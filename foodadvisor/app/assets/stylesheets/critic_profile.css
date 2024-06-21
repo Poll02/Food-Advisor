@@ -1,0 +1,94 @@
+/* critic_profile.css */
+
+.profile-container {
+    border: 1px solid #386641;
+    display: flex;
+    flex-wrap: wrap; /* Permette il wrap degli elementi */
+    justify-content: flex-start; /* Allinea gli elementi partendo da sinistra */
+    margin-top: 5%; /* Spazio tra l'header e la foto profilo */
+    margin-left: 4%;
+    margin-right: 2%;
+    margin-bottom: 5%;
+    border-radius: 2%;
+}
+  
+.profile-pic {
+    width: 15%;
+    height: auto; /* Modifica per consentire l'altezza automatica */
+    overflow: hidden;
+    border-radius: 50%; /* Forma circolare */
+    margin: 30px 0 30px 150px; /* Margine intorno alla foto del profilo */
+}
+  
+.profile-pic img {
+    width: 100%;
+    height: auto;
+}
+
+.personal-fields {
+    width: 45%; /* Larghezza percentuale per i campi personali */
+    margin: 20px 0 20px 30%; /* Margine sopra, sotto, a destra, a sinistra */
+}
+
+.personal-fields a {
+    margin-top: 10px; /* Spazio sopra */
+    font-size: 1.5em; /* Ingrandisce il testo al 150% */
+    display: block; /* Rende ogni campo su una nuova riga */
+}
+
+.statistics {
+    width: 100%; /* Larghezza al 100% per occupare tutta la larghezza disponibile */
+    margin: 20px 40px 40px 40px;
+    border: 1px solid #386641; /* Bordo */
+    border-radius: 2%;
+    padding: 10px; /* Spazio interno */
+}
+  
+.statistics a {
+    margin-left: 10%;
+    margin-top: 10px; /* Spazio sopra */
+    font-size: 1.5em; /* Ingrandisce il testo al 150% */
+    display: block; /* Rende ogni campo su una nuova riga */
+}
+
+.stories {
+    width: 100%; /* Larghezza al 100% per occupare tutta la larghezza disponibile */
+    height: 10%;
+    margin: 20px 40px 40px 40px;
+    border: 1px solid #386641; /* Bordo */
+    border-radius: 2%;
+    padding: 10px; /* Spazio interno */
+}
+
+.section{
+    display: flex;
+    justify-content: center;
+    margin-left: 50%;
+    font-size: 1.5em;
+}
+
+.recensioni {
+    width: 100%; /* Larghezza al 100% per occupare tutta la larghezza disponibile */
+    height: 10%;
+    margin: 20px 40px 40px 40px;
+    border: 1px solid #386641; /* Bordo */
+    border-radius: 2%;
+    padding: 10px; /* Spazio interno */
+}
+.eventi {
+    width: 100%; /* Larghezza al 100% per occupare tutta la larghezza disponibile */
+    height: 10%;
+    margin: 20px 40px 40px 40px;
+    border: 1px solid #386641; /* Bordo */
+    border-radius: 2%;
+    padding: 10px; /* Spazio interno */
+}
+
+.raccolte {
+    width: 100%; /* Larghezza al 100% per occupare tutta la larghezza disponibile */
+    height: 10%;
+    margin: 20px 40px 40px 40px;
+    border: 1px solid #386641; /* Bordo */
+    border-radius: 2%;
+    padding: 10px; /* Spazio interno */
+}
