@@ -5,7 +5,6 @@ Rails.application.routes.draw do
   # Rotta per creare una nuova registrazione
   resources :registrations, only: [:create]
 
-  # Puoi aggiungere altre rotte qui
   # Rotta per la pagina principale (opzionale)
   root 'welcome#index'
 end
