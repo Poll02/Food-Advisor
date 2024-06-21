@@ -1,3 +1,11 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  # Rotta per la pagina di registrazione
+  get 'signup', to: 'registrations#new'
+
+  # Rotta per creare una nuova registrazione
+  resources :registrations, only: [:create]
+
+  # Puoi aggiungere altre rotte qui
+  # Rotta per la pagina principale (opzionale)
+  root 'welcome#index'
 end

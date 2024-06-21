@@ -1,0 +1,42 @@
+<h1>Sign Up</h1>
+
+<%= form_with model: @user, url: registrations_path do |f| %>
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+  
+  <div class="field">
+    <%= f.label :surname %>
+    <%= f.text_field :surname %>
+  </div>
+  
+  <div class="field">
+    <%= f.label :birth %>
+    <%= f.date_select :birth %>
+  </div>
+  
+  <div class="field">
+    <%= f.label :email %>
+    <%= f.email_field :email %>
+  </div>
+  
+  <div class="field">
+    <%= f.label :phone %>
+    <%= f.telephone_field :phone %>
+  </div>
+  
+  <div class="field">
+    <%= f.label :password %>
+    <%= f.password_field :password %>
+  </div>
+  
+  <div class="field">
+    <%= f.label :password_confirmation %>
+    <%= f.password_field :password_confirmation %>
+  </div>
+  
+  <div class="actions">
+    <%= f.submit "Sign Up" %>
+  </div>
+<% end %>
