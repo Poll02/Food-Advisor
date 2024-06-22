@@ -1,32 +1,16 @@
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link rel="stylesheet" href="<%= asset_path 'login.css' %>">
-    <%= favicon_link_tag asset_path('logo.png') %>
-</head>
+<%= stylesheet_link_tag 'login', media: 'all' %>
+
+
 <body>
 
-    <header>
-            <a><h1>FoodAdvisor</h1></a>
-            
-            </div>
-            
-            <nav id="homepage-nav">
-                <a href="#">Homepage</a>
-                <a href="#">Ristoranti</a>
-                <a href="#">Classifica</a>
-                <a href="#"><ion-icon name="trophy"></ion-icon></a>
-                <a href="#" class="active"><ion-icon name="person-circle-outline"></ion-icon></a>
-            </nav>
-        </header>
-
-    
-
-
     <div class="login-page">
+        <div class="login-text-container" style="display: flex; flex-direction: column; width: 20%;">
+            <h1 style="color: white;">Esegui l'accesso come utente</h1>
+            <p style="color: rgb(255, 255, 255);">Per scrivere Recensioni, partecipare ad Eventi, gestire Prenotazioni e competere con gli altri utenti! oppure</p>
+            <h1 style="color: white;">Accedi come Ristoratore</h1>
+            <p style="color: rgb(255, 255, 255);">Per gestire il tuo ristorante, pubblicizzare Eventi e guadagnare punti in classifica!</p>
+
+        </div>
         <div class="login-container">
             <div class="login-form-container">
                 <h1 style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">Login Utente<span><ion-icon name="person"></ion-icon></span></h1>
@@ -55,6 +39,13 @@
 
                     <div class="password-forgot-container">
                         <p id="forgot-password">Ho dimenticato la password</p>
+
+                    </div>
+                    <div class="register-container" style="display: flex; align-items: center; gap: 5px; justify-content: center;">
+                        <hr class='solid' style="width: 25%;" id='divider'>
+                        <p style="font-size: 13px; color: #386641; cursor: pointer;">Iscriviti</p>
+                        <hr class='solid' style="width: 25%;" id='divider'>
+
 
                     </div>
                 </form>
@@ -87,13 +78,16 @@
                         <p id="forgot-password">Ho dimenticato la password</p>
 
                     </div>
+                    <div class="register-container" style="display: flex; align-items: center; gap: 5px; justify-content: center;">
+                        <hr class='solid' style="width: 25%;" id='divider'>
+                        <p style="font-size: 13px; color: #386641; cursor: pointer;">Diventa un ristoratore</p>
+                        <hr class='solid' style="width: 25%;" id='divider'>
+
+
+                    </div>
+
                 </form>
             </div>
         </div>
     </div>
 
-    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
-
-</body>
-</html>

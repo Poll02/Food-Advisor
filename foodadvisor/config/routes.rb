@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   get 'sessions/new'
   get 'login', to: 'sessions#new'
   post 'login', to: 'sessions#create'
+  root 'home#index'  
+  get 'home/index' 
+  get 'ricerca', to: 'ricerca#index'
   delete 'logout', to: 'sessions#destroy'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 

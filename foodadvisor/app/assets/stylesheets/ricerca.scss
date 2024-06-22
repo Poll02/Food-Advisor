@@ -1,0 +1,91 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.ricerca-container{
+    margin-top: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    
+}
+
+#findbar{
+    border: 1px solid rgb(146, 146, 146);
+    border-radius: 100px;
+    padding: 5px;
+    width: 700px;
+    height: 50px;
+    margin-bottom: 30px;
+    text-align: center;
+    font-size: 15px;
+
+}
+
+.find-input ion-icon{
+    position: absolute;
+    padding: 10px;
+    text-align: center;
+}
+
+#find-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.results-and-details-container{
+    display: flex;
+    align-items: center;
+    gap: 50px;
+    margin-bottom: 30px;
+}
+
+.results-container{
+    display: flex;
+    flex-direction: column;
+    width: 500px;
+    overflow-x: scroll;
+    height: 600px;
+    
+}
+
+.result-box{
+    display: flex;
+}
+
+.result-box img{
+    cursor: pointer;
+    width: 200px;
+    height: 150px;
+    border-radius: 20px;
+    margin-right: 20px;
+    transition: 0.2s;
+}
+
+.result-box img:hover{
+    filter: brightness(80%);
+}
+
+.vertical-divider{
+border-left: 1px solid rgb(156, 156, 156);
+  height: 500px;
+}
+
+.details-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.details-container img{
+    width: 300px;
+    height: 300px;
+    border-radius: 20px;
+    margin-right: 20px;
+}

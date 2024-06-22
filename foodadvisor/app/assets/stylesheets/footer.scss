@@ -39,7 +39,15 @@ footer {
   .footerNav ul li a:hover {
     opacity: 1;
   }
-
+  
+  .socialSection {
+    text-align: center;
+  }
+  
+  .socialSection h3 {
+    margin-bottom: 10px;
+  }
+  
   .socialIcons {
     display: flex;
     justify-content: center;
