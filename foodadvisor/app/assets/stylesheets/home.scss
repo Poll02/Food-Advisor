@@ -25,6 +25,7 @@
 }
 
 .recents-container{
+    width: 90%;
     display: flex;
     flex-direction: column;
     margin-bottom: 30px;
@@ -38,6 +39,12 @@
     overflow-x: scroll;
     overflow-y: hidden;
     scrollbar-width: none;
+}
+
+@keyframes scrollLeft{
+from {transform: translate(1000px)}
+to{transform: translate()}
+
 }
 
 .restaurant-box{
@@ -94,11 +101,41 @@ position: absolute;
     padding: 10px;
     background-color: white;
     border-radius: 50px;
+    cursor: pointer;
 
 }
+
+.earn-points-container button:hover{
+    background-color: rgb(186, 207, 209);
+}
+
 
 .text-container{
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 }
+
+.most-rewarded-text button{
+    margin-top: 10px;
+    border: 1px solid black;
+    width: 100px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-bottom: 30px;
+
+}
+
+.most-rewarded-text button:hover{
+    background-color: rgb(186, 207, 209);
+}
+
+.popular-reviews-box img{
+    margin-right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 100px;
+}
+
