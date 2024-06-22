@@ -4,12 +4,13 @@
     border: 1px solid #386641;
     display: flex;
     flex-wrap: wrap; /* Permette il wrap degli elementi */
-    justify-content: flex-start; /* Allinea gli elementi partendo da sinistra */
+    justify-content: center; /* Allinea gli elementi partendo dal centro */
     margin-top: 5%; /* Spazio tra l'header e la foto profilo */
     margin-left: 4%;
     margin-right: 2%;
     margin-bottom: 5%;
     border-radius: 2%;
+
 }
   
 .profile-pic {
@@ -63,7 +64,6 @@
 .section{
     display: flex;
     justify-content: center;
-    margin-left: 50%;
     font-size: 1.5em;
 }
 
