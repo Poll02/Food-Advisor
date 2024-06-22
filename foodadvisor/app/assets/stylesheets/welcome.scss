@@ -1,3 +1,140 @@
-// Place all the styles related to the Welcome controller here.
+// Place all the styles related to the Home controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: https://sass-lang.com/
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+.h1-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+}
+
+.homepage-container{
+    margin-top: 130px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    
+}
+
+.recents-container{
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 30px;
+}
+
+.restaurants-grid{
+    margin-top: 10px;
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    scrollbar-width: none;
+}
+
+@keyframes scrollLeft{
+from {transform: translate(1000px)}
+to{transform: translate()}
+
+}
+
+.restaurant-box{
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    transition: 0.2s;
+}  
+
+.restaurant-box:hover{
+    filter: brightness(80%);
+}
+
+.restaurant-box img{
+    border-radius: 15px;
+    width: 400px;
+    height: auto;
+    display: block;
+}
+
+.text-overlay{
+position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: black 1px 0 5px;
+}
+
+.earn-points-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(177, 255, 229);
+    width: fit-content;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.earn-points-container img{
+    width: 100px;
+    margin-right: 10px;
+
+}
+
+.earn-points-container button{
+    margin-top: 10px;
+    border: 1px solid black;
+    width: 100px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 50px;
+    cursor: pointer;
+
+}
+
+.earn-points-container button:hover{
+    background-color: rgb(186, 207, 209);
+}
+
+
+.text-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.most-rewarded-text button{
+    margin-top: 10px;
+    border: 1px solid black;
+    width: 100px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 50px;
+    cursor: pointer;
+    margin-bottom: 30px;
+
+}
+
+.most-rewarded-text button:hover{
+    background-color: rgb(186, 207, 209);
+}
+
+.popular-reviews-box img{
+    margin-right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 100px;
+}

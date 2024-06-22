@@ -1,6 +1,8 @@
 .dashboard {
     display: flex;
-    min-height: 100vh; /* Full viewport height */
+    min-height: 50vh;
+    margin: 20px;
+    border: 1px solid black;
   
     .sidebar {
       width: 200px; /* Fixed width for the sidebar */

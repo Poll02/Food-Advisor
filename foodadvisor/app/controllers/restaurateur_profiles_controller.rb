@@ -1,8 +1,9 @@
 class RestaurateurProfilesController < ApplicationController
   layout 'with_sidebar'
-  
+
   def show
     #@user = current_user
+    render 'dashboard/show'  # Rende la vista specificata
   end
 
   def edit
