@@ -1,0 +1,38 @@
+.dashboard {
+    display: flex;
+    min-height: 100vh; /* Full viewport height */
+  
+    .sidebar {
+      width: 200px; /* Fixed width for the sidebar */
+      background-color: #f8f9fa; /* Light background color */
+      padding: 20px;
+      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+      
+  
+      ul {
+        list-style: none; /* Remove default list styling */
+        padding: 0;
+  
+        li {
+          margin-bottom: 15px; /* Space between links */
+  
+          a {
+            text-decoration: none; /* Remove underline */
+            color: #333; /* Dark text color */
+            font-weight: bold;
+  
+            &:hover {
+              color: #007bff; /* Change color on hover */
+            }
+          }
+        }
+      }
+    }
+  
+    .content {
+      flex: 1; /* Take up remaining space */
+      padding: 20px;
+      background-color: #ffffff; /* White background for content */
+    }
+  }
+  

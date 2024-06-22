@@ -18,8 +18,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_21_125929) do
     t.string "email"
     t.string "phone"
     t.string "password_digest"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "role"
+    t.string "restaurant_name"
   end
 
 end

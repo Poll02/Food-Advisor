@@ -4,9 +4,11 @@ Rails.application.routes.draw do
   get 'critic_profile', to: 'profile#critic_profile'
   # Rotta per la pagina di registrazione
   get 'signup', to: 'registrations#new'
+  get 'rest_profile', to: 'restaurateur_profiles#show'
 
   # Rotta per creare una nuova registrazione
   resources :registrations, only: [:create]
+  resource :restaurateur_profile, only: [:show, :edit, :update]
 
   # Rotta per la pagina principale (opzionale)
   get 'sessions/new'
@@ -24,4 +26,10 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  # Rotte per le pagine della dashboard
+  get 'dashboard', to: 'dashboard#show'
+  get 'info', to: 'info#show'
+  get 'menu', to: 'menu#show'
+  get 'chat', to: 'chat#show'
+  get 'settings', to: 'settings#show'
 end
