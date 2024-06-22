@@ -1,52 +1,120 @@
-<h1>Registrazione</h1>
+<div class="registration-page">
+    <div class="registration-form-container">
+      <h1>Registrati<span><i class="fa fa-id-card"></i></span></h1>
+      <div class="user-type-selection">
+        <label>
+          <input type="radio" name="user_type" value="utente" checked> Utente
+        </label>
+        <label>
+          <input type="radio" name="user_type" value="ristoratore"> Ristoratore
+        </label>
+      </div>
 
-<%= form_with model: @user, url: registrations_path do |f| %>
-  <div class="field">
-    <%= f.label :name %>
-    <%= f.text_field :name %>
-  </div>
-  
-  <div class="field">
-    <%= f.label :surname %>
-    <%= f.text_field :surname %>
-  </div>
-  
-  <div class="field">
-    <%= f.label :birth %>
-    <%= f.date_select :birth %>
+      <div class="forms-container">
+        <div class="user-form">
+          <%= form_with model: @user, url: registrations_path do |f| %>
+            <div class="field">
+              <%= f.label :name %>
+              <%= f.text_field :name %>
+            </div>
+
+            <div class="field">
+              <%= f.label :surname %>
+              <%= f.text_field :surname %>
+            </div>
+
+            <div class="field">
+              <%= f.label :birth %>
+              <%= f.date_select :birth %>
+            </div>
+
+            <div class="field">
+              <%= f.label :email %>
+              <%= f.email_field :email %>
+            </div>
+
+            <div class="field">
+              <%= f.label :phone %>
+              <%= f.telephone_field :phone %>
+            </div>
+
+            <div class="field">
+              <%= f.label :password %>
+              <%= f.password_field :password %>
+            </div>
+
+            <div class="field">
+              <%= f.label :password_confirmation %>
+              <%= f.password_field :password_confirmation %>
+            </div>
+
+            <div class="actions">
+              <%= f.submit "Iscriviti" %>
+            </div>
+          <% end %>
+        </div>
+
+        <div class="separator"></div>
+
+        <div class="restaurant-form disabled">
+          <%= form_with model: @user, url: registrations_path do |f| %>
+            <div class="field">
+              <%= f.label :restaurant_name %>
+              <%= f.text_field :restaurant_name %>
+            </div>
+
+            <div class="field">
+              <%= f.label :email %>
+              <%= f.email_field :email %>
+            </div>
+
+            <div class="field">
+              <%= f.label :phone %>
+              <%= f.telephone_field :phone %>
+            </div>
+
+            <div class="field">
+              <%= f.label :password %>
+              <%= f.password_field :password %>
+            </div>
+
+            <div class="field">
+              <%= f.label :password_confirmation %>
+              <%= f.password_field :password_confirmation %>
+            </div>
+
+            <div class="actions">
+              <%= f.submit "Iscriviti" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :role %>
-    <%= f.text_field :role %>
-  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const userTypeRadios = document.querySelectorAll('input[name="user_type"]');
+      const userForm = document.querySelector('.user-form');
+      const restaurantForm = document.querySelector('.restaurant-form');
 
-  <div class="field">
-    <%= f.label :restaurant_name %>
-    <%= f.text_field :restaurant_name %>
-  </div>
-  
-  <div class="field">
-    <%= f.label :email %>
-    <%= f.email_field :email %>
-  </div>
-  
-  <div class="field">
-    <%= f.label :phone %>
-    <%= f.telephone_field :phone %>
-  </div>
-  
-  <div class="field">
-    <%= f.label :password %>
-    <%= f.password_field :password %>
-  </div>
-  
-  <div class="field">
-    <%= f.label :password_confirmation %>
-    <%= f.password_field :password_confirmation %>
-  </div>
-  
-  <div class="actions">
-    <%= f.submit "Sign Up" %>
-  </div>
-<% end %>
+      userTypeRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+          if (this.value === 'utente') {
+            userForm.style.opacity = '1';
+            userForm.classList.remove('disabled');
+            restaurantForm.style.opacity = '0.5';
+            restaurantForm.classList.add('disabled');
+          } else {
+            userForm.style.opacity = '0.5';
+            userForm.classList.add('disabled');
+            restaurantForm.style.opacity = '1';
+            restaurantForm.classList.remove('disabled');
+          }
+        });
+      });
+
+      // Trigger change event to set initial state
+      document.querySelector('input[name="user_type"]:checked').dispatchEvent(new Event('change'));
+    });
+  </script>

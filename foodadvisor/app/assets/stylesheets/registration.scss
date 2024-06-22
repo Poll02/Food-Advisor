@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+
+$primary-color: #00b072;
+$secondary-color: #386641;
+
+
+.registration-page {
+  background-image: image-url('background.jpg');
+  backdrop-filter: blur(60%);
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.registration-form-container {
+  background-color: white;
+  border-radius: 10px;
+  width: 800px;
+  padding: 20px;
+  box-shadow: 5px 5px 15px 5px rgba(0, 0, 0, 0.32);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  h1 {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: $secondary-color;
+  }
+
+  .user-type-selection {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+
+    label {
+      font-size: 16px;
+      color: $secondary-color;
+      cursor: pointer;
+
+      input {
+        margin-right: 5px;
+      }
+    }
+  }
+
+  .forms-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .user-form,
+    .restaurant-form {
+      width: 48%;
+      display: flex;
+      flex-direction: column;
+      transition: opacity 0.3s;
+
+      .field {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+
+        label {
+          font-weight: bold;
+          color: $secondary-color;
+          margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"],
+        select {
+          border-radius: 5px;
+          border: 1px solid $secondary-color;
+          padding: 8px;
+          font-size: 14px;
+          width: 100%;
+        }
+      }
+
+      .actions {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+
+        input[type="submit"] {
+          border: none;
+          background-color: $primary-color;
+          padding: 10px 20px;
+          color: white;
+          border-radius: 10px;
+          cursor: pointer;
+          transition: 0.3s;
+
+          &:hover {
+            filter: brightness(140%);
+          }
+        }
+      }
+    }
+
+    .separator {
+      width: 1px;
+      background-color: rgba(99, 99, 99, 0.413);
+      height: 100%;
+    }
+  }
+}
+
+.disabled {
+    pointer-events: none;
+  }
+
+@media (max-width: 800px) {
+  .registration-page {
+    .registration-form-container {
+      width: 90%;
+    }
+  }
+
+  .forms-container {
+    flex-direction: column;
+    align-items: center;
+
+    .user-form,
+    .restaurant-form {
+      width: 90%;
+    }
+
+    .separator {
+      width: 90%;
+      height: 1px;
+      margin: 20px 0;
+    }
+  }
+}
