@@ -9,7 +9,6 @@ Rails.application.routes.draw do
   resources :registrations, only: [:create]
 
   # Rotta per la pagina principale (opzionale)
-  root 'welcome#index'
   get 'sessions/new'
   get 'login', to: 'sessions#new'
   post 'login', to: 'sessions#create'
