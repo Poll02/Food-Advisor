@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   # Rotta per la pagina di registrazione
   get 'signup', to: 'registrations#new'
   get 'rest_profile', to: 'restaurateur_profiles#show'
+  #route for placement
+  get 'classifiche', to: 'classifica#classifica'
 
   # Rotta per creare una nuova registrazione
   resources :registrations, only: [:create]

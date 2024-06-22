@@ -14,7 +14,11 @@
  *= require_self
  */
  @import "navbar";
+<<<<<<< HEAD
  
+=======
+
+>>>>>>> d3651752f8dc633175fce5172065fcc25e0999bb
  @import "footer";
  @import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
 
@@ -25,6 +29,6 @@
     font-family: 'Poppins', sans-serif;
 }
 
-
+ @import "classifica";
  @import "dashboard";
  @import "with_sidebar";
