@@ -1,1 +1,163 @@
 <h1>Info</h1>
+<div class="flex-container-info">
+    <!-- Colonna sinistra -->
+    <div class="column">
+
+      <h3>Statistiche Prenotazioni Settimanali</h3>
+      <div class="section">
+        <div class="statistiche">
+            <canvas id="graficoSettimana"></canvas>
+        </div>
+      </div>
+
+      <h3>Gestione Prenotazioni</h3>
+      <div class="section">
+        <div class="prenotazione">
+            <%= image_tag 'background.jpg', class: 'pren-foto', alt: 'Tagliatelle' %>    
+            <div class="pren-info">
+                <p>Nome</p>
+                <p>Orario</p>
+                <p>N persone</p>
+            </div>
+            <div class="pren-icon">
+                <i class="fa-solid fa-check"></i>
+                <i class="fa-solid fa-ban"></i>
+            </div>
+        </div>
+        <div class="prenotazione">
+            <%= image_tag 'background.jpg', class: 'pren-foto', alt: 'Tagliatelle' %>    
+            <div class="pren-info">
+                <p>Nome</p>
+                <p>Orario</p>
+                <p>N persone</p>
+            </div>
+            <div class="pren-icon">
+                <i class="fa-solid fa-check"></i>
+                <i class="fa-solid fa-ban"></i>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="column">
+      <h3>Calendario</h3>
+      <div class="section" id="calendario">
+        
+      </div>
+
+      <h3>Prenotazioni Quotidiane</h3>
+      <div class="section">
+        <div class="prenotazione">
+            <%= image_tag 'background.jpg', class: 'pren-foto', alt: 'Tagliatelle' %>    
+            <div class="pren-info">
+                <p>Nome</p>
+                <p>Orario</p>
+                <p>N persone</p>
+            </div>
+            <div class="pren-icon">
+                <i class="fa-solid fa-check"></i>
+                <i class="fa-solid fa-ban"></i>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Informazioni sui Dipendenti del Ristorante</h3>
+  <div class="employees-section">
+    <div class="dipendente">
+        <%= image_tag 'background.jpg', class: 'dip-foto' %>    
+        <div class="dip-info">
+            <p>Nome</p>
+            <p>Cognome</p>
+            <p>Ruolo</p>
+        </div>
+    </div>
+    <div class="dipendente">
+        <%= image_tag 'background.jpg', class: 'dip-foto' %>    
+        <div class="dip-info">
+            <p>Nome</p>
+            <p>Cognome</p>
+            <p>Ruolo</p>
+        </div>
+    </div>
+  </div>
+
+  <script>
+// JS PER IL GRAFICO
+document.addEventListener('DOMContentLoaded', function() {
+  var ctx = document.getElementById('graficoSettimana').getContext('2d');
+  var graficoSettimana = new Chart(ctx, {
+    type: 'line', // Tipo di grafico: linea
+    data: {
+      labels: ['Lunedì', 'Martedì', 'Mercoledì', 'Giovedì', 'Venerdì', 'Sabato', 'Domenica'], // Giorni della settimana
+      datasets: [{
+        label: 'Numero di Prenotazioni',
+        data: [12, 19, 3, 5, 2, 3, 7], // Dati delle ordinate
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+});
+
+// JS PER IL CALENDARIO
+document.addEventListener('DOMContentLoaded', function() {
+  const calendario = document.getElementById('calendario');
+
+  const monthNames = [
+    'Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno',
+    'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'
+  ];
+
+  const weekdayNames = ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'];
+
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
+  function createCalendar(month, year) {
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    let calendarHTML = '';
+
+    // Mese corrente
+    calendarHTML += `<div class="month">${monthNames[month]} ${year}</div>`;
+
+    // Giorni della settimana
+    calendarHTML += '<div class="weekdays">';
+    weekdayNames.forEach(day => {
+      calendarHTML += `<div class="weekday">${day}</div>`;
+    });
+    calendarHTML += '</div>';
+
+    // Giorni del mese
+    calendarHTML += '<div class="days">';
+    // Aggiungi celle vuote fino al primo giorno del mese
+    for (let i = 0; i < firstDay - 1; i++) {
+      calendarHTML += '<div class="day empty"></div>';
+    }
+
+    // Aggiungi giorni del mese
+    for (let day = 1; day <= daysInMonth; day++) {
+      calendarHTML += `<div class="day">${day}</div>`;
+    }
+    calendarHTML += '</div>';
+
+    return calendarHTML;
+  }
+
+  calendario.innerHTML = createCalendar(currentMonth, currentYear);
+});
+
+</script>
+

@@ -1,7 +1,83 @@
 <h1>Benvenuto nel tuo profilo personale</h1>
-<div>
-  <!-- Informazioni profilo ristoratore -->
-  <p>Email:</p>
-  <p>Nome del ristorante:</p>
-  <p>Data di registrazione:</p>
+<div class="ristorante">
+  <%= image_tag 'background.jpg', class: 'r-foto' %>   
+  <div class="r-info">
+    <p>Email:</p>
+    <p>Nome del ristorante:</p>
+    <p>Data di registrazione:</p>
+  </div>
 </div>
+<p>statistiche</p>
+<div class="r-statistiche">
+  <div class="r-stat">
+    <div class="r-tags">
+      <span class="r-tag pub">Pub</span>
+      <span class="r-tag famiglie">Per famiglie</span>
+    </div>
+  </div>
+</div>
+
+<p>stories social</p>
+<div class="r-stories">
+  <div class="r-storia">
+    <p>storia</p>
+  </div>
+</div>
+<p>recensioni</p>
+<div class="r-recensioni">
+  <div class="r-recensione">
+    <%= image_tag 'background.jpg', class: 'recensione-foto' %>    
+    <div class="recensione-info">
+        <p>Nome</p>
+        <p>Stelle</p>
+        <p>Descrizione</p>
+    </div>
+    <div class="recensione-icon">
+        <i class="fa-solid fa-thumbtack"></i>
+        <i class="fa-solid fa-ban"></i>
+        <i class="fa-solid fa-retweet"></i>
+    </div>
+  </div>
+</div>
+<p>ricette condivise</p>
+<div class="r-ricette">
+  <div class="r-ricetta">
+      <%= image_tag 'background.jpg', class: 'ricetta-foto' %>    
+      <div class="ricetta-info">
+          <p>Nome</p>
+          <p>Ingredienti</p>
+          <p>Lavorazione</p>
+      </div>
+  </div>
+  <div class="r-ricetta">
+      <%= image_tag 'background.jpg', class: 'ricetta-foto' %>    
+      <div class="ricetta-info">
+          <p>Nome</p>
+          <p>Ingredienti</p>
+          <p>Lavorazione</p>
+      </div>
+  </div>
+</div>
+<p>eventi</p>
+<div class="r-eventi">
+  <div class="r-evento">
+    <%= image_tag 'background.jpg', class: 'evento-foto' %>    
+      <div class="evento-info">
+          <p>Nome</p>
+          <p>Ingredienti</p>
+          <p>Descrizione</p>
+          <p>Premio</p>
+      </div>
+  </div>
+  <div class="r-evento">
+    <%= image_tag 'background.jpg', class: 'evento-foto' %>    
+      <div class="evento-info">
+          <p>Nome</p>
+          <p>Data</p>
+          <p>Descrizione</p>
+          <p>Premio</p>
+      </div>
+  </div>
+</div>
+
+

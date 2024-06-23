@@ -16,7 +16,7 @@ Rails.application.routes.draw do
   #route for placement
   get 'classifiche', to: 'classifica#classifica'
   # Rotte per le pagine della dashboard
-  get 'dashboard', to: 'dashboard#show'
+  get 'dashboard', to: 'restaurateur_profiles#show'
   get 'info', to: 'info#show'
   get 'chat', to: 'chat#show'
   get 'settings', to: 'settings#show'
@@ -31,7 +31,7 @@ Rails.application.routes.draw do
 
   #
   resources :registrations, only: [:create]
-  resource :restaurateur_profile, only: [:show, :edit, :update]
+  resource :restaurateur_profiles, only: [:show, :edit, :update]
   resource :settings, only: [:show, :edit, :update]
   resource :menus, only: [:show, :edit, :update]
 
