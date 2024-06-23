@@ -1,0 +1,23 @@
+<h1>Impostazioni</h1>
+
+<%= form_for(@setting, url: settings_path, method: :put) do |f| %>
+    <div class="field">
+      <%= f.label :font, "Font" %><br>
+      <%= f.select :font, [["Arial", "arial"], ["Times New Roman", "times"], ["Courier New", "courier"]], prompt: "Seleziona un font" %>
+    </div>
+  
+    <div class="field">
+      <%= f.label :font_size, "Dimensione del testo" %><br>
+      <%= f.select :font_size, [["Piccolo", "small"], ["Medio", "medium"], ["Grande", "large"]], prompt: "Seleziona una dimensione" %>
+    </div>
+  
+    <div class="field">
+      <%= f.label :theme, "Tema" %><br>
+      <%= f.select :theme, [["Giorno", "day"], ["Notte", "night"]], prompt: "Seleziona un tema" %>
+    </div>
+  
+    <div class="actions">
+      <%= f.submit "Salva Impostazioni" %>
+    </div>
+  <% end %>
+  

@@ -10,7 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_22_085156) do
+ActiveRecord::Schema.define(version: 2024_06_23_092738) do
+
+  create_table "dishes", force: :cascade do |t|
+    t.string "name"
+    t.decimal "price", precision: 8, scale: 2
+    t.string "ingredients"
+    t.integer "menu_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["menu_id"], name: "index_dishes_on_menu_id"
+  end
+
+  create_table "menu", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "name"
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.string "font"
+    t.string "font_size"
+    t.string "theme"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "name"
@@ -25,4 +49,5 @@ ActiveRecord::Schema.define(version: 2024_06_22_085156) do
     t.string "restaurant_name"
   end
 
+  add_foreign_key "dishes", "menu"
 end

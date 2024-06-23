@@ -1,0 +1,22 @@
+.categoria-cibo {
+    border: 1px solid black;
+    padding: 1%;
+    border-radius: 10px;
+    margin-bottom: 1%;
+}
+.piatto {
+    border: 1px solid red;
+    width: 130px;
+    height: 150px;
+    padding: 1%;
+    margin-top: 1%;
+    border-radius: 10px;
+    display: inline-block;
+}
+.foto-piatto {
+    width: 100%;
+    height: 30px;
+}
+.info-piatto {
+    /*font automatici*/
+}

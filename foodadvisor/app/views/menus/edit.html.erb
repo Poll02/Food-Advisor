@@ -1,0 +1,33 @@
+<!-- app/views/menu/edit.html.erb -->
+<h1>Modifica Menu</h1>
+
+<%= form_for(@menu) do |f| %>
+  <div class="field">
+    <%= f.label :name, "Nome del Menu" %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <h2>Piatti</h2>
+  <%= f.fields_for :dishes do |dish_form| %>
+    <div class="field">
+      <%= dish_form.label :name, "Nome del Piatto" %><br>
+      <%= dish_form.text_field :name %>
+    </div>
+    <div class="field">
+      <%= dish_form.label :price, "Prezzo" %><br>
+      <%= dish_form.text_field :price %>
+    </div>
+    <div class="field">
+      <%= dish_form.label :ingredients, "Ingredienti" %><br>
+      <%= dish_form.text_area :ingredients %>
+    </div>
+    <div class="field">
+      <%= dish_form.check_box :_destroy %>
+      <%= dish_form.label :_destroy, "Rimuovi Piatto" %>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit "Salva Menu" %>
+  </div>
+<% end %>

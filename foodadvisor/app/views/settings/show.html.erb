@@ -1,2 +1,23 @@
-<h1>Settings#show</h1>
-<p>Find me in app/views/settings/show.html.erb</p>
+<h1>Impostazioni</h1>
+
+<p>
+  <strong>Font:</strong>
+  <%= @setting.font %>
+</p>
+
+<p>
+  <strong>Dimensione del testo:</strong>
+  <%= @setting.font_size %>
+</p>
+
+<p>
+  <strong>Tema:</strong>
+  <%= @setting.theme == 'day' ? 'Giorno' : 'Notte' %>
+</p>
+
+<%= link_to 'Modifica Impostazioni', edit_settings_path %>
+
+<p>Gestisci le notifiche</p>
+<p>Tag di preferenza</p>
+<p>Elimina l'account</p>
+
