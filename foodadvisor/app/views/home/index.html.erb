@@ -1,8 +1,8 @@
 <%= stylesheet_link_tag 'home', media: 'all' %>
 <div class="homepage-container">
-    <% flash.each do |message_type, message| %>
-    <div class="alert alert-<%= message_type %>" style="font-style: italic; color: #00b072;">
-      <%= message %>
+    <% if logged_in? %>
+    <div class="alert" style="font-style: italic; color: #00b072;">
+      <p>Benvenuto, <span style="font-weight: bold;"> <%= current_user.name %> </span>!</p> 
     </div>
   <% end %>
     <div class="h1-container">
@@ -47,9 +47,9 @@
     <div class="earn-points-container">
         <%= image_tag 'trophy.png' %>
         <div class="text-container">
-        <h3 style="color: black;">Guadagna punti!</h3>
-        <p style="color: black;">Recensisci i ristoranti e partecipa ai tornei di FoodAdvisor per guadagnare punti!</p>
-        <a href="<%= classifiche_path %>"><button type="button">Cominciamo!</button></a>
+        <h3>Guadagna punti!</h3>
+        <p>Recensisci i ristoranti e partecipa ai tornei di FoodAdvisor per guadagnare punti!</p>
+        <a href="<%= competizioni_path %>"><button type="button">Cominciamo!</button></a>
         </div>
     </div>
 

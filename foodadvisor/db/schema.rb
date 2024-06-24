@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_23_092738) do
+ActiveRecord::Schema.define(version: 2024_06_24_124804) do
+
+  create_table "competiziones", force: :cascade do |t|
+    t.string "nome"
+    t.string "descrizione"
+    t.string "locandina"
+    t.string "requisiti"
+    t.string "premio"
+    t.string "tag"
+    t.integer "owner", null: false
+    t.datetime "data_inizio"
+    t.datetime "data_fine"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "dishes", force: :cascade do |t|
     t.string "name"
@@ -26,6 +40,17 @@ ActiveRecord::Schema.define(version: 2024_06_23_092738) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "name"
+  end
+
+  create_table "partecipazione_competizionis", force: :cascade do |t|
+    t.integer "idutente"
+    t.integer "idcomp"
+    t.integer "user_id", null: false
+    t.integer "competizione_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["competizione_id"], name: "index_partecipazione_competizionis_on_competizione_id"
+    t.index ["user_id"], name: "index_partecipazione_competizionis_on_user_id"
   end
 
   create_table "settings", force: :cascade do |t|
@@ -49,5 +74,8 @@ ActiveRecord::Schema.define(version: 2024_06_23_092738) do
     t.string "restaurant_name"
   end
 
+  add_foreign_key "competiziones", "users", column: "owner"
   add_foreign_key "dishes", "menu"
+  add_foreign_key "partecipazione_competizionis", "competiziones"
+  add_foreign_key "partecipazione_competizionis", "users"
 end

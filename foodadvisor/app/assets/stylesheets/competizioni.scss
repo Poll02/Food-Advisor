@@ -79,6 +79,7 @@ position: absolute;
     display: flex;
     flex-direction: column;
     max-height: 500px;
+    max-width: 400px;
     overflow-y: scroll;
 }
 
@@ -110,6 +111,7 @@ position: absolute;
 .right-side{
     display: flex;
     flex-direction: column;
+    max-width: 400px;
 }
 
 .right-side img{
