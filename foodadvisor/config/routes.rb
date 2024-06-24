@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'support/index'
   get 'menus/show'
   get 'menus/edit'
   get 'menus/update'
@@ -28,6 +29,8 @@ Rails.application.routes.draw do
   get 'home/index' 
   get 'ricerca', to: 'ricerca#index'
   delete 'logout', to: 'sessions#destroy'
+
+  get 'support', to: 'support#index'
 
   #
   resources :registrations, only: [:create]
