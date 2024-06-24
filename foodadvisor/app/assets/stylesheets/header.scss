@@ -1,4 +1,5 @@
-header{
+/* Stili normali */
+header {
     position: fixed;
     top: 0;
     width: 100%;
@@ -10,20 +11,18 @@ header{
     padding: 0 5%;
     z-index: 10;
     border-bottom: 1px solid #386641;
-
 }
 
-a{
+a {
     text-decoration: none;
 }
 
-
-.banner-logo{
+.banner-logo {
     width: 20%;
     height: auto;
 }
 
-header h1{
+header h1 {
     font-size: 40px;
     text-decoration: none;
     background: linear-gradient(to right, #13f4d5, #386641);
@@ -32,13 +31,12 @@ header h1{
     -webkit-text-fill-color: transparent;
 }
 
-header nav{
+header nav {
     display: flex;
     gap: 30px;
-
 }
 
-header nav a{
+header nav a {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -51,12 +49,35 @@ header nav a{
     transition: 0.3s;
 }
 
-header nav a.active{
+header nav a.active {
     background: #00b072;
     border: 1px solid white;
     color: white;
 }
 
-header nav a:hover{
-transform: scale(95%);
+header nav a:hover {
+    transform: scale(95%);
+}
+
+/* Modalità notte */
+body.night-mode header {
+    background-color: #222;
+    border-bottom: 1px solid #fff;
+}
+
+body.night-mode header h1 {
+    background: linear-gradient(to right, #fff, #888);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body.night-mode header nav a {
+    color: #fff;
+}
+
+body.night-mode header nav a.active {
+    background: #555;
+    border: 1px solid #fff;
+    color: white;
 }
