@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'competizione/index'
   get 'menus/show'
   get 'menus/edit'
   get 'menus/update'
@@ -14,7 +15,7 @@ Rails.application.routes.draw do
   get 'signup', to: 'registrations#new'
   get 'rest_profile', to: 'restaurateur_profiles#show'
   #route for placement
-  get 'classifiche', to: 'classifica#classifica'
+  get 'competizioni', to: 'competizione#index'
   # Rotte per le pagine della dashboard
   get 'dashboard', to: 'dashboard#show'
   get 'info', to: 'info#show'
@@ -24,13 +25,16 @@ Rails.application.routes.draw do
   get 'sessions/new'
   get 'login', to: 'sessions#new'
   post 'login', to: 'sessions#create'
+  get 'auth/google_oauth2/callback', to: 'sessions#create'
+  get 'auth/failure', to: redirect('/')
     
   get 'home/index' 
   get 'ricerca', to: 'ricerca#index'
-  delete 'logout', to: 'sessions#destroy'
+  get 'logout', to: 'sessions#destroy'
 
   #
   resources :registrations, only: [:create]
+  resources :competizioni, only: [:index]
   resource :restaurateur_profile, only: [:show, :edit, :update]
   resource :settings, only: [:show, :edit, :update]
   resource :menus, only: [:show, :edit, :update]

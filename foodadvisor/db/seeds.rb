@@ -5,3 +5,17 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+user = User.first 
+
+Competizione.create!(
+  nome: "Competizione di Test2",
+  descrizione: "Questa è una seconda competizione di esempio per testare la creazione di record.",
+  locandina: "background.jpg",
+  requisiti: "Nessun requisito specifico.",
+  premio: "Un premio non simbolico.",
+  tag: "esempio, test",
+  owner: user,
+  data_inizio: DateTime.now,
+  data_fine: DateTime.now + 1.month
+)

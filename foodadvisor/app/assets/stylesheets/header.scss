@@ -60,3 +60,26 @@ header nav a.active{
 header nav a:hover{
 transform: scale(95%);
 }
+
+.dropdown {
+    display: none;
+    position: absolute;
+    right: 20px;
+    top: 60px; 
+    background-color: #fff;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.dropdown a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown a:hover {
+    background-color: #ddd;
+}
