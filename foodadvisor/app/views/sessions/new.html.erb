@@ -14,41 +14,44 @@
         <div class="login-container">
             <div class="login-form-container">
                 <h1 style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">Login Utente<span><ion-icon name="person"></ion-icon></span></h1>
-                <form id="login-form">
-                    <div class="input-container">
-                        <label for="username" id="login-label">Nome Utente</label>
-                    <input type="text" id="login-input">
-                    </div>
-                    <div class="input-container">
-                        <label for="password" id="login-label">Password</label>
-                        <input type="password" id="login-input">
-                    </div>
+                <!-- app/views/sessions/new.html.erb -->
+                <%= form_with(url: login_path, local: true, id: "login-form") do %>
+                <% if flash.now[:alert] %>
+                <div class="alert alert-danger" style="color: red; font-style: italic;">
+                <%= flash.now[:alert] %>
+                </div>
+                  <% end %>
 
-                    <div class="rememberme-container">
-                        <label for="checkbox" id="login-label" style="font-weight: normal; color: black;">Ricordami</label>
-                        <input type="checkbox"></span>
-                    </div>
-                    
-                    
-                    <button type="submit" id="login-btn">Accedi</button>
-                    <hr class='solid' id='divider'>
-                    <button type="submit" id="login-btn" style="background-color: rgb(6, 176, 176); margin-bottom: 10px;"><ion-icon name="logo-google"></ion-icon>Accedi con Google</button>
-                    <button type="submit" id="login-btn" style="background-color: rgb(97, 35, 195);"><ion-icon name="logo-facebook"></ion-icon>Accedi con Facebook</button>
+                <div class="input-container">
+                    <%= label_tag :email, "Email", id: "login-label" %>
+                    <%= text_field_tag 'session[email]', nil, id: "login-input" %>
+                </div>
+                <div class="input-container">
+                    <%= label_tag :password, "Password", id: "login-label" %>
+                    <%= password_field_tag 'session[password]', nil, id: "login-input" %>
+                </div>
+                <div class="rememberme-container">
+                    <%= label_tag :remember_me, "Ricordami", id: "login-label", style: "font-weight: normal; color: black;" %>
+                    <%= check_box_tag 'session[remember_me]' %>
+                </div>
+                <%= submit_tag 'Accedi', id: "login-btn" %>
+                <hr class='solid' id='divider'>
+                <button type="button" id="login-btn" style="background-color: rgb(6, 176, 176); margin-bottom: 10px;">
+                    <ion-icon name="logo-google"></ion-icon>Accedi con Google
+                </button>
+                <button type="button" id="login-btn" style="background-color: rgb(97, 35, 195);">
+                    <ion-icon name="logo-facebook"></ion-icon>Accedi con Facebook
+                </button>
+                <div class="password-forgot-container">
+                    <p id="forgot-password">Ho dimenticato la password</p>
+                </div>
+                <div class="register-container" style="display: flex; align-items: center; gap: 5px; justify-content: center;">
+                    <hr class='solid' style="width: 25%;" id='divider'>
+                    <p style="font-size: 13px; color: #386641; cursor: pointer;">Iscriviti</p>
+                    <hr class='solid' style="width: 25%;" id='divider'>
+                </div>
+                <% end %>
 
-
-
-                    <div class="password-forgot-container">
-                        <p id="forgot-password">Ho dimenticato la password</p>
-
-                    </div>
-                    <div class="register-container" style="display: flex; align-items: center; gap: 5px; justify-content: center;">
-                        <hr class='solid' style="width: 25%;" id='divider'>
-                        <p style="font-size: 13px; color: #386641; cursor: pointer;">Iscriviti</p>
-                        <hr class='solid' style="width: 25%;" id='divider'>
-
-
-                    </div>
-                </form>
             </div>
         </div>
         <div class="login-container">

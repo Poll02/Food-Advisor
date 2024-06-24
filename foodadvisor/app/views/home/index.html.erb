@@ -1,5 +1,10 @@
 <%= stylesheet_link_tag 'home', media: 'all' %>
 <div class="homepage-container">
+    <% flash.each do |message_type, message| %>
+    <div class="alert alert-<%= message_type %>" style="font-style: italic; color: #00b072;">
+      <%= message %>
+    </div>
+  <% end %>
     <div class="h1-container">
         <h1 style="color: black;">Consigliati per te</h1>
     </div>
@@ -44,7 +49,7 @@
         <div class="text-container">
         <h3>Guadagna punti!</h3>
         <p>Recensisci i ristoranti e partecipa ai tornei di FoodAdvisor per guadagnare punti!</p>
-        <button type="button">Cominciamo!</button>
+        <a href="<%= classifiche_path %>"><button type="button">Cominciamo!</button></a>
         </div>
     </div>
 
@@ -158,7 +163,7 @@
         </div>
 
         <div class="reserv-container" style="margin-left: 30px; display: flex; justify-content: center; align-items: center; width: 20%;">
-            <h2>Accedi al <span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span>  per effettuare e visualizzare le tue prenotazioni!</h3>
+            <h2>Accedi al <a href="<% login_path %>"><span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span></a>  per effettuare e visualizzare le tue prenotazioni!</h3>
 
         </div>
     </div>
