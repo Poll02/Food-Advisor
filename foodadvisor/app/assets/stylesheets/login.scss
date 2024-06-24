@@ -1,14 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
+.login-text-container {
+    color: white;
 }
 
-
-
+.night-mode .login-text-container {
+    color: black;
+}
 
 .login-page{
     background-image: image-url('background.jpg');
@@ -18,6 +14,10 @@
     justify-content: space-evenly;
     align-items: center;
 
+}
+
+.night-mode .login-page {
+    background-color: rgba(0, 0, 0, 0.9); /* Overlay più scuro per modalità notte */
 }
 
 .input-container{
@@ -39,6 +39,11 @@
     align-items: center;
     margin-top: 10px;
     margin-bottom: 10px;
+    color: black;
+}
+
+.night-mode .rememberme-container {
+    color: white;
 }
 
 .rememberme-container input{
@@ -63,12 +68,18 @@
     padding: 20px;
     -webkit-box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.32); 
     box-shadow: 5px 5px 15px 5px rgba(0,0,0,0.32); 
+}
 
-
+.night-mode .login-container {
+    background-color: #313131; /* Sfondo notturno */
 }
 
 ion-icon{
     font-size: 30px;
+}
+
+.night-mode ion-icon {
+    color: white;
 }
 
 #login-btn{
@@ -117,6 +128,11 @@ ion-icon{
     color: #386641;
 }
 
+.night-mode #login-label {
+    font-weight: bold;
+    color: white;
+}
+
 #login-input{
     border-radius: 5px;
     border: 1px solid #386641;
@@ -131,3 +147,21 @@ ion-icon{
     
 }
 
+.night-mode #login-form {
+    color: #ccc; /* Testo grigio chiaro in modalità notte */
+}
+
+.register-container {
+    display: flex; 
+    align-items: center; 
+    gap: 5px; 
+    justify-content: center;
+}
+
+.register-container > p {
+    color: #386641;
+}
+
+.night-mode .register-container > p {
+    color: white;
+}

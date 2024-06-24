@@ -1,3 +1,124 @@
-// Place all the styles related to the Info controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: https://sass-lang.com/
+/* Contenitore principale con flexbox */
+.flex-container-info {
+    display: flex;
+}
+
+/* Stile delle colonne */
+.column {
+    flex: 1;
+    margin: 0 10px;
+}
+
+/* Stile delle sezioni */
+.section {
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.prenotazione {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+  
+  /* Stile per l'immagine */
+  .pren-foto {
+    width: 100px;  /* Puoi regolare la larghezza come preferisci */
+    height: auto;
+  }
+  
+  /* Stile per le informazioni */
+  .pren-info {
+    flex: 1;
+    text-align: center;
+  }
+  
+  /* Stile per le icone */
+  .pren-icon {
+    display: flex;
+    gap: 10px;  /* Spazio tra le icone */
+  }
+  
+  .pren-icon i {
+    cursor: pointer;
+    font-size: 24px;  /* Regola la dimensione delle icone come preferisci */
+  }
+
+
+/* Stile per la sezione delle informazioni sui dipendenti */
+.employees-section {
+    margin-top: 20px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+}
+.dipendente {
+    margin: 1%;
+    border: 1px solid black;
+    width: 100px;
+    height: 120px;
+}
+.dip-foto {
+    width: 100px;  /* Puoi regolare la larghezza come preferisci */
+    height: auto;
+}
+
+/* per le statistiche */
+.statistiche {
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+    text-align: center;
+  }
+  
+  .statistiche canvas {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* per il calendario */
+
+  /* Stile per il mese */
+.month {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  /* Stile per i giorni della settimana */
+  .weekdays {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .weekday {
+    flex: 1;
+    text-align: center;
+  }
+  
+  /* Stile per i giorni del mese */
+  .days {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  
+  .day {
+    width: calc(100% / 7);
+    padding: 10px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  
+  .empty {
+    visibility: hidden;
+  }

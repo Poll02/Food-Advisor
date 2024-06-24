@@ -1,17 +1,15 @@
 # app/controllers/settings_controller.rb
 class SettingsController < ApplicationController
+  before_action :set_setting, only: [:show, :edit, :update]
   layout 'with_sidebar'
 
   def show
-    @setting = Setting.first_or_initialize
   end
 
   def edit
-    @setting = Setting.first_or_initialize
   end
 
   def update
-    @setting = Setting.first_or_initialize
     if @setting.update(setting_params)
       redirect_to settings_path, notice: 'Impostazioni aggiornate con successo.'
     else
@@ -20,6 +18,10 @@ class SettingsController < ApplicationController
   end
 
   private
+
+  def set_setting
+    @setting = Setting.first_or_initialize
+  end
 
   def setting_params
     params.require(:setting).permit(:font, :font_size, :theme)

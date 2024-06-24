@@ -1,7 +1,12 @@
 <%= stylesheet_link_tag 'home', media: 'all' %>
 <div class="homepage-container">
+    <% if logged_in? %>
+    <div class="alert" style="font-style: italic; color: #00b072;">
+      <p>Benvenuto, <span style="font-weight: bold;"> <%= current_user.name %> </span>!</p> 
+    </div>
+  <% end %>
     <div class="h1-container">
-        <h1 style="color: black;">Consigliati per te</h1>
+        <h1>Consigliati per te</h1>
     </div>
     <div class="recents-container">
         <div class="restaurants-text" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
@@ -44,7 +49,7 @@
         <div class="text-container">
         <h3>Guadagna punti!</h3>
         <p>Recensisci i ristoranti e partecipa ai tornei di FoodAdvisor per guadagnare punti!</p>
-        <button type="button">Cominciamo!</button>
+        <a href="<%= competizioni_path %>"><button type="button">Cominciamo!</button></a>
         </div>
     </div>
 
@@ -107,8 +112,8 @@
     </div>
     <div class="most-rewarded-container" style="margin-top: 30px; display: flex; align-items: center; width: 100%; background-color:antiquewhite;">
         <div class="most-rewarded-text" style="margin-left: 20%; width: 20%; margin-top: 30px;">
-            <h1>Scopri i Ristoranti più premiati</h1>
-            <p>Fatti guidare dagli altri utenti e dai critici per scoprire ristoranti particolarmente graditi.</p>
+            <h1 style="color: black;">Scopri i Ristoranti più premiati</h1>
+            <p style="color: black;">Fatti guidare dagli altri utenti e dai critici per scoprire ristoranti particolarmente graditi.</p>
             <button type="button">Vediamoli!</button>
 
         </div>
@@ -158,7 +163,7 @@
         </div>
 
         <div class="reserv-container" style="margin-left: 30px; display: flex; justify-content: center; align-items: center; width: 20%;">
-            <h2>Accedi al <span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span>  per effettuare e visualizzare le tue prenotazioni!</h3>
+            <h2>Accedi al <a href="<% login_path %>"><span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span></a>  per effettuare e visualizzare le tue prenotazioni!</h3>
 
         </div>
     </div>

@@ -1,0 +1,136 @@
+.classifica-page{
+    margin-top: 130px;
+    margin-left: 50px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.recommended{
+    display: flex;
+    flex-direction: column;
+}
+
+#find-competizione-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.comp-grid{
+    margin-top: 10px;
+    margin-bottom: 30px;
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    scrollbar-width: none;
+}
+
+@keyframes scrollLeft{
+from {transform: translate(1000px)}
+to{transform: translate()}
+
+}
+
+.comp-box{
+    position: relative;
+    display: inline-block;
+    transition: 0.2s;
+}  
+
+
+
+.comp-box img{
+    border-radius: 15px;
+    width: 400px;
+    height: auto;
+    display: block;
+}
+
+.text-overlay{
+position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: black 1px 0 5px;
+}
+
+.comp-box button{
+    margin-top: 10px;
+    border: 1px solid black;
+    width: 100px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 50px;
+    cursor: pointer;
+}
+
+.comp-box button:hover{
+    background-color: rgb(186, 207, 209);
+}
+
+.left-side{
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    max-width: 400px;
+    overflow-y: scroll;
+}
+
+.left-side-comp-box{
+    display: flex;
+}
+
+.left-side img{
+    cursor: pointer;
+    width: 100px;
+    height: 100px;
+    border-radius: 99px;
+    margin-right: 20px;
+    transition: 0.2s;
+}
+
+.left-side img:hover{
+    filter: brightness(80%);
+}
+
+.all-comp{
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-evenly;
+    margin-bottom: 30px;
+    gap: 50px;
+}
+
+.right-side{
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+}
+
+.right-side img{
+    border-radius: 15px;
+    width: 400px;
+    height: auto;
+    display: block;
+}
+
+.right-side button{
+    padding: 10px;
+    border: none;
+    background-color: rgb(83, 197, 159);
+    color: white;
+    border-radius: 10px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.right-side button:hover{
+    filter: brightness(120%);
+}

@@ -1,19 +1,13 @@
-// Place all the styles related to the Home controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: https://sass-lang.com/
-@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-
 .h1-container{
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 25px;
+    color: black;
+}
+
+.night-mode .h1-container {
+    color: white;
 }
 
 .homepage-container{
@@ -138,4 +132,3 @@ position: absolute;
     height: 60px;
     border-radius: 100px;
 }
-

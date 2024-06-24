@@ -7,6 +7,20 @@
 
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- link per i font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arial&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Times+New+Roman&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+New&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap"> 
+
+  <style>
+    body {
+      font-family: <%= @setting&.font || 'Poppins' %>;
+      font-size: <%= @setting&.font_size || 'medium' %>;
+    }
+  </style>
+
 </head>
 <body>
   <%= render 'layouts/navbar' %> <!-- Barra di navigazione -->
@@ -30,5 +44,18 @@
 
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- js per i grafici (libreria chart.js) -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var settingTheme = "<%= @setting&.theme %>";
+  
+    if (settingTheme === 'night') {
+      document.body.classList.add('night-mode');
+    } else {
+      document.body.classList.remove('night-mode');
+    }
+  });
+  
+  </script>
 </body>
 </html>

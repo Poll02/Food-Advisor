@@ -3,7 +3,7 @@ class RestaurateurProfilesController < ApplicationController
   
   def show
     #@user = current_user
-    render 'dashboard/show'  # Rende la vista specificata
+    render 'restaurateur_profiles/show'  # Rende la vista specificata
     #da sistemare il reindirizzamento con variabili di sessione dopo aver fatto il login
   end
 
