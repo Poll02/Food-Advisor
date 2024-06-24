@@ -3,37 +3,59 @@
   min-height: 50vh;
   margin-top: 130px;
   border: 1px solid black;
+}
 
-  .sidebar {
-    width: 200px; /* Fixed width for the sidebar */
-    background-color: #f8f9fa; /* Light background color */
-    padding: 20px;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+.night-mode .dashboard {
+  border-color: #555;
+}
 
+.sidebar {
+  width: 200px; /* Fixed width for the sidebar */
+  background-color: #f8f9fa; /* Light background color */
+  padding: 20px;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
+}
 
-    ul {
-      list-style: none; /* Remove default list styling */
-      padding: 0;
+.night-mode .sidebar {
+  background-color: #444;
+  color: #ccc;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+}
 
-      li {
-        margin-bottom: 15px; /* Space between links */
+.sidebar ul {
+  list-style: none; /* Remove default list styling */
+  padding: 0;
+}
 
-        a {
-          text-decoration: none; /*Remove underline */
-          color: #333; /* Dark text color */
-          font-weight: bold;
+.sidebar ul li {
+  margin-bottom: 15px; /* Space between links */
+}
 
-          &:hover {
-            color: #007bff; /* Change color on hover */
-          }
-        }
-      }
-    }
-  }
+.sidebar ul li a {
+  text-decoration: none; /* Remove underline */
+  color: #333; /* Dark text color */
+  font-weight: bold;
+}
 
-  .content {
-    flex: 1; /* Take up remaining space */
-    padding: 20px;
-    background-color: #ffffff; /* White background for content */
-  }
+.night-mode .sidebar ul li a {
+  color: #ccc;
+}
+
+.sidebar ul li a:hover {
+  color: #007bff; /* Change color on hover */
+}
+
+.night-mode .sidebar ul li a:hover {
+  color: #66aaff;
+}
+
+.content {
+  flex: 1; /* Take up remaining space */
+  padding: 20px;
+  background-color: #ffffff; /* White background for content */
+}
+
+.night-mode .content {
+  background-color: #333;
+  color: #ccc;
 }

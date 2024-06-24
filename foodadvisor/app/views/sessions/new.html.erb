@@ -5,10 +5,10 @@
 
     <div class="login-page">
         <div class="login-text-container" style="display: flex; flex-direction: column; width: 20%;">
-            <h1 style="color: white;">Esegui l'accesso come utente</h1>
-            <p style="color: rgb(255, 255, 255);">Per scrivere Recensioni, partecipare ad Eventi, gestire Prenotazioni e competere con gli altri utenti! oppure</p>
-            <h1 style="color: white;">Accedi come Ristoratore</h1>
-            <p style="color: rgb(255, 255, 255);">Per gestire il tuo ristorante, pubblicizzare Eventi e guadagnare punti in classifica!</p>
+            <h1>Esegui l'accesso come utente</h1>
+            <p>Per scrivere Recensioni, partecipare ad Eventi, gestire Prenotazioni e competere con gli altri utenti! oppure</p>
+            <h1>Accedi come Ristoratore</h1>
+            <p>Per gestire il tuo ristorante, pubblicizzare Eventi e guadagnare punti in classifica!</p>
 
         </div>
         <div class="login-container">
@@ -31,7 +31,7 @@
                     <%= password_field_tag 'session[password]', nil, id: "login-input" %>
                 </div>
                 <div class="rememberme-container">
-                    <%= label_tag :remember_me, "Ricordami", id: "login-label", style: "font-weight: normal; color: black;" %>
+                    <%= label_tag :remember_me, "Ricordami", id: "login-label", style: "font-weight: normal; " %>
                     <%= check_box_tag 'session[remember_me]' %>
                 </div>
                 <%= submit_tag 'Accedi', id: "login-btn" %>
@@ -45,9 +45,9 @@
                 <div class="password-forgot-container">
                     <p id="forgot-password">Ho dimenticato la password</p>
                 </div>
-                <div class="register-container" style="display: flex; align-items: center; gap: 5px; justify-content: center;">
+                <div class="register-container">
                     <hr class='solid' style="width: 25%;" id='divider'>
-                    <p style="font-size: 13px; color: #386641; cursor: pointer;">Iscriviti</p>
+                    <p style="font-size: 13px; cursor: pointer;"><a href="<%= signup_path %>">Iscriviti</a></p>
                     <hr class='solid' style="width: 25%;" id='divider'>
                 </div>
                 <% end %>
@@ -68,7 +68,7 @@
                     </div>
 
                     <div class="rememberme-container">
-                        <label for="checkbox" id="login-label" style="font-weight: normal; color: black;">Ricordami</label>
+                        <label for="checkbox" id="login-label" style="font-weight: normal; ">Ricordami</label>
                         <input type="checkbox"></span>
                     </div>
                     
@@ -81,12 +81,10 @@
                         <p id="forgot-password">Ho dimenticato la password</p>
 
                     </div>
-                    <div class="register-container" style="display: flex; align-items: center; gap: 5px; justify-content: center;">
+                    <div class="register-container">
                         <hr class='solid' style="width: 25%;" id='divider'>
-                        <p style="font-size: 13px; color: #386641; cursor: pointer;">Diventa un ristoratore</p>
+                        <p style="font-size: 13px; cursor: pointer;">Diventa un ristoratore</p>
                         <hr class='solid' style="width: 25%;" id='divider'>
-
-
                     </div>
 
                 </form>

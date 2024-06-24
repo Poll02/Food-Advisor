@@ -1,5 +1,6 @@
 $primary-color: #00b072;
 $secondary-color: #386641;
+$night-text: white;
 
 
 .registration-page {
@@ -109,6 +110,58 @@ $secondary-color: #386641;
       width: 1px;
       background-color: rgba(99, 99, 99, 0.413);
       height: 100%;
+    }
+  }
+}
+
+.night-mode .registration-form-container {
+  background-color: black;
+
+  h1 {
+    color: $night-text;
+  }
+
+  .user-type-selection {
+    label {
+      color: $night-text;
+    }
+  }
+
+  .forms-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+
+    .user-form,
+    .restaurant-form {
+      width: 48%;
+      display: flex;
+      flex-direction: column;
+      transition: opacity 0.3s;
+
+      .field {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+
+        label {
+          font-weight: bold;
+          color: $night-text;
+          margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"],
+        select {
+          border: 1px solid $night-text;
+        }
+      }
+    }
+
+    .separator {
+      background-color: rgba(255, 255, 255, 0.413);
     }
   }
 }

@@ -1,27 +1,44 @@
-.ristorante {
+  
+  .night-mode {
+    background-color: #333;
+    color: #fff;
+  }
+  
+  .ristorante {
     border: 1px solid black;
     padding: 1%;
     display: flex;
     justify-content: space-between;
-
-}
-.r-foto {
+  }
+  
+  .night-mode .ristorante {
+    border-color: #555;
+  }
+  
+  .r-foto {
     width: 100px;  /* Puoi regolare la larghezza come preferisci */
     height: auto;
-}
-.r-info {
-
-}
-.r-statistiche {
+  }
+  
+  .r-info {
+  
+  }
+  
+  .r-statistiche {
     padding: 1%;
     border: 1px solid black;
-
-}
-.r-stat {
+  }
+  
+  .night-mode .r-statistiche {
+    border-color: #555;
+  }
+  
+  .r-stat {
     display: flex;
     flex-direction: column;
-}
-.r-tags {
+  }
+  
+  .r-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
@@ -35,30 +52,39 @@
     font-size: 14px;
   }
   
-.r-tag.pub {
+  .r-tag.pub {
     background-color: #ffc107; /* Colore giallo */
-}
+  }
   
-.r-tag.famiglie {
+  .r-tag.famiglie {
     background-color: #28a745; /* Colore verde */
-}
-
-
-
-.r-stories {
+  }
+  
+  .r-stories {
     padding: 1%;
     border: 1px solid black;
-}
-.r-storia {
-
-}
-.r-recensioni {
+  }
+  
+  .night-mode .r-stories {
+    border-color: #555;
+  }
+  
+  .r-storia {
+  
+  }
+  
+  .r-recensioni {
     padding: 1%;
     border: 1px solid black;
     display: flex;
     flex-direction: column;
-}
-.r-recensione {
+  }
+  
+  .night-mode .r-recensioni {
+    border-color: #555;
+  }
+  
+  .r-recensione {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -66,47 +92,77 @@
     border: 1px solid #ccc;
     margin-bottom: 20px;
     width: 100%;
-}
-.recensione-foto {
+  }
+  
+  .night-mode .r-recensione {
+    border-color: #777;
+  }
+  
+  .recensione-foto {
     width: 100px;  /* Puoi regolare la larghezza come preferisci */
     height: auto;
-}
-.recensione-info {
+  }
+  
+  .recensione-info {
     text-align: center;
-}
-.recensione-icon {
+  }
+  
+  .recensione-icon {
     cursor: pointer;
     font-size: 24px;  /* Regola la dimensione delle icone come preferisci */
-}
-.r-ricette {
+  }
+  
+  .r-ricette {
     padding: 1%;
     border: 1px solid black;
     display: flex;
     flex-direction: row;
-}
-.r-ricetta {
+  }
+  
+  .night-mode .r-ricette {
+    border-color: #555;
+  }
+  
+  .r-ricetta {
     margin: 1%;
     border: 1px solid black;
     width: 100px;
     height: 120px;
-}
-.ricetta-foto {
+  }
+  
+  .night-mode .r-ricetta {
+    border-color: #555;
+  }
+  
+  .ricetta-foto {
     width: 100px;  /* Puoi regolare la larghezza come preferisci */
     height: auto;
-}
-.r-eventi {
+  }
+  
+  .r-eventi {
     padding: 1%;
     border: 1px solid black;
     display: flex;
     flex-direction: row;
-}
-.r-evento {
+  }
+  
+  .night-mode .r-eventi {
+    border-color: #555;
+  }
+  
+  .r-evento {
     margin: 1%;
     border: 1px solid black;
     width: 100px;
     height: 160px;
-}
-.evento-foto {
+  }
+  
+  .night-mode .r-evento {
+    border-color: #555;
+  }
+  
+  .evento-foto {
     width: 100px;  /* Puoi regolare la larghezza come preferisci */
     height: auto;
-}
+  }
+  
