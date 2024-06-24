@@ -5,7 +5,7 @@
             <a href="<%= root_path %>">Homepage</a>
             <a href="<%= ricerca_path %>">Ristoranti</a>
             <a href="<%= competizioni_path %>">Competizioni</a>
-            <a href="#"><ion-icon name="trophy"></ion-icon></a>
+            <a href="<%= classifiche_path %>"><ion-icon name="trophy"></ion-icon></a>
             <a href="#" class="active"  onclick="toggleDropdown()"><ion-icon name="person-circle-outline"></ion-icon></a>
             <div class="dropdown" id="dropdown">
                 <% if logged_in? %>

@@ -1,6 +1,8 @@
 class User < ApplicationRecord
     has_secure_password
     has_many :competizioni, foreign_key: 'owner'
+    has_many :problems, foreign_key: :id_utente
+
 
     def self.from_omniauth(auth)
       where(email: auth.info.email).first_or_initialize do |user|

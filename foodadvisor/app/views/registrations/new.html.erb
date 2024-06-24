@@ -15,17 +15,17 @@
         <div class="user-form">
           <%= form_with model: @user, url: registrations_path do |f| %>
             <div class="field">
-              <%= f.label :name %>
+              <%= f.label :Nome %>
               <%= f.text_field :name %>
             </div>
 
             <div class="field">
-              <%= f.label :surname %>
+              <%= f.label :Cognome %>
               <%= f.text_field :surname %>
             </div>
 
             <div class="field">
-              <%= f.label :birth %>
+              <%= f.label :Data_di_nascita %>
               <%= f.date_select :birth %>
             </div>
 
@@ -35,7 +35,7 @@
             </div>
 
             <div class="field">
-              <%= f.label :phone %>
+              <%= f.label :Telefono %>
               <%= f.telephone_field :phone %>
             </div>
 
@@ -45,7 +45,7 @@
             </div>
 
             <div class="field">
-              <%= f.label :password_confirmation %>
+              <%= f.label :Conferma_Password %>
               <%= f.password_field :password_confirmation %>
             </div>
 
@@ -60,8 +60,13 @@
         <div class="restaurant-form disabled">
           <%= form_with model: @user, url: registrations_path do |f| %>
             <div class="field">
-              <%= f.label :restaurant_name %>
+              <%= f.label :Nome_Ristorante %>
               <%= f.text_field :restaurant_name %>
+            </div>
+
+            <div class="field">
+              <%= f.label :Partita_IVA %>
+              <%= f.text_field :partita_iva %>
             </div>
 
             <div class="field">
@@ -70,7 +75,7 @@
             </div>
 
             <div class="field">
-              <%= f.label :phone %>
+              <%= f.label :Telefono %>
               <%= f.telephone_field :phone %>
             </div>
 
@@ -80,7 +85,7 @@
             </div>
 
             <div class="field">
-              <%= f.label :password_confirmation %>
+              <%= f.label :Conferma_Password %>
               <%= f.password_field :password_confirmation %>
             </div>
 

@@ -9,6 +9,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
+  get 'classifiche', to: 'classifiche#index'
+  get 'supporto', to: 'supporto#index'
+  resources :problems, only: [:create]
+
+
   #route for critic_profile
   get 'critic_profile', to: 'profile#critic_profile'
   # Rotta per la pagina di registrazione
