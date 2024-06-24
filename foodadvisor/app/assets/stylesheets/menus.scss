@@ -1,22 +1,25 @@
+.menu {
+    text-align: center;
+}
 .categoria-cibo {
-    border: 1px solid black;
-    padding: 1%;
-    border-radius: 10px;
     margin-bottom: 1%;
 }
 .piatto {
-    border: 1px solid red;
-    width: 130px;
-    height: 150px;
+    border: 1px solid #ccc;
+    width: 150px;
+    height: fit-content;
     padding: 1%;
+    margin: 1%;
     margin-top: 1%;
     border-radius: 10px;
     display: inline-block;
 }
 .foto-piatto {
     width: 100%;
-    height: 30px;
+    height: 70px;
+    border-radius: 10px;
 }
 .info-piatto {
     /*font automatici*/
+    margin-top: 4px;
 }

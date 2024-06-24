@@ -5,7 +5,8 @@
   }
   
   .ristorante {
-    border: 1px solid black;
+    border: 1px solid #555;
+    border-radius: 10px;
     padding: 1%;
     display: flex;
     justify-content: space-between;
@@ -26,7 +27,8 @@
   
   .r-statistiche {
     padding: 1%;
-    border: 1px solid black;
+    border: 1px solid #555;
+    border-radius: 10px;
   }
   
   .night-mode .r-statistiche {
@@ -62,7 +64,8 @@
   
   .r-stories {
     padding: 1%;
-    border: 1px solid black;
+    border: 1px solid #555;
+    border-radius: 10px;
   }
   
   .night-mode .r-stories {
@@ -75,7 +78,8 @@
   
   .r-recensioni {
     padding: 1%;
-    border: 1px solid black;
+    border: 1px solid #555;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
   }
@@ -90,6 +94,7 @@
     justify-content: space-between;
     padding: 10px;
     border: 1px solid #ccc;
+    border-radius: 10px;
     margin-bottom: 20px;
     width: 100%;
   }
@@ -114,7 +119,8 @@
   
   .r-ricette {
     padding: 1%;
-    border: 1px solid black;
+    border: 1px solid #555;
+    border-radius: 10px;
     display: flex;
     flex-direction: row;
   }
@@ -125,9 +131,10 @@
   
   .r-ricetta {
     margin: 1%;
-    border: 1px solid black;
-    width: 100px;
-    height: 120px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 120px;
+    height: 160px;
   }
   
   .night-mode .r-ricetta {
@@ -135,13 +142,19 @@
   }
   
   .ricetta-foto {
-    width: 100px;  /* Puoi regolare la larghezza come preferisci */
+    width: 120px;  /* Puoi regolare la larghezza come preferisci */
     height: auto;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .ricetta-info {
+    padding: 5px;
   }
   
   .r-eventi {
     padding: 1%;
-    border: 1px solid black;
+    border: 1px solid #555;
+    border-radius: 10px;
     display: flex;
     flex-direction: row;
   }
@@ -152,9 +165,10 @@
   
   .r-evento {
     margin: 1%;
-    border: 1px solid black;
-    width: 100px;
-    height: 160px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 120px;
+    height: 180px;
   }
   
   .night-mode .r-evento {
@@ -162,7 +176,12 @@
   }
   
   .evento-foto {
-    width: 100px;  /* Puoi regolare la larghezza come preferisci */
+    width: 120px;  /* Puoi regolare la larghezza come preferisci */
     height: auto;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .evento-info {
+    padding: 5px;
   }
   

@@ -10,9 +10,10 @@
 }
 
 /* Stile delle sezioni */
-.section {
+.i-section {
     margin-bottom: 20px;
     border: 1px solid #ccc;
+    border-radius: 10px;
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -24,6 +25,7 @@
     justify-content: space-between;
     padding: 10px;
     border: 1px solid #ccc;
+    border-radius: 10px;
     margin-bottom: 20px;
     width: 100%;
   }
@@ -56,19 +58,23 @@
 .employees-section {
     margin-top: 20px;
     border: 1px solid #ccc;
+    border-radius: 10px;
     padding: 10px;
     display: flex;
     flex-direction: row;
 }
 .dipendente {
     margin: 1%;
-    border: 1px solid black;
-    width: 100px;
-    height: 120px;
+    padding: 1%;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    width: 140px;
+    height: fit-content;
 }
 .dip-foto {
-    width: 100px;  /* Puoi regolare la larghezza come preferisci */
-    height: auto;
+    width: auto;  /* Puoi regolare la larghezza come preferisci */
+    height: 60px;
+    border-radius: 10px;
 }
 
 /* per le statistiche */
@@ -90,7 +96,10 @@
   /* Stile per il mese */
 .month {
     font-size: 24px;
-    margin-bottom: 10px;
+    background-color: #1f4728;
+    color: white;
+    border-radius: 10px 10px 0 0;
+    padding: 1%;
   }
   
   /* Stile per i giorni della settimana */
@@ -98,7 +107,8 @@
     display: flex;
     justify-content: space-between;
     font-weight: bold;
-    margin-bottom: 10px;
+    border-bottom: 1px solid #ccc;
+    padding: 1%;
   }
   
   .weekday {

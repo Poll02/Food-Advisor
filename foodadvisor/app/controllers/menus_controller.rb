@@ -12,7 +12,7 @@ class MenusController < ApplicationController
 
   def update
     if @menu.update(menu_params)
-      redirect_to menus_path, notice: 'Menu aggiornato con successo.'
+      redirect_to menu_path(@menu), notice: 'Menu aggiornato con successo.'
     else
       render :edit
     end

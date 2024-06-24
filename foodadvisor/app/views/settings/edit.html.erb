@@ -1,23 +1,32 @@
-<h1>Impostazioni</h1>
-
-<%= form_for(@setting, url: settings_path, method: :put) do |f| %>
-    <div class="field">
-      <%= f.label :font, "Font" %><br>
-      <%= f.select :font, [["Arial", "arial"], ["Times New Roman", "times"], ["Courier New", "courier"], ["Poppins", "poppins"]], prompt: "Seleziona un font" %>
-    </div>
-  
-    <div class="field">
-      <%= f.label :font_size, "Dimensione del testo" %><br>
-      <%= f.select :font_size, [["Piccolo", "small"], ["Medio", "medium"], ["Grande", "large"]], prompt: "Seleziona una dimensione" %>
-    </div>
-  
-    <div class="field">
-      <%= f.label :theme, "Tema" %><br>
-      <%= f.select :theme, [["Giorno", "day"], ["Notte", "night"]], prompt: "Seleziona un tema" %>
-    </div>
-  
-    <div class="actions">
-      <%= f.submit "Salva Impostazioni" %>
-    </div>
-  <% end %>
+<div class="impostazioni">
+  <h1>Impostazioni</h1>
+  <p>Stile dell'applicazione</p>
+  <div class="s-section">
+    <%= form_for(@setting, url: settings_path, method: :put) do |f| %>
+      <div class="field">
+        <%= f.label :font, "Font: " %>
+        <%= f.select :font, [["Arial", "arial"], ["Times New Roman", "times"], ["Courier New", "courier"], ["Poppins", "poppins"]], prompt: "Seleziona un font" %>
+      </div>
+    
+      <div class="field">
+        <%= f.label :font_size, "Dimensione del testo: " %>
+        <%= f.select :font_size, [["Piccolo", "small"], ["Medio", "medium"], ["Grande", "large"]], prompt: "Seleziona una dimensione" %>
+      </div>
+    
+      <div class="field">
+        <%= f.label :theme, "Tema: " %>
+        <%= f.select :theme, [["Giorno", "day"], ["Notte", "night"]], prompt: "Seleziona un tema" %>
+      </div>
+    
+      <div class="actions">
+        <%= f.submit "Salva Impostazioni" %>
+      </div>
+    <% end %>
+  </div>
+  <p>Gestisci le tue preferenze</p>
+  <div class="s-section">
+    <p>Gestisci le notifiche</p>
+    <p>Tag di preferenza</p>
+  </div>
+</div>
   
