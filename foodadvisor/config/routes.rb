@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'competizione/index'
+  get 'support/index'
   get 'menus/show'
   get 'menus/edit'
   get 'menus/update'
@@ -32,6 +33,7 @@ Rails.application.routes.draw do
   get 'ricerca', to: 'ricerca#index'
   get 'logout', to: 'sessions#destroy'
 
+  get 'support', to: 'support#index'
   #
   resources :registrations, only: [:create]
   resources :competizioni, only: [:index]
