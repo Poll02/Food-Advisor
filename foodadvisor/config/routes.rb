@@ -31,7 +31,6 @@ Rails.application.routes.draw do
   delete 'logout', to: 'sessions#destroy'
 
   get 'support', to: 'support#index'
-
   #
   resources :registrations, only: [:create]
   resource :restaurateur_profile, only: [:show, :edit, :update]
