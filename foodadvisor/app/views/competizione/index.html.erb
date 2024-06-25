@@ -29,6 +29,7 @@
 
     <div class="all-comp">
       <div class="left-side">
+        <h1>Risultati</h1>
         <% @competizioni.each do |competizione| %>
           <div class="left-side-comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>"  data-date="<%= competizione.data_inizio %>" data-endate="<%= competizione.data_fine %>" data-id="<% competizione.id %>">
             <%= image_tag competizione.locandina %>
@@ -42,7 +43,7 @@
         <% end %>
       </div>
       <div class="vertical-divider"></div>
-      <div class="right-side">
+      <div class="right-side" id="right-side" style="display: none;">
         <% if @competizioni.any? %>
           <%= image_tag @competizioni.first.locandina, id: 'right-side-image' %>
           <h1 id="right-side-nome"><%= @competizioni.first.nome %></h1>
@@ -78,8 +79,9 @@
           var dataI = box.getAttribute('data-date')
           var dataF = box.getAttribute('data-endate')
 
-
           // Aggiorna i contenuti del riquadro destro
+          var rightSide = document.getElementById('right-side');
+          rightSide.style.display = 'flex';
           document.getElementById('right-side-button').setAttribute('data-competizione-id', id);
           document.getElementById('right-side-nome').innerText = nome;
           document.getElementById('right-side-descrizione').innerText = descrizione;
@@ -88,13 +90,22 @@
           document.getElementById('right-side-image').src = '/assets/' + locandina; // Assumendo che le immagini siano nella cartella assets
           document.getElementById('right-side-start-data').innerText = dataI;
           document.getElementById('right-side-end-date').innerText = dataF;
-
-
-
         });
-      }
-      );
-      
+      });
+
+      // Funzione per la ricerca delle competizioni
+      var findbar = document.getElementById('findbar');
+      findbar.addEventListener('input', function() {
+        var searchText = findbar.value.toLowerCase();
+        compBoxes.forEach(function(box) {
+          var nome = box.getAttribute('data-nome').toLowerCase();
+          if (nome.includes(searchText)) {
+            box.style.display = 'flex';
+          } else {
+            box.style.display = 'none';
+          }
+        });
+      });
     });
   </script>
 </body>
