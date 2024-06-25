@@ -1,4 +1,12 @@
 Rails.application.routes.draw do
+  get 'user_profile/edit'
+  get 'user_profile/show'
+  get 'admin_profile/edit'
+  get 'admin_profile/show'
+  get 'profile/show'
+  get 'critic_profile/show'
+  get 'critic_profile/edit'
+  get 'critic_profile/update'
   get 'competizione/index'
   get 'support/index'
   get 'menus/show'
@@ -10,13 +18,23 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
-  #route for critic_profile
-  get 'critic_profile', to: 'profile#critic_profile'
+  get 'classifiche', to: 'classifiche#index'
+  get 'supporto', to: 'supporto#index'
+  resources :problems, only: [:create]
+
+
+  #routes for profiles
+  get 'critic_profile', to: 'critic_profile#show'
+  get 'rest_profile', to: 'restaurateur_profiles#show'
+  get 'admin_profile', to: 'admin_profile#show'
+  get 'user_profile', to: 'user_profile#show'
+
   # Rotta per la pagina di registrazione
   get 'signup', to: 'registrations#new'
-  get 'rest_profile', to: 'restaurateur_profiles#show'
+  
   #route for placement
   get 'competizioni', to: 'competizione#index'
+  
   # Rotte per le pagine della dashboard
   get 'dashboard', to: 'restaurateur_profiles#show'
   get 'info', to: 'info#show'

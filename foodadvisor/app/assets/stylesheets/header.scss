@@ -88,13 +88,18 @@ transform: scale(95%);
 .dropdown {
     display: none;
     position: absolute;
-    right: 20px;
-    top: 60px; 
+    right: 60px;
+    top: 70px; 
     background-color: #fff;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     z-index: 1;
     border-radius: 5px;
     overflow: hidden;
+}
+
+.night-mode .dropdown {
+    background-color: rgb(49, 49, 49);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .dropdown a {

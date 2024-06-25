@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_24_222854) do
+ActiveRecord::Schema.define(version: 2024_06_25_090705) do
 
   create_table "competiziones", force: :cascade do |t|
     t.string "nome"
@@ -42,6 +42,14 @@ ActiveRecord::Schema.define(version: 2024_06_24_222854) do
     t.string "name"
   end
 
+  create_table "problems", force: :cascade do |t|
+    t.integer "id_utente"
+    t.string "text"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["id_utente"], name: "index_problems_on_id_utente"
+  end
+
   create_table "ristoratoris", force: :cascade do |t|
     t.string "restaurant_name", null: false
     t.integer "piva", limit: 8, null: false
@@ -51,6 +59,7 @@ ActiveRecord::Schema.define(version: 2024_06_24_222854) do
     t.binary "foto"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "role"
   end
 
   create_table "settings", force: :cascade do |t|
@@ -72,8 +81,10 @@ ActiveRecord::Schema.define(version: 2024_06_24_222854) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "role"
     t.string "restaurant_name"
+    t.string "partita_iva"
   end
 
   add_foreign_key "competiziones", "users", column: "owner"
   add_foreign_key "dishes", "menu"
+  add_foreign_key "problems", "users", column: "id_utente"
 end

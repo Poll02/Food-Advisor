@@ -28,9 +28,17 @@
   <div class="dashboard">
     <aside class="sidebar">
       <ul>
-        <li><%= link_to 'Dashboard', dashboard_path %></li>
-        <li><%= link_to 'Info', info_path %></li>
-        <li><%= link_to 'Menu', menus_path %></li>
+        <% case current_user.role %>
+          <% when 'admin' %>
+            
+          <% when 'restaurant_owner' %>
+            <li><%= link_to 'Dashboard', dashboard_path %></li>
+            <li><%= link_to 'Info', info_path %></li>
+            <li><%= link_to 'Menu', menus_path %></li>
+          <% when 'user' %>
+            <li><%= link_to 'Dashboard', user_profile_path %></li>
+          <% when 'critic' %>
+        <% end %>
         <li><%= link_to 'Chat', chat_path %></li>
         <li><%= link_to raw('<i class="fa fa-cog" aria-hidden="true"></i>'), settings_path %></li>
       </ul>

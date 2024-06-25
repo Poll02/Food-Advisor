@@ -5,11 +5,20 @@
             <a href="<%= root_path %>">Homepage</a>
             <a href="<%= ricerca_path %>">Ristoranti</a>
             <a href="<%= competizioni_path %>">Competizioni</a>
-            <a href="#"><ion-icon name="trophy"></ion-icon></a>
+            <a href="<%= classifiche_path %>"><ion-icon name="trophy"></ion-icon></a>
             <a href="#" class="active"  onclick="toggleDropdown()"><ion-icon name="person-circle-outline"></ion-icon></a>
             <div class="dropdown" id="dropdown">
                 <% if logged_in? %>
-                    <a href="/profile">Visualizza Profilo</a>
+                    <% case current_user.role %>
+                        <% when 'admin' %>
+                        <a href="/admin_profile">Visualizza Profilo</a>
+                        <% when 'restaurant_owner' %>
+                        <a href="/rest_profile">Visualizza Profilo</a>
+                        <% when 'user' %>
+                        <a href="/user_profile">Visualizza Profilo</a>
+                        <% when 'critic' %>
+                        <a href="/critic_profile">Visualizza Profilo</a>
+                    <% end %>
                     <a href="/logout">Logout</a>
                 <% else %>
                     <a href="/login">Accedi</a>
@@ -21,14 +30,12 @@
 
     <script>
         function toggleDropdown() {
-    var dropdown = document.getElementById('dropdown');
-    if (dropdown.style.display === 'block') {
-        dropdown.style.display = 'none';
-    } else {
-        dropdown.style.display = 'block';
-    }
-}
-
-
+            var dropdown = document.getElementById('dropdown');
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+            } else {
+                dropdown.style.display = 'block';
+            }
+        }
     </script>
 </header>

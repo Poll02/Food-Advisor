@@ -57,7 +57,12 @@
         <div class="login-container">
             <div class="login-form-container">
                 <h1 style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">Login Ristoratore<span><ion-icon name="pizza"></ion-icon></span></h1>
-                <form id="login-form">
+                <%= form_with(url: login_path, local: true, id: "login-form") do %>
+                    <% if flash.now[:alert] %>
+                        <div class="alert alert-danger" style="color: red; font-style: italic;">
+                        <%= flash.now[:alert] %>
+                        </div>
+                    <% end %>
                     <div class="input-container">
                         <label id="login-label">P. IVA</label>
                     <input type="text" id="login-input">
@@ -73,7 +78,7 @@
                     </div>
                     
                     
-                    <button type="submit" id="login-btn">Accedi</button>
+                    <%= submit_tag 'Accedi', id: "login-btn" %>
                     <hr class='solid' id='divider'>
 
 
@@ -82,12 +87,12 @@
 
                     </div>
                     <div class="register-container">
-                        <hr class='solid' style="width: 25%;" id='divider'>
-                        <p style="font-size: 13px; cursor: pointer;">Diventa un ristoratore</p>
-                        <hr class='solid' style="width: 25%;" id='divider'>
+                        <hr class='solid' style="width: 20%;" id='divider'>
+                        <p style="font-size: 13px; cursor: pointer;"><a href="<%= signup_path %>">Diventa un ristoratore</a></p>
+                        <hr class='solid' style="width: 20%;" id='divider'>
                     </div>
 
-                </form>
+                <% end %>
             </div>
         </div>
     </div>
