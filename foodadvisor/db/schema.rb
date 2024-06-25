@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_24_124804) do
+ActiveRecord::Schema.define(version: 2024_06_24_222854) do
 
   create_table "competiziones", force: :cascade do |t|
     t.string "nome"
@@ -42,15 +42,15 @@ ActiveRecord::Schema.define(version: 2024_06_24_124804) do
     t.string "name"
   end
 
-  create_table "partecipazione_competizionis", force: :cascade do |t|
-    t.integer "idutente"
-    t.integer "idcomp"
-    t.integer "user_id", null: false
-    t.integer "competizione_id", null: false
+  create_table "ristoratoris", force: :cascade do |t|
+    t.string "restaurant_name", null: false
+    t.integer "piva", limit: 8, null: false
+    t.string "email", null: false
+    t.string "phone", null: false
+    t.string "password_digest", null: false
+    t.binary "foto"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["competizione_id"], name: "index_partecipazione_competizionis_on_competizione_id"
-    t.index ["user_id"], name: "index_partecipazione_competizionis_on_user_id"
   end
 
   create_table "settings", force: :cascade do |t|
@@ -76,6 +76,4 @@ ActiveRecord::Schema.define(version: 2024_06_24_124804) do
 
   add_foreign_key "competiziones", "users", column: "owner"
   add_foreign_key "dishes", "menu"
-  add_foreign_key "partecipazione_competizionis", "competiziones"
-  add_foreign_key "partecipazione_competizionis", "users"
 end
