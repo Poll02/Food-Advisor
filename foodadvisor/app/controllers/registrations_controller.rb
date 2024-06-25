@@ -1,24 +1,26 @@
 class RegistrationsController < ApplicationController
   def new
     @user = User.new
-    @ristoratore = Ristoratori.new
+    @ristoratori = Ristoratori.new
   end
 
   def create
     if params[:utente_checkbox].present?
-      @user = User.new(user_params)
+      @user = User.new(user_params.merge(role: 'user'))
       if @user.save
         redirect_to root_path, notice: 'Registrazione utente avvenuta con successo.'
       else
         render :new
       end
     elsif params[:ristoratore_checkbox].present?
-      @ristoratore = Ristoratori.new(ristoratore_params)
-      if @ristoratore.save
+      @ristoratori = Ristoratori.new(ristoratore_params.merge(role: 'restaurant_owner'))
+      if @ristoratori.save
         redirect_to root_path, notice: 'Registrazione ristoratore avvenuta con successo.'
       else
         render :new
       end
+    else
+      render :new, alert: 'Seleziona una tipologia di registrazione.'
     end
   end
 
@@ -29,7 +31,7 @@ class RegistrationsController < ApplicationController
   end
 
   def ristoratore_params
-    params.permit(:restaurant_name, :piva, :email, :phone, :password, :password_confirmation, :foto)
+    params.require(:ristoratori).permit(:restaurant_name, :piva, :email, :phone, :password, :password_confirmation, :foto)
   end
 end
 

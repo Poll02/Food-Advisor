@@ -1,30 +1,43 @@
 class MenusController < ApplicationController
   layout 'with_sidebar'
-  before_action :set_menu, only: [:show, :edit, :update]
 
   def show
-    # Il contenuto del menu è già impostato da set_menu
+    @categories = Category.includes(:dishes).all
   end
 
   def edit
-    # Il contenuto del menu è già impostato da set_menu
+    @categories = Category.includes(:dishes).all
+    @new_category = Category.new
+    @new_dish = Dish.new
   end
 
   def update
-    if @menu.update(menu_params)
-      redirect_to menus_path, notice: 'Menu aggiornato con successo.'
-    else
-      render :edit
+    # Aggiorna le categorie e i piatti esistenti
+    params[:categories].each do |category_id, category_params|
+      category = Category.find(category_id)
+      category.update(name: category_params[:name])
+      category_params[:dishes].each do |dish_id, dish_params|
+        dish = category.dishes.find(dish_id)
+        dish.update(dish_params)
+      end
     end
-  end
 
-  private
+    # Aggiungi nuovi piatti
+    if params[:new_dishes]
+      params[:new_dishes].each do |category_id, new_dish_params|
+        category = Category.find(category_id)
+        category.dishes.create(new_dish_params)
+      end
+    end
 
-  def set_menu
-    @menu = Menu.first_or_initialize
-  end
+    # Aggiungi nuove categorie
+    if params[:new_category]
+      new_category = Category.create(params[:new_category].permit(:name))
+      if params[:new_dishes][new_category.id.to_s]
+        new_category.dishes.create(params[:new_dishes][new_category.id.to_s])
+      end
+    end
 
-  def menu_params
-    params.require(:menu).permit(:name, dishes_attributes: [:id, :name, :price, :ingredients, :_destroy])
+    redirect_to menus_path
   end
 end

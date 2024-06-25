@@ -3,11 +3,11 @@
 one:
   name: MyString
   price: 9.99
-  ingredients: MyString
-  menu: one
+  ingredients: MyText
+  category: one
 
 two:
   name: MyString
   price: 9.99
-  ingredients: MyString
-  menu: two
+  ingredients: MyText
+  category: two

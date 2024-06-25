@@ -1,22 +1,39 @@
+.menu {
+    text-align: center;
+}
 .categoria-cibo {
-    border: 1px solid black;
-    padding: 1%;
-    border-radius: 10px;
     margin-bottom: 1%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 .piatto {
-    border: 1px solid red;
-    width: 130px;
-    height: 150px;
+    border: 1px solid #ccc;
+    width: 150px;
+    height: 250px;
     padding: 1%;
-    margin-top: 1%;
+    margin: 1%;
     border-radius: 10px;
     display: inline-block;
 }
 .foto-piatto {
     width: 100%;
-    height: 30px;
+    height: 70px;
+    border-radius: 10px;
 }
 .info-piatto {
     /*font automatici*/
+    margin-top: 4px;
+}
+
+.nuovo-piatto {
+    border: 2px dashed #aaa;
+    padding: 10px;
+    margin: 10px;
+}
+  
+.nuova-categoria {
+    border: 2px dashed #aaa;
+    padding: 10px;
+    margin: 10px;
 }

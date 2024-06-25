@@ -1,59 +1,28 @@
-<h1>Menu</h1>
-<form id="find-form">
+<div class="menu">
+  <h1>Menu</h1>
+  <form id="find-form">
     <div class="find-input" style="display: flex; align-items: center;">
-        <ion-icon name="search-outline" style="margin-bottom: 30px; color: black; "></ion-icon>
-        <input type="text" id="findbar" placeholder="Inserisci il nome del piatto">
+      <ion-icon name="search-outline" style="margin-bottom: 30px; color: black;"></ion-icon>
+      <input type="text" id="findbar" placeholder="Inserisci il nome del piatto">
     </div>
-    <ion-icon name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon> 
-</form>
-<div class="categoria-cibo">
-    <h2>PRIMI</h2>
-    <div class="piatto">
-        <%= image_tag 'background.jpg', class: 'foto-piatto', alt: 'Tagliatelle' %>        
-        <div class="info-piatto">
-            <h3>Tagliatelle</h3>
-            <p>prezzo:8$</p>
-            <p>ingredienti: pasta, ragu</p>
+    <ion-icon name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon>
+  </form>
+
+  <% @categories.each do |category| %>
+    <h2><%= category.name %></h2>
+    <div class="categoria-cibo">
+      <% category.dishes.each do |dish| %>
+        <div class="piatto">
+          <%= image_tag 'background.jpg', class: 'foto-piatto', alt: dish.name %>        
+          <div class="info-piatto">
+            <h3><%= dish.name %></h3>
+            <p>prezzo: <%= number_to_currency(dish.price) %></p>
+            <p>ingredienti: <%= dish.ingredients %></p>
+          </div>
         </div>
+      <% end %>
     </div>
-    <div class="piatto">
-        <%= image_tag 'background.jpg', class: 'foto-piatto', alt: 'Tagliatelle' %>        
-        <div class="info-piatto">
-            <h3>Tagliatelle</h3>
-            <p>prezzo:8$</p>
-            <p>ingredienti: pasta, ragu</p>
-        </div>
-    </div>
+  <% end %>
+
+  <%= link_to 'Modifica Menu', edit_menus_path %>
 </div>
-<div class="categoria-cibo">
-    <h2>SECONDI</h2>
-    <div class="piatto">
-        <%= image_tag 'background.jpg', class: 'foto-piatto', alt: 'Tagliatelle' %>        
-        <div class="info-piatto">
-            <h3>Tagliatelle</h3>
-            <p>prezzo:8$</p>
-            <p>ingredienti: pasta, ragu</p>
-        </div>
-    </div>
-    <div class="piatto">
-        <%= image_tag 'background.jpg', class: 'foto-piatto', alt: 'Tagliatelle' %>        
-        <div class="info-piatto">
-            <h3>Tagliatelle</h3>
-            <p>prezzo:8$</p>
-            <p>ingredienti: pasta, ragu</p>
-        </div>
-    </div>
-</div>
-
-#questo li prende dinamicamente
-<h1><%= @menu.name %></h1>
-
-<% @menu.dishes.each do |dish| %>
-  <div class="piatto">
-    <h3><%= dish.name %></h3>
-    <p>prezzo: <%= number_to_currency(dish.price) %></p>
-    <p>ingredienti: <%= dish.ingredients %></p>
-  </div>
-<% end %>
-
-<%= link_to 'Modifica Menu', edit_menus_path %>
