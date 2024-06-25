@@ -1,41 +1,44 @@
 <div class="menu">
   <h1>Modifica Menu</h1>
-  <form action="<%= menus_path %>" method="post">
-    <%= hidden_field_tag :_method, 'patch' %>
-    <%= csrf_meta_tags %>
-
+  <%= form_with model: @menu, url: menus_path(@menu), method: :patch, local: true do |form| %>
     <% @categories.each do |category| %>
-      <h2>
-        <%= text_field_tag "categories[#{category.id}][name]", category.name %>
-      </h2>
-      <div class="categoria-cibo">
-        <% category.dishes.each do |dish| %>
-          <div class="piatto">
-            <%= image_tag 'background.jpg', class: 'foto-piatto', alt: dish.name %>        
+      <div class="categoria">
+        <h2>
+          <%= text_field_tag "categories[#{category.id}][name]", category.name, class: 'categoria-input' %>
+        </h2>
+        <div class="categoria-cibo">
+          <% category.dishes.each do |dish| %>
+            <div class="piatto">
+              <%= image_tag 'background.jpg', class: 'foto-piatto', alt: dish.name %>
+              <div class="info-piatto">
+                <h3><%= text_field_tag "categories[#{category.id}][dishes][#{dish.id}][name]", dish.name, placeholder: 'Nome piatto' %></h3>
+                <p>prezzo: <%= number_field_tag "categories[#{category.id}][dishes][#{dish.id}][price]", dish.price, step: 0.01, placeholder: 'Prezzo' %></p>
+                <p>ingredienti: <%= text_area_tag "categories[#{category.id}][dishes][#{dish.id}][ingredients]", dish.ingredients, placeholder: 'Ingredienti', class: 'ingredients-textarea' %></p>
+              </div>
+            </div>
+          <% end %>
+
+          <!-- Form per aggiungere un nuovo piatto -->
+          <div class="piatto nuovo-piatto">
             <div class="info-piatto">
-              <h3><%= text_field_tag "categories[#{category.id}][dishes][#{dish.id}][name]", dish.name %></h3>
-              <p>prezzo: <%= number_field_tag "categories[#{category.id}][dishes][#{dish.id}][price]", dish.price, step: 0.01 %></p>
-              <p>ingredienti: <%= text_field_tag "categories[#{category.id}][dishes][#{dish.id}][ingredients]", dish.ingredients %></p>
+              <h3><%= text_field_tag "new_dishes[#{category.id}][name]", '', placeholder: 'Nome nuovo piatto' %></h3>
+              <p>prezzo: <%= number_field_tag "new_dishes[#{category.id}][price]", '', step: 0.01, placeholder: 'Prezzo' %></p>
+              <p>ingredienti: <%= text_area_tag "new_dishes[#{category.id}][ingredients]", '', placeholder: 'Ingredienti', class: 'ingredients-textarea' %></p>
             </div>
           </div>
-        <% end %>
-
-        <!-- Form per aggiungere un nuovo piatto -->
-        <div class="piatto nuovo-piatto">
-          <h3><%= text_field_tag "new_dishes[#{category.id}][name]", '', placeholder: 'Nome nuovo piatto' %></h3>
-          <p>prezzo: <%= number_field_tag "new_dishes[#{category.id}][price]", '', step: 0.01, placeholder: 'Prezzo' %></p>
-          <p>ingredienti: <%= text_field_tag "new_dishes[#{category.id}][ingredients]", '', placeholder: 'Ingredienti' %></p>
         </div>
       </div>
     <% end %>
 
     <!-- Form per aggiungere una nuova categoria -->
     <div class="nuova-categoria">
-      <h2><%= text_field_tag "new_category[name]", '', placeholder: 'Nome nuova categoria' %></h2>
+      <h2><%= text_field_tag "new_category[name]", '', placeholder: 'Nome nuova categoria', class: 'categoria-input' %></h2>
     </div>
 
-    <%= submit_tag 'Salva Impostazioni' %>
-  </form>
+    <div class="submit-section">
+      <%= form.submit 'Salva Impostazioni', class: 'save-button' %>
+    </div>
+  <% end %>
 
-  <%= link_to 'Torna al Menu', menus_path %>
+  <%= link_to 'Torna al Menu', menus_path(@menu), class: 'back-link' %>
 </div>
