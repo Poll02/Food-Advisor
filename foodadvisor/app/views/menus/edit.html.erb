@@ -14,6 +14,8 @@
                 <h3><%= text_field_tag "categories[#{category.id}][dishes][#{dish.id}][name]", dish.name, placeholder: 'Nome piatto' %></h3>
                 <p>prezzo: <%= number_field_tag "categories[#{category.id}][dishes][#{dish.id}][price]", dish.price, step: 0.01, placeholder: 'Prezzo' %></p>
                 <p>ingredienti: <%= text_area_tag "categories[#{category.id}][dishes][#{dish.id}][ingredients]", dish.ingredients, placeholder: 'Ingredienti', class: 'ingredients-textarea' %></p>
+                <%= check_box_tag "categories[#{category.id}][dishes][#{dish.id}][delete]", '1', false, class: 'delete-checkbox' %>
+                <label for="categories[#{category.id}][dishes][#{dish.id}][delete]">Elimina</label>
               </div>
             </div>
           <% end %>

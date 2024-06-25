@@ -18,26 +18,29 @@ class MenusController < ApplicationController
         category = Category.find(category_id)
         category.update!(category_params.permit(:name))
 
-        # Aggiorna i piatti esistenti
+        # Aggiorna i piatti esistenti e elimina quelli contrassegnati per l'eliminazione
         category_params[:dishes]&.each do |dish_id, dish_params|
-          dish = Dish.find(dish_id)
-          dish.update!(dish_params.permit(:name, :price, :ingredients))
+          if dish_params[:delete] == '1'
+            Dish.find(dish_id).destroy
+          else
+            dish = Dish.find(dish_id)
+            dish.update!(dish_params.permit(:name, :price, :ingredients))
+          end
         end
-      end
 
-      # Aggiungi nuovi piatti
-      if params[:new_dishes].present?
-        params[:new_dishes].each do |category_id, dish_params|
+        # Aggiungi nuovi piatti solo se tutti i campi sono riempiti
+        if params[:new_dishes][category_id].present? && params[:new_dishes][category_id][:name].present? &&
+           params[:new_dishes][category_id][:price].present? && params[:new_dishes][category_id][:ingredients].present?
           Dish.create!(
             category_id: category_id,
-            name: dish_params[:name],
-            price: dish_params[:price],
-            ingredients: dish_params[:ingredients]
+            name: params[:new_dishes][category_id][:name],
+            price: params[:new_dishes][category_id][:price],
+            ingredients: params[:new_dishes][category_id][:ingredients]
           )
         end
       end
 
-      # Aggiungi nuova categoria
+      # Aggiungi nuova categoria solo se è stata riempita
       if params[:new_category].present? && params[:new_category][:name].present?
         Category.create!(name: params[:new_category][:name], menu: @menu)
       end
@@ -54,9 +57,5 @@ class MenusController < ApplicationController
   def set_menu
     @menu = Menu.find(params[:id])
     @categories = @menu.categories.includes(:dishes)
-  end
-
-  def menu_params
-    params.require(:menu).permit(categories: [:name, dishes: [:name, :price, :ingredients]], new_dishes: [:name, :price, :ingredients], new_category: [:name])
   end
 end
