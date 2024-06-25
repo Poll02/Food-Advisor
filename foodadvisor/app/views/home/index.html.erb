@@ -1,10 +1,17 @@
 <%= stylesheet_link_tag 'home', media: 'all' %>
 <div class="homepage-container">
     <% if logged_in? %>
-    <div class="alert" style="font-style: italic; color: #00b072;">
-      <p>Benvenuto, <span style="font-weight: bold;"> <%= current_user.name %> </span>!</p> 
-    </div>
-  <% end %>
+        <div class="alert" style="font-style: italic; color: #00b072;">
+        <p>Benvenuto,
+            <% if current_user_role == 'User' %>
+            <span style="font-weight: bold;"><%= current_user.name %></span>
+            <% elsif current_user_role == 'Ristoratore' %>
+            <span style="font-weight: bold;"><%= current_user.restaurant_name %></span>
+            <% end %>
+            !
+        </p> 
+        </div>
+    <% end %>
     <div class="h1-container">
         <h1>Consigliati per te</h1>
     </div>

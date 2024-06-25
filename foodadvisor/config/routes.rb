@@ -40,10 +40,22 @@ Rails.application.routes.draw do
   get 'info', to: 'info#show'
   get 'chat', to: 'chat#show'
   get 'settings', to: 'settings#show'
-  #
-  get 'sessions/new'
-  get 'login', to: 'sessions#new'
+  
+  
+  # rotte per il login
+  # Rotta per il form di login (GET e POST)
+  get 'login', to: 'sessions#new', as: :user_login
   post 'login', to: 'sessions#create'
+  
+  # Rotta per il form di login del ristoratore (GET e POST)
+  get 'restaurateur/login', to: 'sessions#new', as: :restaurateur_login
+  post 'restaurateur/login', to: 'sessions#create'
+  
+  # Rotta per il logout (DELETE)
+  delete 'logout', to: 'sessions#destroy', as: :logout
+  #get 'sessions/new'
+  #get 'login', to: 'sessions#new'
+  #post 'login', to: 'sessions#create'
   get 'auth/google_oauth2/callback', to: 'sessions#create'
   get 'auth/failure', to: redirect('/')
     
