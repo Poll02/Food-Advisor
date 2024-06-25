@@ -2,12 +2,6 @@
 
 one:
   name: MyString
-  price: 9.99
-  ingredients: MyText
-  category: one
 
 two:
   name: MyString
-  price: 9.99
-  ingredients: MyText
-  category: two

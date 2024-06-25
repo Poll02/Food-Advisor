@@ -13,7 +13,7 @@ class RegistrationsController < ApplicationController
         render :new
       end
     elsif params[:ristoratore_checkbox].present?
-      @ristoratori = Ristoratori.new(ristoratore_params.merge(role: 'rastaurant_owner'))
+      @ristoratori = Ristoratori.new(ristoratore_params.merge(role: 'restaurant_owner'))
       if @ristoratori.save
         redirect_to root_path, notice: 'Registrazione ristoratore avvenuta con successo.'
       else

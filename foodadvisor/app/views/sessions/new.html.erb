@@ -9,60 +9,51 @@
     </div>
 
     <div class="login-container">
-        <div class="login-form-container">
-            <h1 style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">Login Utente<span><ion-icon name="person"></ion-icon></span></h1>
-            
-            <%= form_with(url: login_path, local: true, id: "user-login-form") do %>
+            <div class="login-form-container">
+                <h1 style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">Login Utente<span><ion-icon name="person"></ion-icon></span></h1>
+                <!-- app/views/sessions/new.html.erb -->
+                <%= form_with(url: login_path, local: true, id: "user-login-form") do %>
                 <% if flash.now[:alert] %>
-                    <div class="alert alert-danger" style="color: red; font-style: italic;">
-                        <%= flash.now[:alert] %>
-                    </div>
-                <% end %>
+                <div class="alert alert-danger" style="color: red; font-style: italic;">
+                <%= flash.now[:alert] %>
+                </div>
+                  <% end %>
 
                 <div class="input-container">
-                    <%= label_tag :email, "Email", id: "user-email-label" %>
-                    <%= text_field_tag 'user[email]', nil, id: "user-email-input" %>
+                    <%= label_tag :email, "Email", id: "login-label" %>
+                    <%= text_field_tag 'session[email]', nil, id: "login-input" %>
                 </div>
-
                 <div class="input-container">
-                    <%= label_tag :password, "Password", id: "user-password-label" %>
-                    <%= password_field_tag 'user[password]', nil, id: "user-password-input" %>
+                    <%= label_tag :password, "Password", id: "login-label" %>
+                    <%= password_field_tag 'session[password]', nil, id: "login-input" %>
                 </div>
-
                 <div class="rememberme-container">
-                    <%= label_tag :remember_me, "Ricordami", id: "user-rememberme-label", style: "font-weight: normal; " %>
-                    <%= check_box_tag 'user[remember_me]' %>
+                    <%= label_tag :remember_me, "Ricordami", id: "login-label", style: "font-weight: normal; " %>
+                    <%= check_box_tag 'session[remember_me]' %>
                 </div>
-
-                <%= submit_tag 'Accedi', id: "user-login-btn" %>
-                <hr class='solid' id='user-divider'>
-
-                <a href="/auth/google_oauth2/callback">
-                    <button type="button" id="user-google-login-btn" style="background-color: rgb(6, 176, 176); margin-bottom: 10px;">
-                        <ion-icon name="logo-google"></ion-icon>Accedi con Google
-                    </button>
-                </a>
-                
-                <button type="button" id="user-facebook-login-btn" style="background-color: rgb(97, 35, 195);">
+                <%= submit_tag 'Accedi', id: "login-btn" %>
+                <hr class='solid' id='divider'>
+                <a href="/auth/google_oauth2/callback"><button type="button" id="login-btn" style="background-color: rgb(6, 176, 176); margin-bottom: 10px;">
+                    <ion-icon name="logo-google"></ion-icon>Accedi con Google
+                </button></a>
+                <button type="button" id="login-btn" style="background-color: rgb(97, 35, 195);">
                     <ion-icon name="logo-facebook"></ion-icon>Accedi con Facebook
                 </button>
-
                 <div class="password-forgot-container">
-                    <p id="user-forgot-password">Ho dimenticato la password</p>
+                    <p id="forgot-password">Ho dimenticato la password</p>
                 </div>
-
                 <div class="register-container">
-                    <hr class='solid' style="width: 25%;" id='user-divider'>
+                    <hr class='solid' style="width: 25%;" id='divider'>
                     <p style="font-size: 13px; cursor: pointer;"><a href="<%= signup_path %>">Iscriviti</a></p>
-                    <hr class='solid' style="width: 25%;" id='user-divider'>
+                    <hr class='solid' style="width: 25%;" id='divider'>
                 </div>
-            <% end %>
+                <% end %>
+
         </div>
     </div>
-
     <div class="login-container">
         <div class="login-form-container">
-            <h1 style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">Login Ristoratore<span><ion-icon name="pizza"></ion-icon></span></h1>
+        <h1 style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">Login Ristoratore<span><ion-icon name="pizza"></ion-icon></span></h1>
             
             <%= form_with(url: login_path, local: true, id: "restaurateur-login-form") do %>
                 <% if flash.now[:alert] %>
@@ -72,31 +63,31 @@
                 <% end %>
 
                 <div class="input-container">
-                    <%= label_tag :piva, "P. IVA", id: "restaurateur-piva-label" %>
-                    <%= text_field_tag 'restaurateur[piva]', nil, id: "restaurateur-piva-input" %>
+                    <%= label_tag :piva, "P. IVA", id: "login-label" %>
+                    <%= text_field_tag 'restaurateur[piva]', nil, id: "piva-input" %>
                 </div>
 
                 <div class="input-container">
-                    <%= label_tag :password, "Password", id: "restaurateur-password-label" %>
-                    <%= password_field_tag 'restaurateur[password]', nil, id: "restaurateur-password-input" %>
+                    <%= label_tag :password, "Password", id: "login-label" %>
+                    <%= password_field_tag 'restaurateur[password]', nil, id: "password-input" %>
                 </div>
 
                 <div class="rememberme-container">
-                    <%= label_tag :remember_me, "Ricordami", id: "restaurateur-rememberme-label", style: "font-weight: normal;" %>
+                    <%= label_tag :remember_me, "Ricordami", id: "login-label", style: "font-weight: normal;" %>
                     <%= check_box_tag 'restaurateur[remember_me]' %>
                 </div>
 
-                <%= submit_tag 'Accedi', id: "restaurateur-login-btn" %>
-                <hr class="solid" id="restaurateur-divider">
+                <%= submit_tag 'Accedi', id: "login-btn" %>
+                <hr class="solid" id="divider">
 
                 <div class="password-forgot-container">
-                    <p id="restaurateur-forgot-password">Ho dimenticato la password</p>
+                    <p id="forgot-password">Ho dimenticato la password</p>
                 </div>
 
                 <div class="register-container">
-                    <hr class="solid" style="width: 20%;" id="restaurateur-divider">
+                    <hr class="solid" style="width: 20%;" id="divider">
                     <p style="font-size: 13px; cursor: pointer;"><a href="<%= signup_path %>">Diventa un ristoratore</a></p>
-                    <hr class="solid" style="width: 20%;" id="restaurateur-divider">
+                    <hr class="solid" style="width: 20%;" id="divider">
                 </div>
             <% end %>
         </div>

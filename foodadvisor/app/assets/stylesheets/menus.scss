@@ -3,14 +3,16 @@
 }
 .categoria-cibo {
     margin-bottom: 1%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
 }
 .piatto {
     border: 1px solid #ccc;
     width: 150px;
-    height: fit-content;
+    height: 250px;
     padding: 1%;
     margin: 1%;
-    margin-top: 1%;
     border-radius: 10px;
     display: inline-block;
 }
@@ -22,4 +24,16 @@
 .info-piatto {
     /*font automatici*/
     margin-top: 4px;
+}
+
+.nuovo-piatto {
+    border: 2px dashed #aaa;
+    padding: 10px;
+    margin: 10px;
+}
+  
+.nuova-categoria {
+    border: 2px dashed #aaa;
+    padding: 10px;
+    margin: 10px;
 }

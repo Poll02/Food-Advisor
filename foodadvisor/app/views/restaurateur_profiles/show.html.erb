@@ -1,12 +1,17 @@
+<%= link_to 'Modifica Impostazioni', edit_restaurateur_profile_path %>
+
 <div class="ristorante">
   <%= image_tag 'background.jpg', class: 'r-foto' %>   
   <div class="r-info">
-    <p>Email:</p>
-    <p>Nome del ristorante:</p>
-    <p>Data di registrazione:</p>
-    <p>Asporto:</p>
+    <p style="font-weight: bold;">Nome del ristorante: <span style="font-weight: normal;"><%= current_user.restaurant_name %></span></p>
+    <p style="font-weight: bold;">Indirizzo: </p>
+    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%= current_user.email %></span></p>
+    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%= current_user.phone %></span></p>
+    <p style="font-weight: bold;">Data di registrazione: <span style="font-weight: normal;"><%= current_user.created_at %></span></p>
+    <p style="font-weight: bold;">Asporto:</p>
   </div>
 </div>
+
 <h3>Statistiche</h3>
 <div class="r-statistiche">
   <div class="r-stat">
@@ -56,6 +61,7 @@
         <p>Descrizione</p>
     </div>
     <div class="recensione-icon">
+        <i class="fa-regular fa-thumbs-up"></i>
         <i class="fa-solid fa-thumbtack"></i>
         <i class="fa-solid fa-ban"></i>
         <i class="fa-solid fa-retweet"></i>
