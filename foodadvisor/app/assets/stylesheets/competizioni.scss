@@ -21,8 +21,9 @@
     margin-top: 10px;
     margin-bottom: 30px;
     display: flex;
+    justify-content: flex-start;
     gap: 20px;
-    width: 100%;
+    width: 140vh;
     overflow-x: scroll;
     overflow-y: hidden;
     scrollbar-width: none;

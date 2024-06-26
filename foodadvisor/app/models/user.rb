@@ -9,6 +9,7 @@ class User < ApplicationRecord
         user.email = auth.info.email
         user.name = auth.info.name
         user.password = SecureRandom.hex(10) unless user.persisted?
+        user.role = 'user' # Imposta un valore di default, o cambia secondo la tua logica
         user.save!
       end
     end
@@ -16,5 +17,11 @@ class User < ApplicationRecord
     validates :name, presence: true
     validates :email, presence: true, uniqueness: true
     validates :password, presence: true, length: { minimum: 6 }
+
+    # Metodo authenticate
+    def authenticate(password)
+      # implementazione di base di has_secure_password
+      return self if BCrypt::Password.new(password_digest) == password
+    end
   end
   

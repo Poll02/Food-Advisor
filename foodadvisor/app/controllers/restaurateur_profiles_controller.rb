@@ -1,29 +1,28 @@
 class RestaurateurProfilesController < ApplicationController
   layout 'with_sidebar'
   
+  before_action :require_logged_in
+  before_action :require_restaurant_owner
+
   def show
-    #@user = current_user
-    render 'restaurateur_profiles/show'  # Rende la vista specificata
-    #da sistemare il reindirizzamento con variabili di sessione dopo aver fatto il login
-  end
+    @restaurant_owner = current_user
+    @promotions = Promotion.where(ristoratore_id: current_user.id)
 
-  def edit
-    #@user = current_user
-  end
-
-  def update
-    #@user = current_user
-    #if @user.update(user_params)
-    #  redirect_to restaurateur_profile_path, notice: 'Profilo aggiornato con successo.'
-    #else
-    #  render :edit
-    #end
+    # Logica per la pagina del profilo del ristoratore
   end
 
   private
 
-  def user_params
-    params.require(:user).permit(:name, :surname, :birth, :role, :email, :password, :password_confirmation, :restaurant_name)
+  def require_logged_in
+    unless logged_in?
+      redirect_to login_path
+    end
+  end
+
+  def require_restaurant_owner
+    unless current_user.role == 'restaurant_owner'
+      redirect_to root_path
+    end
   end
 
 end

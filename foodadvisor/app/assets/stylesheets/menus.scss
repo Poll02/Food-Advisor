@@ -1,22 +1,119 @@
-.categoria-cibo {
-    border: 1px solid black;
+.menu {
+    text-align: center;
+  }
+  
+  .categoria {
+    margin-bottom: 2%;
+  }
+  
+  .categoria-cibo {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .piatto {
+    border: 1px solid #ccc;
+    width: 150px;
+    height: auto;
     padding: 1%;
-    border-radius: 10px;
-    margin-bottom: 1%;
-}
-.piatto {
-    border: 1px solid red;
-    width: 130px;
-    height: 150px;
-    padding: 1%;
-    margin-top: 1%;
+    margin: 1%;
     border-radius: 10px;
     display: inline-block;
-}
-.foto-piatto {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .foto-piatto {
     width: 100%;
-    height: 30px;
-}
-.info-piatto {
-    /*font automatici*/
-}
+    height: 70px;
+    border-radius: 10px;
+  }
+  
+  .info-piatto {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+  
+  .info-piatto h3,
+  .info-piatto p {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 5px 0;
+  }
+  
+  .info-piatto input,
+  .ingredients-textarea {
+    width: 70%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 2px 5px;
+  }
+  
+  .ingredients-textarea {
+    width: 100%;
+    resize: horizontal;
+    height: 50px; /* Altezza iniziale */
+    min-height: 50px;
+    max-height: 150px;
+  }
+  
+  .nuovo-piatto {
+    border: 2px dashed #aaa;
+    padding: 10px;
+    margin: 10px;
+    width: 150px;
+    height: auto;
+    display: inline-block;
+    border-radius: 10px;
+  }
+  
+  .nuova-categoria {
+    border: 2px dashed #aaa;
+    padding: 10px;
+    margin: 20px;
+    display: inline-block;
+    border-radius: 10px;
+    width: 100%;
+  }
+  
+  .categoria-input {
+    border: none;
+    font-size: 1em;
+    text-align: center;
+  }
+  
+  .submit-section {
+    margin-top: 20px;
+  }
+  
+  .save-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+  }
+  
+  .save-button:hover {
+    background-color: #45a049;
+  }
+  
+  .back-link {
+    display: inline-block;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #007BFF;
+  }
+  
+  .back-link:hover {
+    text-decoration: underline;
+  }
+  

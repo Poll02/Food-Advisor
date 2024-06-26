@@ -1,23 +1,28 @@
-<h1>Impostazioni</h1>
+<div class="impostazioni">
+  <h1>Impostazioni</h1>
+  <p>Stile dell'applicazione</p>
+  <div class="s-section">
+    <p>
+      <strong>Font: </strong>
+      <%= @setting.font %>
+    </p>
 
-<p>
-  <strong>Font:</strong>
-  <%= @setting.font %>
-</p>
+    <p>
+      <strong>Dimensione del testo: </strong>
+      <%= @setting.font_size %>
+    </p>
 
-<p>
-  <strong>Dimensione del testo:</strong>
-  <%= @setting.font_size %>
-</p>
+    <p>
+      <strong>Tema: </strong>
+      <%= @setting.theme == 'day' ? 'Giorno' : 'Notte' %>
+    </p>
+  </div>
+  <p>Gestisci le tue preferenze</p>
+  <div class="s-section">
+    <p>Gestisci le notifiche</p>
+    <p>Tag di preferenza</p>
+  </div>
 
-<p>
-  <strong>Tema:</strong>
-  <%= @setting.theme == 'day' ? 'Giorno' : 'Notte' %>
-</p>
-
-<%= link_to 'Modifica Impostazioni', edit_settings_path %>
-
-<p>Gestisci le notifiche</p>
-<p>Tag di preferenza</p>
-<p>Elimina l'account</p>
-
+  <%= link_to 'Modifica Impostazioni', edit_settings_path %>
+  <p>Elimina l'account</p>
+</div>

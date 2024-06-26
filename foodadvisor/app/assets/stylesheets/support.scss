@@ -1,0 +1,132 @@
+:root{
+    --primaryColor:#00b072;
+    --whiteColor:#f5f5f5;
+    --blackColor:#222;
+}
+
+.support-container{
+    width: 100%; 
+    height: auto;
+    padding: 3%;
+    background-color: var(--whiteColor);
+}
+
+.header-FAQ{
+    background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); 
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+    padding: 7% 5%; 
+    margin-top: 40px;
+    width: 100%;
+    border-radius: 40px; 
+    color: var(--whiteColor);
+}
+.header-title-FAQ{
+    font-size:48px;
+    letter-spacing: 1.5;
+}
+
+.header-desc-FAQ{
+    font-size: 14px; 
+    letter-spacing: 1;
+    text-align: center;
+}
+
+.faq{
+    width: 100%; 
+    display: flex; 
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 3%;
+}
+
+.faq-name{
+    flex:0.5;
+    padding: 2% 2% 0 0;
+}
+
+.faq-header{
+    padding: 5% 0 0 0;
+    font-size: 40px;
+    letter-spacing: 2;
+    margin-bottom: 50px;
+}
+
+.faq-img{
+    width: 100%;
+    max-width: 400px;
+}
+
+.faq-box{
+    flex:1;
+    min-width: 320px;
+    padding: 2% 0 4% 4%;
+    border-left: 1px solid var(--blackColor);
+}
+
+.night-mode .faq-box {
+    border-left: 1px solid var(--whiteColor);
+}
+
+.faq-wrapper{
+    width: 100%;
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--blackColor);
+}
+
+.night-mode .faq-wrapper {
+    border-bottom: 1px solid var(--whiteColor);
+}
+
+.faq-title{
+    display: block;
+    position: relative; 
+    width: 100%; 
+    letter-spacing: 1.2; 
+    font-size: 24px; 
+    font-weight: 600;
+    color: var(--primaryColor);
+}
+
+.faq-title::after{
+    width: 10px;
+    height: 10px;
+    content:""; 
+    float: right;
+    border-style:solid; 
+    border-width: 2px 2px 0 0;
+    transform: rotate(135deg);
+    transition: 0.3s ease-in-out;
+}
+
+.faq-title:hover::after {
+    cursor: pointer;
+    color: rgb(20, 128, 88);
+    transform: translateY(-50%) rotate(135deg) scale(1.2); /* Esempio di effetto hover */
+}
+
+.faq-detail{
+    line-height: 1.5; 
+    letter-spacing: 1; 
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.3s ease-in-out;
+    font-size: 14px;
+}
+
+.faq-trigger{
+    display: none;
+}
+
+.faq-trigger:checked + .faq-title + .faq-detail{
+    max-height: 300px;
+}
+
+.faq-trigger:checked + .faq-title::after{
+    transform: rotate(-45deg);
+    transition: 0.4s ease-in-out;
+}

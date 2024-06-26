@@ -1,54 +1,45 @@
 <%= stylesheet_link_tag 'home', media: 'all' %>
 <div class="homepage-container">
     <% if logged_in? %>
-    <div class="alert" style="font-style: italic; color: #00b072;">
-      <p>Benvenuto, <span style="font-weight: bold;"> <%= current_user.name %> </span>!</p> 
-    </div>
-  <% end %>
+        <div class="alert" style="font-style: italic; color: #00b072;">
+        <p>Benvenuto,
+            <% if current_user_role == 'User' %>
+            <span style="font-weight: bold;"><%= current_user.name %></span>
+            <% elsif current_user_role == 'Ristoratore' %>
+            <span style="font-weight: bold;"><%= current_user.restaurant_name %></span>
+            <% end %>
+            !
+        </p> 
+        </div>
+    <% end %>
     <div class="h1-container">
         <h1>Consigliati per te</h1>
     </div>
     <div class="recents-container">
         <div class="restaurants-text" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-
-        <h2>Nuovi Ristoranti</h2>
-        <p>Ristoranti aggiunti da poco su FoodAdvisor. Recensiscili per primo!</p>
-        </div>
-        <div class="restaurants-grid" style="animation: scrollLeft 1s;">
-            <div class="restaurant-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="text-overlay">
-                    Nome Ristorante
-                </div>
-            </div>
-            <div class="restaurant-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="text-overlay">
-                    Nome Ristorante
-                </div>
-            </div>
-            <div class="restaurant-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="text-overlay">
-                    Nome Ristorante
-                </div>
-            </div>
-            <div class="restaurant-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="text-overlay">
-                    Nome Ristorante
-                </div>
-            </div>
-            
+          <h2>Nuovi Ristoratori</h2>
+          <p>Ristoratori aggiunti di recente su FoodAdvisor. Recensiscili per primi!</p>
         </div>
         
-    </div>
+        <div class="restaurants-grid" style="animation: scrollLeft 1s;">
+          <% @recent_restaurants.each do |ristoratore| %>
+            <div class="restaurant-box">
+              <%= image_tag 'background.jpg' %> <!-- Sostituisci con l'attributo dell'immagine del ristoratore -->
+              <div class="text-overlay">
+                <%= ristoratore.restaurant_name %> <!-- Sostituisci con l'attributo che contiene il nome del ristoratore -->
+                <p style="font-weight: normal;">5<span style="font-weight: normal;"><ion-icon name="star" style="font-size: 15px;"></ion-icon></p>
+                <p style="font-weight: normal; font-style: italic;">n. recensioni</p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
 
     <div class="earn-points-container">
         <%= image_tag 'trophy.png' %>
         <div class="text-container">
-        <h3>Guadagna punti!</h3>
-        <p>Recensisci i ristoranti e partecipa ai tornei di FoodAdvisor per guadagnare punti!</p>
+        <h3 style="color: black;">Guadagna punti!</h3>
+        <p style="color: black;">Recensisci i ristoranti e partecipa ai tornei di FoodAdvisor per guadagnare punti!</p>
         <a href="<%= competizioni_path %>"><button type="button">Cominciamo!</button></a>
         </div>
     </div>
@@ -163,7 +154,7 @@
         </div>
 
         <div class="reserv-container" style="margin-left: 30px; display: flex; justify-content: center; align-items: center; width: 20%;">
-            <h2>Accedi al <a href="<% login_path %>"><span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span></a>  per effettuare e visualizzare le tue prenotazioni!</h3>
+            <h2>Accedi al <a href="<%=login_path %>"><span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span></a>  per effettuare e visualizzare le tue prenotazioni!</h3>
 
         </div>
     </div>

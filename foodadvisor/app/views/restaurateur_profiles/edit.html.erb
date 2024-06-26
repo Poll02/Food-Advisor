@@ -1,2 +1,115 @@
-<h1>RestauranterProfile#edit</h1>
-<p>Find me in app/views/restauranter_profile/edit.html.erb</p>
+<%= link_to 'Salva Impostazioni', rest_profile_path %>
+
+<div class="ristorante">
+  <%= image_tag 'background.jpg', class: 'r-foto' %>   
+  <div class="r-info">
+    <p style="font-weight: bold;">Nome del ristorante: <span style="font-weight: normal;"><%= current_user.restaurant_name %></span></p>
+    <p style="font-weight: bold;">Indirizzo: </p>
+    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%= current_user.email %></span></p>
+    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%= current_user.phone %></span></p>
+    <p style="font-weight: bold;">Data di registrazione: <span style="font-weight: normal;"><%= current_user.created_at %></span></p>
+    <p style="font-weight: bold;">Asporto:</p>
+  </div>
+</div>
+
+<h3>Statistiche</h3>
+<div class="r-statistiche">
+  <div class="r-stat">
+    <div class="r-tags">
+      <span class="r-tag pub">Pub</span>
+      <span class="r-tag famiglie">Per famiglie</span>
+    </div>
+  </div>
+</div>
+<h3>Promozioni</h3>
+<div class="r-promozioni">
+  <div class="promo-grid">
+    <div class="promo-box">
+      <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;">Tipo Promozione</span></p>
+      <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;">Data Inizio</span></p>
+      <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;">Data Fine</span></p>
+      <p style="font-weight: bold;">Condizioni: <span style="font-weight: normal;">Condizioni</span></p>
+    </div>
+    <div class="vertical-divider" style="height: 100px;"></div>
+    <div class="promo-box">
+      <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;">Tipo Promozione</span></p>
+      <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;">Data Inizio</span></p>
+      <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;">Data Fine</span></p>
+      <p style="font-weight: bold;">Condizioni: <span style="font-weight: normal;">Condizioni</span></p>
+    </div>
+    <div class="vertical-divider" style="height: 100px;"></div>
+
+      
+
+  </div>
+  
+</div>
+
+<h3>Stories Social</h3>
+<div class="r-stories">
+  <div class="r-storia">
+    <p>storia</p>
+    <i class="fa-solid fa-circle-up"></i>
+  </div>
+</div>
+<h3>Recensioni</h3>
+<div class="r-recensioni">
+  <div class="r-recensione">
+    <%= image_tag 'background.jpg', class: 'recensione-foto' %>    
+    <div class="recensione-info">
+        <p>Nome</p>
+        <p>Stelle</p>
+        <p>Descrizione</p>
+    </div>
+    <div class="recensione-icon">
+        <i class="fa-regular fa-thumbs-up"></i>
+        <i class="fa-solid fa-thumbtack"></i>
+        <i class="fa-solid fa-ban"></i>
+        <i class="fa-solid fa-retweet"></i>
+    </div>
+  </div>
+</div>
+<h3>Ricette Condivise</h3>
+<div class="r-ricette">
+  <div class="r-ricetta">
+      <%= image_tag 'background.jpg', class: 'ricetta-foto' %>    
+      <div class="ricetta-info">
+          <p>Nome</p>
+          <p>Ingredienti</p>
+          <p>Lavorazione</p>
+      </div>
+  </div>
+  <div class="r-ricetta">
+      <%= image_tag 'background.jpg', class: 'ricetta-foto' %>    
+      <div class="ricetta-info">
+          <p>Nome</p>
+          <p>Ingredienti</p>
+          <p>Lavorazione</p>
+      </div>
+  </div>
+  <i class="fa-solid fa-calendar-plus" style="font-size: 30px; margin-top: 6%; "></i>
+</div>
+<h3>Eventi</h3>
+<div class="r-eventi">
+  <div class="r-evento">
+    <%= image_tag 'background.jpg', class: 'evento-foto' %>    
+      <div class="evento-info">
+          <p>Nome</p>
+          <p>Ingredienti</p>
+          <p>Descrizione</p>
+          <p>Premio</p>
+      </div>
+  </div>
+  <div class="r-evento">
+    <%= image_tag 'background.jpg', class: 'evento-foto' %>    
+      <div class="evento-info">
+          <p>Nome</p>
+          <p>Data</p>
+          <p>Descrizione</p>
+          <p>Premio</p>
+      </div>
+  </div>
+  <i class="fa-solid fa-calendar-plus" style="font-size: 30px; margin-top: 6%; "></i>
+</div>
+
+

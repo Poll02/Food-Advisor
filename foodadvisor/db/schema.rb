@@ -10,7 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_24_225925) do
+ActiveRecord::Schema.define(version: 2024_06_25_174910) do
+
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "competiziones", force: :cascade do |t|
     t.string "nome"
@@ -28,18 +34,12 @@ ActiveRecord::Schema.define(version: 2024_06_24_225925) do
 
   create_table "dishes", force: :cascade do |t|
     t.string "name"
-    t.decimal "price", precision: 8, scale: 2
-    t.string "ingredients"
-    t.integer "menu_id", null: false
+    t.decimal "price"
+    t.text "ingredients"
+    t.integer "category_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["menu_id"], name: "index_dishes_on_menu_id"
-  end
-
-  create_table "menu", force: :cascade do |t|
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.string "name"
+    t.index ["category_id"], name: "index_dishes_on_category_id"
   end
 
   create_table "problems", force: :cascade do |t|
@@ -48,6 +48,29 @@ ActiveRecord::Schema.define(version: 2024_06_24_225925) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["id_utente"], name: "index_problems_on_id_utente"
+  end
+
+  create_table "promotions", force: :cascade do |t|
+    t.date "data_inizio"
+    t.date "data_fine"
+    t.string "condizioni"
+    t.string "tipo"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "ristoratore_id"
+    t.index ["ristoratore_id"], name: "index_promotions_on_ristoratore_id"
+  end
+
+  create_table "ristoratoris", force: :cascade do |t|
+    t.string "restaurant_name", null: false
+    t.integer "piva", limit: 8, null: false
+    t.string "email", null: false
+    t.string "phone", null: false
+    t.string "password_digest", null: false
+    t.binary "foto"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "role"
   end
 
   create_table "settings", force: :cascade do |t|
@@ -73,6 +96,7 @@ ActiveRecord::Schema.define(version: 2024_06_24_225925) do
   end
 
   add_foreign_key "competiziones", "users", column: "owner"
-  add_foreign_key "dishes", "menu"
+  add_foreign_key "dishes", "categories"
   add_foreign_key "problems", "users", column: "id_utente"
+  add_foreign_key "promotions", "ristoratoris", column: "ristoratore_id"
 end
