@@ -10,6 +10,7 @@ class Ristoratori < ApplicationRecord
     validates :phone, presence: true
     validates :password, presence: true, length: { minimum: 6 }
 
+    has_one_attached :foto
     # Metodo authenticate
     def authenticate(password)
       # implementazione di base di has_secure_password
