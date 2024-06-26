@@ -52,51 +52,23 @@
         </div>
         
         <div class="restaurants-grid">
-            
-            <div class="restaurant-box">
-                <%= image_tag 'background.jpg' %>
+            <% @eventi.each do |evento| %>
+              <div class="restaurant-box">
+                <% if evento.locandina.attached? %>
+                    <%= image_tag url_for(evento.locandina), class: 'evento-foto'  %>
+                <% else %>
+                    <%= image_tag 'background.jpg', class: 'evento-foto' %>
+                <% end %> 
                 <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
-                    <p>Nome Ristorante</p>
-                    <p style="font-size: 13px; font-weight: normal;">Nome Evento</p>
-                    <p style="font-size: 13px; font-weight: normal;">data/data/data</p>
-
-
+                  <p><%= evento.nome %></p>
+                  <p style="font-size: 13px; font-weight: normal;"><%= evento.descrizione %></p>
+                  <p style="font-size: 13px; font-weight: normal;"><%= evento.data %></p>
+                  <p style="font-size: 13px; font-weight: normal;"><%= evento.luogo %></p>
                 </div>
-            </div>
-            <div class="restaurant-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
-                    <p>Nome Ristorante</p>
-                    <p style="font-size: 13px; font-weight: normal;">Nome Evento</p>
-                    <p style="font-size: 13px; font-weight: normal;">data/data/data</p>
-
-
-                </div>
-            </div>
-            <div class="restaurant-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
-                    <p>Nome Ristorante</p>
-                    <p style="font-size: 13px; font-weight: normal;">Nome Evento</p>
-                    <p style="font-size: 13px; font-weight: normal;">data/data/data</p>
-
-
-                </div>
-            </div>
-
-            <div class="restaurant-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
-                    <p>Nome Ristorante</p>
-                    <p style="font-size: 13px; font-weight: normal;">Nome Evento</p>
-                    <p style="font-size: 13px; font-weight: normal;">data/data/data</p>
-
-
-                </div>
-            </div>
-            
-            
-        </div>
+              </div>
+            <% end %>
+          </div>
+          
 
         
         

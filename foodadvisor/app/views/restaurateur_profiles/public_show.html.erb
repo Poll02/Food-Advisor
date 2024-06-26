@@ -1,0 +1,111 @@
+<div class="pagina-vetrina">
+    <div class="ristorante">
+    <% if @restaurant_owner.foto.attached? %>
+        <%= image_tag url_for(@restaurant_owner.foto), class: 'r-foto'  %>
+    <% else %>
+        <%= image_tag 'background.jpg', class: 'r-foto' %>
+    <% end %>
+    
+    <div class="r-info">
+        <p style="font-weight: bold;">Nome del ristorante: <span style="font-weight: normal;"><%= @restaurant_owner.restaurant_name %></span></p>
+        <p style="font-weight: bold;">Indirizzo: </p>
+        <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%= @restaurant_owner.email %></span></p>
+        <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%= @restaurant_owner.phone %></span></p>
+        <p style="font-weight: bold;">Data di registrazione: <span style="font-weight: normal;"><%= @restaurant_owner.created_at %></span></p>
+        <p style="font-weight: bold;">Asporto:</p>
+    </div>
+    </div>
+
+    <h3>Tags</h3>
+    <div class="r-statistiche">
+    <div class="r-stat">
+        <div class="r-tags">
+        <span class="r-tag pub">Pub</span>
+        <span class="r-tag famiglie">Per famiglie</span>
+        </div>
+    </div>
+    </div>
+    <h3>Promozioni</h3>
+    <div class="r-promozioni">
+    <div class="promo-grid">
+        <% if @promotions.present? %>
+        <% @promotions.each do |promotion| %>
+            <div class="promo-box">
+            <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;"><%= promotion.tipo %></span></p>
+            <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;"><%= promotion.data_inizio %></span></p>
+            <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;"><%= promotion.data_fine %></span></p>
+            <p style="font-weight: bold;">Condizioni: <span style="font-weight: normal;"><%= promotion.condizioni %></span></p>
+            </div>
+            <div class="vertical-divider" style="height: 100px;"></div>
+        <% end %>
+        <% else %>
+        <p>Nessuna promozione attiva</p>
+        <% end %>
+    </div>
+    </div>
+
+    <h3>Stories Social</h3>
+    <div class="r-stories">
+    <div class="r-storia">
+        <p>storia</p>
+    </div>
+    </div>
+    <h3>Recensioni</h3>
+    <div class="r-recensioni">
+    <div class="r-recensione">
+        <%= image_tag 'background.jpg', class: 'recensione-foto' %>    
+        <div class="recensione-info">
+            <p>Nome</p>
+            <p>Stelle</p>
+            <p>Descrizione</p>
+        </div>
+        <div class="recensione-icon">
+            <i class="fa-regular fa-thumbs-up"></i>
+            <i class="fa-solid fa-thumbtack"></i>
+            <i class="fa-solid fa-ban"></i>
+            <i class="fa-solid fa-retweet"></i>
+        </div>
+    </div>
+    </div>
+    <h3>Ricette Condivise</h3>
+    <div class="r-ricette">
+    <div class="r-ricetta">
+        <%= image_tag 'background.jpg', class: 'ricetta-foto' %>    
+        <div class="ricetta-info">
+            <p>Nome</p>
+            <p>Ingredienti</p>
+            <p>Lavorazione</p>
+        </div>
+    </div>
+    <div class="r-ricetta">
+        <%= image_tag 'background.jpg', class: 'ricetta-foto' %>    
+        <div class="ricetta-info">
+            <p>Nome</p>
+            <p>Ingredienti</p>
+            <p>Lavorazione</p>
+        </div>
+    </div>
+    </div>
+    <h3>Eventi</h3>
+    <div class="r-eventi">
+    <% if @eventi.any? %>
+        <% @eventi.each do |evento| %>
+        <div class="r-evento">
+            <% if evento.locandina.attached? %>
+            <%= image_tag url_for(evento.locandina), class: 'evento-foto'  %>
+            <% else %>
+            <%= image_tag 'background.jpg', class: 'evento-foto' %>
+            <% end %>   
+            <div class="evento-info">
+            <p><%= evento.nome %></p>
+            <p>Data: <%= evento.data %></p>
+            <p>Luogo: <%= evento.luogo %></p>
+            <p>Desc: <%= evento.descrizione %></p>
+            </div>
+        </div>
+        <% end %>
+    <% else %>
+        <p>Il ristoratore non ha creato alcun evento.</p>
+    <% end %>
+    </div>
+</div>

@@ -1,4 +1,4 @@
-<%= link_to 'Salva Impostazioni', rest_profile_path %>
+<%= link_to 'Salva', rest_profile_path %>
 
 <div class="ristorante">
   <%= form_with(model: @restaurant_owner, url: restaurateur_profiles_path, local: true, html: { method: :patch, multipart: true }) do |f| %>
@@ -47,6 +47,7 @@
 
 
 <h3>Statistiche</h3>
+<h3>Tags</h3>
 <div class="r-statistiche">
   <div class="r-stat">
     <div class="r-tags">
@@ -58,26 +59,25 @@
 <h3>Promozioni</h3>
 <div class="r-promozioni">
   <div class="promo-grid">
-    <div class="promo-box">
-      <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;">Tipo Promozione</span></p>
-      <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;">Data Inizio</span></p>
-      <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;">Data Fine</span></p>
-      <p style="font-weight: bold;">Condizioni: <span style="font-weight: normal;">Condizioni</span></p>
-    </div>
-    <div class="vertical-divider" style="height: 100px;"></div>
-    <div class="promo-box">
-      <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;">Tipo Promozione</span></p>
-      <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;">Data Inizio</span></p>
-      <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;">Data Fine</span></p>
-      <p style="font-weight: bold;">Condizioni: <span style="font-weight: normal;">Condizioni</span></p>
-    </div>
-    <div class="vertical-divider" style="height: 100px;"></div>
+    <% if @promotions.present? %>
+      <% @promotions.each do |promotion| %>
+        <div class="promo-box">
+          <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;"><%= promotion.tipo %></span></p>
+          <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;"><%= promotion.data_inizio %></span></p>
+          <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;"><%= promotion.data_fine %></span></p>
+          <p style="font-weight: bold;">Condizioni: <span style="font-weight: normal;"><%= promotion.condizioni %></span></p>
+          <ion-icon name="close-circle-outline" class="del-promo-icon" id="del-promo-icon" data-promotion-id="<%= promotion.id %>" style="font-size: 25px; cursor: pointer;"></ion-icon>
 
-      
-
+        </div>
+        <div class="vertical-divider" style="height: 100px;"></div>
+      <% end %>
+    <% else %>
+      <p>Nessuna promozione attiva</p>
+    <% end %>
   </div>
-  
 </div>
+<button type="button" id="add-promo-btn">Aggiungi Promozione</button>
+
 
 <h3>Stories Social</h3>
 <div class="r-stories">
@@ -186,8 +186,39 @@
 </div>
 
 
+
+<div id="myModal2" class="modal">
+  <div class="modal-content">
+    <span class="close" id="close-promo-modal">&times;</span>
+    <h2>Aggiungi Promozione</h2>
+    <%= form_with(url: create_promotion_restaurateur_profiles_path, method: :post, local: true) do |form| %>
+      <div class="form-group">
+        <%= form.label :tipo, "Tipo Promozione" %>
+        <%= form.text_field :tipo, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= form.label :data_inizio, "Data Inizio" %>
+        <%= form.date_field :data_inizio, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= form.label :data_fine, "Data Fine" %>
+        <%= form.date_field :data_fine, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= form.label :condizioni, "Condizioni" %>
+        <%= form.text_area :condizioni, class: "form-control" %>
+      </div>
+      <%= form.hidden_field :ristoratore_id, value: current_user.id %>
+      <div class="form-group">
+        <%= form.submit "Salva Promozione", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
 <!-- Finestra di conferma eliminazione -->
-<div id="confirmModal" class="modal">
+<div id="confirmModal" class="modal">s
   <div class="modal-content">
     <span class="close-confirm">&times;</span>
     <h2>Conferma Eliminazione</h2>
@@ -198,8 +229,28 @@
 </div>
 
 <script>
-// per la finestra modale
+
+//JS per l'aggiunta di promozioni
 document.addEventListener("DOMContentLoaded", function() {
+  var modal2 = document.getElementById("myModal2");
+    var btn = document.getElementById("add-promo-btn");
+    var span = document.getElementById("close-promo-modal");
+
+    btn.onclick = function() {
+      modal2.style.display = "block";
+    }
+
+    span.onclick = function() {
+      modal2.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal2.style.display = "none";
+      }
+    }
+
+    //JS per eliminazione eventi
   var confirmModal = document.getElementById("confirmModal");
   var closeConfirmBtn = document.getElementsByClassName("close-confirm")[0];
   var confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
@@ -253,6 +304,7 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
+
   // per la finestra modale creazione evento
   document.addEventListener("DOMContentLoaded", function() {
     var modal = document.getElementById("myModal");
@@ -285,6 +337,8 @@ document.addEventListener("DOMContentLoaded", function() {
       var form = modal.querySelector("form");
       form.reset();
     }
+
+  
   });
 </script>
 
