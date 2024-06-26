@@ -17,39 +17,23 @@
     </div>
     <div class="recents-container">
         <div class="restaurants-text" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
-
-        <h2>Nuovi Ristoranti</h2>
-        <p>Ristoranti aggiunti da poco su FoodAdvisor. Recensiscili per primo!</p>
-        </div>
-        <div class="restaurants-grid" style="animation: scrollLeft 1s;">
-            <div class="restaurant-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="text-overlay">
-                    Nome Ristorante
-                </div>
-            </div>
-            <div class="restaurant-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="text-overlay">
-                    Nome Ristorante
-                </div>
-            </div>
-            <div class="restaurant-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="text-overlay">
-                    Nome Ristorante
-                </div>
-            </div>
-            <div class="restaurant-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="text-overlay">
-                    Nome Ristorante
-                </div>
-            </div>
-            
+          <h2>Nuovi Ristoratori</h2>
+          <p>Ristoratori aggiunti di recente su FoodAdvisor. Recensiscili per primi!</p>
         </div>
         
-    </div>
+        <div class="restaurants-grid" style="animation: scrollLeft 1s;">
+          <% @recent_restaurants.each do |ristoratore| %>
+            <div class="restaurant-box">
+              <%= image_tag 'background.jpg' %> <!-- Sostituisci con l'attributo dell'immagine del ristoratore -->
+              <div class="text-overlay">
+                <%= ristoratore.restaurant_name %> <!-- Sostituisci con l'attributo che contiene il nome del ristoratore -->
+                <p style="font-weight: normal;">5<span style="font-weight: normal;"><ion-icon name="star" style="font-size: 15px;"></ion-icon></p>
+                <p style="font-weight: normal; font-style: italic;">n. recensioni</p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
 
     <div class="earn-points-container">
         <%= image_tag 'trophy.png' %>
@@ -170,7 +154,7 @@
         </div>
 
         <div class="reserv-container" style="margin-left: 30px; display: flex; justify-content: center; align-items: center; width: 20%;">
-            <h2>Accedi al <a href="<% login_path %>"><span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span></a>  per effettuare e visualizzare le tue prenotazioni!</h3>
+            <h2>Accedi al <a href="<%=login_path %>"><span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span></a>  per effettuare e visualizzare le tue prenotazioni!</h3>
 
         </div>
     </div>

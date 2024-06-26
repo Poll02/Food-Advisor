@@ -29,25 +29,20 @@
 <h3>Promozioni</h3>
 <div class="r-promozioni">
   <div class="promo-grid">
-    <div class="promo-box">
-      <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;">Tipo Promozione</span></p>
-      <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;">Data Inizio</span></p>
-      <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;">Data Fine</span></p>
-      <p style="font-weight: bold;">Condizioni: <span style="font-weight: normal;">Condizioni</span></p>
-    </div>
-    <div class="vertical-divider" style="height: 100px;"></div>
-    <div class="promo-box">
-      <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;">Tipo Promozione</span></p>
-      <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;">Data Inizio</span></p>
-      <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;">Data Fine</span></p>
-      <p style="font-weight: bold;">Condizioni: <span style="font-weight: normal;">Condizioni</span></p>
-    </div>
-    <div class="vertical-divider" style="height: 100px;"></div>
-
-      
-
+    <% if @promotions.present? %>
+      <% @promotions.each do |promotion| %>
+        <div class="promo-box">
+          <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;"><%= promotion.tipo %></span></p>
+          <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;"><%= promotion.data_inizio %></span></p>
+          <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;"><%= promotion.data_fine %></span></p>
+          <p style="font-weight: bold;">Condizioni: <span style="font-weight: normal;"><%= promotion.condizioni %></span></p>
+        </div>
+        <div class="vertical-divider" style="height: 100px;"></div>
+      <% end %>
+    <% else %>
+      <p>Nessuna promozione attiva</p>
+    <% end %>
   </div>
-  
 </div>
 
 <h3>Stories Social</h3>

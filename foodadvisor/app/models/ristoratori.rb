@@ -3,6 +3,8 @@
 class Ristoratori < ApplicationRecord
     has_secure_password
     has_many :eventos, foreign_key: 'owner'
+    has_many :promotions, foreign_key: 'ristoratore_id'
+
     
     validates :restaurant_name, presence: true
     validates :piva, presence: true, uniqueness: true

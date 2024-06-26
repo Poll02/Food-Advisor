@@ -8,6 +8,7 @@ class RestaurateurProfilesController < ApplicationController
 
   def show
     @eventi = Evento.where(owner: @restaurant_owner.id).where("data > ?", Date.today)
+    @promotions = Promotion.where(ristoratore_id: @restaurant_owner.id)
   end
 
   def edit

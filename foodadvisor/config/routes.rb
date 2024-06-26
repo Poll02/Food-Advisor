@@ -67,7 +67,8 @@ Rails.application.routes.draw do
   get 'logout', to: 'sessions#destroy'
 
   get 'support', to: 'support#index'
-  #
+  
+  resources :promotions, only: [:index]
   resources :registrations, only: [:create]
   resources :competizioni, only: [:index]
   resource :restaurateur_profiles, only: [:show, :edit] do

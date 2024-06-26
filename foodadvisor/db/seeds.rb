@@ -38,3 +38,28 @@ secondi.dishes.create([
 
 puts "Database seeded with categories and dishes."
 
+# Trova il ristorante con id 3
+ristorante = Ristoratori.find_by(id: 3)
+
+if ristorante
+  # Crea le promozioni
+  promozione1 = ristorante.promotions.create!(
+    data_inizio: Date.today,
+    data_fine: Date.tomorrow,
+    condizioni: "Sconto del 20% su tutti i piatti",
+    tipo: "Sconto"
+  )
+
+  promozione2 = ristorante.promotions.create!(
+    data_inizio: Date.today + 1,
+    data_fine: Date.today + 7,
+    condizioni: "Menu fisso a prezzo scontato",
+    tipo: "Menu Fisso"
+  )
+
+  puts "Promozioni create per il ristorante"
+else
+  puts "Ristorante con id 3 non trovato"
+end
+
+

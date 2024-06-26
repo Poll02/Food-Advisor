@@ -88,6 +88,17 @@ ActiveRecord::Schema.define(version: 2024_06_26_095809) do
     t.index ["id_utente"], name: "index_problems_on_id_utente"
   end
 
+  create_table "promotions", force: :cascade do |t|
+    t.date "data_inizio"
+    t.date "data_fine"
+    t.string "condizioni"
+    t.string "tipo"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "ristoratore_id"
+    t.index ["ristoratore_id"], name: "index_promotions_on_ristoratore_id"
+  end
+
   create_table "ristoratoris", force: :cascade do |t|
     t.string "restaurant_name", null: false
     t.integer "piva", limit: 8, null: false
@@ -129,4 +140,5 @@ ActiveRecord::Schema.define(version: 2024_06_26_095809) do
   add_foreign_key "dishes", "categories"
   add_foreign_key "eventos", "ristoratoris", column: "owner"
   add_foreign_key "problems", "users", column: "id_utente"
+  add_foreign_key "promotions", "ristoratoris", column: "ristoratore_id"
 end
