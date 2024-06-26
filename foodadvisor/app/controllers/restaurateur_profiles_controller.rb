@@ -3,7 +3,7 @@ class RestaurateurProfilesController < ApplicationController
   
   before_action :require_logged_in
   before_action :require_restaurant_owner
-  before_action :set_restaurant_owner, only: [:show, :edit, :create_event, :destroy_event]
+  before_action :set_restaurant_owner, only: [:show, :edit, :update, :create_event, :destroy_event]
   before_action :set_evento, only: [:destroy_event]
 
   def show
@@ -15,13 +15,23 @@ class RestaurateurProfilesController < ApplicationController
     @eventi = Evento.where(owner: @restaurant_owner.id).where("data > ?", Date.today)
   end
 
+  def update
+    @eventi = Evento.where(owner: @restaurant_owner.id).where("data > ?", Date.today)
+    if @restaurant_owner.update(restaurant_owner_params)
+      redirect_to edit_restaurateur_profiles_path, notice: 'Profilo aggiornato con successo.'
+    else
+      render :edit
+    end
+  end
+
   def create_event
     @evento = Evento.new(
       owner: current_user.id,
       nome: params[:nome],
       data: params[:data],
       luogo: params[:luogo],
-      descrizione: params[:descrizione]
+      descrizione: params[:descrizione],
+      locandina: params[:locandina]
     )
 
     if @evento.save
@@ -62,5 +72,9 @@ class RestaurateurProfilesController < ApplicationController
 
   def set_evento
     @evento = Evento.find(params[:id])
+  end
+
+  def restaurant_owner_params
+    params.require(:ristoratori).permit(:restaurant_name, :email, :phone, :foto)
   end
 end

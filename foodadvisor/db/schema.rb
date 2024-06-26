@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_26_095809) do
+ActiveRecord::Schema.define(version: 2024_06_26_144039) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 2024_06_26_095809) do
     t.string "descrizione"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.binary "locandina"
   end
 
   create_table "problems", force: :cascade do |t|
@@ -134,8 +135,6 @@ ActiveRecord::Schema.define(version: 2024_06_26_095809) do
     t.string "partita_iva"
   end
 
-  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "competiziones", "users", column: "owner"
   add_foreign_key "dishes", "categories"
   add_foreign_key "eventos", "ristoratoris", column: "owner"

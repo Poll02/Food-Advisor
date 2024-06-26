@@ -92,7 +92,11 @@
   <% if @eventi.any? %>
     <% @eventi.each do |evento| %>
       <div class="r-evento">
-        <%= image_tag 'background.jpg', class: 'evento-foto' %>    
+        <% if evento.locandina.attached? %>
+          <%= image_tag url_for(evento.locandina), class: 'evento-foto'  %>
+        <% else %>
+          <%= image_tag 'background.jpg', class: 'evento-foto' %>
+        <% end %>   
         <div class="evento-info">
           <p><%= evento.nome %></p>
           <p>Data: <%= evento.data %></p>

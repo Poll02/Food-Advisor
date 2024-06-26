@@ -1,4 +1,5 @@
 class Evento < ApplicationRecord
+    has_one_attached :locandina
   
     validates :owner, presence: true
     validates :nome, presence: true

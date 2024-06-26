@@ -1,16 +1,50 @@
 <%= link_to 'Salva Impostazioni', rest_profile_path %>
 
 <div class="ristorante">
-  <%= image_tag 'background.jpg', class: 'r-foto' %>   
-  <div class="r-info">
-    <p style="font-weight: bold;">Nome del ristorante: <span style="font-weight: normal;"><%= current_user.restaurant_name %></span></p>
-    <p style="font-weight: bold;">Indirizzo: </p>
-    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%= current_user.email %></span></p>
-    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%= current_user.phone %></span></p>
-    <p style="font-weight: bold;">Data di registrazione: <span style="font-weight: normal;"><%= current_user.created_at %></span></p>
-    <p style="font-weight: bold;">Asporto:</p>
-  </div>
+  <%= form_with(model: @restaurant_owner, url: restaurateur_profiles_path, local: true, html: { method: :patch, multipart: true }) do |f| %>
+    <% if @restaurant_owner.foto.attached? %>
+      <%= image_tag url_for(@restaurant_owner.foto), class: 'r-foto' %>
+    <% else %>
+      <%= image_tag 'background.jpg', class: 'r-foto' %>
+    <% end %>
+    
+    <div class="form-group">
+      <%= f.label :foto, "Carica una nuova immagine:" %>
+      <%= f.file_field :foto, class: 'form-control' %>
+    </div>
+    
+    <div class="r-info">
+      <div class="form-group">
+        <%= f.label :restaurant_name, "Nome del ristorante:" %>
+        <%= f.text_field :restaurant_name, value: current_user.restaurant_name, class: 'form-control' %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :address, "Indirizzo:" %>
+        <%= f.text_field :address, class: 'form-control' %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :email, "Email:" %>
+        <%= f.email_field :email, value: current_user.email, class: 'form-control' %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :phone, "Telefono:" %>
+        <%= f.telephone_field :phone, value: current_user.phone, class: 'form-control' %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :created_at, "Data di registrazione:" %>
+        <%= f.text_field :created_at, value: current_user.created_at, class: 'form-control', disabled: true %>
+      </div>
+      
+      <%= f.submit "Salva", class: 'btn btn-primary' %>
+    </div>
+  <% end %>
 </div>
+
+
 
 <h3>Statistiche</h3>
 <div class="r-statistiche">
@@ -95,7 +129,11 @@
   <% if @eventi.any? %>
     <% @eventi.each do |evento| %>
       <div class="r-evento" id="evento-<%= evento.id %>">
-        <%= image_tag 'background.jpg', class: 'evento-foto' %>    
+        <% if evento.locandina.attached? %>
+          <%= image_tag url_for(evento.locandina), class: 'evento-foto'  %>
+        <% else %>
+          <%= image_tag 'background.jpg', class: 'evento-foto' %>
+        <% end %> 
         <div class="evento-info">
           <p><%= evento.nome %></p>
           <p>Data: <%= evento.data %></p>
@@ -136,12 +174,17 @@
         <%= form.text_area :descrizione %>
       </div>
       <div>
+        <%= form.label :locandina, "Locandina Evento" %>
+        <%= form.file_field :locandina %>
+      </div>
+      <div>
         <%= form.submit "Crea Evento" %>
         <button type="button" id="resetBtn">Azzera</button>
       </div>
     <% end %>
   </div>
 </div>
+
 
 <!-- Finestra di conferma eliminazione -->
 <div id="confirmModal" class="modal">

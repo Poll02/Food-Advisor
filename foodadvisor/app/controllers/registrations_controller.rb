@@ -5,6 +5,8 @@ class RegistrationsController < ApplicationController
   end
 
   def create
+    Rails.logger.info "Params: #{params.inspect}"
+    
     if params[:utente_checkbox].present?
       @user = User.new(user_params.merge(role: 'user'))
       if @user.save
@@ -34,4 +36,3 @@ class RegistrationsController < ApplicationController
     params.require(:ristoratori).permit(:restaurant_name, :piva, :email, :phone, :password, :password_confirmation, :foto)
   end
 end
-
