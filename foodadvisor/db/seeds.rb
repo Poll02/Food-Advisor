@@ -39,7 +39,7 @@ secondi.dishes.create([
 puts "Database seeded with categories and dishes."
 
 # Trova il ristorante con id 3
-ristorante = Ristoratori.find_by(id: 3)
+ristorante = Ristoratori.find_by(id: 4)
 
 if ristorante
   # Crea le promozioni

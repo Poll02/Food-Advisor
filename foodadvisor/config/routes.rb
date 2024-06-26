@@ -74,6 +74,10 @@ Rails.application.routes.draw do
   resource :restaurateur_profiles, only: [:show, :edit] do
     post 'create_event', to: 'restaurateur_profiles#create_event'
     delete 'destroy_event/:id', to: 'restaurateur_profiles#destroy_event', as: 'destroy_event'
+    delete 'destroy_promotion/:id', action: :destroy_promotion, as: :destroy_promotion
+
+    post :create_promotion, on: :collection
+
   end
   resource :settings, only: [:show, :edit, :update]
   resource :menus, only: [:show, :edit, :update]
