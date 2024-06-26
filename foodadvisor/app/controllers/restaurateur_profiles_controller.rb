@@ -59,8 +59,6 @@ class RestaurateurProfilesController < ApplicationController
   end
 
   def destroy_promotion
-    @promotion = Promotion.find(params[:id])
-
     if @promotion.ristoratore_id == @restaurant_owner.id
       @promotion.destroy
       render json: { success: true }

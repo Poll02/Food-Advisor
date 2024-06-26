@@ -42,7 +42,7 @@ Rails.application.routes.draw do
   get 'settings', to: 'settings#show'
 
   # rotte per le pagine vetrina
-  get 'public_profile/:id', to: 'restaurateur_profiles#public_show', as: 'public_profile'
+  get 'public_restaurant_profile/:id', to: 'restaurateur_profiles#public_show'
 
   # per creare un evento
   post 'restaurateur_profiles/create_event', to: 'restaurateur_profiles#create_event', as: 'create_event_restaurateur_profiles'
@@ -77,7 +77,7 @@ Rails.application.routes.draw do
   resource :restaurateur_profiles, only: [:show, :edit, :update] do
     post 'create_event', to: 'restaurateur_profiles#create_event'
     delete 'destroy_event/:id', to: 'restaurateur_profiles#destroy_event', as: 'destroy_event'
-    delete 'destroy_promotion/:id', action: :destroy_promotion, as: :destroy_promotion
+    delete 'destroy_promotion/:id', to: 'restaurateur_profiles#destroy_promotion', as: 'destroy_promotion'
 
     post :create_promotion, on: :collection
 

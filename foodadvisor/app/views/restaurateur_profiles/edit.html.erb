@@ -61,7 +61,7 @@
   <div class="promo-grid">
     <% if @promotions.present? %>
       <% @promotions.each do |promotion| %>
-        <div class="promo-box">
+        <div class="promo-box" id="promotion-<%= promotion.id %>">
           <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;"><%= promotion.tipo %></span></p>
           <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;"><%= promotion.data_inizio %></span></p>
           <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;"><%= promotion.data_fine %></span></p>
@@ -198,7 +198,7 @@
       </div>
       <div class="form-group">
         <%= form.label :data_inizio, "Data Inizio" %>
-        <%= form.date_field :data_inizio, class: "form-control" %>
+        <%= form.date_field :data_inizio, class: "form-control", id: "eventDatePromo" %>
       </div>
       <div class="form-group">
         <%= form.label :data_fine, "Data Fine" %>
@@ -208,16 +208,16 @@
         <%= form.label :condizioni, "Condizioni" %>
         <%= form.text_area :condizioni, class: "form-control" %>
       </div>
-      <%= form.hidden_field :ristoratore_id, value: current_user.id %>
       <div class="form-group">
         <%= form.submit "Salva Promozione", class: "btn btn-primary" %>
+        <button type="button" id="resetBtnPromo">Azzera</button>
       </div>
     <% end %>
   </div>
 </div>
 
 
-<!-- Finestra di conferma eliminazione -->
+<!-- Finestra di conferma eliminazione evento -->
 <div id="confirmModal" class="modal">s
   <div class="modal-content">
     <span class="close-confirm">&times;</span>
@@ -228,13 +228,68 @@
   </div>
 </div>
 
-<script>
+<!-- Finestra di conferma eliminazione promozione -->
+<div id="confirmModalPromo" class="modal">s
+  <div class="modal-content">
+    <span class="close-confirm-promo">&times;</span>
+    <h2>Conferma Eliminazione</h2>
+    <p>Sei sicuro di voler eliminare questo evento?</p>
+    <button id="confirmDeleteBtnPromo">Conferma</button>
+    <button id="cancelDeleteBtnPromo">Annulla</button>
+  </div>
+</div>
 
-//JS per l'aggiunta di promozioni
-document.addEventListener("DOMContentLoaded", function() {
-  var modal2 = document.getElementById("myModal2");
+<script>
+  // JS per la finestra modale creazione evento
+  document.addEventListener("DOMContentLoaded", function() {
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("openModalBtn");
+    var span = document.getElementsByClassName("close")[0];
+    var resetBtn = document.getElementById("resetBtn");
+    var eventDateField = document.getElementById("eventDate");
+
+    // Imposta la data minima per il campo data
+    var today = new Date();
+    today.setDate(today.getDate() + 1); // Aggiungi un giorno alla data odierna
+    var minDate = today.toISOString().split('T')[0];
+    eventDateField.setAttribute('min', minDate);
+
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    resetBtn.onclick = function() {
+      var form = modal.querySelector("form");
+      form.reset();
+    }
+
+  
+  });
+
+
+  // JS aggiunta di promozioni
+  document.addEventListener("DOMContentLoaded", function() {
+    var modal2 = document.getElementById("myModal2");
     var btn = document.getElementById("add-promo-btn");
     var span = document.getElementById("close-promo-modal");
+    var resetBtn = document.getElementById("resetBtnPromo");
+    var eventDateField = document.getElementById("eventDatePromo");
+
+    // Imposta la data minima per il campo data
+    var today = new Date();
+    today.setDate(today.getDate() + 1); // Aggiungi un giorno alla data odierna
+    var minDate = today.toISOString().split('T')[0];
+    eventDateField.setAttribute('min', minDate);
 
     btn.onclick = function() {
       modal2.style.display = "block";
@@ -250,7 +305,13 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     }
 
-    //JS per eliminazione eventi
+    resetBtn.onclick = function() {
+      var form = modal.querySelector("form");
+      form.reset();
+    }
+  });
+
+  // JS per eliminazione evento
   var confirmModal = document.getElementById("confirmModal");
   var closeConfirmBtn = document.getElementsByClassName("close-confirm")[0];
   var confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
@@ -301,44 +362,58 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
   }
-});
 
+  // JS per eliminazione promozioni
+  var confirmPromoModal = document.getElementById("confirmModalPromo");
+  var closePromoConfirmBtn = document.getElementsByClassName("close-confirm-promo")[0];
+  var confirmPromoDeleteBtn = document.getElementById("confirmDeleteBtnPromo");
+  var cancelPromoDeleteBtn = document.getElementById("cancelDeleteBtnPromo");
+  var promoIdToDelete = null;
 
-
-  // per la finestra modale creazione evento
-  document.addEventListener("DOMContentLoaded", function() {
-    var modal = document.getElementById("myModal");
-    var btn = document.getElementById("openModalBtn");
-    var span = document.getElementsByClassName("close")[0];
-    var resetBtn = document.getElementById("resetBtn");
-    var eventDateField = document.getElementById("eventDate");
-
-    // Imposta la data minima per il campo data
-    var today = new Date();
-    today.setDate(today.getDate() + 1); // Aggiungi un giorno alla data odierna
-    var minDate = today.toISOString().split('T')[0];
-    eventDateField.setAttribute('min', minDate);
-
-    btn.onclick = function() {
-      modal.style.display = "block";
+  document.querySelectorAll('.del-promo-icon').forEach(function(deletePromoIcon) {
+    deletePromoIcon.onclick = function() {
+      promoIdToDelete = this.getAttribute('data-promotion-id');
+      confirmPromoModal.style.display = "block";
     }
-
-    span.onclick = function() {
-      modal.style.display = "none";
-    }
-
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
-
-    resetBtn.onclick = function() {
-      var form = modal.querySelector("form");
-      form.reset();
-    }
-
-  
   });
+
+  closePromoConfirmBtn.onclick = function() {
+    confirmPromoModal.style.display = "none";
+  }
+
+  cancelPromoDeleteBtn.onclick = function() {
+    confirmPromoModal.style.display = "none";
+    promoIdToDelete = null;
+  }
+
+  window.onclick = function(event) {
+    if (event.target == confirmPromoModal) {
+      confirmPromoModal.style.display = "none";
+      promoIdToDelete = null;
+    }
+  }
+
+  confirmPromoDeleteBtn.onclick = function() {
+    if (promoIdToDelete) {
+      fetch(`/restaurateur_profiles/destroy_promotion/${promoIdToDelete}`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById(`promotion-${promoIdToDelete}`).remove();
+            confirmPromoModal.style.display = "none";
+          } else {
+            alert('Errore durante l\'eliminazione della promozione: ' + data.error);
+          }
+        }).catch(error => {
+          alert('Errore durante l\'eliminazione della promozione: ' + error.message);
+        });
+    }
+  }
+
 </script>
 
