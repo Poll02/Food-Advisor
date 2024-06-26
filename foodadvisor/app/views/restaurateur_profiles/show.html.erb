@@ -95,9 +95,9 @@
         <%= image_tag 'background.jpg', class: 'evento-foto' %>    
         <div class="evento-info">
           <p><%= evento.nome %></p>
-          <p><%= evento.data %></p>
-          <p><%= evento.luogo %></p>
-          <p><%= evento.descrizione %></p>
+          <p>Data: <%= evento.data %></p>
+          <p>Luogo: <%= evento.luogo %></p>
+          <p>Desc: <%= evento.descrizione %></p>
         </div>
       </div>
     <% end %>

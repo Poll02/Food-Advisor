@@ -98,11 +98,11 @@
         <%= image_tag 'background.jpg', class: 'evento-foto' %>    
         <div class="evento-info">
           <p><%= evento.nome %></p>
-          <p><%= evento.data %></p>
-          <p><%= evento.luogo %></p>
-          <p><%= evento.descrizione %></p>
+          <p>Data: <%= evento.data %></p>
+          <p>Luogo: <%= evento.luogo %></p>
+          <p>Desc: <%= evento.descrizione %></p>
         </div>
-        <i class="fa fa-trash delete-icon" data-event-id="<%= evento.id %>" style="cursor: pointer;"></i>
+        <i class="fa fa-trash delete-icon" data-event-id="<%= evento.id %>" style="font-size: 15px; cursor: pointer;"></i>
       </div>
     <% end %>
   <% else %>
