@@ -74,4 +74,12 @@ Rails.application.routes.draw do
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check
+
+  direct :rails_blob_representation do |blob, options|
+    route_for(:rails_disk_service, blob.key, options)
+  end
+
+  direct :rails_storage_proxy do |proxy, options|
+    route_for(:rails_disk_service, proxy.key, options)
+  end
 end

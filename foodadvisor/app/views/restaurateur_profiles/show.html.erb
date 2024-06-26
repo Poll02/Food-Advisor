@@ -1,7 +1,12 @@
 <%= link_to 'Modifica Impostazioni', edit_restaurateur_profile_path %>
 
 <div class="ristorante">
-  <%= image_tag 'background.jpg', class: 'r-foto' %>   
+  <% if @restaurant_owner.foto.attached? %>
+    <%= image_tag url_for(@restaurant_owner.foto), class: 'r-foto'  %>
+  <% else %>
+    <%= image_tag 'background.jpg', class: 'r-foto' %>
+  <% end %>
+   
   <div class="r-info">
     <p style="font-weight: bold;">Nome del ristorante: <span style="font-weight: normal;"><%= current_user.restaurant_name %></span></p>
     <p style="font-weight: bold;">Indirizzo: </p>
