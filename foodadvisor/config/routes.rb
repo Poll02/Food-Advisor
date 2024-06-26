@@ -40,6 +40,9 @@ Rails.application.routes.draw do
   get 'info', to: 'info#show'
   get 'chat', to: 'chat#show'
   get 'settings', to: 'settings#show'
+
+  # per creare un evento
+  post 'restaurateur_profiles/create_event', to: 'restaurateur_profiles#create_event', as: 'create_event_restaurateur_profiles'
   
   
   # rotte per il login
@@ -67,9 +70,13 @@ Rails.application.routes.draw do
   #
   resources :registrations, only: [:create]
   resources :competizioni, only: [:index]
-  resource :restaurateur_profile, only: [:show, :edit, :update]
+  resource :restaurateur_profiles, only: [:show, :edit] do
+    post 'create_event', to: 'restaurateur_profiles#create_event'
+    delete 'destroy_event/:id', to: 'restaurateur_profiles#destroy_event', as: 'destroy_event'
+  end
   resource :settings, only: [:show, :edit, :update]
   resource :menus, only: [:show, :edit, :update]
+  resources :eventi, only: [:create]
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

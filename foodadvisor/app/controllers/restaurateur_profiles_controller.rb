@@ -3,10 +3,42 @@ class RestaurateurProfilesController < ApplicationController
   
   before_action :require_logged_in
   before_action :require_restaurant_owner
+  before_action :set_restaurant_owner, only: [:show, :edit, :create_event, :destroy_event]
+  before_action :set_evento, only: [:destroy_event]
 
   def show
-    @restaurant_owner = current_user
-    # Logica per la pagina del profilo del ristoratore
+    @eventi = Evento.where(owner: @restaurant_owner.id).where("data > ?", Date.today)
+  end
+
+  def edit
+    @eventi = Evento.where(owner: @restaurant_owner.id).where("data > ?", Date.today)
+  end
+
+  def create_event
+    @evento = Evento.new(
+      owner: current_user.id,
+      nome: params[:nome],
+      data: params[:data],
+      luogo: params[:luogo],
+      descrizione: params[:descrizione]
+    )
+
+    if @evento.save
+      redirect_to edit_restaurateur_profiles_path, notice: 'Evento creato con successo.'
+    else
+      redirect_to edit_restaurateur_profiles_path, alert: 'Errore nella creazione dell\'evento.'
+    end
+  end
+
+  def destroy_event
+    if @evento.owner == @restaurant_owner.id
+      @evento.destroy
+      render json: { success: true }
+    else
+      render json: { success: false, error: 'Non sei autorizzato a eliminare questo evento.' }, status: :forbidden
+    end
+  rescue StandardError => e
+    render json: { success: false, error: e.message }, status: :unprocessable_entity
   end
 
   private
@@ -23,4 +55,11 @@ class RestaurateurProfilesController < ApplicationController
     end
   end
 
+  def set_restaurant_owner
+    @restaurant_owner = current_user
+  end
+
+  def set_evento
+    @evento = Evento.find(params[:id])
+  end
 end

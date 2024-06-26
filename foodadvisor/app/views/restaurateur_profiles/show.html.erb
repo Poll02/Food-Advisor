@@ -1,4 +1,4 @@
-<%= link_to 'Modifica Impostazioni', edit_restaurateur_profile_path %>
+<%= link_to 'Modifica Impostazioni', edit_restaurateur_profiles_path %>
 
 <div class="ristorante">
   <%= image_tag 'background.jpg', class: 'r-foto' %>   
@@ -89,24 +89,19 @@
 </div>
 <h3>Eventi</h3>
 <div class="r-eventi">
-  <div class="r-evento">
-    <%= image_tag 'background.jpg', class: 'evento-foto' %>    
-      <div class="evento-info">
-          <p>Nome</p>
-          <p>Ingredienti</p>
-          <p>Descrizione</p>
-          <p>Premio</p>
+  <% if @eventi.any? %>
+    <% @eventi.each do |evento| %>
+      <div class="r-evento">
+        <%= image_tag 'background.jpg', class: 'evento-foto' %>    
+        <div class="evento-info">
+          <p><%= evento.nome %></p>
+          <p><%= evento.data %></p>
+          <p><%= evento.luogo %></p>
+          <p><%= evento.descrizione %></p>
+        </div>
       </div>
-  </div>
-  <div class="r-evento">
-    <%= image_tag 'background.jpg', class: 'evento-foto' %>    
-      <div class="evento-info">
-          <p>Nome</p>
-          <p>Data</p>
-          <p>Descrizione</p>
-          <p>Premio</p>
-      </div>
-  </div>
+    <% end %>
+  <% else %>
+    <p>Il ristoratore non ha creato alcun evento.</p>
+  <% end %>
 </div>
-
-

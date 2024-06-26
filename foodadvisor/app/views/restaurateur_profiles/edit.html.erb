@@ -87,29 +87,161 @@
           <p>Lavorazione</p>
       </div>
   </div>
-  <i class="fa-solid fa-calendar-plus" style="font-size: 30px; margin-top: 6%; "></i>
-</div>
-<h3>Eventi</h3>
-<div class="r-eventi">
-  <div class="r-evento">
-    <%= image_tag 'background.jpg', class: 'evento-foto' %>    
-      <div class="evento-info">
-          <p>Nome</p>
-          <p>Ingredienti</p>
-          <p>Descrizione</p>
-          <p>Premio</p>
-      </div>
-  </div>
-  <div class="r-evento">
-    <%= image_tag 'background.jpg', class: 'evento-foto' %>    
-      <div class="evento-info">
-          <p>Nome</p>
-          <p>Data</p>
-          <p>Descrizione</p>
-          <p>Premio</p>
-      </div>
-  </div>
-  <i class="fa-solid fa-calendar-plus" style="font-size: 30px; margin-top: 6%; "></i>
+  <i class="fa-solid fa-calendar-plus" style="font-size: 30px; cursor: pointer; margin-left: 10px; align-self: center; "></i>
 </div>
 
+<h3>Eventi</h3>
+<div class="r-eventi">
+  <% if @eventi.any? %>
+    <% @eventi.each do |evento| %>
+      <div class="r-evento" id="evento-<%= evento.id %>">
+        <%= image_tag 'background.jpg', class: 'evento-foto' %>    
+        <div class="evento-info">
+          <p><%= evento.nome %></p>
+          <p><%= evento.data %></p>
+          <p><%= evento.luogo %></p>
+          <p><%= evento.descrizione %></p>
+        </div>
+        <i class="fa fa-trash delete-icon" data-event-id="<%= evento.id %>" style="cursor: pointer;"></i>
+      </div>
+    <% end %>
+  <% else %>
+    <p>Il ristoratore non ha creato alcun evento.</p>
+  <% end %>
+
+  <!-- Icona per aprire la finestra modale -->
+  <i class="fa-solid fa-calendar-plus" id="openModalBtn" style="font-size: 30px; cursor: pointer; margin-left: 10px; align-self: center; "></i>
+</div>
+
+<!-- Finestra modale creazione evento -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Crea Nuovo Evento</h2>
+    <%= form_with url: create_event_restaurateur_profiles_path, method: :post, local: true do |form| %>
+      <div>
+        <%= form.label :nome, "Nome Evento" %>
+        <%= form.text_field :nome %>
+      </div>
+      <div>
+        <%= form.label :data, "Data Evento" %>
+        <%= form.date_field :data, id: "eventDate" %>
+      </div>
+      <div>
+        <%= form.label :luogo, "Luogo Evento" %>
+        <%= form.text_field :luogo %>
+      </div>
+      <div>
+        <%= form.label :descrizione, "Descrizione Evento" %>
+        <%= form.text_area :descrizione %>
+      </div>
+      <div>
+        <%= form.submit "Crea Evento" %>
+        <button type="button" id="resetBtn">Azzera</button>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Finestra di conferma eliminazione -->
+<div id="confirmModal" class="modal">
+  <div class="modal-content">
+    <span class="close-confirm">&times;</span>
+    <h2>Conferma Eliminazione</h2>
+    <p>Sei sicuro di voler eliminare questo evento?</p>
+    <button id="confirmDeleteBtn">Conferma</button>
+    <button id="cancelDeleteBtn">Annulla</button>
+  </div>
+</div>
+
+<script>
+// per la finestra modale
+document.addEventListener("DOMContentLoaded", function() {
+  var confirmModal = document.getElementById("confirmModal");
+  var closeConfirmBtn = document.getElementsByClassName("close-confirm")[0];
+  var confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+  var cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+  var eventIdToDelete = null;
+
+  document.querySelectorAll('.delete-icon').forEach(function(deleteIcon) {
+    deleteIcon.onclick = function() {
+      eventIdToDelete = this.getAttribute('data-event-id');
+      confirmModal.style.display = "block";
+    }
+  });
+
+  closeConfirmBtn.onclick = function() {
+    confirmModal.style.display = "none";
+  }
+
+  cancelDeleteBtn.onclick = function() {
+    confirmModal.style.display = "none";
+    eventIdToDelete = null;
+  }
+
+  window.onclick = function(event) {
+    if (event.target == confirmModal) {
+      confirmModal.style.display = "none";
+      eventIdToDelete = null;
+    }
+  }
+
+  confirmDeleteBtn.onclick = function() {
+    if (eventIdToDelete) {
+      fetch(`/restaurateur_profiles/destroy_event/${eventIdToDelete}`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById(`evento-${eventIdToDelete}`).remove();
+            confirmModal.style.display = "none";
+          } else {
+            alert('Errore durante l\'eliminazione dell\'evento: ' + data.error);
+          }
+        }).catch(error => {
+          alert('Errore durante l\'eliminazione dell\'evento: ' + error.message);
+        });
+    }
+  }
+});
+
+
+  // per la finestra modale creazione evento
+  document.addEventListener("DOMContentLoaded", function() {
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("openModalBtn");
+    var span = document.getElementsByClassName("close")[0];
+    var resetBtn = document.getElementById("resetBtn");
+    var eventDateField = document.getElementById("eventDate");
+
+    // Imposta la data minima per il campo data
+    var today = new Date();
+    today.setDate(today.getDate() + 1); // Aggiungi un giorno alla data odierna
+    var minDate = today.toISOString().split('T')[0];
+    eventDateField.setAttribute('min', minDate);
+
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    resetBtn.onclick = function() {
+      var form = modal.querySelector("form");
+      form.reset();
+    }
+  });
+</script>
 
