@@ -45,11 +45,11 @@ Rails.application.routes.draw do
   # rotte per il login
   # Rotta per il form di login (GET e POST)
   get 'login', to: 'sessions#new', as: :user_login
-  post 'login', to: 'sessions#create'
+  post 'login', to: 'sessions#create_user'
   
   # Rotta per il form di login del ristoratore (GET e POST)
-  get 'restaurateur/login', to: 'sessions#new', as: :restaurateur_login
-  post 'restaurateur/login', to: 'sessions#create'
+  get 'login_restaurateur', to: 'sessions#new', as: :restaurateur_login
+  post 'login_restaurateur', to: 'sessions#create_restaurateur'
   
   # Rotta per il logout (DELETE)
   delete 'logout', to: 'sessions#destroy', as: :logout

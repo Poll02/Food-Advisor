@@ -12,7 +12,7 @@
             <div class="login-form-container">
                 <h1 style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">Login Utente<span><ion-icon name="person"></ion-icon></span></h1>
                 <!-- app/views/sessions/new.html.erb -->
-                <%= form_with(url: login_path, local: true, id: "user-login-form") do %>
+                <%= form_with(url: user_login_path, local: true, id: "user-login-form") do %>
                 <% if flash.now[:alert] %>
                 <div class="alert alert-danger" style="color: red; font-style: italic;">
                 <%= flash.now[:alert] %>
@@ -55,7 +55,7 @@
         <div class="login-form-container">
         <h1 style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">Login Ristoratore<span><ion-icon name="pizza"></ion-icon></span></h1>
             
-            <%= form_with(url: login_path, local: true, id: "restaurateur-login-form") do %>
+        <%= form_with(url: restaurateur_login_path, local: true, id: "restaurateur-login-form") do %>
                 <% if flash.now[:alert] %>
                     <div class="alert alert-danger" style="color: red; font-style: italic;">
                         <%= flash.now[:alert] %>
@@ -81,7 +81,7 @@
                 <hr class="solid" id="divider">
 
                 <div class="password-forgot-container">
-                    <p id="forgot-password">Ho dimenticato la password</p>
+                    <p id="r-forgot-password">Ho dimenticato la password</p>
                 </div>
 
                 <div class="register-container">

@@ -10,5 +10,10 @@ class Ristoratori < ApplicationRecord
     validates :password, presence: true, length: { minimum: 6 }
 
     has_one_attached :foto
+    # Metodo authenticate
+    def authenticate(password)
+      # implementazione di base di has_secure_password
+      return self if BCrypt::Password.new(password_digest) == password
+    end
   end
   
