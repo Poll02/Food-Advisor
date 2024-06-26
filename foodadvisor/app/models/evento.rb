@@ -1,5 +1,5 @@
 class Evento < ApplicationRecord
-    has_one_attached :locandina
+    has_one_attached :locandina  # se stai usando Active Storage
   
     validates :owner, presence: true
     validates :nome, presence: true

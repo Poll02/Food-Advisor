@@ -76,7 +76,7 @@ Rails.application.routes.draw do
     delete 'destroy_event/:id', to: 'restaurateur_profiles#destroy_event', as: 'destroy_event'
   end
   resource :settings, only: [:show, :edit, :update]
-  resource :menus, only: [:show, :edit, :update]
+  resources :menus, only: [:show, :edit, :update, :new, :create]
   resources :eventi, only: [:create]
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
