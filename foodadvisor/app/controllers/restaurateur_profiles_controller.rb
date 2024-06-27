@@ -27,13 +27,15 @@ class RestaurateurProfilesController < ApplicationController
   end
 
   def create_event
+    locandina_path = save_locandina(params[:locandina]) if params[:locandina].present?
+
     @evento = Evento.new(
       owner: current_user.id,
       nome: params[:nome],
       data: params[:data],
       luogo: params[:luogo],
       descrizione: params[:descrizione],
-      locandina: params[:locandina]
+      locandina: locandina_path
     )
 
     if @evento.save
@@ -119,5 +121,20 @@ class RestaurateurProfilesController < ApplicationController
 
   def determine_layout
     action_name == 'public_show' ? 'application' : 'with_sidebar'
+  end
+
+  # Metodo per salvare l'immagine in assets/images e restituire il percorso
+  def save_locandina(image)
+    # Genera un nome univoco per l'immagine
+    filename = "#{SecureRandom.hex(8)}_#{image.original_filename}"
+    # Percorso completo di salvataggio
+    directory = Rails.root.join('app', 'assets', 'images')
+    path = File.join(directory, filename)
+    # Salva il file nell'immagine
+    File.open(path, 'wb') do |file|
+      file.write(image.read)
+    end
+    # Restituisce il percorso relativo dell'immagine
+    "/assets/#{filename}"
   end
 end

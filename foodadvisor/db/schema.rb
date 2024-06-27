@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_26_181954) do
+ActiveRecord::Schema.define(version: 2024_06_27_165058) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -46,6 +46,14 @@ ActiveRecord::Schema.define(version: 2024_06_26_181954) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "chooses", id: false, force: :cascade do |t|
+    t.integer "ristoratori_id", null: false
+    t.integer "tag_id", null: false
+    t.index ["ristoratori_id", "tag_id"], name: "index_chooses_on_ristoratori_id_and_tag_id", unique: true
+    t.index ["ristoratori_id"], name: "index_chooses_on_ristoratori_id"
+    t.index ["tag_id"], name: "index_chooses_on_tag_id"
+  end
+
   create_table "competiziones", force: :cascade do |t|
     t.string "nome"
     t.string "descrizione"
@@ -78,7 +86,7 @@ ActiveRecord::Schema.define(version: 2024_06_26_181954) do
     t.string "descrizione"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.binary "locandina"
+    t.string "locandina"
   end
 
   create_table "problems", force: :cascade do |t|
@@ -106,17 +114,24 @@ ActiveRecord::Schema.define(version: 2024_06_26_181954) do
     t.string "email", null: false
     t.string "phone", null: false
     t.string "password_digest", null: false
-    t.binary "foto"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "role"
     t.string "profile_picture_url"
+    t.string "photo"
   end
 
   create_table "settings", force: :cascade do |t|
     t.string "font"
     t.string "font_size"
     t.string "theme"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "tags", force: :cascade do |t|
+    t.string "nome"
+    t.string "categoria"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -135,6 +150,8 @@ ActiveRecord::Schema.define(version: 2024_06_26_181954) do
     t.string "partita_iva"
   end
 
+  add_foreign_key "chooses", "ristoratoris"
+  add_foreign_key "chooses", "tags"
   add_foreign_key "competiziones", "users", column: "owner"
   add_foreign_key "dishes", "categories"
   add_foreign_key "eventos", "ristoratoris", column: "owner"

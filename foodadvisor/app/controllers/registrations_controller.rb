@@ -16,6 +16,16 @@ class RegistrationsController < ApplicationController
       end
     elsif params[:ristoratore_checkbox].present?
       @ristoratori = Ristoratori.new(ristoratore_params.merge(role: 'restaurant_owner'))
+
+      if params[:ristoratori][:photo]
+        uploaded_file = params[:ristoratori][:photo]
+        file_path = Rails.root.join('app', 'assets', 'images', uploaded_file.original_filename)
+        File.open(file_path, 'wb') do |file|
+          file.write(uploaded_file.read)
+        end
+        @ristoratori.photo = uploaded_file.original_filename
+      end
+
       if @ristoratori.save
         redirect_to login_path, notice: 'Registrazione ristoratore avvenuta con successo.'
       else
@@ -33,6 +43,6 @@ class RegistrationsController < ApplicationController
   end
 
   def ristoratore_params
-    params.require(:ristoratori).permit(:restaurant_name, :piva, :email, :phone, :password, :password_confirmation, :foto)
+    params.require(:ristoratori).permit(:restaurant_name, :piva, :email, :phone, :password, :password_confirmation, :photo)
   end
 end

@@ -53,7 +53,7 @@
       <div class="separator"></div>
 
       <div class="restaurant-form">
-        <%= form_with model: @ristoratori, url: registrations_path, html: { id: 'restaurant_registration_form' } do |f| %>
+        <%= form_with model: @ristoratori, url: registrations_path, multipart: true, html: { id: 'restaurant_registration_form' } do |f| %>
           <%= hidden_field_tag :ristoratore_checkbox, 'ristoratore' %>
           <div class="field">
             <%= f.label :restaurant_name %>
@@ -80,8 +80,8 @@
             <%= f.password_field :password_confirmation %>
           </div>
           <div class="field">
-            <%= f.label :foto %>
-            <%= f.file_field :foto, accept: 'image/png,image/gif,image/jpeg' %>
+            <%= f.label :photo %>
+            <%= f.file_field :photo %>
           </div>
           <div class="actions">
             <%= f.submit "Iscriviti" %>

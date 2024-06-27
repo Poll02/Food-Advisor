@@ -2,11 +2,11 @@
 
 <div class="ristorante">
   <%= form_with(model: @restaurant_owner, url: restaurateur_profiles_path, local: true, html: { method: :patch, multipart: true }) do |f| %>
-    <% if @restaurant_owner.foto.attached? %>
-      <%= image_tag url_for(@restaurant_owner.foto), class: 'r-foto' %>
-    <% else %>
-      <%= image_tag 'background.jpg', class: 'r-foto' %>
-    <% end %>
+    <% if @restaurant_owner.photo.present? %>
+    <%= image_tag @restaurant_owner.photo, class: 'r-foto'  %>
+  <% else %>
+    <%= image_tag 'background.jpg', class: 'r-foto' %>
+  <% end %>
     
     <div class="form-group">
       <%= f.label :foto, "Carica una nuova immagine:" %>
@@ -129,11 +129,11 @@
   <% if @eventi.any? %>
     <% @eventi.each do |evento| %>
       <div class="r-evento" id="evento-<%= evento.id %>">
-        <% if evento.locandina.attached? %>
-          <%= image_tag url_for(evento.locandina), class: 'evento-foto'  %>
+        <% if evento.locandina.present? %>
+          <%= image_tag evento.locandina, class: 'evento-foto'  %>
         <% else %>
           <%= image_tag 'background.jpg', class: 'evento-foto' %>
-        <% end %> 
+        <% end %>
         <div class="evento-info">
           <p><%= evento.nome %></p>
           <p>Data: <%= evento.data %></p>

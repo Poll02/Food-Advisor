@@ -25,11 +25,11 @@
             <% @recent_restaurants.each do |ristoratore| %>
                 <%= link_to public_restaurant_profile_path(ristoratore.id), class: 'restaurant-link' do %>
                 <div class="restaurant-box">
-                    <% if ristoratore.foto.attached? %>
-                        <%= image_tag url_for(ristoratore.foto)  %>
+                    <% if ristoratore.photo.present? %>
+                        <%= image_tag ristoratore.photo %>
                     <% else %>
-                        <%= image_tag 'background.jpg' %>
-                    <% end %> 
+                        <%= image_tag "background.jpg" %>
+                    <% end %>
                     <div class="text-overlay">
                         <%= ristoratore.restaurant_name %> 
                         <p style="font-weight: normal;">5<span style="font-weight: normal;"><ion-icon name="star" style="font-size: 15px;"></ion-icon></p>
@@ -61,8 +61,8 @@
             <% @eventi.each do |evento| %>
                 <%= link_to public_restaurant_profile_path(evento.owner), class: 'restaurant-link' do %>
               <div class="restaurant-box">
-                <% if evento.locandina.attached? %>
-                    <%= image_tag url_for(evento.locandina), class: 'evento-foto'  %>
+                <% if evento.locandina.present? %>
+                    <%= image_tag evento.locandina, class: 'evento-foto'  %>
                 <% else %>
                     <%= image_tag 'background.jpg', class: 'evento-foto' %>
                 <% end %> 
