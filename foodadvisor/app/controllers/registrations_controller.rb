@@ -10,14 +10,14 @@ class RegistrationsController < ApplicationController
     if params[:utente_checkbox].present?
       @user = User.new(user_params.merge(role: 'user'))
       if @user.save
-        redirect_to root_path, notice: 'Registrazione utente avvenuta con successo.'
+        redirect_to login_path, notice: 'Registrazione utente avvenuta con successo.'
       else
         render :new
       end
     elsif params[:ristoratore_checkbox].present?
       @ristoratori = Ristoratori.new(ristoratore_params.merge(role: 'restaurant_owner'))
       if @ristoratori.save
-        redirect_to root_path, notice: 'Registrazione ristoratore avvenuta con successo.'
+        redirect_to login_path, notice: 'Registrazione ristoratore avvenuta con successo.'
       else
         render :new
       end

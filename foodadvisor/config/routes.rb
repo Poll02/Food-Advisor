@@ -42,7 +42,7 @@ Rails.application.routes.draw do
   get 'settings', to: 'settings#show'
 
   # rotte per le pagine vetrina
-  get 'public_restaurant_profile/:id', to: 'restaurateur_profiles#public_show'
+  get 'public_restaurant_profile/:id', to: 'restaurateur_profiles#public_show', as: 'public_restaurant_profile'
 
   # per creare un evento
   post 'restaurateur_profiles/create_event', to: 'restaurateur_profiles#create_event', as: 'create_event_restaurateur_profiles'
@@ -66,7 +66,10 @@ Rails.application.routes.draw do
   get 'auth/failure', to: redirect('/')
     
   get 'home/index' 
+
+  # rotte per la pagina di ricerca
   get 'ricerca', to: 'ricerca#index'
+  get 'ricerca/search', to: 'ricerca#search'
   get 'logout', to: 'sessions#destroy'
 
   get 'support', to: 'support#index'

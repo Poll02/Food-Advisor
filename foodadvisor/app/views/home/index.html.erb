@@ -18,20 +18,26 @@
     <div class="recents-container">
         <div class="restaurants-text" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
           <h2>Nuovi Ristoratori</h2>
-          <p>Ristoratori aggiunti di recente su FoodAdvisor. Recensiscili per primi!</p>
+          <p>Ristoratori aggiunti di recente su FoodAdvisor. Recensiscili per primo!</p>
         </div>
         
         <div class="restaurants-grid" style="animation: scrollLeft 1s;">
-          <% @recent_restaurants.each do |ristoratore| %>
-            <div class="restaurant-box">
-              <%= image_tag 'background.jpg' %> <!-- Sostituisci con l'attributo dell'immagine del ristoratore -->
-              <div class="text-overlay">
-                <%= ristoratore.restaurant_name %> <!-- Sostituisci con l'attributo che contiene il nome del ristoratore -->
-                <p style="font-weight: normal;">5<span style="font-weight: normal;"><ion-icon name="star" style="font-size: 15px;"></ion-icon></p>
-                <p style="font-weight: normal; font-style: italic;">n. recensioni</p>
-              </div>
-            </div>
-          <% end %>
+            <% @recent_restaurants.each do |ristoratore| %>
+                <%= link_to public_restaurant_profile_path(ristoratore.id), class: 'restaurant-link' do %>
+                <div class="restaurant-box">
+                    <% if ristoratore.foto.attached? %>
+                        <%= image_tag url_for(ristoratore.foto)  %>
+                    <% else %>
+                        <%= image_tag 'background.jpg' %>
+                    <% end %> 
+                    <div class="text-overlay">
+                        <%= ristoratore.restaurant_name %> 
+                        <p style="font-weight: normal;">5<span style="font-weight: normal;"><ion-icon name="star" style="font-size: 15px;"></ion-icon></p>
+                        <p style="font-weight: normal; font-style: italic;">n. recensioni</p>
+                    </div>
+                </div>
+                <% end %>
+            <% end %>          
         </div>
       </div>
 
@@ -53,6 +59,7 @@
         
         <div class="restaurants-grid">
             <% @eventi.each do |evento| %>
+                <%= link_to public_restaurant_profile_path(evento.owner), class: 'restaurant-link' do %>
               <div class="restaurant-box">
                 <% if evento.locandina.attached? %>
                     <%= image_tag url_for(evento.locandina), class: 'evento-foto'  %>
@@ -66,6 +73,7 @@
                   <p style="font-size: 13px; font-weight: normal;"><%= evento.luogo %></p>
                 </div>
               </div>
+              <% end %>
             <% end %>
           </div>
           

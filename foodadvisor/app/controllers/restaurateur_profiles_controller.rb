@@ -7,7 +7,7 @@ class RestaurateurProfilesController < ApplicationController
   before_action :set_evento, only: [:destroy_event]
 
   def show
-    @eventi = Evento.where(owner: @restaurant_owner.id).where("data > ?", Date.today)
+    @eventi = Evento.where(owner: @restaurant_owner.id).where("data >= ?", Date.today)
     @promotions = Promotion.where(ristoratore_id: @restaurant_owner.id)
   end
 
@@ -83,7 +83,7 @@ class RestaurateurProfilesController < ApplicationController
   # Nuova azione pubblica per mostrare il profilo vetrina
   def public_show
     @restaurant_owner = Ristoratori.find(params[:id])
-    @eventi = Evento.where(owner: @restaurant_owner.id).where("data > ?", Date.today)
+    @eventi = Evento.where(owner: @restaurant_owner.id).where("data >= ?", Date.today)
     @promotions = Promotion.where(ristoratore_id: @restaurant_owner.id)
   end
 

@@ -98,19 +98,27 @@
     const userForm = document.querySelector('.user-form');
     const restaurantForm = document.querySelector('.restaurant-form');
 
+    function toggleForms() {
+      if (document.querySelector('input[name="user_type"]:checked').value === 'utente') {
+        userForm.style.opacity = 1;
+        userForm.querySelectorAll('input, button').forEach(el => el.disabled = false);
+
+        restaurantForm.style.opacity = 0.5;
+        restaurantForm.querySelectorAll('input, button').forEach(el => el.disabled = true);
+      } else {
+        userForm.style.opacity = 0.5;
+        userForm.querySelectorAll('input, button').forEach(el => el.disabled = true);
+
+        restaurantForm.style.opacity = 1;
+        restaurantForm.querySelectorAll('input, button').forEach(el => el.disabled = false);
+      }
+    }
+
     userTypeRadios.forEach(radio => {
-      radio.addEventListener('change', function() {
-        if (this.value === 'utente') {
-          userForm.style.display = 'block';
-          restaurantForm.style.display = 'none';
-        } else {
-          userForm.style.display = 'none';
-          restaurantForm.style.display = 'block';
-        }
-      });
+      radio.addEventListener('change', toggleForms);
     });
 
     // Trigger change event to set initial state
-    document.querySelector('input[name="user_type"]:checked').dispatchEvent(new Event('change'));
+    toggleForms();
   });
 </script>
