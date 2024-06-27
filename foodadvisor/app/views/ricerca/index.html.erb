@@ -1,47 +1,35 @@
 <%= stylesheet_link_tag 'ricerca', media: 'all' %>
 <div class="ricerca-container">
     <h1 style="font-size: 50px;">Cerca ristoranti</h1>
-    <form id="find-form">
-        <div class="find-input" style="display: flex; align-items: center;">
-            <ion-icon name="search-outline" style="margin-bottom: 30px; color: black; "></ion-icon>
-            <input type="text" id="findbar" placeholder="Inserisci qui il nome del ristorante">
-        </div>
-        <ion-icon name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px; "></ion-icon> 
-        <ion-icon name="pin-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon> 
-    </form>
+    <div class="search-container">
+  <form id="find-form" action="<%= ricerca_path %>" method="get">
+    <div class="find-input" style="display: flex; align-items: center;">
+      <ion-icon name="search-outline" style="margin-bottom: 30px; color: black;"></ion-icon>
+      <input type="text" id="findbar" name="query" placeholder="Inserisci qui il nome del ristorante" value="<%= params[:query] %>">
+    </div>
+    <button type="submit" style="display: none;"></button>
+    <ion-icon name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon>
+    <ion-icon name="pin-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon>
+  </form>
+</div>
     <div class="results-and-details-container">
         <div class="results-container">
-            <div class="result-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="result-text">
-                    <h3>Nome Ristorante</h3>
-                    <p>Categoria, N stelle</p>
-                    <p>Descrizione</p>
-                    <p style="font-style: italic;">Posizione</p>
-                </div>
-            </div>
-            <hr class="solid" id="divider">
-            <div class="result-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="result-text">
-                    <h3>Nome Ristorante</h3>
-                    <p>Categoria, N stelle</p>
-                    <p>Descrizione</p>
-                    <p style="font-style: italic;">Posizione</p>
-                </div>
-            </div>
-            <hr class="solid" id="divider">
-
-            <div class="result-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="result-text">
-                    <h3>Nome Ristorante</h3>
-                    <p>Categoria, N stelle</p>
-                    <p>Descrizione</p>
-                    <p style="font-style: italic;">Posizione</p>
-                </div>
-            </div>
-        </div>
+  <% @ristoratori.each do |ristoratore| %>
+    <div class="result-box">
+      <% if ristoratore.foto.attached? %>
+    <%= image_tag url_for(ristoratore.foto)%>
+  <% else %>
+    <%= image_tag 'background.jpg'%>
+  <% end %>
+      <div class="result-text">
+        <h3><%= ristoratore.restaurant_name %></h3>
+        <p>N stelle, N. recensioni</p>
+      </div>
+    </div>
+    <hr class="solid" id="divider">
+  <% end %>
+</div>
+            
         <div class="vertical-divider"></div>
         <div class="details-container">
             <%= image_tag 'background.jpg' %> <!--Posizione sulla Mappa-->

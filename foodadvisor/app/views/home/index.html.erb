@@ -24,7 +24,11 @@
         <div class="restaurants-grid" style="animation: scrollLeft 1s;">
           <% @recent_restaurants.each do |ristoratore| %>
             <div class="restaurant-box">
-              <%= image_tag 'background.jpg' %> <!-- Sostituisci con l'attributo dell'immagine del ristoratore -->
+             <% if ristoratore.foto.attached? %>
+            <%= image_tag url_for(ristoratore.foto)%>
+        <% else %>
+            <%= image_tag 'background.jpg'%>
+        <% end %>
               <div class="text-overlay">
                 <%= ristoratore.restaurant_name %> <!-- Sostituisci con l'attributo che contiene il nome del ristoratore -->
                 <p style="font-weight: normal;">5<span style="font-weight: normal;"><ion-icon name="star" style="font-size: 15px;"></ion-icon></p>
