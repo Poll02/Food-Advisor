@@ -69,7 +69,6 @@ Rails.application.routes.draw do
 
   # rotte per la pagina di ricerca
   get 'ricerca', to: 'ricerca#index'
-  get 'ricerca/search', to: 'ricerca#search'
   get 'logout', to: 'sessions#destroy'
 
   get 'support', to: 'support#index'

@@ -1,35 +1,37 @@
 <%= stylesheet_link_tag 'ricerca', media: 'all' %>
 <div class="ricerca-container">
     <h1 style="font-size: 50px;">Cerca ristoranti</h1>
-    <form id="find-form" onsubmit="return false;">
+    <div class="search-container">
+    <form id="find-form" action="<%= ricerca_path %>" method="get">
         <div class="find-input" style="display: flex; align-items: center;">
-            <ion-icon name="search-outline" style="margin-bottom: 30px; color: black; cursor: pointer; "></ion-icon>
-            <input type="text" id="findbar" placeholder="Inserisci qui il nome del ristorante" onkeyup="searchRestaurants()">
+        <button type="submit" style="background: none; border: none; margin-bottom: 80px; cursor: pointer; padding: 0;">
+            <ion-icon name="search-outline" style="color: black;"></ion-icon>
+        </button>
+        <input type="text" id="findbar" name="query" placeholder="Inserisci qui il nome del ristorante" value="<%= params[:query] %>">
         </div>
-        <ion-icon name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px; "></ion-icon> 
-        <ion-icon name="pin-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon> 
+        <button type="submit" style="display: none;"></button>
+        <ion-icon name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon>
+        <ion-icon name="pin-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon>
     </form>
-
+</div>
     <div class="results-and-details-container">
         <div class="results-container">
-            <% @restaurants.each do |ristoratore| %>
-                <%= link_to public_restaurant_profile_path(ristoratore.id), class: 'restaurant-link' do %>
+            <% @ristoratori.each do |ristoratore| %>
                 <div class="result-box">
-                    <% if ristoratore.foto.attached? %>
-                        <%= image_tag url_for(ristoratore.foto)  %>
-                    <% else %>
-                        <%= image_tag 'background.jpg' %>
-                    <% end %> 
-                    <div class="result-text">
-                        <%= ristoratore.restaurant_name %> 
-                        <p style="font-weight: normal;">5<span style="font-weight: normal;"><ion-icon name="star" style="font-size: 15px;"></ion-icon></p>
-                        <p style="font-weight: normal; font-style: italic;">n. recensioni</p>
-                    </div>
+                <% if ristoratore.foto.attached? %>
+                <%= image_tag url_for(ristoratore.foto)%>
+            <% else %>
+                <%= image_tag 'background.jpg'%>
+            <% end %>
+                <div class="result-text">
+                    <h3><%= ristoratore.restaurant_name %></h3>
+                    <p>N stelle, N. recensioni</p>
                 </div>
-                <% end %>
+                </div>
                 <hr class="solid" id="divider">
-            <% end %>     
+            <% end %>
         </div>
+            
         <div class="vertical-divider"></div>
         <div class="details-container">
             <%= image_tag 'background.jpg' %> <!--Posizione sulla Mappa-->
@@ -37,43 +39,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    function searchRestaurants() {
-        const query = document.getElementById('findbar').value;
-        
-        fetch(`/ricerca/search?query=${query}`)
-            .then(response => response.json())
-            .then(data => {
-                const resultsContainer = document.querySelector('.results-container');
-                resultsContainer.innerHTML = ''; // Clear previous results
-                
-                data.forEach(restaurant => {
-                    const resultBox = document.createElement('div');
-                    resultBox.className = 'result-box';
-
-                    const imageUrl = restaurant.foto_url;
-
-                    resultBox.innerHTML = `
-                        <a href="/public_restaurant_profile/${restaurant.id}" class="restaurant-link">
-                            <div class="result-box">
-                                <img src="${imageUrl}" />
-                                <div class="result-text">
-                                    ${restaurant.restaurant_name}
-                                    <p style="font-weight: normal;">5
-                                        <span style="font-weight: normal;">
-                                            <ion-icon name="star" style="font-size: 15px;"></ion-icon>
-                                        </span>
-                                    </p>
-                                    <p style="font-weight: normal; font-style: italic;">${restaurant.review_count} recensioni</p>
-                                </div>
-                            </div>
-                        </a>
-                        <hr>
-                    `;
-
-                    resultsContainer.appendChild(resultBox);
-                });
-            });
-    }
-</script>

@@ -300,13 +300,13 @@
     }
 
     window.onclick = function(event) {
-      if (event.target == modal) {
+      if (event.target == modal2) {
         modal2.style.display = "none";
       }
     }
 
     resetBtn.onclick = function() {
-      var form = modal.querySelector("form");
+      var form = modal2.querySelector("form");
       form.reset();
     }
   });
@@ -365,55 +365,68 @@
 
   // JS per eliminazione promozioni
   var confirmPromoModal = document.getElementById("confirmModalPromo");
-  var closePromoConfirmBtn = document.getElementsByClassName("close-confirm-promo")[0];
-  var confirmPromoDeleteBtn = document.getElementById("confirmDeleteBtnPromo");
-  var cancelPromoDeleteBtn = document.getElementById("cancelDeleteBtnPromo");
-  var promoIdToDelete = null;
+var closePromoConfirmBtn = document.getElementsByClassName("close-confirm-promo")[0];
+var confirmPromoDeleteBtn = document.getElementById("confirmDeleteBtnPromo");
+var cancelPromoDeleteBtn = document.getElementById("cancelDeleteBtnPromo");
+var promoIdToDelete = null;
 
-  document.querySelectorAll('.del-promo-icon').forEach(function(deletePromoIcon) {
-    deletePromoIcon.onclick = function() {
-      promoIdToDelete = this.getAttribute('data-promotion-id');
-      confirmPromoModal.style.display = "block";
-    }
-  });
-
-  closePromoConfirmBtn.onclick = function() {
-    confirmPromoModal.style.display = "none";
+document.querySelectorAll('.del-promo-icon').forEach(function(deletePromoIcon) {
+  deletePromoIcon.onclick = function() {
+    promoIdToDelete = this.getAttribute('data-promotion-id');
+    console.log("Promo ID to delete:", promoIdToDelete); // Log per verificare ID della promozione da eliminare
+    confirmPromoModal.style.display = "block";
   }
+});
 
-  cancelPromoDeleteBtn.onclick = function() {
+closePromoConfirmBtn.onclick = function() {
+  console.log("Close button clicked");
+  confirmPromoModal.style.display = "none";
+}
+
+cancelPromoDeleteBtn.onclick = function() {
+  console.log("Cancel delete button clicked");
+  confirmPromoModal.style.display = "none";
+  promoIdToDelete = null;
+}
+
+window.onclick = function(event) {
+  if (event.target == confirmPromoModal) {
+    console.log("Clicked outside modal");
     confirmPromoModal.style.display = "none";
     promoIdToDelete = null;
   }
+}
 
-  window.onclick = function(event) {
-    if (event.target == confirmPromoModal) {
-      confirmPromoModal.style.display = "none";
-      promoIdToDelete = null;
-    }
-  }
-
-  confirmPromoDeleteBtn.onclick = function() {
-    if (promoIdToDelete) {
-      fetch(`/restaurateur_profiles/destroy_promotion/${promoIdToDelete}`, {
-        method: 'DELETE',
-        headers: {
-          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-          'Content-Type': 'application/json'
+confirmPromoDeleteBtn.onclick = function() {
+  console.log("Confirm delete button clicked");
+  if (promoIdToDelete) {
+    fetch(`/restaurateur_profiles/destroy_promotion/${promoIdToDelete}`, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+      .then(data => {
+        console.log("Response from server:", data); // Log per verificare la risposta dal server
+        if (data.success) {
+          console.log("Promotion deleted successfully");
+          document.getElementById(`promotion-${promoIdToDelete}`).remove();
+          confirmPromoModal.style.display = "none";
+        } else {
+          console.error('Errore durante l\'eliminazione della promozione data: ' + data.error);
+          alert('Errore durante l\'eliminazione della promozione data: ' + data.error);
         }
-      }).then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            document.getElementById(`promotion-${promoIdToDelete}`).remove();
-            confirmPromoModal.style.display = "none";
-          } else {
-            alert('Errore durante l\'eliminazione della promozione: ' + data.error);
-          }
-        }).catch(error => {
-          alert('Errore durante l\'eliminazione della promozione: ' + error.message);
-        });
-    }
+      }).catch(error => {
+        console.error('Errore durante l\'eliminazione della promozione errore: ' + error.message);
+        alert('Errore durante l\'eliminazione della promozione errore: ' + error.message);
+      });
+  } else {
+    console.error("Promo ID to delete is null or undefined");
+    alert("Errore: ID promozione da eliminare non valido.");
   }
+}
+
 
 </script>
 

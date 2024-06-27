@@ -9,6 +9,7 @@ class RestaurateurProfilesController < ApplicationController
   def show
     @eventi = Evento.where(owner: @restaurant_owner.id).where("data >= ?", Date.today)
     @promotions = Promotion.where(ristoratore_id: @restaurant_owner.id)
+
   end
 
   def edit
@@ -59,14 +60,17 @@ class RestaurateurProfilesController < ApplicationController
   end
 
   def destroy_promotion
-    if @promotion.ristoratore_id == @restaurant_owner.id
-      @promotion.destroy
-      render json: { success: true }
+    @promotion = Promotion.find_by(id: params[:id])
+
+    if @promotion
+      if @promotion.destroy
+        render json: { success: true }, status: :ok
+      else
+        render json: { success: false, error: 'Errore durante l\'eliminazione della promozione' }, status: :unprocessable_entity
+      end
     else
-      render json: { success: false, error: 'Non sei autorizzato a eliminare questa promozione.' }, status: :forbidden
+      render json: { success: false, error: 'Promozione non trovata' }, status: :not_found
     end
-  rescue StandardError => e
-    render json: { success: false, error: e.message }, status: :unprocessable_entity
   end
 
   def destroy_event
