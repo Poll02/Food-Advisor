@@ -1,6 +1,7 @@
 class Choose < ApplicationRecord
-  self.primary_key = :ristoratori_id, :tag_id
+  belongs_to :ristoratori
+  belongs_to :tag
 
-  belongs_to :ristoratori, foreign_key: :ristoratori_id
-  belongs_to :tag, foreign_key: :tag_id
+  validates :ristoratori_id, presence: true
+  validates :tag_id, presence: true
 end

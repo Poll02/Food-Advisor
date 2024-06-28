@@ -1,4 +1,4 @@
 class Tag < ApplicationRecord
-  has_many :chooses, foreign_key: :tag_id
-  has_many :ristoratori, through: :chooses
+  has_many :chooses
+  has_many :ristoratoris, through: :chooses
   end

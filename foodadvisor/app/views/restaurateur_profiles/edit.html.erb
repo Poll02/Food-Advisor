@@ -1,48 +1,38 @@
 <%= link_to 'Salva', rest_profile_path %>
 
 <div class="ristorante">
-  <%= form_with(model: @restaurant_owner, url: restaurateur_profiles_path, local: true, html: { method: :patch, multipart: true }) do |f| %>
-    <% if @restaurant_owner.photo.present? %>
-    <%= image_tag @restaurant_owner.photo, class: 'r-foto'  %>
+  <% if @restaurant_owner.photo.present? %>
+  <%= image_tag @restaurant_owner.photo, class: 'r-foto' %>
   <% else %>
-    <%= image_tag 'background.jpg', class: 'r-foto' %>
+  <%= image_tag 'background.jpg', class: 'r-foto' %>
   <% end %>
-    
-    <div class="form-group">
-      <%= f.label :foto, "Carica una nuova immagine:" %>
-      <%= f.file_field :foto, class: 'form-control' %>
-    </div>
-    
+  <%= form_with(model: Ristoratori, url: update_info_restaurateur_profiles_path, local: true, html: { method: :patch, multipart: true }) do |f| %>
     <div class="r-info">
       <div class="form-group">
         <%= f.label :restaurant_name, "Nome del ristorante:" %>
         <%= f.text_field :restaurant_name, value: current_user.restaurant_name, class: 'form-control' %>
       </div>
-      
+
       <div class="form-group">
-        <%= f.label :address, "Indirizzo:" %>
-        <%= f.text_field :address, class: 'form-control' %>
+        <%= f.label :indirizzo, "Indirizzo:" %>
+        <%= f.text_field :indirizzo, class: 'form-control' %>
       </div>
-      
+
       <div class="form-group">
         <%= f.label :email, "Email:" %>
         <%= f.email_field :email, value: current_user.email, class: 'form-control' %>
       </div>
-      
+
       <div class="form-group">
         <%= f.label :phone, "Telefono:" %>
         <%= f.telephone_field :phone, value: current_user.phone, class: 'form-control' %>
       </div>
-      
-      <div class="form-group">
-        <%= f.label :created_at, "Data di registrazione:" %>
-        <%= f.text_field :created_at, value: current_user.created_at, class: 'form-control', disabled: true %>
-      </div>
-      
+
       <%= f.submit "Salva", class: 'btn btn-primary' %>
     </div>
   <% end %>
 </div>
+
 
 
 
@@ -53,7 +43,7 @@
     <div class="r-tags">
       <% if @tags.present? %>
         <% @tags.each do |tag| %>
-          <span class="r-tag"><%= tag.nome %></span>
+          <span class="piatto"><%= tag.nome %></span>
         <% end %>
       <% end %>
       <table>
