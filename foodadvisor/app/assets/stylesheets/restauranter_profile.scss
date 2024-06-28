@@ -366,3 +366,81 @@ cursor: pointer;
   gap: 30px;
 }
 
+// per la tabella dei tag
+/* Generali */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  vertical-align: top;
+}
+
+.category-header {
+  font-weight: bold;
+}
+
+.dish-container {
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.piatto {
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 5px;
+  display: inline-block;
+  justify-content: space-between;
+}
+
+.piatto i {
+  cursor: pointer;
+}
+
+/* Colori per categorie specifiche */
+.category-cuisine {
+  background-color: #FFDDC1;
+}
+
+.category-diet {
+  background-color: #D4EDDA;
+}
+
+.category-flavor {
+  background-color: #FFF3CD;
+}
+
+/* Specifica gli stili per ogni categoria */
+tr.cuisine .piatto {
+  background-color: #FFDDC1;
+}
+
+tr.diet .piatto {
+  background-color: #D4EDDA;
+}
+
+tr.flavor .piatto {
+  background-color: #FFF3CD;
+}
+
+.inline-form {
+  display: inline;
+}
+
+.button-with-icon {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+}
+
+.button-with-icon .fas {
+  font-size: 1rem; /* o la dimensione desiderata */
+}
+
+
+

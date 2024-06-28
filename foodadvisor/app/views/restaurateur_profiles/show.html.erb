@@ -21,8 +21,13 @@
 <div class="r-statistiche">
   <div class="r-stat">
     <div class="r-tags">
-      <span class="r-tag pub">Pub</span>
-      <span class="r-tag famiglie">Per famiglie</span>
+      <% if @tags.present? %>
+        <% @tags.each do |tag| %>
+          <span class="r-tag"><%= tag.name %></span>
+        <% end %>
+      <% else %>
+        <p>Nessun tag associato</p>
+      <% end %>
     </div>
   </div>
 </div>

@@ -47,6 +47,9 @@ Rails.application.routes.draw do
   # per creare un evento
   post 'restaurateur_profiles/create_event', to: 'restaurateur_profiles#create_event', as: 'create_event_restaurateur_profiles'
   
+  # per i tag
+  post 'restaurateur_profiles/:tag_id/add', to: 'restaurateur_profiles#add_tag', as: 'add_tag'
+  post 'restaurateur_profiles/:tag_id/remove', to: 'restaurateur_profiles#remove_tag', as: 'remove_tag'
   
   # rotte per il login
   # Rotta per il form di login (GET e POST)
@@ -79,6 +82,7 @@ Rails.application.routes.draw do
   resource :restaurateur_profiles, only: [:show, :edit, :update] do
     post 'create_event', to: 'restaurateur_profiles#create_event'
     delete 'destroy_event/:id', to: 'restaurateur_profiles#destroy_event', as: 'destroy_event'
+    post 'add_tag/:tag_id', to: 'restaurateur_profiles#add_tag'
     delete 'destroy_promotion/:id', to: 'restaurateur_profiles#destroy_promotion', as: 'destroy_promotion'
 
     post :create_promotion, on: :collection

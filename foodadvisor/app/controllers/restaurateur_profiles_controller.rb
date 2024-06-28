@@ -3,18 +3,48 @@ class RestaurateurProfilesController < ApplicationController
   
   before_action :require_logged_in, except: [:public_show]
   before_action :require_restaurant_owner, except: [:public_show]
-  before_action :set_restaurant_owner, only: [:show, :edit, :update, :create_event, :destroy_event, :public_show]
+  before_action :set_restaurant_owner, only: [:show, :edit, :update, :create_event, :destroy_event, :public_show, :add_tag, :remove_tag]
   before_action :set_evento, only: [:destroy_event]
 
   def show
-    @eventi = Evento.where(owner: @restaurant_owner.id).where("data >= ?", Date.today)
+    @eventi = Evento.where(owner: @restaurant_owner.id).where("data >=?", Date.today)
     @promotions = Promotion.where(ristoratore_id: @restaurant_owner.id)
-
+    @tags = @restaurant_owner.tags
   end
 
   def edit
     @eventi = Evento.where(owner: @restaurant_owner.id).where("data > ?", Date.today)
     @promotions = Promotion.where(ristoratore_id: @restaurant_owner.id)
+    @tags = @restaurant_owner.tags
+    @categories = Tag.distinct.pluck(:categoria)
+  end
+
+  def add_tag
+    logger.debug "Ristoratore ID: #{@restaurant_owner.id}"
+    logger.debug "Tag ID: #{params[:tag_id]}"
+    
+    choose = Choose.new(ristoratori_id: @restaurant_owner.id, tag_id: params[:tag_id])
+    logger.debug "Choose: #{choose.inspect}"
+    
+    if choose.save
+      flash[:notice] = "Tag added successfully."
+    else
+      logger.debug "Failed to add tag: #{choose.errors.full_messages.join(', ')}"
+      flash[:alert] = "Failed to add tag. Errors: #{choose.errors.full_messages.join(', ')}"
+    end
+    
+    redirect_to your_redirect_path
+  end
+  
+
+  def remove_tag
+    choose = Choose.find_by(ristoratori_id: @restaurant_owner.id, tag_id: @tag.id)
+    if choose.destroy
+      flash[:notice] = "Tag removed successfully."
+    else
+      flash[:alert] = "Failed to remove tag."
+    end
+    redirect_to edit_restaurateur_profiles_path # Replace with the appropriate redirect path
   end
 
   def update
@@ -91,6 +121,7 @@ class RestaurateurProfilesController < ApplicationController
     @restaurant_owner = Ristoratori.find(params[:id])
     @eventi = Evento.where(owner: @restaurant_owner.id).where("data >= ?", Date.today)
     @promotions = Promotion.where(ristoratore_id: @restaurant_owner.id)
+    @tags = @restaurant_owner.tags
   end
 
   private

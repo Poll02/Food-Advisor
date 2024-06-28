@@ -51,11 +51,49 @@
 <div class="r-statistiche">
   <div class="r-stat">
     <div class="r-tags">
-      <span class="r-tag pub">Pub</span>
-      <span class="r-tag famiglie">Per famiglie</span>
+      <% if @tags.present? %>
+        <% @tags.each do |tag| %>
+          <span class="r-tag"><%= tag.nome %></span>
+        <% end %>
+      <% end %>
+      <table>
+        <% @categories.each do |category| %>
+          <tr class="<%= category.downcase.gsub(' ', '-') %>">
+            <td class="category-header"><%= category %></td>
+            <td class="dish-container">
+              <% tags = Tag.where(categoria: category) %>
+              <% tags.each do |tag| %>
+                <div class="piatto">
+                  <%= tag.nome %>
+                  <% if @tags.include?(tag) %>
+                    <%= form_with url: remove_tag_path(tag_id: tag.id), method: :post, class: 'inline-form' do %>
+                      <%= hidden_field_tag :tag_id, tag.id %>
+                      <%= hidden_field_tag :action_type, 'remove' %>
+                      <button type="submit" class="button-with-icon">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    <% end %>
+                  <% else %>
+                    <%= form_with url: add_tag_path(tag_id: tag.id), method: :post, class: 'inline-form' do %>
+                      <%= hidden_field_tag :tag_id, tag.id %>
+                      <%= hidden_field_tag :action_type, 'add' %>
+                      <button type="submit" class="button-with-icon">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    <% end %>
+                  <% end %>
+                </div>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
     </div>
   </div>
 </div>
+
+
+
 <h3>Promozioni</h3>
 <div class="r-promozioni">
   <div class="promo-grid">
