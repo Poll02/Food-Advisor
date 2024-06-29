@@ -451,4 +451,38 @@ tr.flavor .piatto {
 }
 
 
+.public-r-reviews{
+  display: flex;
+  gap: 20px;
+  width: 1200px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 15px;
+  transition: 0.3s;
+}
 
+.public-r-reviews-grid{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.public-r-reviews:hover{
+  background-color: #ddd7d7;
+}
+
+.public-reviews-details{
+  display: flex;
+  flex-direction: column;
+}
+
+.public-r-reviews img{
+  width: 70px;
+  height: 70px;
+  border-radius: 100px;
+}
+
+.reviews-filters{
+  display: flex;
+gap: 30px;
+}
