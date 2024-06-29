@@ -1,14 +1,13 @@
 <div class="pagina-vetrina">
     <div class="rest-foto-name">
-    <i class="fa-regular fa-star"></i>
         <div class="rest-info-public">
-            <h1 style="font-size: 50px; color: black; "><%= @restaurant_owner.restaurant_name %></h1>
+            <h1 style="font-size: 50px;"><%= @restaurant_owner.restaurant_name %></h1>
             <h2>n. stelle</h2>
             <h3>n. recensioni</h3>
             <% if @tags.present? %>
               <h2 style="margin-top: 20px;">TAGS: </h2>
               <% @tags.each do |tag| %>
-                <span class="r-tag"><%= tag.nome %></span>
+                <span class="r-tag"><%= tag.name %></span>
               <% end %>
             <% else %>
               <p>Nessun tag associato</p>
@@ -39,7 +38,7 @@
       <h1>Eventi</h1>
 
       <div class="public-r-events">
-        <div class="restaurants-grid">
+        <div class="restaurants-grid" style="width: 1300px; justify-content: center;">
         <% if @eventi.present? %>
  
             <% @eventi.each do |evento| %>
@@ -81,6 +80,53 @@
         
       </div>
       <hr class="solid" id="divider" style="width: 70%;">
+      <h1 style="margin-bottom: 20px;">Ricette Condivise</h1>
+      <div class="r-public-recipes">
+        <div class="restaurants-grid" style="width: 1300px; justify-content: center;" id="recipes-grid">
+          <div class="restaurant-box" id="recipes-box">
+            <%= image_tag 'background.jpg', class: 'evento-foto' %>
+            <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
+              <p>Nome Ricetta</p>
+              <p style="font-size: 13px; font-weight: normal;">Difficoltà: <span>Difficoltà</span></p>
+              <p style="font-size: 13px; font-weight: normal;">Ingredienti: <span>Ingredienti</span></p>
+              <p style="font-size: 13px; font-weight: normal; font-style: italic;">Clicca per vedere il procedimento</p>
+            </div>
+          </div>
+      </div>
+      </div>
+      <hr class="solid" id="divider" style="width: 70%;">
+      <h1 style="margin-bottom: 20px;">Recensioni</h1>
+      <div class="reviews-filters">
+        <p style="font-weight: bold;">Filtra per:</p>
+        <p>Data</p>
+        <p>Numero di stelle da a</p>
+      </div>
+      <div class="public-r-reviews-grid">
+        <div class="public-r-reviews">
+          <%= image_tag 'background.jpg'%>
+          <div class="public-review-details">
+            <h3>Nome Utente</h3>
+            <p>n. stelle</p>
+            <p>Testo della recensione. Il testo dovrebbe rispettare dei caratteri minimi e massimi e dobbiamo decidere come gestirne la visualizzazione</p>
+            <p style="font-style: italic; font-size: 13px;">in data DATA</p>
+          </div>
+          
+        </div>
+        <div class="public-r-reviews">
+          <%= image_tag 'background.jpg'%>
+          <div class="public-review-details">
+            <h3>Nome Utente</h3>
+            <p>n. stelle</p>
+            <p>Testo della recensione. Il testo dovrebbe rispettare dei caratteri minimi e massimi e dobbiamo decidere come gestirne la visualizzazione</p>
+            <p style="font-style: italic; font-size: 13px;">in data DATA</p>
+          </div>
+          
+        </div>
+
+      </div>
+      
+
+
 
 
     
