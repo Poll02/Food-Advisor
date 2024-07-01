@@ -1,18 +1,26 @@
 class RestaurateurProfilesController < ApplicationController
   layout 'with_sidebar'
-  
+
   before_action :require_logged_in
   before_action :require_restaurant_owner
-  before_action :set_restaurant_owner, only: [:show, :edit, :create_event, :destroy_event]
+  before_action :set_restaurant_owner, only: [:show, :edit, :create_event, :destroy_event, :update]
   before_action :set_evento, only: [:destroy_event]
 
   def show
-    @eventi = Evento.where(owner: @restaurant_owner.id).where("data > ?", Date.today)
-    @promotions = Promotion.where(ristoratore_id: @restaurant_owner.id)
+    @eventi = Evento.where(owner: current_user.id).where("data > ?", Date.today)
+    @promotions = Promotion.where(ristoratore_id: current_user.id)
   end
 
   def edit
-    @eventi = Evento.where(owner: @restaurant_owner.id).where("data > ?", Date.today)
+    @eventi = Evento.where(owner: current_user.id).where("data > ?", Date.today)
+  end
+
+  def update
+    if @restaurant_owner.update(restaurant_owner_new_params)
+      redirect_to show_restaurateur_profiles_path, notice: 'Profilo aggiornato con successo.'
+    else
+      render :edit
+    end
   end
 
   def create_event
@@ -32,7 +40,7 @@ class RestaurateurProfilesController < ApplicationController
   end
 
   def destroy_event
-    if @evento.owner == @restaurant_owner.id
+    if @evento.owner == current_user.id
       @evento.destroy
       render json: { success: true }
     else
@@ -62,5 +70,9 @@ class RestaurateurProfilesController < ApplicationController
 
   def set_evento
     @evento = Evento.find(params[:id])
+  end
+
+  def restaurant_owner_new_params
+    params.require(:restaurant_owner).permit(:foto, :restaurant_name, :address, :email, :phone)
   end
 end

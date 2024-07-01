@@ -44,7 +44,9 @@ Rails.application.routes.draw do
   # per creare un evento
   post 'restaurateur_profiles/create_event', to: 'restaurateur_profiles#create_event', as: 'create_event_restaurateur_profiles'
   
-  
+  #upload dati profilo
+  resource :restaurateur_profiles, only: [:edit, :update, :show]
+
   # rotte per il login
   # Rotta per il form di login (GET e POST)
   get 'login', to: 'sessions#new', as: :user_login
@@ -71,7 +73,7 @@ Rails.application.routes.draw do
   resources :promotions, only: [:index]
   resources :registrations, only: [:create]
   resources :competizioni, only: [:index]
-  resource :restaurateur_profiles, only: [:show, :edit] do
+  resource :restaurateur_profiles, only: [:show, :edit, :update] do
     post 'create_event', to: 'restaurateur_profiles#create_event'
     delete 'destroy_event/:id', to: 'restaurateur_profiles#destroy_event', as: 'destroy_event'
   end

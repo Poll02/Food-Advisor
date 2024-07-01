@@ -1,16 +1,50 @@
 <%= link_to 'Salva Impostazioni', rest_profile_path %>
 
 <div class="ristorante">
-  <%= image_tag 'background.jpg', class: 'r-foto' %>   
-  <div class="r-info">
-    <p style="font-weight: bold;">Nome del ristorante: <span style="font-weight: normal;"><%= current_user.restaurant_name %></span></p>
-    <p style="font-weight: bold;">Indirizzo: </p>
-    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%= current_user.email %></span></p>
-    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%= current_user.phone %></span></p>
-    <p style="font-weight: bold;">Data di registrazione: <span style="font-weight: normal;"><%= current_user.created_at %></span></p>
-    <p style="font-weight: bold;">Asporto:</p>
-  </div>
+  <%= form_with(model: @restaurant_owner, url: restaurateur_profiles_path, local: true, html: { method: :patch, multipart: true }) do |f| %>
+    <% if @restaurant_owner.foto.attached? %>
+      <%= image_tag url_for(@restaurant_owner.foto), class: 'r-foto' %>
+    <% else %>
+      <%= image_tag 'background.jpg', class: 'r-foto' %>
+    <% end %>
+    
+    <div class="form-group">
+      <%= f.label :foto, "Carica una nuova immagine:" %>
+      <%= f.file_field :foto, class: 'form-control' %>
+    </div>
+    
+    <div class="r-info">
+      <div class="form-group">
+        <%= f.label :restaurant_name, "Nome del ristorante:" %>
+        <%= f.text_field :restaurant_name, class: 'form-control' %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :address, "Indirizzo:" %>
+        <%= f.text_field :address, class: 'form-control' %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :email, "Email:" %>
+        <%= f.email_field :email, class: 'form-control' %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :phone, "Telefono:" %>
+        <%= f.telephone_field :phone, class: 'form-control' %>
+      </div>
+      
+      <div class="form-group">
+        <%= f.label :created_at, "Data di registrazione:" %>
+        <%= f.text_field :created_at, value: current_user.created_at, class: 'form-control', disabled: true %>
+      </div>
+      
+      <%= f.submit "Salva", class: 'btn btn-primary' %>
+    </div>
+  <% end %>
 </div>
+
+
 
 <h3>Statistiche</h3>
 <div class="r-statistiche">
@@ -89,159 +123,4 @@
   </div>
   <i class="fa-solid fa-calendar-plus" style="font-size: 30px; cursor: pointer; margin-left: 10px; align-self: center; "></i>
 </div>
-
-<h3>Eventi</h3>
-<div class="r-eventi">
-  <% if @eventi.any? %>
-    <% @eventi.each do |evento| %>
-      <div class="r-evento" id="evento-<%= evento.id %>">
-        <%= image_tag 'background.jpg', class: 'evento-foto' %>    
-        <div class="evento-info">
-          <p><%= evento.nome %></p>
-          <p>Data: <%= evento.data %></p>
-          <p>Luogo: <%= evento.luogo %></p>
-          <p>Desc: <%= evento.descrizione %></p>
-        </div>
-        <i class="fa fa-trash delete-icon" data-event-id="<%= evento.id %>" style="font-size: 15px; cursor: pointer;"></i>
-      </div>
-    <% end %>
-  <% else %>
-    <p>Il ristoratore non ha creato alcun evento.</p>
-  <% end %>
-
-  <!-- Icona per aprire la finestra modale -->
-  <i class="fa-solid fa-calendar-plus" id="openModalBtn" style="font-size: 30px; cursor: pointer; margin-left: 10px; align-self: center; "></i>
-</div>
-
-<!-- Finestra modale creazione evento -->
-<div id="myModal" class="modal">
-  <div class="modal-content">
-    <span class="close">&times;</span>
-    <h2>Crea Nuovo Evento</h2>
-    <%= form_with url: create_event_restaurateur_profiles_path, method: :post, local: true do |form| %>
-      <div>
-        <%= form.label :nome, "Nome Evento" %>
-        <%= form.text_field :nome %>
-      </div>
-      <div>
-        <%= form.label :data, "Data Evento" %>
-        <%= form.date_field :data, id: "eventDate" %>
-      </div>
-      <div>
-        <%= form.label :luogo, "Luogo Evento" %>
-        <%= form.text_field :luogo %>
-      </div>
-      <div>
-        <%= form.label :descrizione, "Descrizione Evento" %>
-        <%= form.text_area :descrizione %>
-      </div>
-      <div>
-        <%= form.submit "Crea Evento" %>
-        <button type="button" id="resetBtn">Azzera</button>
-      </div>
-    <% end %>
-  </div>
-</div>
-
-<!-- Finestra di conferma eliminazione -->
-<div id="confirmModal" class="modal">
-  <div class="modal-content">
-    <span class="close-confirm">&times;</span>
-    <h2>Conferma Eliminazione</h2>
-    <p>Sei sicuro di voler eliminare questo evento?</p>
-    <button id="confirmDeleteBtn">Conferma</button>
-    <button id="cancelDeleteBtn">Annulla</button>
-  </div>
-</div>
-
-<script>
-// per la finestra modale
-document.addEventListener("DOMContentLoaded", function() {
-  var confirmModal = document.getElementById("confirmModal");
-  var closeConfirmBtn = document.getElementsByClassName("close-confirm")[0];
-  var confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
-  var cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
-  var eventIdToDelete = null;
-
-  document.querySelectorAll('.delete-icon').forEach(function(deleteIcon) {
-    deleteIcon.onclick = function() {
-      eventIdToDelete = this.getAttribute('data-event-id');
-      confirmModal.style.display = "block";
-    }
-  });
-
-  closeConfirmBtn.onclick = function() {
-    confirmModal.style.display = "none";
-  }
-
-  cancelDeleteBtn.onclick = function() {
-    confirmModal.style.display = "none";
-    eventIdToDelete = null;
-  }
-
-  window.onclick = function(event) {
-    if (event.target == confirmModal) {
-      confirmModal.style.display = "none";
-      eventIdToDelete = null;
-    }
-  }
-
-  confirmDeleteBtn.onclick = function() {
-    if (eventIdToDelete) {
-      fetch(`/restaurateur_profiles/destroy_event/${eventIdToDelete}`, {
-        method: 'DELETE',
-        headers: {
-          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-          'Content-Type': 'application/json'
-        }
-      }).then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            document.getElementById(`evento-${eventIdToDelete}`).remove();
-            confirmModal.style.display = "none";
-          } else {
-            alert('Errore durante l\'eliminazione dell\'evento: ' + data.error);
-          }
-        }).catch(error => {
-          alert('Errore durante l\'eliminazione dell\'evento: ' + error.message);
-        });
-    }
-  }
-});
-
-
-  // per la finestra modale creazione evento
-  document.addEventListener("DOMContentLoaded", function() {
-    var modal = document.getElementById("myModal");
-    var btn = document.getElementById("openModalBtn");
-    var span = document.getElementsByClassName("close")[0];
-    var resetBtn = document.getElementById("resetBtn");
-    var eventDateField = document.getElementById("eventDate");
-
-    // Imposta la data minima per il campo data
-    var today = new Date();
-    today.setDate(today.getDate() + 1); // Aggiungi un giorno alla data odierna
-    var minDate = today.toISOString().split('T')[0];
-    eventDateField.setAttribute('min', minDate);
-
-    btn.onclick = function() {
-      modal.style.display = "block";
-    }
-
-    span.onclick = function() {
-      modal.style.display = "none";
-    }
-
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
-      }
-    }
-
-    resetBtn.onclick = function() {
-      var form = modal.querySelector("form");
-      form.reset();
-    }
-  });
-</script>
 
