@@ -41,12 +41,15 @@ Rails.application.routes.draw do
   get 'chat', to: 'chat#show'
   get 'settings', to: 'settings#show'
 
+  # rotte per le pagine vetrina
+  get 'public_restaurant_profile/:id', to: 'restaurateur_profiles#public_show', as: 'public_restaurant_profile'
+
   # per creare un evento
   post 'restaurateur_profiles/create_event', to: 'restaurateur_profiles#create_event', as: 'create_event_restaurateur_profiles'
+  # per i tag
+  post 'restaurateur_profiles/:tag_id/add_tag', to: 'restaurateur_profiles#add_tag', as: 'add_tag'
+  post 'restaurateur_profiles/:tag_id/remove_tag', to: 'restaurateur_profiles#remove_tag', as: 'remove_tag'
   
-  #upload dati profilo
-  resource :restaurateur_profiles, only: [:edit, :update, :show]
-
   # rotte per il login
   # Rotta per il form di login (GET e POST)
   get 'login', to: 'sessions#new', as: :user_login
@@ -65,6 +68,8 @@ Rails.application.routes.draw do
   get 'auth/failure', to: redirect('/')
     
   get 'home/index' 
+
+  # rotte per la pagina di ricerca
   get 'ricerca', to: 'ricerca#index'
   get 'logout', to: 'sessions#destroy'
 
@@ -76,9 +81,18 @@ Rails.application.routes.draw do
   resource :restaurateur_profiles, only: [:show, :edit, :update] do
     post 'create_event', to: 'restaurateur_profiles#create_event'
     delete 'destroy_event/:id', to: 'restaurateur_profiles#destroy_event', as: 'destroy_event'
+    post 'add_tag/:tag_id', to: 'restaurateur_profiles#add_tag'
+    delete 'destroy_promotion/:id', to: 'restaurateur_profiles#destroy_promotion', as: 'destroy_promotion'
+
+    post :create_promotion, on: :collection
+
+    collection do
+      patch 'update_info', to: 'restaurateur_profiles#update_info'
+    end
+
   end
-  resource :settings, only: [:show, :edit, :update]
-  resource :menus, only: [:show, :edit, :update]
+  resource :settings, only: [:show, :edit, :update, :destroy]
+  resources :menus, only: [:show, :edit, :update, :new, :create]
   resources :eventi, only: [:create]
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

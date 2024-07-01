@@ -1,5 +1,5 @@
 class Evento < ApplicationRecord
-  
+    
     validates :owner, presence: true
     validates :nome, presence: true
     validates :data, presence: true
