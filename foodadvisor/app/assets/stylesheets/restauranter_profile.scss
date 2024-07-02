@@ -22,9 +22,7 @@
   border-radius: 10px;
 }
 
-.r-info {
 
-}
 
 .r-statistiche {
   padding: 1%;
@@ -98,9 +96,7 @@
   border-color: #555;
 }
 
-.r-storia {
 
-}
 
 .r-recensioni {
   padding: 1%;
@@ -304,14 +300,6 @@ cursor: pointer;
   align-items: center;
 }
 
-.night-mode .pagina-vetrina {
-  color: black;
-}
-
-.night-mode .pagina-vetrina h1 {
-  color: white;
-}
-
 .rest-foto-name{
   background-color: antiquewhite;
   width: 100%;
@@ -326,6 +314,7 @@ cursor: pointer;
 .rest-foto-name img{
   width: 600px;
   height: 400px;
+  border-radius: 10px;
 }
 
 .review-reserve-buttons{
@@ -450,7 +439,6 @@ tr.flavor .piatto {
   font-size: 1rem; /* o la dimensione desiderata */
 }
 
-
 .public-r-reviews{
   display: flex;
   gap: 20px;
@@ -486,3 +474,6 @@ tr.flavor .piatto {
   display: flex;
 gap: 30px;
 }
+
+
+
