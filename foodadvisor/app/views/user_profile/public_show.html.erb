@@ -1,0 +1,56 @@
+<div class="pagina-vetrina-utente">
+    <h1 style="font-size: 40px; margin-bottom: 20px;">Profilo di <span style="color: #28a745;">Nome Utente</span></h1>
+    <div class="public-u-foto-info">
+        <div class="public-u-foto">
+            <%= image_tag 'background.jpg' %>
+        </div>
+        <div class="public-u-info">
+            <p style="font-weight: bold;">Nome: <span style="font-weight: normal;">Nome</span></p>
+            <p style="font-weight: bold;">Cognome: <span style="font-weight: normal;">Cognome</span></p>
+            <p style="font-weight: bold;">Iscrizione: <span style="font-weight: normal;">Iscrizione</span></p>
+            <p style="font-weight: bold;">Follower: <span style="font-weight: normal;">Follower</span></p>
+            <p style="font-weight: bold;">Seguiti: <span style="font-weight: normal;">Seguiti</span></p>
+        </div>
+    </div>
+    <div class="public-u-follow-btn">
+        <button type="button">Inizia a Seguire</button>
+        <button type="button" style="background-color: red;">Segnala</button>
+
+    </div>
+    <hr class="solid" id="divider" style="width: 80%;">
+    <div class="public-u-recents-reviews" style="max-height: 600px; overflow-y: scroll;">
+        <h1>Ultime Recensioni</h1>
+        <div class="r-recensioni">
+            <div class="public-r-reviews" style="margin-bottom: 20px;">
+              <%= image_tag 'background.jpg'%>
+              <div class="public-review-details">
+                <h3>Nome Ristorante</h3>
+                <p>n. stelle</p>
+                <p>Testo della recensione. Il testo dovrebbe rispettare dei caratteri minimi e massimi e dobbiamo decidere come gestirne la visualizzazione</p>
+                <p style="font-style: italic; font-size: 13px;">in data DATA</p>
+              </div>
+              
+            </div>
+            
+            
+          </div>
+    </div>
+    <hr class="solid" id="divider" style="width: 80%;">
+    <h1>Competizioni a cui l'utente partecipa</h1>
+
+    <div class="public-u-competitions">
+        <div class="public-u-competition-box">
+            <%= image_tag 'background.jpg'%> <!--Immagine Competizione-->
+            <div class="public-u-competition-box-info">
+                <p style="font-weight: bold;">Nome Competizione: <span style="font-weight: normal;">Nome Competizione</span></p>
+                <p style="font-weight: bold;">Punti: <span style="font-weight: normal;">Punti</span></p>
+                <p style="font-weight: bold;">Posizione in Classifica: <span style="font-weight: normal;">Posizione</span></p>
+            </div>
+
+
+            
+
+        </div>
+    </div>
+
+</div>

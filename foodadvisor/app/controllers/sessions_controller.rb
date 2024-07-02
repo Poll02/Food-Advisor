@@ -38,7 +38,6 @@ class SessionsController < ApplicationController
     redirect_to root_url
   end
 
-  private
 
   def handle_google_login
     user = User.from_omniauth(request.env['omniauth.auth'])

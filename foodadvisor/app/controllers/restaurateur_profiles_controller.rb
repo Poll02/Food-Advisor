@@ -3,55 +3,53 @@ class RestaurateurProfilesController < ApplicationController
   
   before_action :require_logged_in, except: [:public_show]
   before_action :require_restaurant_owner, except: [:public_show]
-  before_action :set_restaurant_owner, only: [:show, :edit, :update, :create_event, :destroy_event, :public_show, :add_tag, :remove_tag]
+  before_action :set_restaurant_owner, only: [:show, :edit, :update_info, :create_event, :destroy_event, :public_show, :add_tag, :remove_tag]
   before_action :set_evento, only: [:destroy_event]
 
   def show
     @eventi = Evento.where(owner: @restaurant_owner.id).where("data >=?", Date.today)
     @promotions = Promotion.where(ristoratore_id: @restaurant_owner.id)
     @tags = @restaurant_owner.tags
+    @recipes = Recipe.where(ristoratore_id: @restaurant_owner.id)
+
   end
 
   def edit
-    @eventi = Evento.where(owner: @restaurant_owner.id).where("data > ?", Date.today)
-    @promotions = Promotion.where(ristoratore_id: @restaurant_owner.id)
-    @tags = @restaurant_owner.tags
-    @categories = Tag.distinct.pluck(:categoria)
+    @recipes = Recipe.where(ristoratore_id: @restaurant_owner.id)
+
+    load_associated_data # Carica di nuovo i dati associati per la vista edit
   end
 
   def add_tag
-    logger.debug "Ristoratore ID: #{@restaurant_owner.id}"
-    logger.debug "Tag ID: #{params[:tag_id]}"
-    
-    choose = Choose.new(ristoratori_id: @restaurant_owner.id, tag_id: params[:tag_id])
-    logger.debug "Choose: #{choose.inspect}"
-    
-    if choose.save
-      flash[:notice] = "Tag added successfully."
+    @tag = Tag.find(params[:tag_id])
+    @restaurant_owner = current_user
+    if @restaurant_owner.tags.exclude?(@tag)
+      @restaurant_owner.tags << @tag
+      flash[:success] = "Tag aggiunto con successo."
     else
-      logger.debug "Failed to add tag: #{choose.errors.full_messages.join(', ')}"
-      flash[:alert] = "Failed to add tag. Errors: #{choose.errors.full_messages.join(', ')}"
+      flash[:error] = "Il tag è già associato al ristoratore."
     end
-    
-    redirect_to your_redirect_path
+    redirect_to edit_restaurateur_profiles_path  # Reindirizza alla pagina di modifica del profilo
   end
-  
 
   def remove_tag
-    choose = Choose.find_by(ristoratori_id: @restaurant_owner.id, tag_id: @tag.id)
-    if choose.destroy
-      flash[:notice] = "Tag removed successfully."
+    @tag = Tag.find(params[:tag_id])
+    @restaurant_owner = current_user
+    if @restaurant_owner.tags.include?(@tag)
+      @restaurant_owner.tags.delete(@tag)
+      flash[:success] = "Tag rimosso con successo."
     else
-      flash[:alert] = "Failed to remove tag."
+      flash[:error] = "Il tag non è associato al ristoratore."
     end
-    redirect_to edit_restaurateur_profiles_path # Replace with the appropriate redirect path
+    redirect_to edit_restaurateur_profiles_path  # Reindirizza alla pagina di modifica del profilo
   end
 
-  def update
-    @eventi = Evento.where(owner: @restaurant_owner.id).where("data > ?", Date.today)
-    if @restaurant_owner.update(restaurant_owner_params)
+  def update_info
+    puts "PARAMETRI: #{restaurant_owner_new_params.inspect}" # Debug output
+    if @restaurant_owner.update(restaurant_owner_new_params)
       redirect_to edit_restaurateur_profiles_path, notice: 'Profilo aggiornato con successo.'
     else
+      load_associated_data # Carica di nuovo i dati associati per la vista edit
       render :edit
     end
   end
@@ -121,6 +119,8 @@ class RestaurateurProfilesController < ApplicationController
     @restaurant_owner = Ristoratori.find(params[:id])
     @eventi = Evento.where(owner: @restaurant_owner.id).where("data >= ?", Date.today)
     @promotions = Promotion.where(ristoratore_id: @restaurant_owner.id)
+    @recipes = Recipe.where(ristoratore_id: @restaurant_owner.id)
+
     @tags = @restaurant_owner.tags
   end
 
@@ -147,11 +147,22 @@ class RestaurateurProfilesController < ApplicationController
   end
 
   def restaurant_owner_params
-    params.require(:ristoratori).permit(:restaurant_name, :email, :phone, :foto)
+    params.require(:ristoratori).permit(:restaurant_name, :email, :phone, :photo)
+  end
+
+  def restaurant_owner_new_params
+    params.require(:ristoratori).permit(:restaurant_name, :indirizzo, :email, :phone)
   end
 
   def determine_layout
     action_name == 'public_show' ? 'application' : 'with_sidebar'
+  end
+
+  def load_associated_data
+    @eventi = Evento.where(owner: @restaurant_owner.id).where("data > ?", Date.today)
+    @promotions = Promotion.where(ristoratore_id: @restaurant_owner.id)
+    @tags = @restaurant_owner.tags
+    @categories = Tag.distinct.pluck(:categoria)
   end
 
   # Metodo per salvare l'immagine in assets/images e restituire il percorso

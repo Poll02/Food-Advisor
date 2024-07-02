@@ -2,10 +2,15 @@
 
 class Ristoratori < ApplicationRecord
     has_secure_password
-    has_many :eventos, foreign_key: 'owner'
-    has_many :promotions, foreign_key: 'ristoratore_id'
-    has_many :chooses, foreign_key: :ristoratori_id
+    has_many :eventos, foreign_key: 'owner', dependent: :destroy
+    has_many :promotions, foreign_key: 'ristoratore_id', dependent: :destroy
+    has_many :recipes, foreign_key: 'ristoratore_id', dependent: :destroy
+
+
+
+    has_many :chooses, dependent: :destroy
     has_many :tags, through: :chooses
+
     
     validates :restaurant_name, presence: true
     validates :piva, presence: true, uniqueness: true

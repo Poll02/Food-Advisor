@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_27_165058) do
+ActiveRecord::Schema.define(version: 2024_07_01_225720) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -108,6 +108,17 @@ ActiveRecord::Schema.define(version: 2024_06_27_165058) do
     t.index ["ristoratore_id"], name: "index_promotions_on_ristoratore_id"
   end
 
+  create_table "recipes", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "difficulty", null: false
+    t.string "ingredients", null: false
+    t.string "procedure", null: false
+    t.string "photo"
+    t.integer "ristoratore_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "ristoratoris", force: :cascade do |t|
     t.string "restaurant_name", null: false
     t.integer "piva", limit: 8, null: false
@@ -119,6 +130,7 @@ ActiveRecord::Schema.define(version: 2024_06_27_165058) do
     t.string "role"
     t.string "profile_picture_url"
     t.string "photo"
+    t.string "indirizzo"
   end
 
   create_table "settings", force: :cascade do |t|
@@ -136,6 +148,16 @@ ActiveRecord::Schema.define(version: 2024_06_27_165058) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "user_competitions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "competizione_id", null: false
+    t.integer "punti", default: 0
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["competizione_id"], name: "index_user_competitions_on_competizione_id"
+    t.index ["user_id"], name: "index_user_competitions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "surname"
@@ -150,11 +172,14 @@ ActiveRecord::Schema.define(version: 2024_06_27_165058) do
     t.string "partita_iva"
   end
 
-  add_foreign_key "chooses", "ristoratoris"
-  add_foreign_key "chooses", "tags"
+  add_foreign_key "chooses", "ristoratoris", on_delete: :cascade
+  add_foreign_key "chooses", "tags", on_delete: :cascade
   add_foreign_key "competiziones", "users", column: "owner"
-  add_foreign_key "dishes", "categories"
-  add_foreign_key "eventos", "ristoratoris", column: "owner"
-  add_foreign_key "problems", "users", column: "id_utente"
-  add_foreign_key "promotions", "ristoratoris", column: "ristoratore_id"
+  add_foreign_key "dishes", "categories", on_delete: :cascade
+  add_foreign_key "eventos", "ristoratoris", column: "owner", on_delete: :cascade
+  add_foreign_key "problems", "users", column: "id_utente", on_delete: :cascade
+  add_foreign_key "promotions", "ristoratoris", column: "ristoratore_id", on_delete: :cascade
+  add_foreign_key "recipes", "ristoratoris", column: "ristoratore_id"
+  add_foreign_key "user_competitions", "competiziones"
+  add_foreign_key "user_competitions", "users"
 end

@@ -23,7 +23,7 @@
     <div class="r-tags">
       <% if @tags.present? %>
         <% @tags.each do |tag| %>
-          <span class="r-tag"><%= tag.name %></span>
+          <span class="piatto"><%= tag.nome %></span>
         <% end %>
       <% else %>
         <p>Nessun tag associato</p>
@@ -31,6 +31,7 @@
     </div>
   </div>
 </div>
+
 <h3>Promozioni</h3>
 <div class="r-promozioni">
   <div class="promo-grid">
@@ -56,42 +57,44 @@
     <p>storia</p>
   </div>
 </div>
+
 <h3>Recensioni</h3>
 <div class="r-recensioni">
-  <div class="r-recensione">
-    <%= image_tag 'background.jpg', class: 'recensione-foto' %>    
-    <div class="recensione-info">
-        <p>Nome</p>
-        <p>Stelle</p>
-        <p>Descrizione</p>
+  <div class="public-r-reviews">
+    <%= image_tag 'background.jpg'%>
+    <div class="public-review-details">
+      <h3>Nome Utente</h3>
+      <p>n. stelle</p>
+      <p>Testo della recensione. Il testo dovrebbe rispettare dei caratteri minimi e massimi e dobbiamo decidere come gestirne la visualizzazione</p>
+      <p style="font-style: italic; font-size: 13px;">in data DATA</p>
     </div>
-    <div class="recensione-icon">
-        <i class="fa-regular fa-thumbs-up"></i>
-        <i class="fa-solid fa-thumbtack"></i>
-        <i class="fa-solid fa-ban"></i>
-        <i class="fa-solid fa-retweet"></i>
-    </div>
+    
   </div>
 </div>
+
 <h3>Ricette Condivise</h3>
 <div class="r-ricette">
-  <div class="r-ricetta">
-      <%= image_tag 'background.jpg', class: 'ricetta-foto' %>    
-      <div class="ricetta-info">
-          <p>Nome</p>
-          <p>Ingredienti</p>
-          <p>Lavorazione</p>
+  <% if @recipes.any? %>
+    <% @recipes.each do |recipe| %>
+      <div class="r-ricetta">
+        <% if recipe.photo.present? %>
+          <%= image_tag recipe.photo, class: 'ricetta-foto' %>
+        <% else %>
+          <%= image_tag 'background.jpg', class: 'ricetta-foto' %>
+        <% end %>
+        <div class="ricetta-info">
+          <p>Nome: <%= recipe.name %></p>
+          <p>Difficoltà: <%= recipe.difficulty %></p>
+          <p>Ingredienti: <%= recipe.ingredients %></p>
+          <p>Procedimento: <%= recipe.procedure %></p>
+        </div>
       </div>
-  </div>
-  <div class="r-ricetta">
-      <%= image_tag 'background.jpg', class: 'ricetta-foto' %>    
-      <div class="ricetta-info">
-          <p>Nome</p>
-          <p>Ingredienti</p>
-          <p>Lavorazione</p>
-      </div>
-  </div>
+    <% end %>
+  <% else %>
+    <p>Il ristoratore non ha condiviso alcuna ricetta.</p>
+  <% end %>
 </div>
+
 <h3>Eventi</h3>
 <div class="r-eventi">
   <% if @eventi.any? %>

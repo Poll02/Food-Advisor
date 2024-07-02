@@ -22,6 +22,13 @@ Rails.application.routes.draw do
   get 'supporto', to: 'supporto#index'
   resources :problems, only: [:create]
 
+  # Rotte per le competizioni
+  resources :competizione, only: [:index, :show] do
+    member do
+      post 'join', to: 'competizione#join_competition'
+    end
+  end
+
 
   #routes for profiles
   get 'critic_profile', to: 'critic_profile#show'
@@ -43,13 +50,14 @@ Rails.application.routes.draw do
 
   # rotte per le pagine vetrina
   get 'public_restaurant_profile/:id', to: 'restaurateur_profiles#public_show', as: 'public_restaurant_profile'
+  get 'public_user_profile/:id', to: 'user_profile#public_show', as: 'public_user_profile'
+
 
   # per creare un evento
   post 'restaurateur_profiles/create_event', to: 'restaurateur_profiles#create_event', as: 'create_event_restaurateur_profiles'
-  
   # per i tag
-  post 'restaurateur_profiles/:tag_id/add', to: 'restaurateur_profiles#add_tag', as: 'add_tag'
-  post 'restaurateur_profiles/:tag_id/remove', to: 'restaurateur_profiles#remove_tag', as: 'remove_tag'
+  post 'restaurateur_profiles/:tag_id/add_tag', to: 'restaurateur_profiles#add_tag', as: 'add_tag'
+  post 'restaurateur_profiles/:tag_id/remove_tag', to: 'restaurateur_profiles#remove_tag', as: 'remove_tag'
   
   # rotte per il login
   # Rotta per il form di login (GET e POST)
@@ -65,7 +73,7 @@ Rails.application.routes.draw do
   #get 'sessions/new'
   #get 'login', to: 'sessions#new'
   #post 'login', to: 'sessions#create'
-  get 'auth/google_oauth2/callback', to: 'sessions#create'
+  get 'auth/google_oauth2/callback', to: 'sessions#handle_google_login'
   get 'auth/failure', to: redirect('/')
     
   get 'home/index' 
@@ -87,8 +95,12 @@ Rails.application.routes.draw do
 
     post :create_promotion, on: :collection
 
+    collection do
+      patch 'update_info', to: 'restaurateur_profiles#update_info'
+    end
+
   end
-  resource :settings, only: [:show, :edit, :update]
+  resource :settings, only: [:show, :edit, :update, :destroy]
   resources :menus, only: [:show, :edit, :update, :new, :create]
   resources :eventi, only: [:create]
 
@@ -104,3 +116,4 @@ Rails.application.routes.draw do
     route_for(:rails_disk_service, proxy.key, options)
   end
 end
+

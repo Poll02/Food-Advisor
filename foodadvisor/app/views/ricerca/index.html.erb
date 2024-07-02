@@ -10,7 +10,7 @@
         <input type="text" id="findbar" name="query" placeholder="Inserisci qui il nome del ristorante" value="<%= params[:query] %>">
         </div>
         <button type="submit" style="display: none;"></button>
-        <ion-icon name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon>
+        <ion-icon id="filter-icon" name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px; cursor: pointer;"></ion-icon>
         <ion-icon name="pin-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon>
     </form>
 </div>
@@ -41,3 +41,66 @@
         </div>
     </div>
 </div>
+
+<!-- Finestra di dialogo -->
+<div id="dialog" class="dialog">
+    <div class="dialog-content">
+        <span class="close-button">&times;</span>
+        <form id="filter-form">
+            <h4>Applica dei filtri alla tua ricerca</h4>
+            <p>Stelle:<p>
+            <div class="stars">
+                <span class="star" data-value="1">&#9733;</span>
+                <span class="star" data-value="2">&#9733;</span>
+                <span class="star" data-value="3">&#9733;</span>
+                <span class="star" data-value="4">&#9733;</span>
+                <span class="star" data-value="5">&#9733;</span>
+            </div>
+            <p>Tag:</p>
+            <P>Km distanza:</p>
+            <input type="hidden" id="star-rating" name="star_rating" value="0">
+            <button type="button" id="apply-filters">Applica filtri</button>
+        </form>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+    const dialog = document.getElementById('dialog');
+    const filterIcon = document.getElementById('filter-icon');
+    const closeButton = document.querySelector('.close-button');
+    const stars = document.querySelectorAll('.star');
+    const starRatingInput = document.getElementById('star-rating');
+    const applyFiltersButton = document.getElementById('apply-filters');
+
+    filterIcon.addEventListener('click', () => {
+        dialog.style.display = 'block';
+    });
+
+    closeButton.addEventListener('click', () => {
+        dialog.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target == dialog) {
+            dialog.style.display = 'none';
+        }
+    });
+
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const value = star.getAttribute('data-value');
+            starRatingInput.value = value;
+            stars.forEach(s => s.classList.remove('selected'));
+            for (let i = 0; i < value; i++) {
+                stars[i].classList.add('selected');
+            }
+        });
+    });
+
+    applyFiltersButton.addEventListener('click', () => {
+        const starRating = starRatingInput.value;
+        const query = document.getElementById('findbar').value;
+        window.location.href = `<%= ricerca_path %>?query=${query}&star_rating=${starRating}`;
+    });
+});
+</script>

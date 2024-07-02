@@ -1,5 +1,7 @@
 class Competizione < ApplicationRecord
     belongs_to :owner, class_name: 'User', foreign_key: 'owner'
+    has_many :user_competitions
+    has_many :users, through: :user_competitions
   
     validates :nome, presence: true
     validates :descrizione, presence: true

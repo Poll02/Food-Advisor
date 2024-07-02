@@ -1,5 +1,5 @@
 class UserProfileController < ApplicationController
-  layout 'with_sidebar'
+  layout :determine_layout
 
   before_action :require_logged_in
   before_action :require_customer
@@ -8,6 +8,15 @@ class UserProfileController < ApplicationController
     @user = current_user
     # Logica per la pagina del profilo del cliente
   end
+
+  def public_show
+    @user = current_user
+  end
+
+  def determine_layout
+    action_name == 'public_show' ? 'application' : 'with_sidebar'
+  end
+
 
   private
 
