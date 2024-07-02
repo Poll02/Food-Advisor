@@ -1,3 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <!-- Stelle vuote -->
+    <symbol id="empty-star" viewBox="0 0 576 512">
+      <path fill="none" stroke="gold" stroke-width="40" d="M288 350.1l-120.4 63.2 23.1-120.5-97.6-84.7 134.9-13 53.2-122.4 53.2 122.4 134.9 13-97.6 84.7 23.1 120.5z"/>
+    </symbol>
+
+  <!-- Stelle piene -->
+    <symbol id="filled-star" viewBox="0 0 576 512">
+      <path fill="gold" d="M288 350.1l-120.4 63.2 23.1-120.5-97.6-84.7 134.9-13 53.2-122.4 53.2 122.4 134.9 13-97.6 84.7 23.1 120.5z"/>
+    </symbol>
+</svg>
+
 <div class="pagina-vetrina">
     <div class="rest-foto-name">
     <i class="fa-regular fa-star"></i>
@@ -32,10 +44,44 @@
 
     </div>
     <div class="review-reserve-buttons">
-        <button type="button">Lascia una Recensione</button>
-        <button type="button" style="background-color: rgb(234, 183, 121);">Prenota un Tavolo</button>
+      <button type="button" class="review">Lascia una Recensione</button>
+      <button type="button" style="background-color: rgb(234, 183, 121);">Prenota un Tavolo</button>
 
+    </div>
+
+    <div id="reviewModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Lascia una Recensione</h2>
+        <form action="/reviews" method="post">
+          <label for="stars">Stelle:</label>
+          <div class="star-rating">
+            <svg class="star" viewBox="0 0 576 512" onclick="selectStar(1)">
+              <use xlink:href="#empty-star"></use>
+            </svg>
+            <svg class="star" viewBox="0 0 576 512" onclick="selectStar(2)">
+              <use xlink:href="#empty-star"></use>
+            </svg>
+            <svg class="star" viewBox="0 0 576 512" onclick="selectStar(3)">
+              <use xlink:href="#empty-star"></use>
+            </svg>
+            <svg class="star" viewBox="0 0 576 512" onclick="selectStar(4)">
+              <use xlink:href="#empty-star"></use>
+            </svg>
+            <svg class="star" viewBox="0 0 576 512" onclick="selectStar(5)">
+              <use xlink:href="#empty-star"></use>
+            </svg>
+          </div>
+          <input type="hidden" id="stars" name="stars">
+          <br><br>
+          <label for="comment">Commento:</label>
+          <textarea id="comment" name="comment" rows="4" cols="50"></textarea>
+          <br><br>
+          <button type="submit">Invia</button>
+        </form>
       </div>
+    </div>
+
       <h1>Eventi</h1>
 
       <div class="public-r-events">
@@ -129,3 +175,65 @@
 
     
 </div>
+
+<style>
+.star-rating {
+  display: flex;
+  justify-content: center; /* Centra le stelle orizzontalmente */
+  gap: 10px; /* Spazio tra le stelle */
+}
+
+/* Stile base per ogni stella */
+.star {
+  width: 40px; /* Dimensione delle stelle */
+  height: 40px;
+  cursor: pointer; /* Cambia il cursore al passaggio del mouse */
+}
+
+/* Stile per le stelle selezionate */
+.star.selected {
+  fill: gold; /* Colore dorato per le stelle piene */
+}
+
+/* Stile per le stelle non selezionate */
+.star:not(.selected) {
+  fill: none; /* Stelle vuote senza riempimento */
+}
+</style>
+
+<script>
+function selectStar(value) {
+  // Resetta tutte le stelle
+  document.querySelectorAll('.star use').forEach(use => {
+    use.setAttribute('xlink:href', '#empty-star');
+  });
+
+  // Imposta le stelle fino al valore cliccato
+  for (let i = 1; i <= value; i++) {
+    document.querySelector(`.star:nth-child(${i}) use`).setAttribute('xlink:href', '#filled-star');
+  }
+
+  // Aggiorna il valore nascosto per inviarlo al server
+  document.getElementById('stars').value = value;
+}
+  document.addEventListener("DOMContentLoaded", function() {
+    function openModal() {
+      document.getElementById('reviewModal').style.display = 'block';
+    }
+
+    function closeModal() {
+      document.getElementById('reviewModal').style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+      var modal = document.getElementById('reviewModal');
+      if (event.target == modal) {
+        modal.style.display = 'none';
+      }
+    }
+
+    document.querySelector('.review').onclick = openModal;
+    document.querySelector('.close').onclick = closeModal;
+
+  });
+</script>

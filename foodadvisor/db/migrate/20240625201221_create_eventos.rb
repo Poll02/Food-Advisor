@@ -6,7 +6,7 @@ class CreateEventos < ActiveRecord::Migration[6.1]
       t.date :data, null: false
       t.string :luogo, null: false
       t.string :descrizione
-
+      t.string :locandina
       t.timestamps
     end
 
