@@ -1,8 +1,8 @@
 class UserProfileController < ApplicationController
   layout :determine_layout
 
-  before_action :require_logged_in
-  before_action :require_customer
+  before_action :require_logged_in, except: [:public_show]
+  before_action :require_customer, except: [:public_show]
 
   def show
     @user = current_user
@@ -10,7 +10,7 @@ class UserProfileController < ApplicationController
   end
 
   def public_show
-    @user = current_user
+    @user = User.find(params[:id])
   end
 
   def determine_layout
@@ -27,7 +27,7 @@ class UserProfileController < ApplicationController
   end
 
   def require_customer
-    unless current_user.role == 'user'
+    unless current_user.role == 'User'
       redirect_to root_path
     end
   end

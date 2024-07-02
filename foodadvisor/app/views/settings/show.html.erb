@@ -24,10 +24,9 @@
   </div>
 
   <%= link_to 'Modifica Impostazioni', edit_settings_path %>
-
-  <%= form_with url: settings_path(current_user), method: :delete, format: :html, data: { confirm: 'Sei sicuro di voler eliminare il tuo account?' } do %>
-    <%= submit_tag 'Elimina l\'account' %>
-  <% end %>
-  
+  <br>
+  <%= form_with url: settings_path(current_user), method: :delete, data: { confirm: 'Sei sicuro di voler eliminare il tuo account?' } do |form| %>
+    <%= form.submit 'Elimina l\'account' %>
+  <% end %>  
   
 </div>

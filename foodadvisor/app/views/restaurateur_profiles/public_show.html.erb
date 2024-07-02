@@ -2,7 +2,7 @@
     <div class="rest-foto-name">
     <i class="fa-regular fa-star"></i>
         <div class="rest-info-public">
-            <h1 style="font-size: 50px; color: black; "><%= @restaurant_owner.restaurant_name %></h1>
+            <h1 style="font-size: 50px; color: black; "><%= @restaurant_owner.nomeristorante %></h1>
             <h2>n. stelle</h2>
             <h3>n. recensioni</h3>
             <% if @tags.present? %>
@@ -14,17 +14,17 @@
               <p>Nessun tag associato</p>
             <% end %>
           </div>
-          <% if @restaurant_owner.photo.present? %>
-            <%= image_tag @restaurant_owner.photo %>
+          <% if @restaurant_owner.cliente.foto.present? %>
+            <%= image_tag "background.jpg" %>
         <% else %>
             <%= image_tag "background.jpg" %>
         <% end %>
   <div class="rest-info-public-right">
     <h3>Informazioni</h3>
-    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.email %></span></p>
-    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.phone %></span></p>
-    <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;">Indirizzo Ristorante</span></p>
-    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;">Asporto</span></p>
+    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.email %></span></p>
+    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.telefono %></span></p>
+    <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"> <%= @restaurant_owner.indirizzo %></span></p>
+    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> <%= @restaurant_owner.asporto %></span></p>
     
   </div>
   

@@ -17,19 +17,21 @@
     <div class="results-and-details-container">
         <div class="results-container">
             <% @ristoratori.each do |ristoratore| %>
-                <%= link_to public_restaurant_profile_path(ristoratore.id), class: 'restaurant-link' do %>
                 <div class="result-box">
-                    <% if ristoratore.photo.present? %>
-                        <%= image_tag ristoratore.photo %>
-                    <% else %>
+                    <% if ristoratore.cliente.foto.present? %>
+                        <%= link_to public_restaurant_profile_path(ristoratore.id), class: 'restaurant-link' do %>
                         <%= image_tag "background.jpg" %>
+                        <% end %>
+                    <% else %>
+                        <%= link_to public_restaurant_profile_path(ristoratore.id), class: 'restaurant-link' do %>
+                        <%= image_tag "background.jpg" %>
+                        <% end %>
                     <% end %>
                     <div class="result-text">
-                        <h3><%= ristoratore.restaurant_name %></h3>
+                        <h3><%= ristoratore.nomeristorante %></h3>
                         <p>N stelle, N. recensioni</p>
                     </div>
                 </div>
-                <% end %>
                 <hr class="solid" id="divider">
             <% end %>
         </div>

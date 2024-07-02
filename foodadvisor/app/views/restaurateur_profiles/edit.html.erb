@@ -1,40 +1,12 @@
 <%= link_to 'Salva', rest_profile_path %>
 
 <div class="ristorante">
-  <% if @restaurant_owner.photo.present? %>
-  <%= image_tag @restaurant_owner.photo, class: 'r-foto' %>
+  <% if @restaurant_owner.cliente.foto.present? %>
+  <%= image_tag 'background.jpg', class: 'r-foto' %>
   <% else %>
   <%= image_tag 'background.jpg', class: 'r-foto' %>
   <% end %>
-  <%= form_with(model: Ristoratori, url: update_info_restaurateur_profiles_path, local: true, html: { method: :patch, multipart: true }) do |f| %>
-    <div class="r-info">
-      <div class="form-group">
-        <%= f.label :restaurant_name, "Nome del ristorante:" %>
-        <%= f.text_field :restaurant_name, value: current_user.restaurant_name, class: 'form-control' %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :indirizzo, "Indirizzo:" %>
-        <%= f.text_field :indirizzo, class: 'form-control' %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :email, "Email:" %>
-        <%= f.email_field :email, value: current_user.email, class: 'form-control' %>
-      </div>
-
-      <div class="form-group">
-        <%= f.label :phone, "Telefono:" %>
-        <%= f.telephone_field :phone, value: current_user.phone, class: 'form-control' %>
-      </div>
-
-      <%= f.submit "Salva", class: 'btn btn-primary' %>
-    </div>
-  <% end %>
 </div>
-
-
-
 
 <h3>Tags</h3>
 <div class="r-statistiche">
@@ -152,8 +124,7 @@
     <p>Il ristoratore non ha condiviso alcuna ricetta.</p>
   <% end %>
 </div>
-<button type="button" id="add-recipe-btn">Aggiungi Promozione</button>
-
+<button type="button" id="add-recipe-btn">Aggiungi Ricetta</button>
 
 <h3>Eventi</h3>
 <div class="r-eventi">
@@ -187,7 +158,7 @@
   <div class="modal-content">
     <span class="close">&times;</span>
     <h2>Crea Nuovo Evento</h2>
-    <%= form_with url: create_event_restaurateur_profiles_path, method: :post, local: true do |form| %>
+    <%= form_with(url: create_event_restaurateur_profiles_path, method: :post, local: true) do |form| %>
       <div>
         <%= form.label :nome, "Nome Evento" %>
         <%= form.text_field :nome %>
