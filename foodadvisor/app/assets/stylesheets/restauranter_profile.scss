@@ -8,7 +8,8 @@
   border-radius: 10px;
   padding: 1%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 30px;
 }
 
 .night-mode .ristorante {
@@ -16,8 +17,9 @@
 }
 
 .r-foto {
-  width: 100px;
-  height: auto;
+  width: 300px;
+  height: 200px;
+  border-radius: 10px;
 }
 
 .r-info {
@@ -74,7 +76,7 @@
 .r-tag {
   padding: 5px 10px;
   border-radius: 3px;
-  color: #fff;
+  color: #28a745;
   font-size: 14px;
 }
 
@@ -157,8 +159,9 @@
   margin: 1%;
   border: 1px solid #ccc;
   border-radius: 10px;
-  width: 120px;
-  height: 160px;
+  width: 400px;
+  height: 260px;
+  overflow-y: scroll;
 }
 
 .night-mode .r-ricetta {
@@ -168,7 +171,7 @@
 .ricetta-foto {
   width: 120px;  
   height: auto;
-  border-radius: 10px 10px 0 0;
+  border-radius: 10px
 }
 
 .ricetta-info {
@@ -191,8 +194,9 @@
   margin: 1%;
   border: 1px solid #b8adad;
   border-radius: 10px;
-  width: 160px;
-  height: 240px;
+  width: 280px;
+  height: 300px;
+  overflow-y: scroll;
   text-align: center;
 }
 
@@ -201,9 +205,10 @@
 }
 
 .evento-foto {
-  width: 160px;  
-  height: auto;
-  border-radius: 10px 10px 0 0;
+  margin-top: 10px;
+  width: 260px;  
+  height: 100px;
+  border-radius: 10px
 }
 
 .evento-info {
@@ -251,3 +256,251 @@
   cursor: pointer;
 }
 
+#add-promo-btn{
+  font-size: 15px;
+  color: white;
+  background-color: #28a745;
+  border: none;
+  padding: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+
+}
+
+#add-recipe-btn{
+  font-size: 15px;
+  color: white;
+  background-color: #28a745;
+  border: none;
+  padding: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+
+}
+
+#add-promo-btn:hover{
+  filter: brightness(120%);
+}
+
+#add-recipe-btn:hover{
+  filter: brightness(120%);
+}
+
+.modal button{
+  font-size: 15px;
+  color: white;
+  background-color: #28a745;
+  border: none;
+  padding: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.modal input[type="submit"]{
+ font-size: 15px;
+color: white;
+background-color: #28a745;
+border: none;
+padding: 5px;
+margin-top: 10px;
+margin-bottom: 10px;
+border-radius: 10px;
+cursor: pointer;
+}
+
+.pagina-vetrina {
+  margin-top: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.night-mode .pagina-vetrina {
+  color: black;
+}
+
+.night-mode .pagina-vetrina h1 {
+  color: white;
+}
+
+.rest-foto-name{
+  background-color: antiquewhite;
+  width: 100%;
+  padding: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 50px;
+
+}
+
+.rest-foto-name img{
+  width: 600px;
+  height: 400px;
+}
+
+.review-reserve-buttons{
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.review-reserve-buttons button{
+  border: none;
+  font-size: 17px;
+  padding: 10px;
+  background-color: rgb(91, 206, 168);
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.review-reserve-buttons button:hover{
+  filter: brightness(120%);
+}
+
+.public-r-promos-box{
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: white;
+  border: 1px solid black;
+  width: 300px;
+  height: 150px;
+  box-shadow: 2px 2px 10px 2px rgba(0,0,0,0.32);
+
+}
+
+.public-r-promos{
+  display: flex;
+  justify-content: center;
+  width: 80%;
+  overflow-x: scroll;
+  gap: 30px;
+}
+
+// per la tabella dei tag
+/* Generali */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+td {
+  padding: 10px;
+  border: 1px solid #ccc;
+  vertical-align: top;
+}
+
+.category-header {
+  font-weight: bold;
+}
+
+.dish-container {
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.piatto {
+  padding: 5px;
+  border-radius: 5px;
+  margin-right: 5px;
+  display: inline-block;
+  justify-content: space-between;
+}
+
+.piatto i {
+  cursor: pointer;
+}
+
+/* Colori per categorie specifiche */
+.category-cuisine {
+  background-color: #FFDDC1;
+}
+
+.category-diet {
+  background-color: #D4EDDA;
+}
+
+.category-flavor {
+  background-color: #FFF3CD;
+}
+
+/* Specifica gli stili per ogni categoria */
+tr.cuisine .piatto {
+  background-color: #FFDDC1;
+}
+
+tr.diet .piatto {
+  background-color: #D4EDDA;
+}
+
+tr.flavor .piatto {
+  background-color: #FFF3CD;
+}
+
+.inline-form {
+  display: inline;
+}
+
+.button-with-icon {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: inherit;
+}
+
+.button-with-icon .fas {
+  font-size: 1rem; /* o la dimensione desiderata */
+}
+
+
+.public-r-reviews{
+  display: flex;
+  gap: 20px;
+  width: 1200px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 15px;
+  transition: 0.3s;
+}
+
+.public-r-reviews-grid{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.public-r-reviews:hover{
+  background-color: #ddd7d7;
+}
+
+.public-reviews-details{
+  display: flex;
+  flex-direction: column;
+}
+
+.public-r-reviews img{
+  width: 70px;
+  height: 70px;
+  border-radius: 100px;
+}
+
+.reviews-filters{
+  display: flex;
+gap: 30px;
+}

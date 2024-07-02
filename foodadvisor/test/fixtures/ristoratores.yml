@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  piva: MyString
+  asporto: false
+  nomeristorante: MyString
+  indirizzo: MyString
+
+two:
+  piva: MyString
+  asporto: false
+  nomeristorante: MyString
+  indirizzo: MyString

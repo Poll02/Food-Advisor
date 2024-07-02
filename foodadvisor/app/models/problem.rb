@@ -1,4 +1,4 @@
 class Problem < ApplicationRecord
-    belongs_to :user, foreign_key: :id_utente
+    belongs_to :cliente
   end
   

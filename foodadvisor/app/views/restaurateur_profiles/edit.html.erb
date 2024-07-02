@@ -1,49 +1,82 @@
-<%= link_to 'Salva Impostazioni', rest_profile_path %>
+<%= link_to 'Salva', rest_profile_path %>
 
 <div class="ristorante">
-  <%= image_tag 'background.jpg', class: 'r-foto' %>   
-  <div class="r-info">
-    <p style="font-weight: bold;">Nome del ristorante: <span style="font-weight: normal;"><%= current_user.restaurant_name %></span></p>
-    <p style="font-weight: bold;">Indirizzo: </p>
-    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%= current_user.email %></span></p>
-    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%= current_user.phone %></span></p>
-    <p style="font-weight: bold;">Data di registrazione: <span style="font-weight: normal;"><%= current_user.created_at %></span></p>
-    <p style="font-weight: bold;">Asporto:</p>
-  </div>
+  <% if @restaurant_owner.cliente.foto.present? %>
+  <%= image_tag 'background.jpg', class: 'r-foto' %>
+  <% else %>
+  <%= image_tag 'background.jpg', class: 'r-foto' %>
+  <% end %>
 </div>
 
-<h3>Statistiche</h3>
+<h3>Tags</h3>
 <div class="r-statistiche">
   <div class="r-stat">
     <div class="r-tags">
-      <span class="r-tag pub">Pub</span>
-      <span class="r-tag famiglie">Per famiglie</span>
+      <% if @tags.present? %>
+        <% @tags.each do |tag| %>
+          <span class="piatto"><%= tag.nome %></span>
+        <% end %>
+      <% end %>
+      <table>
+        <% @categories.each do |category| %>
+          <tr class="<%= category.downcase.gsub(' ', '-') %>">
+            <td class="category-header"><%= category %></td>
+            <td class="dish-container">
+              <% tags = Tag.where(categoria: category) %>
+              <% tags.each do |tag| %>
+                <div class="piatto">
+                  <%= tag.nome %>
+                  <% if @tags.include?(tag) %>
+                    <%= form_with url: remove_tag_path(tag_id: tag.id), method: :post, class: 'inline-form' do %>
+                      <%= hidden_field_tag :tag_id, tag.id %>
+                      <%= hidden_field_tag :action_type, 'remove' %>
+                      <button type="submit" class="button-with-icon">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    <% end %>
+                  <% else %>
+                    <%= form_with url: add_tag_path(tag_id: tag.id), method: :post, class: 'inline-form' do %>
+                      <%= hidden_field_tag :tag_id, tag.id %>
+                      <%= hidden_field_tag :action_type, 'add' %>
+                      <button type="submit" class="button-with-icon">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    <% end %>
+                  <% end %>
+                </div>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
     </div>
   </div>
 </div>
+
+
+
 <h3>Promozioni</h3>
 <div class="r-promozioni">
   <div class="promo-grid">
-    <div class="promo-box">
-      <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;">Tipo Promozione</span></p>
-      <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;">Data Inizio</span></p>
-      <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;">Data Fine</span></p>
-      <p style="font-weight: bold;">Condizioni: <span style="font-weight: normal;">Condizioni</span></p>
-    </div>
-    <div class="vertical-divider" style="height: 100px;"></div>
-    <div class="promo-box">
-      <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;">Tipo Promozione</span></p>
-      <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;">Data Inizio</span></p>
-      <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;">Data Fine</span></p>
-      <p style="font-weight: bold;">Condizioni: <span style="font-weight: normal;">Condizioni</span></p>
-    </div>
-    <div class="vertical-divider" style="height: 100px;"></div>
+    <% if @promotions.present? %>
+      <% @promotions.each do |promotion| %>
+        <div class="promo-box" id="promotion-<%= promotion.id %>">
+          <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;"><%= promotion.tipo %></span></p>
+          <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;"><%= promotion.data_inizio %></span></p>
+          <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;"><%= promotion.data_fine %></span></p>
+          <p style="font-weight: bold;">Condizioni: <span style="font-weight: normal;"><%= promotion.condizioni %></span></p>
+          <ion-icon name="close-circle-outline" class="del-promo-icon" id="del-promo-icon" data-promotion-id="<%= promotion.id %>" style="font-size: 25px; cursor: pointer;"></ion-icon>
 
-      
-
+        </div>
+        <div class="vertical-divider" style="height: 100px;"></div>
+      <% end %>
+    <% else %>
+      <p>Nessuna promozione attiva</p>
+    <% end %>
   </div>
-  
 </div>
+<button type="button" id="add-promo-btn">Aggiungi Promozione</button>
+
 
 <h3>Stories Social</h3>
 <div class="r-stories">
@@ -71,31 +104,38 @@
 </div>
 <h3>Ricette Condivise</h3>
 <div class="r-ricette">
-  <div class="r-ricetta">
-      <%= image_tag 'background.jpg', class: 'ricetta-foto' %>    
-      <div class="ricetta-info">
-          <p>Nome</p>
-          <p>Ingredienti</p>
-          <p>Lavorazione</p>
+  <% if @recipes.any? %>
+    <% @recipes.each do |recipe| %>
+      <div class="r-ricetta">
+        <% if recipe.photo.present? %>
+          <%= image_tag recipe.photo, class: 'ricetta-foto' %>
+        <% else %>
+          <%= image_tag 'background.jpg', class: 'ricetta-foto' %>
+        <% end %>
+        <div class="ricetta-info">
+          <p>Nome: <%= recipe.name %></p>
+          <p>Difficoltà: <%= recipe.difficulty %></p>
+          <p>Ingredienti: <%= recipe.ingredients %></p>
+          <p>Procedimento: <%= recipe.procedure %></p>
+        </div>
       </div>
-  </div>
-  <div class="r-ricetta">
-      <%= image_tag 'background.jpg', class: 'ricetta-foto' %>    
-      <div class="ricetta-info">
-          <p>Nome</p>
-          <p>Ingredienti</p>
-          <p>Lavorazione</p>
-      </div>
-  </div>
-  <i class="fa-solid fa-calendar-plus" style="font-size: 30px; cursor: pointer; margin-left: 10px; align-self: center; "></i>
+    <% end %>
+  <% else %>
+    <p>Il ristoratore non ha condiviso alcuna ricetta.</p>
+  <% end %>
 </div>
+<button type="button" id="add-recipe-btn">Aggiungi Ricetta</button>
 
 <h3>Eventi</h3>
 <div class="r-eventi">
   <% if @eventi.any? %>
     <% @eventi.each do |evento| %>
       <div class="r-evento" id="evento-<%= evento.id %>">
-        <%= image_tag 'background.jpg', class: 'evento-foto' %>    
+        <% if evento.locandina.present? %>
+          <%= image_tag evento.locandina, class: 'evento-foto'  %>
+        <% else %>
+          <%= image_tag 'background.jpg', class: 'evento-foto' %>
+        <% end %>
         <div class="evento-info">
           <p><%= evento.nome %></p>
           <p>Data: <%= evento.data %></p>
@@ -118,7 +158,7 @@
   <div class="modal-content">
     <span class="close">&times;</span>
     <h2>Crea Nuovo Evento</h2>
-    <%= form_with url: create_event_restaurateur_profiles_path, method: :post, local: true do |form| %>
+    <%= form_with(url: create_event_restaurateur_profiles_path, method: :post, local: true) do |form| %>
       <div>
         <%= form.label :nome, "Nome Evento" %>
         <%= form.text_field :nome %>
@@ -136,6 +176,10 @@
         <%= form.text_area :descrizione %>
       </div>
       <div>
+        <%= form.label :locandina, "Locandina Evento" %>
+        <%= form.file_field :locandina %>
+      </div>
+      <div>
         <%= form.submit "Crea Evento" %>
         <button type="button" id="resetBtn">Azzera</button>
       </div>
@@ -143,8 +187,40 @@
   </div>
 </div>
 
-<!-- Finestra di conferma eliminazione -->
-<div id="confirmModal" class="modal">
+
+
+<div id="myModal2" class="modal">
+  <div class="modal-content">
+    <span class="close" id="close-promo-modal">&times;</span>
+    <h2>Aggiungi Promozione</h2>
+    <%= form_with(url: create_promotion_restaurateur_profiles_path, method: :post, local: true) do |form| %>
+      <div class="form-group">
+        <%= form.label :tipo, "Tipo Promozione" %>
+        <%= form.text_field :tipo, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= form.label :data_inizio, "Data Inizio" %>
+        <%= form.date_field :data_inizio, class: "form-control", id: "eventDatePromo" %>
+      </div>
+      <div class="form-group">
+        <%= form.label :data_fine, "Data Fine" %>
+        <%= form.date_field :data_fine, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= form.label :condizioni, "Condizioni" %>
+        <%= form.text_area :condizioni, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= form.submit "Salva Promozione", class: "btn btn-primary" %>
+        <button type="button" id="resetBtnPromo">Azzera</button>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+<!-- Finestra di conferma eliminazione evento -->
+<div id="confirmModal" class="modal">s
   <div class="modal-content">
     <span class="close-confirm">&times;</span>
     <h2>Conferma Eliminazione</h2>
@@ -154,9 +230,90 @@
   </div>
 </div>
 
+<!-- Finestra di conferma eliminazione promozione -->
+<div id="confirmModalPromo" class="modal">s
+  <div class="modal-content">
+    <span class="close-confirm-promo">&times;</span>
+    <h2>Conferma Eliminazione</h2>
+    <p>Sei sicuro di voler eliminare questo evento?</p>
+    <button id="confirmDeleteBtnPromo">Conferma</button>
+    <button id="cancelDeleteBtnPromo">Annulla</button>
+  </div>
+</div>
+
 <script>
-// per la finestra modale
-document.addEventListener("DOMContentLoaded", function() {
+  // JS per la finestra modale creazione evento
+  document.addEventListener("DOMContentLoaded", function() {
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("openModalBtn");
+    var span = document.getElementsByClassName("close")[0];
+    var resetBtn = document.getElementById("resetBtn");
+    var eventDateField = document.getElementById("eventDate");
+
+    // Imposta la data minima per il campo data
+    var today = new Date();
+    today.setDate(today.getDate() + 1); // Aggiungi un giorno alla data odierna
+    var minDate = today.toISOString().split('T')[0];
+    eventDateField.setAttribute('min', minDate);
+
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    resetBtn.onclick = function() {
+      var form = modal.querySelector("form");
+      form.reset();
+    }
+
+  
+  });
+
+
+  // JS aggiunta di promozioni
+  document.addEventListener("DOMContentLoaded", function() {
+    var modal2 = document.getElementById("myModal2");
+    var btn = document.getElementById("add-promo-btn");
+    var span = document.getElementById("close-promo-modal");
+    var resetBtn = document.getElementById("resetBtnPromo");
+    var eventDateField = document.getElementById("eventDatePromo");
+
+    // Imposta la data minima per il campo data
+    var today = new Date();
+    today.setDate(today.getDate() + 1); // Aggiungi un giorno alla data odierna
+    var minDate = today.toISOString().split('T')[0];
+    eventDateField.setAttribute('min', minDate);
+
+    btn.onclick = function() {
+      modal2.style.display = "block";
+    }
+
+    span.onclick = function() {
+      modal2.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal2) {
+        modal2.style.display = "none";
+      }
+    }
+
+    resetBtn.onclick = function() {
+      var form = modal2.querySelector("form");
+      form.reset();
+    }
+  });
+
+  // JS per eliminazione evento
   var confirmModal = document.getElementById("confirmModal");
   var closeConfirmBtn = document.getElementsByClassName("close-confirm")[0];
   var confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
@@ -207,41 +364,71 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
   }
+
+  // JS per eliminazione promozioni
+  var confirmPromoModal = document.getElementById("confirmModalPromo");
+var closePromoConfirmBtn = document.getElementsByClassName("close-confirm-promo")[0];
+var confirmPromoDeleteBtn = document.getElementById("confirmDeleteBtnPromo");
+var cancelPromoDeleteBtn = document.getElementById("cancelDeleteBtnPromo");
+var promoIdToDelete = null;
+
+document.querySelectorAll('.del-promo-icon').forEach(function(deletePromoIcon) {
+  deletePromoIcon.onclick = function() {
+    promoIdToDelete = this.getAttribute('data-promotion-id');
+    console.log("Promo ID to delete:", promoIdToDelete); // Log per verificare ID della promozione da eliminare
+    confirmPromoModal.style.display = "block";
+  }
 });
 
+closePromoConfirmBtn.onclick = function() {
+  console.log("Close button clicked");
+  confirmPromoModal.style.display = "none";
+}
 
-  // per la finestra modale creazione evento
-  document.addEventListener("DOMContentLoaded", function() {
-    var modal = document.getElementById("myModal");
-    var btn = document.getElementById("openModalBtn");
-    var span = document.getElementsByClassName("close")[0];
-    var resetBtn = document.getElementById("resetBtn");
-    var eventDateField = document.getElementById("eventDate");
+cancelPromoDeleteBtn.onclick = function() {
+  console.log("Cancel delete button clicked");
+  confirmPromoModal.style.display = "none";
+  promoIdToDelete = null;
+}
 
-    // Imposta la data minima per il campo data
-    var today = new Date();
-    today.setDate(today.getDate() + 1); // Aggiungi un giorno alla data odierna
-    var minDate = today.toISOString().split('T')[0];
-    eventDateField.setAttribute('min', minDate);
+window.onclick = function(event) {
+  if (event.target == confirmPromoModal) {
+    console.log("Clicked outside modal");
+    confirmPromoModal.style.display = "none";
+    promoIdToDelete = null;
+  }
+}
 
-    btn.onclick = function() {
-      modal.style.display = "block";
-    }
-
-    span.onclick = function() {
-      modal.style.display = "none";
-    }
-
-    window.onclick = function(event) {
-      if (event.target == modal) {
-        modal.style.display = "none";
+confirmPromoDeleteBtn.onclick = function() {
+  console.log("Confirm delete button clicked");
+  if (promoIdToDelete) {
+    fetch(`/restaurateur_profiles/destroy_promotion/${promoIdToDelete}`, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        'Content-Type': 'application/json'
       }
-    }
+    }).then(response => response.json())
+      .then(data => {
+        console.log("Response from server:", data); // Log per verificare la risposta dal server
+        if (data.success) {
+          console.log("Promotion deleted successfully");
+          document.getElementById(`promotion-${promoIdToDelete}`).remove();
+          confirmPromoModal.style.display = "none";
+        } else {
+          console.error('Errore durante l\'eliminazione della promozione data: ' + data.error);
+          alert('Errore durante l\'eliminazione della promozione data: ' + data.error);
+        }
+      }).catch(error => {
+        console.error('Errore durante l\'eliminazione della promozione errore: ' + error.message);
+        alert('Errore durante l\'eliminazione della promozione errore: ' + error.message);
+      });
+  } else {
+    console.error("Promo ID to delete is null or undefined");
+    alert("Errore: ID promozione da eliminare non valido.");
+  }
+}
 
-    resetBtn.onclick = function() {
-      var form = modal.querySelector("form");
-      form.reset();
-    }
-  });
+
 </script>
 

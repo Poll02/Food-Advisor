@@ -1,0 +1,137 @@
+<div class="pagina-vetrina">
+    <div class="rest-foto-name">
+    <i class="fa-regular fa-star"></i>
+        <div class="rest-info-public">
+            <h1 style="font-size: 50px; color: black; "><%= @restaurant_owner.nomeristorante %></h1>
+            <h2>n. stelle</h2>
+            <h3>n. recensioni</h3>
+            <% if @tags.present? %>
+              <h2 style="margin-top: 20px;">TAGS: </h2>
+              <% @tags.each do |tag| %>
+                <span class="r-tag"><%= tag.nome %></span>
+              <% end %>
+            <% else %>
+              <p>Nessun tag associato</p>
+            <% end %>
+          </div>
+          <% if @restaurant_owner.cliente.foto.present? %>
+            <%= image_tag "background.jpg" %>
+        <% else %>
+            <%= image_tag "background.jpg" %>
+        <% end %>
+  <div class="rest-info-public-right">
+    <h3>Informazioni</h3>
+    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.email %></span></p>
+    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.telefono %></span></p>
+    <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"> <%= @restaurant_owner.indirizzo %></span></p>
+    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> <%= @restaurant_owner.asporto %></span></p>
+    
+  </div>
+  
+  
+
+    </div>
+    <div class="review-reserve-buttons">
+        <button type="button">Lascia una Recensione</button>
+        <button type="button" style="background-color: rgb(234, 183, 121);">Prenota un Tavolo</button>
+
+      </div>
+      <h1>Eventi</h1>
+
+      <div class="public-r-events">
+        <div class="restaurants-grid">
+        <% if @eventi.present? %>
+ 
+            <% @eventi.each do |evento| %>
+              <div class="restaurant-box">
+                <% if evento.locandina.present? %>
+                  <%= image_tag evento.locandina, class: 'evento-foto'  %>
+                <% else %>
+                  <%= image_tag 'background.jpg', class: 'evento-foto' %>
+                <% end %> 
+                <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
+                  <p><%= evento.nome %></p>
+                  <p style="font-size: 13px; font-weight: normal;"><%= evento.descrizione %></p>
+                  <p style="font-size: 13px; font-weight: normal;"><%= evento.data %></p>
+                  <p style="font-size: 13px; font-weight: normal;"><%= evento.luogo %></p>
+                </div>
+              </div>
+            <% end %>
+            <% else %>
+      <p>Nessun evento trovato</p>
+    <% end %>
+          </div>
+      </div>
+      <hr class="solid" id="divider" style="width: 70%;">
+      <h1 style="margin-bottom: 20px;">Promozioni</h1>
+
+      <div class="public-r-promos">
+        <% if @promotions.present? %>
+        <% @promotions.each do |promotion| %>
+        <div class="public-r-promos-box">
+            <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;"><%= promotion.tipo %></span></p>
+          <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;"><%= promotion.data_inizio %></span></p>
+          <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;"><%= promotion.data_fine %></span></p>
+          <p style="font-weight: bold;">Condizioni: <span style="font-weight: normal;"><%= promotion.condizioni %></span></p>           
+        </div>
+        <% end %>
+    <% else %>
+      <p>Nessuna promozione attiva</p>
+    <% end %>
+        
+    </div>
+    <hr class="solid" id="divider" style="width: 70%;">
+    <h1 style="margin-bottom: 20px;">Ricette Condivise</h1>
+    <div class="r-public-recipes">
+      <div class="restaurants-grid" style="width: 1300px; justify-content: center;" id="recipes-grid">
+        <% if @recipes.any? %>
+      <% @recipes.each do |recipe| %>
+        <div class="restaurant-box" id="recipes-box">
+          <%= image_tag 'background.jpg'%>
+          <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
+            <p><%= recipe.name %></p>
+            <p style="font-size: 13px; font-weight: normal;">Difficoltà: <span><%= recipe.difficulty %></span></p>
+            <p style="font-size: 13px; font-weight: normal;">Ingredienti: <span><%= recipe.ingredients %></span></p>
+            <p style="font-size: 13px; font-weight: normal; font-style: italic;">Clicca per vedere il procedimento</p>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p>Il ristorante non ha condiviso ricette</p>
+    <% end %>
+    </div>
+    </div>
+    <hr class="solid" id="divider" style="width: 70%;">
+    <h1 style="margin-bottom: 20px;">Recensioni</h1>
+    <div class="reviews-filters">
+      <p style="font-weight: bold;">Filtra per:</p>
+      <p>Data</p>
+      <p>Numero di stelle da a</p>
+    </div>
+    <div class="public-r-reviews-grid">
+      <div class="public-r-reviews">
+        <%= image_tag 'background.jpg'%>
+        <div class="public-review-details">
+          <h3>Nome Utente</h3>
+          <p>n. stelle</p>
+          <p>Testo della recensione. Il testo dovrebbe rispettare dei caratteri minimi e massimi e dobbiamo decidere come gestirne la visualizzazione</p>
+          <p style="font-style: italic; font-size: 13px;">in data DATA</p>
+        </div>
+        
+      </div>
+      <div class="public-r-reviews">
+        <%= image_tag 'background.jpg'%>
+        <div class="public-review-details">
+          <h3>Nome Utente</h3>
+          <p>n. stelle</p>
+          <p>Testo della recensione. Il testo dovrebbe rispettare dei caratteri minimi e massimi e dobbiamo decidere come gestirne la visualizzazione</p>
+          <p style="font-style: italic; font-size: 13px;">in data DATA</p>
+        </div>
+        
+      </div>
+
+    </div>
+
+
+    
+</div>

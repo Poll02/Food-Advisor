@@ -82,6 +82,7 @@
           // Aggiorna i contenuti del riquadro destro
           var rightSide = document.getElementById('right-side');
           rightSide.style.display = 'flex';
+          document.getElementById('right-side-id').innerText = id;
           document.getElementById('right-side-button').setAttribute('data-competizione-id', id);
           document.getElementById('right-side-nome').innerText = nome;
           document.getElementById('right-side-descrizione').innerText = descrizione;
@@ -107,6 +108,31 @@
         });
       });
     });
+
+    document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll('.iscriviti-button').forEach(function(button) {
+    button.addEventListener('click', function() {
+      var competitionId = this.getAttribute('data-competizione-id');
+
+      fetch(`/competizione/${competitionId}/join`, {
+        method: 'POST',
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+          'Content-Type': 'application/json'
+        },
+        credentials: 'same-origin'
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Partecipazione avvenuta con successo!');
+        } else {
+          alert('Errore nella partecipazione: ' + data.error);
+        }
+      });
+    });
+  });
+});
   </script>
 </body>
 </html>
