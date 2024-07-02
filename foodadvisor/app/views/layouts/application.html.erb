@@ -18,8 +18,8 @@
 
   <style>
     body {
-      font-family: <%= @setting&.font || 'Poppins' %>;
-      font-size: <%= @setting&.font_size || 'medium' %>;
+      font-family: <%= @user_settings[:font] %>;
+      font-size: <%= @user_settings[:font_size] %>;
     }
   </style>
 
@@ -36,7 +36,7 @@
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
   <script>
   document.addEventListener('DOMContentLoaded', function() {
-    var settingTheme = "<%= @setting&.theme %>";
+    var settingTheme = "<%= @user_settings[:theme] %>";
   
     if (settingTheme === 'night') {
       document.body.classList.add('night-mode');

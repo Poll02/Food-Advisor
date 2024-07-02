@@ -1,4 +1,5 @@
 class Tag < ApplicationRecord
-  has_many :chooses
-  has_many :ristoratoris, through: :chooses
+    has_many :chooses
+
   end
+  

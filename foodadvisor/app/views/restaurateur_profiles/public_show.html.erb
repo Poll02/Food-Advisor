@@ -14,7 +14,7 @@
     <div class="rest-foto-name">
     <i class="fa-regular fa-star"></i>
         <div class="rest-info-public">
-            <h1 style="font-size: 50px; color: black; "><%= @restaurant_owner.restaurant_name %></h1>
+            <h1 style="font-size: 50px; color: black; "><%= @restaurant_owner.nomeristorante %></h1>
             <h2>n. stelle</h2>
             <h3>n. recensioni</h3>
             <% if @tags.present? %>
@@ -26,17 +26,17 @@
               <p>Nessun tag associato</p>
             <% end %>
           </div>
-          <% if @restaurant_owner.photo.present? %>
-            <%= image_tag @restaurant_owner.photo %>
+          <% if @restaurant_owner.cliente.foto.present? %>
+            <%= image_tag "background.jpg" %>
         <% else %>
             <%= image_tag "background.jpg" %>
         <% end %>
   <div class="rest-info-public-right">
     <h3>Informazioni</h3>
-    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.email %></span></p>
-    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.phone %></span></p>
-    <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;">Indirizzo Ristorante</span></p>
-    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;">Asporto</span></p>
+    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.email %></span></p>
+    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.telefono %></span></p>
+    <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"> <%= @restaurant_owner.indirizzo %></span></p>
+    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> <%= @restaurant_owner.asporto %></span></p>
     
   </div>
   
@@ -130,15 +130,21 @@
     <h1 style="margin-bottom: 20px;">Ricette Condivise</h1>
     <div class="r-public-recipes">
       <div class="restaurants-grid" style="width: 1300px; justify-content: center;" id="recipes-grid">
+        <% if @recipes.any? %>
+      <% @recipes.each do |recipe| %>
         <div class="restaurant-box" id="recipes-box">
-          <%= image_tag 'background.jpg', class: 'evento-foto' %>
+          <%= image_tag 'background.jpg'%>
           <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
-            <p>Nome Ricetta</p>
-            <p style="font-size: 13px; font-weight: normal;">Difficoltà: <span>Difficoltà</span></p>
-            <p style="font-size: 13px; font-weight: normal;">Ingredienti: <span>Ingredienti</span></p>
+            <p><%= recipe.name %></p>
+            <p style="font-size: 13px; font-weight: normal;">Difficoltà: <span><%= recipe.difficulty %></span></p>
+            <p style="font-size: 13px; font-weight: normal;">Ingredienti: <span><%= recipe.ingredients %></span></p>
             <p style="font-size: 13px; font-weight: normal; font-style: italic;">Clicca per vedere il procedimento</p>
           </div>
         </div>
+      <% end %>
+    <% else %>
+      <p>Il ristorante non ha condiviso ricette</p>
+    <% end %>
     </div>
     </div>
     <hr class="solid" id="divider" style="width: 70%;">

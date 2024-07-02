@@ -76,7 +76,7 @@
 .r-tag {
   padding: 5px 10px;
   border-radius: 3px;
-  color: #fff;
+  color: #28a745;
   font-size: 14px;
 }
 
@@ -159,8 +159,9 @@
   margin: 1%;
   border: 1px solid #ccc;
   border-radius: 10px;
-  width: 120px;
-  height: 160px;
+  width: 400px;
+  height: 260px;
+  overflow-y: scroll;
 }
 
 .night-mode .r-ricetta {
@@ -170,7 +171,7 @@
 .ricetta-foto {
   width: 120px;  
   height: auto;
-  border-radius: 10px 10px 0 0;
+  border-radius: 10px
 }
 
 .ricetta-info {
@@ -268,7 +269,24 @@
 
 }
 
+#add-recipe-btn{
+  font-size: 15px;
+  color: white;
+  background-color: #28a745;
+  border: none;
+  padding: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+
+}
+
 #add-promo-btn:hover{
+  filter: brightness(120%);
+}
+
+#add-recipe-btn:hover{
   filter: brightness(120%);
 }
 

@@ -10,20 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_06_28_214932) do
+ActiveRecord::Schema.define(version: 2024_07_02_105123) do
 
-  create_table "categories", force: :cascade do |t|
-    t.string "name"
+  create_table "admins", force: :cascade do |t|
+    t.integer "utente_id", null: false
+    t.string "nome"
+    t.string "cognome"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["utente_id"], name: "index_admins_on_utente_id"
   end
 
-  create_table "chooses", id: false, force: :cascade do |t|
-    t.integer "ristoratori_id", null: false
+  create_table "chooses", force: :cascade do |t|
+    t.integer "ristoratore_id", null: false
     t.integer "tag_id", null: false
-    t.index ["ristoratori_id", "tag_id"], name: "index_chooses_on_ristoratori_id_and_tag_id", unique: true
-    t.index ["ristoratori_id"], name: "index_chooses_on_ristoratori_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ristoratore_id"], name: "index_chooses_on_ristoratore_id"
     t.index ["tag_id"], name: "index_chooses_on_tag_id"
+  end
+
+  create_table "clientes", force: :cascade do |t|
+    t.integer "utente_id", null: false
+    t.string "foto"
+    t.date "dataiscrizione"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["utente_id"], name: "index_clientes_on_utente_id"
   end
 
   create_table "competiziones", force: :cascade do |t|
@@ -36,37 +49,39 @@ ActiveRecord::Schema.define(version: 2024_06_28_214932) do
     t.integer "owner", null: false
     t.datetime "data_inizio"
     t.datetime "data_fine"
+    t.integer "ristoratore_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["ristoratore_id"], name: "index_competiziones_on_ristoratore_id"
   end
 
-  create_table "dishes", force: :cascade do |t|
-    t.string "name"
-    t.decimal "price"
-    t.text "ingredients"
-    t.integer "category_id", null: false
+  create_table "criticos", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "certificato"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["category_id"], name: "index_dishes_on_category_id"
+    t.index ["user_id"], name: "index_criticos_on_user_id"
   end
 
   create_table "eventos", force: :cascade do |t|
-    t.integer "owner", null: false
     t.string "nome", null: false
     t.date "data", null: false
     t.string "luogo", null: false
     t.string "descrizione"
     t.string "locandina"
+    t.integer "ristoratore_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["ristoratore_id"], name: "index_eventos_on_ristoratore_id"
   end
 
   create_table "problems", force: :cascade do |t|
     t.integer "id_utente"
     t.string "text"
+    t.integer "cliente_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["id_utente"], name: "index_problems_on_id_utente"
+    t.index ["cliente_id"], name: "index_problems_on_cliente_id"
   end
 
   create_table "promotions", force: :cascade do |t|
@@ -74,33 +89,43 @@ ActiveRecord::Schema.define(version: 2024_06_28_214932) do
     t.date "data_fine"
     t.string "condizioni"
     t.string "tipo"
+    t.integer "ristoratore_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.integer "ristoratore_id"
     t.index ["ristoratore_id"], name: "index_promotions_on_ristoratore_id"
   end
 
-  create_table "ristoratoris", force: :cascade do |t|
-    t.string "restaurant_name", null: false
-    t.integer "piva", limit: 8, null: false
-    t.string "email", null: false
-    t.string "phone", null: false
-    t.string "password_digest", null: false
+  create_table "recipes", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "difficulty", null: false
+    t.string "ingredients", null: false
+    t.string "procedure", null: false
+    t.string "photo"
+    t.integer "ristoratore_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "role"
-    t.string "profile_picture_url"
-    t.string "address"
-    t.string "photo"
+    t.index ["ristoratore_id"], name: "index_recipes_on_ristoratore_id"
+  end
+
+  create_table "ristoratores", force: :cascade do |t|
+    t.integer "cliente_id", null: false
+    t.string "piva"
+    t.boolean "asporto"
+    t.string "nomeristorante"
     t.string "indirizzo"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cliente_id"], name: "index_ristoratores_on_cliente_id"
   end
 
   create_table "settings", force: :cascade do |t|
-    t.string "font"
-    t.string "font_size"
-    t.string "theme"
+    t.string "font", default: "default_font"
+    t.string "font_size", default: "default_size"
+    t.string "theme", default: "default_theme"
+    t.integer "utente_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["utente_id"], name: "index_settings_on_utente_id"
   end
 
   create_table "tags", force: :cascade do |t|
@@ -110,25 +135,47 @@ ActiveRecord::Schema.define(version: 2024_06_28_214932) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string "name"
-    t.string "surname"
-    t.date "birth"
-    t.string "email"
-    t.string "phone"
-    t.string "password_digest"
+  create_table "user_competitions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "competizione_id", null: false
+    t.integer "punti", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.string "role"
-    t.string "restaurant_name"
-    t.string "partita_iva"
+    t.index ["competizione_id"], name: "index_user_competitions_on_competizione_id"
+    t.index ["user_id"], name: "index_user_competitions_on_user_id"
   end
 
-  add_foreign_key "chooses", "ristoratoris", on_delete: :cascade
-  add_foreign_key "chooses", "tags", on_delete: :cascade
-  add_foreign_key "competiziones", "users", column: "owner"
-  add_foreign_key "dishes", "categories", on_delete: :cascade
-  add_foreign_key "eventos", "ristoratoris", column: "owner", on_delete: :cascade
-  add_foreign_key "problems", "users", column: "id_utente", on_delete: :cascade
-  add_foreign_key "promotions", "ristoratoris", column: "ristoratore_id", on_delete: :cascade
+  create_table "users", force: :cascade do |t|
+    t.integer "cliente_id", null: false
+    t.string "username"
+    t.string "nome"
+    t.string "cognome"
+    t.date "datanascita"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cliente_id"], name: "index_users_on_cliente_id"
+  end
+
+  create_table "utentes", force: :cascade do |t|
+    t.string "email"
+    t.string "password_digest"
+    t.string "telefono"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  add_foreign_key "admins", "utentes"
+  add_foreign_key "chooses", "ristoratores", on_delete: :cascade
+  add_foreign_key "chooses", "tags"
+  add_foreign_key "clientes", "utentes"
+  add_foreign_key "competiziones", "ristoratores"
+  add_foreign_key "criticos", "users"
+  add_foreign_key "eventos", "ristoratores"
+  add_foreign_key "problems", "clientes"
+  add_foreign_key "promotions", "ristoratores"
+  add_foreign_key "ristoratores", "clientes"
+  add_foreign_key "settings", "utentes"
+  add_foreign_key "user_competitions", "competiziones", on_delete: :cascade
+  add_foreign_key "user_competitions", "users"
+  add_foreign_key "users", "clientes"
 end

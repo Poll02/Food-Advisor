@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  foto: MyString
+  dataiscrizione: 2024-06-30
+
+two:
+  foto: MyString
+  dataiscrizione: 2024-06-30
