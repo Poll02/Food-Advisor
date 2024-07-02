@@ -106,3 +106,14 @@ Competizione.create!(
   ristoratore_id: 2  # Sostituisci con l'ID reale del ristoratore
 )
 
+# Creazione di prenotazioni
+prenotazione_prova = Prenotazione.create!(
+  user_id: 1,
+  ristoratore_id: 1,
+  numero_persone: 4,
+  data: Date.new(2024, 7, 5),
+  orario: Time.new(2024, 7, 5, 20, 0, 0)
+)
+
+puts "Created prenotazione for user_id 1 and ristoratore_id 1"
+

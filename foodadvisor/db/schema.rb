@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_02_105123) do
+ActiveRecord::Schema.define(version: 2024_07_02_174612) do
 
   create_table "admins", force: :cascade do |t|
     t.integer "utente_id", null: false
@@ -73,6 +73,18 @@ ActiveRecord::Schema.define(version: 2024_07_02_105123) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["ristoratore_id"], name: "index_eventos_on_ristoratore_id"
+  end
+
+  create_table "prenotaziones", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "ristoratore_id", null: false
+    t.integer "numero_persone", null: false
+    t.date "data", null: false
+    t.time "orario", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ristoratore_id"], name: "index_prenotaziones_on_ristoratore_id"
+    t.index ["user_id"], name: "index_prenotaziones_on_user_id"
   end
 
   create_table "problems", force: :cascade do |t|
@@ -171,6 +183,8 @@ ActiveRecord::Schema.define(version: 2024_07_02_105123) do
   add_foreign_key "competiziones", "ristoratores"
   add_foreign_key "criticos", "users"
   add_foreign_key "eventos", "ristoratores"
+  add_foreign_key "prenotaziones", "ristoratores"
+  add_foreign_key "prenotaziones", "users"
   add_foreign_key "problems", "clientes"
   add_foreign_key "promotions", "ristoratores"
   add_foreign_key "ristoratores", "clientes"

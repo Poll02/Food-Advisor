@@ -4,6 +4,8 @@ class User < ApplicationRecord
     has_one :critico
     has_many :user_competitions
     has_many :competiziones, through: :user_competitions
+    has_many :prenotaziones
+
 
     accepts_nested_attributes_for :critico
   end
