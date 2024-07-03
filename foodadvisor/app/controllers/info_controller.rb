@@ -34,18 +34,16 @@ class InfoController < ApplicationController
   end
 
   def destroy_dipendente
-    Rails.logger.info "Inizio ricerca dipendente:" # Log del dipendente trovato
-    @dipendente = Dipendente.find(params[:id])
-    Rails.logger.info "Inizio ricerca dipendente trovato: #{@dipendente.inspect}" # Log del dipendente trovato
+    @dipendente = Dipendente.find_by(id: params[:id])
+    
     if @dipendente
-      Rails.logger.info "Dipendente trovato: #{@dipendente.inspect}" # Log del dipendente trovato
       if @dipendente.destroy
         render json: { success: true }, status: :ok
       else
         render json: { success: false, error: 'Errore durante l\'eliminazione del dipendente' }, status: :unprocessable_entity
       end
     else
-      render json: { success: false, error: 'Dipendente non trovata' }, status: :not_found
+      render json: { success: false, error: 'Dipendente non trovato' }, status: :not_found
     end
   end
 

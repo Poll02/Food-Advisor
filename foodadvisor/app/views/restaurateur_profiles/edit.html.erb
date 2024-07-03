@@ -149,9 +149,8 @@
   <% else %>
     <p>Il ristoratore non ha creato alcun evento.</p>
   <% end %>
-  <!-- Icona per aprire la finestra modale -->
-  <i class="fa-solid fa-calendar-plus" id="openModalBtn" style="font-size: 30px; cursor: pointer; margin-left: 10px; align-self: center; "></i>
 </div>
+<button type="button" id="add-event-btn">Aggiungi Evento</button>
 
 <!-- Finestra modale creazione evento -->
 <div id="myModal" class="modal">
@@ -161,26 +160,26 @@
     <%= form_with(url: create_event_restaurateur_profiles_path, method: :post, local: true) do |form| %>
       <div>
         <%= form.label :nome, "Nome Evento" %>
-        <%= form.text_field :nome %>
+        <%= form.text_field :nome, class: "form-control" %>
       </div>
       <div>
         <%= form.label :data, "Data Evento" %>
-        <%= form.date_field :data, id: "eventDate" %>
+        <%= form.date_field :data, id: "eventDate", class: "form-control" %>
       </div>
       <div>
         <%= form.label :luogo, "Luogo Evento" %>
-        <%= form.text_field :luogo %>
+        <%= form.text_field :luogo, class: "form-control" %>
       </div>
       <div>
         <%= form.label :descrizione, "Descrizione Evento" %>
-        <%= form.text_area :descrizione %>
+        <%= form.text_area :descrizione, class: "form-control" %>
       </div>
       <div>
         <%= form.label :locandina, "Locandina Evento" %>
-        <%= form.file_field :locandina %>
+        <%= form.file_field :locandina, class: "form-control" %>
       </div>
       <div>
-        <%= form.submit "Crea Evento" %>
+        <%= form.submit "Crea Evento", class: "btn btn-primary" %>
         <button type="button" id="resetBtn">Azzera</button>
       </div>
     <% end %>
@@ -290,7 +289,7 @@
   // JS per aprire la finestra degli eventi
   document.addEventListener("DOMContentLoaded", function() {
     var modal = document.getElementById("myModal");
-    var btn = document.getElementById("openModalBtn");
+    var btn = document.getElementById("add-event-btn");
     var span = document.getElementsByClassName("close")[0];
     var resetBtn = document.getElementById("resetBtn");
     var eventDateField = document.getElementById("eventDate");

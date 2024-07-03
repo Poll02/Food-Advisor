@@ -74,12 +74,12 @@
             <p><%= dipendente.cognome %></p>
             <p><%= dipendente.ruolo %></p>
           </div>
-          <i class="fa fa-times delete-dipendente" data-id="<%= dipendente.id %>" style="font-size: 20px; cursor: pointer;"></i>
+          <ion-icon name="close-circle-outline" class="del-dipendente-icon" id="del-dipendente-icon" data-dipendente-id="<%= dipendente.id %>" style="font-size: 25px; cursor: pointer;"></ion-icon>
         </div>
       <% end %>
     <% end %>
-    <i class="fa-solid fa-user-plus" id="add-dipendente" style="font-size: 30px; cursor: pointer;"></i>
   </div>
+  <button type="button" id="add-dipendente-btn">Aggiungi Dipendente</button>
   
   <!-- Modale per aggiungere dipendente -->
   <div id="dipendenteModal" class="modal">
@@ -114,6 +114,16 @@
       <% end %>
     </div>
   </div> 
+  <!-- Finestra di conferma eliminazione ricetta -->
+  <div id="confirmModalDipendente" class="modal">s
+    <div class="modal-content">
+      <span class="close-confirm-dipendente">&times;</span>
+      <h2>Conferma Eliminazione</h2>
+      <p>Sei sicuro di voler eliminare questo evento?</p>
+      <button id="confirmDeleteBtnDipendente">Conferma</button>
+      <button id="cancelDeleteBtnDipendente">Annulla</button>
+    </div>
+  </div>
 
 
 
@@ -192,6 +202,99 @@ document.addEventListener('DOMContentLoaded', function() {
 
   calendario.innerHTML = createCalendar(currentMonth, currentYear);
 });
+
+
+  // JS per aprire la finestra dei dipendenti
+  document.addEventListener("DOMContentLoaded", function() {
+    var modal2 = document.getElementById("dipendenteModal");
+    var btn = document.getElementById("add-dipendente-btn");
+    var span = document.getElementById("close-dipendente-modal");
+    var resetBtn = document.getElementById("resetBtnDipendente");
+
+    btn.onclick = function() {
+      modal2.style.display = "block";
+    }
+
+    span.onclick = function() {
+      modal2.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal2) {
+        modal2.style.display = "none";
+      }
+    }
+
+    resetBtn.onclick = function() {
+      var form = modal2.querySelector("form");
+      form.reset();
+    }
+  });
+
+  // JS per eliminazione dipendenti
+  var confirmPromoModal = document.getElementById("confirmModalDipendente");
+  var closePromoConfirmBtn = document.getElementsByClassName("close-confirm-dipendente")[0];
+  var confirmPromoDeleteBtn = document.getElementById("confirmDeleteBtnDipendente");
+  var cancelPromoDeleteBtn = document.getElementById("cancelDeleteBtnDipendente");
+  var promoIdToDelete = null;
+
+  document.querySelectorAll('.del-dipendente-icon').forEach(function(deletePromoIcon) {
+    deletePromoIcon.onclick = function() {
+      promoIdToDelete = this.getAttribute('data-dipendente-id');
+      console.log("Dip ID to delete:", promoIdToDelete); // Log per verificare ID della promozione da eliminare
+      confirmPromoModal.style.display = "block";
+    }
+  });
+
+  closePromoConfirmBtn.onclick = function() {
+    console.log("Close button clicked");
+    confirmPromoModal.style.display = "none";
+  }
+
+  cancelPromoDeleteBtn.onclick = function() {
+    console.log("Cancel delete button clicked");
+    confirmPromoModal.style.display = "none";
+    promoIdToDelete = null;
+  }
+
+  window.onclick = function(event) {
+    if (event.target == confirmPromoModal) {
+      console.log("Clicked outside modal");
+      confirmPromoModal.style.display = "none";
+      promoIdToDelete = null;
+    }
+  }
+
+  confirmPromoDeleteBtn.onclick = function() {
+    console.log("Confirm delete dipendente button clicked");
+    if (promoIdToDelete) {
+      fetch(`/info/destroy_dipendente/${promoIdToDelete}`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+        .then(data => {
+          console.log("Response from server:", data); // Log per verificare la risposta dal server
+          if (data.success) {
+            console.log("Dipendente deleted successfully");
+            document.getElementById(`dipendente-${promoIdToDelete}`).remove();
+            confirmPromoModal.style.display = "none";
+          } else {
+            console.error('Errore durante l\'eliminazione della promozione data: ' + data.error);
+            alert('Errore durante l\'eliminazione della promozione data: ' + data.error);
+          }
+        }).catch(error => {
+          console.error('Errore durante l\'eliminazione della promozione errore: ' + error.message);
+          alert('Errore durante l\'eliminazione del dipendente errore: ' + error.message);
+        });
+    } else {
+      console.error("Dip ID to delete is null or undefined");
+      alert("Errore: ID dipendente da eliminare non valido.");
+    }
+  }
+
 
 </script>
 

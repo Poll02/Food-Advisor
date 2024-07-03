@@ -105,7 +105,11 @@
         <% if @recipes.any? %>
       <% @recipes.each do |recipe| %>
         <div class="restaurant-box" id="recipes-box">
-          <%= image_tag recipe.photo %>
+          <% if recipe.photo.present? %>
+            <%= image_tag recipe.photo %>
+          <% else %>
+            <%= image_tag 'background.jpg' %>
+          <% end %>
           <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
             <p><%= recipe.name %></p>
             <p style="font-size: 13px; font-weight: normal;">Difficoltà: <span><%= recipe.difficulty %></span></p>

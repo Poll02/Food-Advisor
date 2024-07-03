@@ -105,6 +105,9 @@ Competizione.create!(
   ristoratore_id: 2  # Sostituisci con l'ID reale del ristoratore
 )
 
+# evento
+Evento.create(nome:"cena",luogo:"casa di nora",data:DateTime.new(2024, 7, 20, 18, 0, 0),descrizione:"g",ristoratore_id:2)
+
 # Creazione di prenotazioni
 prenotazione_prova = Prenotazione.create!(
   user_id: 1,
