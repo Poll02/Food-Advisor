@@ -101,7 +101,9 @@ Rails.application.routes.draw do
   get 'auth/google_oauth2/callback', to: 'sessions#create'
   get 'auth/failure', to: redirect('/')
     
-  get 'home/index' 
+  get 'home/index'
+  
+
 
   # rotte per la pagina di ricerca
   get 'ricerca', to: 'ricerca#index'
@@ -126,6 +128,11 @@ Rails.application.routes.draw do
   end
   resource :settings, only: [:show, :edit, :update, :destroy]
   resources :eventi, only: [:create]
+
+    #rotta per le recensioni
+    resources :reviews, only: [:create]
+    # rotta per visualizzare le recensioni pubbliche
+    get '/public_show', to: 'reviews#public_show', as: 'public_show_reviews'
 
 
 end

@@ -107,6 +107,20 @@ ActiveRecord::Schema.define(version: 2024_07_02_174612) do
     t.index ["ristoratore_id"], name: "index_promotions_on_ristoratore_id"
   end
 
+  create_table "recensiones", force: :cascade do |t|
+    t.integer "cliente_id", null: false
+    t.integer "ristoratore_id", null: false
+    t.integer "competizione_id"
+    t.string "commento"
+    t.boolean "pinnata", default: false
+    t.integer "stelle"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cliente_id"], name: "index_recensiones_on_cliente_id"
+    t.index ["competizione_id"], name: "index_recensiones_on_competizione_id"
+    t.index ["ristoratore_id"], name: "index_recensiones_on_ristoratore_id"
+  end
+
   create_table "recipes", force: :cascade do |t|
     t.string "name", null: false
     t.string "difficulty", null: false
@@ -187,6 +201,9 @@ ActiveRecord::Schema.define(version: 2024_07_02_174612) do
   add_foreign_key "prenotaziones", "users"
   add_foreign_key "problems", "clientes"
   add_foreign_key "promotions", "ristoratores"
+  add_foreign_key "recensiones", "clientes"
+  add_foreign_key "recensiones", "competiziones"
+  add_foreign_key "recensiones", "ristoratores"
   add_foreign_key "ristoratores", "clientes"
   add_foreign_key "settings", "utentes"
   add_foreign_key "user_competitions", "competiziones", on_delete: :cascade
