@@ -189,6 +189,10 @@ document.addEventListener('DOMContentLoaded', function() {
     var orario = document.getElementById('orario').value;
     var ristoratore_id = document.getElementById('ristoratore_id').value;
 
+    console.log("persone", num_persone);
+    console.log("data", data);
+    console.log("orario", orario);
+    console.log("id rist", ristoratore_id);
 
     fetch('/prenotazioni', {
       method: 'POST',

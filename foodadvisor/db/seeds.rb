@@ -109,13 +109,17 @@ Competizione.create!(
 Evento.create(nome:"cena",luogo:"casa di nora",data:DateTime.new(2024, 7, 20, 18, 0, 0),descrizione:"g",ristoratore_id:2)
 
 # Creazione di prenotazioni
-prenotazione_prova = Prenotazione.create!(
+Prenotazione.create!(
   user_id: 1,
   ristoratore_id: 1,
   numero_persone: 4,
   data: Date.new(2024, 7, 5),
   orario: Time.new(2024, 7, 5, 20, 0, 0)
 )
-
-puts "Created prenotazione for user_id 1 and ristoratore_id 1"
-
+Prenotazione.create!(
+  user_id: 3,
+  ristoratore_id: 3,
+  numero_persone: 2,  
+  data: Date.new(2024, 7, 3),  
+  orario: Time.new(2024, 7, 10, 19, 30)
+)
