@@ -64,24 +64,59 @@
 
   <h3>Informazioni sui Dipendenti del Ristorante</h3>
   <div class="employees-section">
-    <div class="dipendente">
-        <%= image_tag 'background.jpg', class: 'dip-foto' %>    
-        <div class="dip-info">
-            <p>Nome</p>
-            <p>Cognome</p>
-            <p>Ruolo</p>
+    <% if @dipendenti.empty? %>
+      <p>Non hai ancora inserito un dipendente.</p>
+    <% else %>
+      <% @dipendenti.each do |dipendente| %>
+        <div class="dipendente">
+          <%= image_tag dipendente.foto.present? ? dipendente.foto : 'background.jpg', class: 'dip-foto' %>    
+          <div class="dip-info">
+            <p><%= dipendente.nome %></p>
+            <p><%= dipendente.cognome %></p>
+            <p><%= dipendente.ruolo %></p>
+          </div>
+          <i class="fa fa-times delete-dipendente" data-id="<%= dipendente.id %>" style="font-size: 20px; cursor: pointer;"></i>
         </div>
-    </div>
-    <div class="dipendente">
-        <%= image_tag 'background.jpg', class: 'dip-foto' %>    
-        <div class="dip-info">
-            <p>Nome</p>
-            <p>Cognome</p>
-            <p>Ruolo</p>
-        </div>
-    </div>
-    <i class="fa-solid fa-user-plus" style="font-size: 30px; margin-top: 6%; "></i>
+      <% end %>
+    <% end %>
+    <i class="fa-solid fa-user-plus" id="add-dipendente" style="font-size: 30px; cursor: pointer;"></i>
   </div>
+  
+  <!-- Modale per aggiungere dipendente -->
+  <div id="dipendenteModal" class="modal">
+    <div class="modal-content">
+      <span class="close" id="close-dipendente-modal">&times;</span>
+      <h2>Aggiungi Dipendente</h2>
+      <%= form_with(url: create_dipendente_info_path, method: :post, local: true) do |form| %>
+        <div class="form-group">
+          <%= form.label :nome, "Nome" %>
+          <%= form.text_field :nome, class: "form-control" %>
+        </div>
+        <div class="form-group">
+          <%= form.label :cognome, "Cognome" %>
+          <%= form.text_field :cognome, class: "form-control" %>
+        </div>
+        <div class="form-group">
+          <%= form.label :ruolo, "Ruolo" %>
+          <%= form.text_field :ruolo, class: "form-control" %>
+        </div>
+        <div class="form-group">
+          <%= form.label :assunzione, "Data di Assunzione" %>
+          <%= form.date_field :assunzione, class: "form-control" %>
+        </div>
+        <div class="form-group">
+          <%= form.label :foto, "Foto URL" %>
+          <%= form.text_field :foto, class: "form-control" %>
+        </div>
+        <div class="form-group">
+          <%= form.submit "Salva Dipendente", class: "btn btn-primary" %>
+          <button type="button" id="resetBtnDipendente">Azzera</button>
+        </div>
+      <% end %>
+    </div>
+  </div> 
+
+
 
   <script>
 // JS PER IL GRAFICO

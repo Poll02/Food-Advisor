@@ -66,7 +66,6 @@ Rails.application.routes.draw do
   # Rotte per le pagine della dashboard
   get 'dashboard', to: 'restaurateur_profiles#show'
   get 'info', to: 'info#show'
-  get 'chat', to: 'chat#show'
   get 'settings', to: 'settings#show'
 
   # rotte per le pagine vetrina
@@ -109,6 +108,8 @@ Rails.application.routes.draw do
   resource :restaurateur_profiles, only: [:show, :edit, :update] do
     post 'create_event', to: 'restaurateur_profiles#create_event'
     delete 'destroy_event/:id', to: 'restaurateur_profiles#destroy_event', as: 'destroy_event'
+    post 'create_recipe', to: 'restaurateur_profiles#create_recipe'
+    delete 'destroy_recipe/:id', to: 'restaurateur_profiles#destroy_recipe', as: 'destroy_recipe'
     post 'add_tag/:tag_id', to: 'restaurateur_profiles#add_tag'
     delete 'destroy_promotion/:id', to: 'restaurateur_profiles#destroy_promotion', as: 'destroy_promotion'
 
@@ -121,5 +122,10 @@ Rails.application.routes.draw do
   end
   resource :settings, only: [:show, :edit, :update, :destroy]
   resources :eventi, only: [:create]
+  resources :info, only: [:show] 
+  
+  # Rotte aggiunte per creare e distruggere un dipendente
+  post 'info/create_dipendente', to: 'info#create_dipendente', as: 'create_dipendente_info'
+  delete 'info/destroy_dipendente/:id', to: 'info#destroy_dipendente', as: 'destroy_dipendente'
 
 end

@@ -25,15 +25,34 @@ class RegistrationController < ApplicationController
   def create_user
     @utente = Utente.new(user_params)
 
+    if params[:utente][:cliente_attributes][:foto]
+      uploaded_file = params[:utente][:cliente_attributes][:foto]
+      file_path = Rails.root.join('app', 'assets', 'images', uploaded_file.original_filename)
+      File.open(file_path, 'wb') do |file|
+        file.write(uploaded_file.read)
+      end
+      @utente.cliente.foto = uploaded_file.original_filename
+    end
+  
     if @utente.save
       redirect_to root_path, notice: "Registrazione utente completata con successo!"
     else
       render :new_user
     end
   end
+  
 
   def create_critico
     @utente = Utente.new(critico_params)
+  
+    if params[:utente][:cliente_attributes][:foto]
+      uploaded_file = params[:utente][:cliente_attributes][:foto]
+      file_path = Rails.root.join('app', 'assets', 'images', uploaded_file.original_filename)
+      File.open(file_path, 'wb') do |file|
+        file.write(uploaded_file.read)
+      end
+      @utente.cliente.foto = uploaded_file.original_filename
+    end
 
     if @utente.save
       redirect_to root_path, notice: "Registrazione critico completata con successo!"
@@ -41,16 +60,27 @@ class RegistrationController < ApplicationController
       render :new_critico
     end
   end
+  
 
   def create_ristoratore
     @utente = Utente.new(ristoratore_params)
+  
+    if params[:utente][:cliente_attributes][:foto]
+      uploaded_file = params[:utente][:cliente_attributes][:foto]
+      file_path = Rails.root.join('app', 'assets', 'images', uploaded_file.original_filename)
+      File.open(file_path, 'wb') do |file|
+        file.write(uploaded_file.read)
+      end
+      @utente.cliente.foto = uploaded_file.original_filename
+    end
 
     if @utente.save
       redirect_to root_path, notice: "Registrazione ristoratore completata con successo!"
     else
       render :new_ristoratore
     end
-  end 
+  end
+  
 
   private
 
@@ -59,17 +89,18 @@ class RegistrationController < ApplicationController
                                    cliente_attributes: [:id, :foto, :dataiscrizione,
                                                         user_attributes: [:username, :nome, :cognome, :datanascita]])
   end
-
+  
   def critico_params
     params.require(:utente).permit(:email, :password, :password_confirmation, :telefono,
                                    cliente_attributes: [:id, :foto, :dataiscrizione,
                                                         user_attributes: [:username, :nome, :cognome, :datanascita,
                                                                           critico_attributes: [:certificato]]])
   end
-
+  
   def ristoratore_params
     params.require(:utente).permit(:email, :password, :password_confirmation, :telefono,
                                    cliente_attributes: [:id, :foto, :dataiscrizione,
                                                         ristoratore_attributes: [:piva, :asporto, :nomeristorante, :indirizzo]])
   end
+  
 end

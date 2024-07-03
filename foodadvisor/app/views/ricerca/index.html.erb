@@ -20,7 +20,7 @@
                 <div class="result-box">
                     <% if ristoratore.cliente.foto.present? %>
                         <%= link_to public_restaurant_profile_path(ristoratore.id), class: 'restaurant-link' do %>
-                        <%= image_tag "background.jpg" %>
+                        <%= image_tag ristoratore.cliente.foto %>
                         <% end %>
                     <% else %>
                         <%= link_to public_restaurant_profile_path(ristoratore.id), class: 'restaurant-link' do %>

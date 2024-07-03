@@ -13,8 +13,8 @@ utente2 = Utente.create(email: 'utente2@example.com', password: 'password2', tel
 utente3 = Utente.create(email: 'utente3@example.com', password: 'password3', telefono: '1112223333')
 
 # Creazione di Clienti
-cliente1 = Cliente.create(utente: utente1, foto: 'foto1.jpg', dataiscrizione: '2023-01-01')
-cliente2 = Cliente.create(utente: utente2, foto: 'foto2.jpg', dataiscrizione: '2023-02-01')
+cliente1 = Cliente.create(utente: utente1, foto: 'ristoratore.jpg', dataiscrizione: '2023-01-01')
+cliente2 = Cliente.create(utente: utente2, foto: 'ristoratore.jpg', dataiscrizione: '2023-02-01')
 # Creazione di Admin
 admin1 = Admin.create(utente: utente3, nome: 'Admin', cognome: 'One')
 # Creazione di Ristoratori
@@ -22,7 +22,6 @@ ristoratore1 = Ristoratore.create(cliente: cliente1, piva: '12345678901', asport
 ristoratore2 = Ristoratore.create(cliente: cliente2, piva: '09876543210', asporto: false, nomeristorante: 'Ristorante Due', indirizzo: 'Via Due, 2')
 # Creazione di Users
 user1 = User.create(cliente: cliente1, username: 'user1', nome: 'Nome1', cognome: 'Cognome1', datanascita: '1990-01-01')
-user2 = User.create(cliente: cliente2, username: 'user2', nome: 'Nome2', cognome: 'Cognome2', datanascita: '1992-02-02')
 # Creazione di Critici
 critico1 = Critico.create(user: user1, certificato: 'Certificato1')
 
@@ -41,7 +40,7 @@ Recipe.create!(
   difficulty: "Facile",
   ingredients: "Pasta, pomodoro, olio d'oliva, aglio",
   procedure: "Cuocere la pasta. In una padella, far rosolare l'aglio nell'olio, aggiungere il pomodoro e condire la pasta.",
-  photo: "https://example.com/pasta.jpg",
+  photo: "pasta_pomodoro.jpg",
   ristoratore_id: 1  # Sostituisci con l'ID reale del ristoratore
 )
 # Ricetta 2
@@ -50,7 +49,7 @@ Recipe.create!(
   difficulty: "Media",
   ingredients: "Savoiardi, mascarpone, uova, zucchero, caffè",
   procedure: "Preparare il caffè e ammorbidire i savoiardi. Montare il mascarpone con le uova e lo zucchero, alternare gli strati di savoiardi inzuppati nel caffè e crema di mascarpone.",
-  photo: "https://example.com/tiramisu.jpg",
+  photo: "tiramisu.jpg",
   ristoratore_id: 2  # Sostituisci con l'ID reale del ristoratore
 )
 # Ricetta 3
@@ -59,7 +58,7 @@ Recipe.create!(
   difficulty: "Media",
   ingredients: "Farina, lievito, acqua, pomodoro, mozzarella, basilico",
   procedure: "Preparare l'impasto e lasciar lievitare. Stendere l'impasto e condire con pomodoro, mozzarella e basilico. Cuocere in forno.",
-  photo: "https://example.com/pizza.jpg",
+  photo: "pizza_margherita.jpg",
   ristoratore_id: 1  # Sostituisci con l'ID reale del ristoratore
 )
 
@@ -68,7 +67,7 @@ Recipe.create!(
 Competizione.create!(
   nome: "Concorso di cucina 2024",
   descrizione: "Partecipa al nostro concorso di cucina e mostra le tue abilità culinarie!",
-  locandina: "https://example.com/concorso_cucina.jpg",
+  locandina: "competizione_cucina.jpg",
   requisiti: "Aperto a tutti i chef amatoriali e professionisti",
   premio: "Buoni pasto e visibilità sul nostro sito web",
   tag: "Cucina, Concorso, Chef",
@@ -82,7 +81,7 @@ Competizione.create!(
 Competizione.create!(
   nome: "Festival di cocktail estivi",
   descrizione: "Un festival estivo dedicato ai cocktail più innovativi!",
-  locandina: "https://example.com/festival_cocktail.jpg",
+  locandina: "competizione_cocktails.jpg",
   requisiti: "Aperto a tutti gli appassionati di cocktail",
   premio: "Voucher per barman professionisti",
   tag: "Cocktail, Bar, Festival",
@@ -96,7 +95,7 @@ Competizione.create!(
 Competizione.create!(
   nome: "Challenge di pasticceria 2024",
   descrizione: "Metti alla prova le tue abilità in pasticceria!",
-  locandina: "https://example.com/challenge_pasticceria.jpg",
+  locandina: "competizione_pasticceria.jpeg",
   requisiti: "Aperto a tutti gli appassionati di dolci",
   premio: "Corso di pasticceria avanzato",
   tag: "Pasticceria, Dolci, Challenge",
