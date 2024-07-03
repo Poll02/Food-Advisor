@@ -56,23 +56,31 @@
     <p>storia</p>
   </div>
 </div>
+
 <h3>Recensioni</h3>
 <div class="r-recensioni">
-  <div class="r-recensione">
-    <%= image_tag 'background.jpg', class: 'recensione-foto' %>    
-    <div class="recensione-info">
-        <p>Nome</p>
-        <p>Stelle</p>
-        <p>Descrizione</p>
-    </div>
-    <div class="recensione-icon">
+  <% if @reviews.any? %>
+    <% @reviews.each do |review| %>
+      <div class="r-recensione">
+      <%= image_tag 'background.jpg', class: 'recensione-foto' %>    
+      <div class="recensione-info">
+        <p><%= review.cliente.user.username %></p>
+        <p><%= review.stelle %></p>
+        <p><%= review.commento %></p>
+      </div>
+      <div class="recensione-icon">
         <i class="fa-regular fa-thumbs-up"></i>
         <i class="fa-solid fa-thumbtack"></i>
         <i class="fa-solid fa-ban"></i>
         <i class="fa-solid fa-retweet"></i>
+      </div>
     </div>
-  </div>
+    <% end %>
+  <%else%>
+    <p>Nessuna recensione trovata</p>
+  <% end %>
 </div>
+
 <h3>Ricette Condivise</h3>
 <div class="r-ricette">
   <% if @recipes.any? %>

@@ -47,6 +47,44 @@ class InfoController < ApplicationController
     end
   end
 
+  def bookings_per_week
+    start_date = Date.parse(params[:start_date])
+    end_date = start_date.end_of_week(:sunday)
+
+    bookings = Prenotazione.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+                      .group("DATE(created_at)")
+                      .count
+
+    reviews = Recensione.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+                    .group("DATE(created_at)")
+                    .count
+
+    render json: { bookings: bookings, reviews: reviews }
+  end
+
+  def daily_bookings_and_events
+    year = params[:year].to_i
+    month = params[:month].to_i
+    day = params[:day].to_i
+
+    start_date = Date.new(year, month, day).beginning_of_day
+    end_date = Date.new(year, month, day).end_of_day
+
+    # Query per le prenotazioni
+    @prenotazioni_oggi = Prenotazione.where(data: start_date..end_date)
+
+    # Query per gli eventi
+    @eventi_oggi = Evento.where(data: start_date..end_date)
+
+    # Puoi aggiungere ulteriori query per altri tipi di dati giornalieri
+
+    # Renderizza il JSON con tutte le informazioni
+    render json: {
+      prenotazioni: @prenotazioni_oggi,
+      eventi: @eventi_oggi,
+    }
+  end
+
   private
 
   def require_logged_in

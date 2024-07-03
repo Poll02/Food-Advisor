@@ -1,4 +1,15 @@
 <div class="pagina-vetrina">
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+      <!-- Stelle vuote -->
+        <symbol id="empty-star" viewBox="0 0 576 512">
+          <path fill="none" stroke="gold" stroke-width="40" d="M288 350.1l-120.4 63.2 23.1-120.5-97.6-84.7 134.9-13 53.2-122.4 53.2 122.4 134.9 13-97.6 84.7 23.1 120.5z"/>
+        </symbol>
+
+      <!-- Stelle piene -->
+        <symbol id="filled-star" viewBox="0 0 576 512">
+          <path fill="gold" d="M288 350.1l-120.4 63.2 23.1-120.5-97.6-84.7 134.9-13 53.2-122.4 53.2 122.4 134.9 13-97.6 84.7 23.1 120.5z"/>
+        </symbol>
+    </svg>
   
     <div class="rest-foto-name">
     <i class="fa-regular fa-star"></i>
@@ -33,7 +44,7 @@
 
     </div>
     <div class="review-reserve-buttons">
-        <button type="button">Lascia una Recensione</button>
+        <button type="button" class="review">Lascia una Recensione</button>
         <button type="button" style="background-color: rgb(234, 183, 121);" class="open-reserv-modal">Prenota un Tavolo</button>
 
         <div id="reservModal" class="reserv-modal">
@@ -53,7 +64,46 @@
           </div>
         </div>
 
+    </div>
+
+    <div id="reviewModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Lascia una Recensione</h2>
+        <% if current_user.present? %>
+        <%= form_with( url: reviews_path, method: "post", local: true) do |form| %>
+          <%= form.hidden_field :cliente_id, value: @current_user.cliente.id %>
+          <%= form.hidden_field :ristoratore_id, value: @restaurant_owner.cliente.id %>
+          <%= form.label :stelle, "Stelle:" %>
+          <div class="star-rating">
+            <svg class="star" viewBox="0 0 576 512" onclick="selectStar(1)">
+              <use xlink:href="#empty-star"></use>
+            </svg>
+            <svg class="star" viewBox="0 0 576 512" onclick="selectStar(2)">
+              <use xlink:href="#empty-star"></use>
+            </svg>
+            <svg class="star" viewBox="0 0 576 512" onclick="selectStar(3)">
+              <use xlink:href="#empty-star"></use>
+            </svg>
+            <svg class="star" viewBox="0 0 576 512" onclick="selectStar(4)">
+              <use xlink:href="#empty-star"></use>
+            </svg>
+            <svg class="star" viewBox="0 0 576 512" onclick="selectStar(5)">
+              <use xlink:href="#empty-star"></use>
+            </svg>
+          </div>
+          <%= form.hidden_field :stelle, id: "stars" %>
+          <br><br>
+          <%= form.label :commento, "Commento:" %>
+          <%= form.text_area :commento, id: "commento", rows: 4, cols: 50 %>
+          <br><br>
+          <%= form.submit "Invia" %>
+        <% end %>
+        <%end%>
       </div>
+    </div>
+
+
       <h1>Eventi</h1>
 
       <div class="public-r-events">
@@ -124,6 +174,7 @@
     </div>
     </div>
     <hr class="solid" id="divider" style="width: 70%;">
+    
     <h1 style="margin-bottom: 20px;">Recensioni</h1>
     <div class="reviews-filters">
       <p style="font-weight: bold;">Filtra per:</p>
@@ -131,36 +182,30 @@
       <p>Numero di stelle da a</p>
     </div>
     <div class="public-r-reviews-grid">
-      <div class="public-r-reviews">
-        <%= image_tag 'background.jpg'%>
-        <div class="public-review-details">
-          <h3>Nome Utente</h3>
-          <p>n. stelle</p>
-          <p>Testo della recensione. Il testo dovrebbe rispettare dei caratteri minimi e massimi e dobbiamo decidere come gestirne la visualizzazione</p>
-          <p style="font-style: italic; font-size: 13px;">in data DATA</p>
-        </div>
-        
-      </div>
-      <div class="public-r-reviews">
-        <%= image_tag 'background.jpg'%>
-        <div class="public-review-details">
-          <h3>Nome Utente</h3>
-          <p>n. stelle</p>
-          <p>Testo della recensione. Il testo dovrebbe rispettare dei caratteri minimi e massimi e dobbiamo decidere come gestirne la visualizzazione</p>
-          <p style="font-style: italic; font-size: 13px;">in data DATA</p>
-        </div>
-        
-      </div>
-
+      <% if @reviews.any? %>
+        <% @reviews.each do |review| %>
+          <div class="public-r-reviews">
+            <%= image_tag 'background.jpg' %>
+            <div class="public-review-details">
+              <h3><%= review.cliente.user.username %></h3> <!-- Assumi che il cliente abbia un attributo 'nome' -->
+              <p><%= review.stelle %> stelle</p>
+              <p><%= review.commento %></p>
+              <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <p>Nessuna recensione trovata</p>
+      <% end %>
     </div>
+    
 
 
     
 </div>
 
-
-<!--Creazione Prenotazione-->
 <script>
+// JS creazione prenotazione
 document.addEventListener('DOMContentLoaded', function() {
   var reservModal = document.getElementById('reservModal');
   var btn = document.querySelector('.open-reserv-modal');
@@ -226,4 +271,68 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+
+// JS recensioni
+function selectStar(value) {
+  // Resetta tutte le stelle
+  document.querySelectorAll('.star use').forEach(use => {
+    use.setAttribute('xlink:href', '#empty-star');
+  });
+
+  // Imposta le stelle fino al valore cliccato
+  for (let i = 1; i <= value; i++) {
+    document.querySelector(`.star:nth-child(${i}) use`).setAttribute('xlink:href', '#filled-star');
+  }
+
+  // Aggiorna il valore nascosto per inviarlo al server
+  document.getElementById('stars').value = value;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  function openModal() {
+    document.getElementById('reviewModal').style.display = 'block';
+  }
+
+  function closeModal() {
+    document.getElementById('reviewModal').style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    var modal = document.getElementById('reviewModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+
+  document.querySelector('.review').onclick = openModal;
+  document.querySelector('.close').onclick = closeModal;
+});
+
 </script>
+
+
+<style>
+.star-rating {
+  display: flex;
+  justify-content: center; /* Centra le stelle orizzontalmente */
+  gap: 10px; /* Spazio tra le stelle */
+}
+
+/* Stile base per ogni stella */
+.star {
+  width: 40px; /* Dimensione delle stelle */
+  height: 40px;
+  cursor: pointer; /* Cambia il cursore al passaggio del mouse */
+}
+
+/* Stile per le stelle selezionate */
+.star.selected {
+  fill: gold; /* Colore dorato per le stelle piene */
+}
+
+/* Stile per le stelle non selezionate */
+.star:not(.selected) {
+  fill: none; /* Stelle vuote senza riempimento */
+}
+
+</style>

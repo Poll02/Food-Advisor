@@ -31,13 +31,14 @@
       <ul>
         <% case session[:role] %>
           <% when 'Admin' %>
-            
+            <li><%= link_to 'Dashboard', admin_profile_path %></li>
           <% when 'Ristoratore' %>
             <li><%= link_to 'Dashboard', dashboard_path %></li>
             <li><%= link_to 'Info', info_path %></li>
           <% when 'User' %>
             <li><%= link_to 'Dashboard', user_profile_path %></li>
           <% when 'Critico' %>
+            <li><%= link_to 'Dashboard', critic_profile_path %></li>
         <% end %>
         <li><%= link_to raw('<i class="fa fa-cog" aria-hidden="true"></i>'), settings_path %></li>
       </ul>

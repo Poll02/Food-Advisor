@@ -23,7 +23,9 @@ Rails.application.routes.draw do
   resources :problems, only: [:create]
   
   
-
+  # grafico
+  get 'bookings_per_week', to: 'info#bookings_per_week'
+  get 'daily_bookings_and_events', to: 'info#daily_bookings_and_events'
 
   #
   # Rotta per il form di login (GET e POST)
@@ -98,7 +100,9 @@ Rails.application.routes.draw do
   get 'auth/google_oauth2/callback', to: 'sessions#create'
   get 'auth/failure', to: redirect('/')
     
-  get 'home/index' 
+  get 'home/index'
+  
+
 
   # rotte per la pagina di ricerca
   get 'ricerca', to: 'ricerca#index'
@@ -130,6 +134,12 @@ Rails.application.routes.draw do
   # Rotte aggiunte per creare e distruggere un dipendente
   post 'info/create_dipendente', to: 'info#create_dipendente', as: 'create_dipendente_info'
   delete 'info/destroy_dipendente/:id', to: 'info#destroy_dipendente', as: 'destroy_dipendente'
+
+
+    #rotta per le recensioni
+    resources :reviews, only: [:create]
+    # rotta per visualizzare le recensioni pubbliche
+    get '/public_show', to: 'reviews#public_show', as: 'public_show_reviews'
 
 
 end

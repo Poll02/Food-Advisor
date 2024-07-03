@@ -3,8 +3,7 @@ class PrenotazioneController < ApplicationController
 
   def create
     @prenotazione = Prenotazione.new(prenotazione_params)
-    @current_user = User.find_by(id: session[:id])
-    @prenotazione.user_id = @current_user.id
+    @prenotazione.user_id = @current_user.cliente.user.id
 
     if @prenotazione.save
       render json: { success: true }

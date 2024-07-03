@@ -7,6 +7,10 @@
             <span style="font-weight: bold;"><%= @current_user.cliente.user.nome %></span>
             <% elsif session[:role] == 'Ristoratore' %>
             <span style="font-weight: bold;"><%= @current_user.cliente.ristoratore.nomeristorante %></span>
+            <% elsif session[:role] == 'Critico' %>
+            <span style="font-weight: bold;"><%= @current_user.cliente.user.nome %></span>
+            <% elsif session[:role] == 'Admin' %>
+            <span style="font-weight: bold;"><%= @current_user.admin.nome %></span>
             <% end %>
             !
         </p> 
