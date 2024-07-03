@@ -8,5 +8,7 @@ class Ristoratore < ApplicationRecord
     has_many :tags, through: :chooses
     has_many :recipes, dependent: :destroy
     has_many :dipendentes, dependent: :destroy
+    has_many :prenotaziones, dependent: :destroy
+
   end
   

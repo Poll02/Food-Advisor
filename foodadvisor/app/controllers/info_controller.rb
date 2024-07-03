@@ -7,6 +7,9 @@ class InfoController < ApplicationController
   
   def show
     @dipendenti = @restaurant_owner.cliente.ristoratore.dipendentes
+    @prenotazioni = Prenotazione.where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id)
+    @prenotazioni_oggi = Prenotazione.where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id, data: Date.today)
+
   end
 
   def create_dipendente

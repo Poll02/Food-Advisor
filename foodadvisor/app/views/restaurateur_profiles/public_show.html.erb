@@ -1,4 +1,5 @@
 <div class="pagina-vetrina">
+  
     <div class="rest-foto-name">
     <i class="fa-regular fa-star"></i>
         <div class="rest-info-public">
@@ -33,7 +34,24 @@
     </div>
     <div class="review-reserve-buttons">
         <button type="button">Lascia una Recensione</button>
-        <button type="button" style="background-color: rgb(234, 183, 121);">Prenota un Tavolo</button>
+        <button type="button" style="background-color: rgb(234, 183, 121);" class="open-reserv-modal">Prenota un Tavolo</button>
+
+        <div id="reservModal" class="reserv-modal">
+          <div class="reserv-modal-content">
+            <span class="close-reserv-modal">&times;</span>
+            <h2>Effettua una Prenotazione</h2>
+            <form id="reservForm">
+              <label for="num_persone">Numero di Persone:</label>
+              <input type="number" id="num_persone" name="num_persone" required>
+              <label for="data">Data:</label>
+              <input type="date" id="data" name="data" required>
+              <label for="orario">Orario:</label>
+              <input type="hidden" id="ristoratore_id" name="ristoratore_id" value="<%= @restaurant_owner.id %>">
+              <input type="time" id="orario" name="orario" required>
+              <button type="submit">Prenota</button>
+            </form>
+          </div>
+        </div>
 
       </div>
       <h1>Eventi</h1>
@@ -135,3 +153,69 @@
 
     
 </div>
+
+
+<!--Creazione Prenotazione-->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var reservModal = document.getElementById('reservModal');
+  var btn = document.querySelector('.open-reserv-modal');
+  var span = document.getElementsByClassName('close-reserv-modal')[0];
+
+  btn.onclick = function() {
+    reservModal.style.display = 'block';
+  }
+
+  span.onclick = function() {
+    reservModal.style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    if (event.target == reservModal) {
+      reservModal.style.display = 'none';
+    }
+  }
+
+  document.getElementById('reservForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+
+    var num_persone = document.getElementById('num_persone').value;
+    var data = document.getElementById('data').value;
+    var orario = document.getElementById('orario').value;
+    var ristoratore_id = document.getElementById('ristoratore_id').value;
+
+
+    fetch('/prenotazioni', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+      },
+      body: JSON.stringify({
+        prenotazione: {
+          numero_persone: num_persone,
+          data: data,
+          orario: orario,
+          ristoratore_id: ristoratore_id
+
+        }
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Prenotazione effettuata con successo!');
+      } else {
+        alert('Errore durante la prenotazione. Riprova.');
+      }
+      reservModal.style.display = 'none';
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Errore durante la prenotazione. Riprova.');
+      reservModal.style.display = 'none';
+    });
+  });
+});
+</script>

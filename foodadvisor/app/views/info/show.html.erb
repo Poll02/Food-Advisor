@@ -11,30 +11,22 @@
 
       <h3>Gestione Prenotazioni</h3>
       <div class="i-section">
-        <div class="prenotazione">
-            <%= image_tag 'background.jpg', class: 'pren-foto', alt: 'Tagliatelle' %>    
-            <div class="pren-info">
-                <p>Nome</p>
-                <p>Orario</p>
-                <p>N persone</p>
-            </div>
-            <div class="pren-icon">
-                <i class="fa-solid fa-check"></i>
-                <i class="fa-solid fa-ban"></i>
-            </div>
-        </div>
-        <div class="prenotazione">
-            <%= image_tag 'background.jpg', class: 'pren-foto', alt: 'Tagliatelle' %>    
-            <div class="pren-info">
-                <p>Nome</p>
-                <p>Orario</p>
-                <p>N persone</p>
-            </div>
-            <div class="pren-icon">
-                <i class="fa-solid fa-check"></i>
-                <i class="fa-solid fa-ban"></i>
-            </div>
-        </div>
+        <% @prenotazioni.each do |prenotazione| %>
+  <div class="prenotazione">
+    <%= image_tag 'background.jpg' %>    
+    <div class="pren-info">
+      <p style="font-weight: bold;">Nome Cliente: <span style="font-weight: normal;"><%= prenotazione.user.nome %> <%= prenotazione.user.cognome %></span></p>
+      <p style="font-weight: bold;">N. Persone: <span style="font-weight: normal;"><%= prenotazione.numero_persone %></span></p>
+      <p style="font-weight: bold;">Data: <span style="font-weight: normal;"><%= prenotazione.data %></span></p>
+      <p style="font-weight: bold;">Orario: <span style="font-weight: normal;"><%= prenotazione.orario.strftime("%H:%M") %></span></p>
+    </div>
+    <div class="pren-icon">
+      <i class="fa-solid fa-check"></i>
+      <i class="fa-solid fa-ban"></i>
+    </div>
+  </div>
+<% end %>
+
       </div>
     </div>
 
@@ -46,18 +38,25 @@
 
       <h3>Prenotazioni Quotidiane</h3>
       <div class="i-section">
-        <div class="prenotazione">
-            <%= image_tag 'background.jpg', class: 'pren-foto', alt: 'Tagliatelle' %>    
-            <div class="pren-info">
-                <p>Nome</p>
-                <p>Orario</p>
-                <p>N persone</p>
-            </div>
-            <div class="pren-icon">
-                <i class="fa-solid fa-check"></i>
-                <i class="fa-solid fa-ban"></i>
-            </div>
-        </div>
+        <% if @prenotazioni_oggi.any? %>
+  <% @prenotazioni_oggi.each do |prenotazione| %>
+    <div class="prenotazione">
+      <%= image_tag 'background.jpg' %>    
+      <div class="pren-info">
+        <p style="font-weight: bold;">Nome Cliente: <span style="font-weight: normal;"><%= prenotazione.user.nome %> <%= prenotazione.user.cognome %></span></p>
+        <p style="font-weight: bold;">N. Persone: <span style="font-weight: normal;"><%= prenotazione.numero_persone %></span></p>
+        <p style="font-weight: bold;">Data: <span style="font-weight: normal;"><%= prenotazione.data %></span></p>
+        <p style="font-weight: bold;">Orario: <span style="font-weight: normal;"><%= prenotazione.orario.strftime("%H:%M") %></span></p>
+      </div>
+      <div class="pren-icon">
+        <i class="fa-solid fa-check"></i>
+        <i class="fa-solid fa-ban"></i>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <p>Nessuna prenotazione per oggi.</p>
+<% end %>
       </div>
     </div>
   </div>

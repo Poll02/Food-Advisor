@@ -21,6 +21,9 @@ Rails.application.routes.draw do
   get 'classifiche', to: 'classifiche#index'
   get 'supporto', to: 'supporto#index'
   resources :problems, only: [:create]
+  
+  
+
 
   #
   # Rotta per il form di login (GET e POST)
@@ -50,6 +53,8 @@ Rails.application.routes.draw do
       post 'join', to: 'competizione#join_competition'
     end
   end
+
+  resources :prenotazioni, controller: 'prenotazione', only: [:create]
 
   #routes for profiles
   get 'critic_profile', to: 'critic_profile#show'
@@ -127,5 +132,6 @@ Rails.application.routes.draw do
   # Rotte aggiunte per creare e distruggere un dipendente
   post 'info/create_dipendente', to: 'info#create_dipendente', as: 'create_dipendente_info'
   delete 'info/destroy_dipendente/:id', to: 'info#destroy_dipendente', as: 'destroy_dipendente'
+
 
 end
