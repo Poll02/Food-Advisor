@@ -9,14 +9,14 @@
             <a href="#" class="active"  onclick="toggleDropdown()"><ion-icon name="person-circle-outline"></ion-icon></a>
             <div class="dropdown" id="dropdown">
                 <% if logged_in? %>
-                    <% case current_user.role %>
-                        <% when 'admin' %>
+                    <% case session[:role] %>
+                        <% when 'Admin' %>
                         <a href="/admin_profile">Visualizza Profilo</a>
-                        <% when 'restaurant_owner' %>
+                        <% when 'Ristoratore' %>
                         <a href="/rest_profile">Visualizza Profilo</a>
-                        <% when 'user' %>
+                        <% when 'User' %>
                         <a href="/user_profile">Visualizza Profilo</a>
-                        <% when 'critic' %>
+                        <% when 'Critico' %>
                         <a href="/critic_profile">Visualizza Profilo</a>
                     <% end %>
                     <a href="/logout">Logout</a>

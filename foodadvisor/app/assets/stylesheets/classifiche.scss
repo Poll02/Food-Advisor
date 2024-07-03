@@ -50,3 +50,30 @@
     max-height: 400px;
     overflow-y: scroll;
 }
+
+.user-competition-ranking{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.user-competition-ranking-box{
+    display: flex;
+    gap: 20px;
+    background-color: antiquewhite;
+    border-radius: 15px;
+    padding: 10px;
+    align-items: center;
+}
+
+.user-competition-ranking-box img{
+    width: 200px;
+    height: 100px;
+    border-radius: 10px;
+}
+
+
+.competition-ranking-details{
+    display: flex;
+    flex-direction: column;
+}

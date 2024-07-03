@@ -1,29 +1,31 @@
 <div class="pagina-vetrina">
+  
     <div class="rest-foto-name">
+    <i class="fa-regular fa-star"></i>
         <div class="rest-info-public">
-            <h1 style="font-size: 50px;"><%= @restaurant_owner.restaurant_name %></h1>
+            <h1 style="font-size: 50px; color: black; "><%= @restaurant_owner.nomeristorante %></h1>
             <h2>n. stelle</h2>
             <h3>n. recensioni</h3>
             <% if @tags.present? %>
               <h2 style="margin-top: 20px;">TAGS: </h2>
               <% @tags.each do |tag| %>
-                <span class="r-tag"><%= tag.name %></span>
+                <span class="r-tag"><%= tag.nome %></span>
               <% end %>
             <% else %>
               <p>Nessun tag associato</p>
             <% end %>
           </div>
-          <% if @restaurant_owner.photo.present? %>
-            <%= image_tag @restaurant_owner.photo %>
+          <% if @restaurant_owner.cliente.foto.present? %>
+            <%= image_tag "background.jpg" %>
         <% else %>
             <%= image_tag "background.jpg" %>
         <% end %>
   <div class="rest-info-public-right">
     <h3>Informazioni</h3>
-    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.email %></span></p>
-    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.phone %></span></p>
-    <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;">Indirizzo Ristorante</span></p>
-    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;">Asporto</span></p>
+    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.email %></span></p>
+    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.telefono %></span></p>
+    <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"> <%= @restaurant_owner.indirizzo %></span></p>
+    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> <%= @restaurant_owner.asporto %></span></p>
     
   </div>
   
@@ -32,13 +34,30 @@
     </div>
     <div class="review-reserve-buttons">
         <button type="button">Lascia una Recensione</button>
-        <button type="button" style="background-color: rgb(234, 183, 121);">Prenota un Tavolo</button>
+        <button type="button" style="background-color: rgb(234, 183, 121);" class="open-reserv-modal">Prenota un Tavolo</button>
+
+        <div id="reservModal" class="reserv-modal">
+          <div class="reserv-modal-content">
+            <span class="close-reserv-modal">&times;</span>
+            <h2>Effettua una Prenotazione</h2>
+            <form id="reservForm">
+              <label for="num_persone">Numero di Persone:</label>
+              <input type="number" id="num_persone" name="num_persone" required>
+              <label for="data">Data:</label>
+              <input type="date" id="data" name="data" required>
+              <label for="orario">Orario:</label>
+              <input type="hidden" id="ristoratore_id" name="ristoratore_id" value="<%= @restaurant_owner.id %>">
+              <input type="time" id="orario" name="orario" required>
+              <button type="submit">Prenota</button>
+            </form>
+          </div>
+        </div>
 
       </div>
       <h1>Eventi</h1>
 
       <div class="public-r-events">
-        <div class="restaurants-grid" style="width: 1300px; justify-content: center;">
+        <div class="restaurants-grid">
         <% if @eventi.present? %>
  
             <% @eventi.each do |evento| %>
@@ -78,56 +97,125 @@
       <p>Nessuna promozione attiva</p>
     <% end %>
         
-      </div>
-      <hr class="solid" id="divider" style="width: 70%;">
-      <h1 style="margin-bottom: 20px;">Ricette Condivise</h1>
-      <div class="r-public-recipes">
-        <div class="restaurants-grid" style="width: 1300px; justify-content: center;" id="recipes-grid">
-          <div class="restaurant-box" id="recipes-box">
-            <%= image_tag 'background.jpg', class: 'evento-foto' %>
-            <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
-              <p>Nome Ricetta</p>
-              <p style="font-size: 13px; font-weight: normal;">Difficoltà: <span>Difficoltà</span></p>
-              <p style="font-size: 13px; font-weight: normal;">Ingredienti: <span>Ingredienti</span></p>
-              <p style="font-size: 13px; font-weight: normal; font-style: italic;">Clicca per vedere il procedimento</p>
-            </div>
-          </div>
-      </div>
-      </div>
-      <hr class="solid" id="divider" style="width: 70%;">
-      <h1 style="margin-bottom: 20px;">Recensioni</h1>
-      <div class="reviews-filters">
-        <p style="font-weight: bold;">Filtra per:</p>
-        <p>Data</p>
-        <p>Numero di stelle da a</p>
-      </div>
-      <div class="public-r-reviews-grid">
-        <div class="public-r-reviews">
+    </div>
+    <hr class="solid" id="divider" style="width: 70%;">
+    <h1 style="margin-bottom: 20px;">Ricette Condivise</h1>
+    <div class="r-public-recipes">
+      <div class="restaurants-grid" style="width: 1300px; justify-content: center;" id="recipes-grid">
+        <% if @recipes.any? %>
+      <% @recipes.each do |recipe| %>
+        <div class="restaurant-box" id="recipes-box">
           <%= image_tag 'background.jpg'%>
-          <div class="public-review-details">
-            <h3>Nome Utente</h3>
-            <p>n. stelle</p>
-            <p>Testo della recensione. Il testo dovrebbe rispettare dei caratteri minimi e massimi e dobbiamo decidere come gestirne la visualizzazione</p>
-            <p style="font-style: italic; font-size: 13px;">in data DATA</p>
+          <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
+            <p><%= recipe.name %></p>
+            <p style="font-size: 13px; font-weight: normal;">Difficoltà: <span><%= recipe.difficulty %></span></p>
+            <p style="font-size: 13px; font-weight: normal;">Ingredienti: <span><%= recipe.ingredients %></span></p>
+            <p style="font-size: 13px; font-weight: normal; font-style: italic;">Clicca per vedere il procedimento</p>
           </div>
-          
         </div>
-        <div class="public-r-reviews">
-          <%= image_tag 'background.jpg'%>
-          <div class="public-review-details">
-            <h3>Nome Utente</h3>
-            <p>n. stelle</p>
-            <p>Testo della recensione. Il testo dovrebbe rispettare dei caratteri minimi e massimi e dobbiamo decidere come gestirne la visualizzazione</p>
-            <p style="font-style: italic; font-size: 13px;">in data DATA</p>
-          </div>
-          
+      <% end %>
+    <% else %>
+      <p>Il ristorante non ha condiviso ricette</p>
+    <% end %>
+    </div>
+    </div>
+    <hr class="solid" id="divider" style="width: 70%;">
+    <h1 style="margin-bottom: 20px;">Recensioni</h1>
+    <div class="reviews-filters">
+      <p style="font-weight: bold;">Filtra per:</p>
+      <p>Data</p>
+      <p>Numero di stelle da a</p>
+    </div>
+    <div class="public-r-reviews-grid">
+      <div class="public-r-reviews">
+        <%= image_tag 'background.jpg'%>
+        <div class="public-review-details">
+          <h3>Nome Utente</h3>
+          <p>n. stelle</p>
+          <p>Testo della recensione. Il testo dovrebbe rispettare dei caratteri minimi e massimi e dobbiamo decidere come gestirne la visualizzazione</p>
+          <p style="font-style: italic; font-size: 13px;">in data DATA</p>
         </div>
-
+        
       </div>
-      
+      <div class="public-r-reviews">
+        <%= image_tag 'background.jpg'%>
+        <div class="public-review-details">
+          <h3>Nome Utente</h3>
+          <p>n. stelle</p>
+          <p>Testo della recensione. Il testo dovrebbe rispettare dei caratteri minimi e massimi e dobbiamo decidere come gestirne la visualizzazione</p>
+          <p style="font-style: italic; font-size: 13px;">in data DATA</p>
+        </div>
+        
+      </div>
 
-
+    </div>
 
 
     
 </div>
+
+
+<!--Creazione Prenotazione-->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  var reservModal = document.getElementById('reservModal');
+  var btn = document.querySelector('.open-reserv-modal');
+  var span = document.getElementsByClassName('close-reserv-modal')[0];
+
+  btn.onclick = function() {
+    reservModal.style.display = 'block';
+  }
+
+  span.onclick = function() {
+    reservModal.style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    if (event.target == reservModal) {
+      reservModal.style.display = 'none';
+    }
+  }
+
+  document.getElementById('reservForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+
+    var num_persone = document.getElementById('num_persone').value;
+    var data = document.getElementById('data').value;
+    var orario = document.getElementById('orario').value;
+    var ristoratore_id = document.getElementById('ristoratore_id').value;
+
+
+    fetch('/prenotazioni', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
+      },
+      body: JSON.stringify({
+        prenotazione: {
+          numero_persone: num_persone,
+          data: data,
+          orario: orario,
+          ristoratore_id: ristoratore_id
+
+        }
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Prenotazione effettuata con successo!');
+      } else {
+        alert('Errore durante la prenotazione. Riprova.');
+      }
+      reservModal.style.display = 'none';
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Errore durante la prenotazione. Riprova.');
+      reservModal.style.display = 'none';
+    });
+  });
+});
+</script>

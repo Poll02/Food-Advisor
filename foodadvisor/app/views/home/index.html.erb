@@ -3,10 +3,10 @@
     <% if logged_in? %>
         <div class="alert" style="font-style: italic; color: #00b072;">
         <p>Benvenuto,
-            <% if current_user_role == 'User' %>
-            <span style="font-weight: bold;"><%= current_user.name %></span>
-            <% elsif current_user_role == 'Ristoratore' %>
-            <span style="font-weight: bold;"><%= current_user.restaurant_name %></span>
+            <% if session[:role] == 'User' %>
+            <span style="font-weight: bold;"><%= @current_user.cliente.user.nome %></span>
+            <% elsif session[:role] == 'Ristoratore' %>
+            <span style="font-weight: bold;"><%= @current_user.cliente.ristoratore.nomeristorante %></span>
             <% end %>
             !
         </p> 
@@ -25,13 +25,13 @@
             <% @recent_restaurants.each do |ristoratore| %>
                 <%= link_to public_restaurant_profile_path(ristoratore.id), class: 'restaurant-link' do %>
                 <div class="restaurant-box">
-                    <% if ristoratore.photo.present? %>
-                        <%= image_tag ristoratore.photo %>
+                    <% if ristoratore.cliente.foto.present? %>
+                        <%= image_tag "background.jpg" %>
                     <% else %>
                         <%= image_tag "background.jpg" %>
                     <% end %>
                     <div class="text-overlay">
-                        <%= ristoratore.restaurant_name %> 
+                        <%= ristoratore.nomeristorante %> 
                         <p style="font-weight: normal;">5<span style="font-weight: normal;"><ion-icon name="star" style="font-size: 15px;"></ion-icon></p>
                         <p style="font-weight: normal; font-style: italic;">n. recensioni</p>
                     </div>
@@ -58,8 +58,8 @@
         </div>
         
         <div class="restaurants-grid">
-            <% @eventi.each do |evento| %>
-                <%= link_to public_restaurant_profile_path(evento.owner), class: 'restaurant-link' do %>
+            <% @upcoming_events.each do |evento| %>
+                <%= link_to public_restaurant_profile_path(evento.ristoratore_id), class: 'restaurant-link' do %>
               <div class="restaurant-box">
                 <% if evento.locandina.present? %>
                     <%= image_tag evento.locandina, class: 'evento-foto'  %>
