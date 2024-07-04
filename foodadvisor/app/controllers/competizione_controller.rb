@@ -9,11 +9,23 @@ class CompetizioneController < ApplicationController
 
   def join_competition
     Rails.logger.debug "join_competition called with params: #{params.inspect}"
-    
+
     competizione = Competizione.find(params[:id])
     Rails.logger.debug "Found competizione: #{competizione.inspect}"
 
-    participation = UserCompetition.new(user: current_user, competizione: competizione)
+    existing_participation = UserCompetition.find_by(user: @current_user.cliente.user, competizione: competizione)
+
+    if existing_participation
+      Rails.logger.debug "User already registered for this competition"
+      render json: { success: false, error: 'Sei già iscritto a questa competizione.' }
+      return
+    end
+
+    Rails.logger.debug "Search user"
+    persona = @current_user.cliente.user
+    Rails.logger.debug "Found persona: #{persona.inspect}"
+
+    participation = UserCompetition.new(user: persona, competizione: competizione)
     Rails.logger.debug "Created participation: #{participation.inspect}"
 
     if participation.save

@@ -1,7 +1,4 @@
-<%= stylesheet_link_tag 'home', media: 'all' %>
-
-<body>
-  <div class="classifica-page">
+<div class="classifica-page">
     <h1>Consigliate</h1>
     <div class="recommended">
       <div class="comp-grid">
@@ -59,9 +56,9 @@
         <% end %>
       </div>
     </div>
-  </div>
+</div>
 
-  <script>
+<script>
     document.addEventListener('DOMContentLoaded', function() {
       // Trova tutti gli elementi left-side-comp-box
       var compBoxes = document.querySelectorAll('.left-side-comp-box');
@@ -109,30 +106,30 @@
       });
     });
 
+    // JS per le competizioni
     document.addEventListener("DOMContentLoaded", function() {
-  document.querySelectorAll('.iscriviti-button').forEach(function(button) {
-    button.addEventListener('click', function() {
-      var competitionId = this.getAttribute('data-competizione-id');
+      document.querySelectorAll('.iscriviti-button').forEach(function(button) {
+        button.addEventListener('click', function() {
+          var competitionId = this.getAttribute('data-competizione-id');
 
-      fetch(`/competizione/${competitionId}/join`, {
-        method: 'POST',
-        headers: {
-          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-          'Content-Type': 'application/json'
-        },
-        credentials: 'same-origin'
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          alert('Partecipazione avvenuta con successo!');
-        } else {
-          alert('Errore nella partecipazione: ' + data.error);
-        }
+          console.log("id competizione", competitionId)
+          fetch(`/competizione/${competitionId}/join`, {
+            method: 'POST',
+            headers: {
+              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+              'Content-Type': 'application/json'
+            },
+            credentials: 'same-origin'
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              alert('Partecipazione avvenuta con successo!');
+            } else {
+              alert('Errore nella partecipazione: ' + data.error);
+            }
+          });
+        });
       });
     });
-  });
-});
-  </script>
-</body>
-</html>
+</script>
