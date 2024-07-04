@@ -1,7 +1,9 @@
 class ClassificheController < ApplicationController
     before_action :require_logged_in
     def index
-        @competitions = @current_user.cliente.user.competiziones
+        if session[:role] == 'User'
+          @competitions = @current_user.cliente.user.competiziones
+        end
     end
 
     private
