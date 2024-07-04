@@ -18,7 +18,7 @@ Rails.application.routes.draw do
 
   get 'classifiche', to: 'classifiche#index'
   get 'supporto', to: 'supporto#index'
-  resources :problems, only: [:create]
+  resources :problems
   
   
   # grafico

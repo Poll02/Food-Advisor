@@ -119,7 +119,6 @@ ActiveRecord::Schema.define(version: 2024_07_04_092344) do
   end
 
   create_table "problems", force: :cascade do |t|
-    t.integer "id_utente"
     t.string "text"
     t.integer "cliente_id", null: false
     t.datetime "created_at", precision: 6, null: false

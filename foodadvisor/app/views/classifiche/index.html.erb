@@ -74,6 +74,9 @@
 
     </div>
     <h3 style="font-size: 40px;">Classifiche di competizioni a cui partecipi</h3>
+    
+    <% if session[:role] == 'User' %>
+        <% if @competitions.any? %>
     <% @competitions.each do |competition| %>
     <div class="user-competition-ranking">
         <div class="user-competition-ranking-box">
@@ -102,6 +105,13 @@
         </div>
     </div>
     <% end %>
+    <% else %>
+        <p>Non partecipi a nessuna competizione<p>
+    <% end %>
+    <% else %>
+        <p>Solo gli utenti normali possono partecipare a competizioni<p>
+    <% end %>
+
 
 </div>
 
