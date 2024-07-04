@@ -1,0 +1,37 @@
+<!-- show.html.erb -->
+<div class="ricerca-menu-container" style="text-align: center; ">
+    <h1 style="font-size: 50px; "><%= @menu.ristoratore.nomeristorante %>'s Menu</h1>
+    <%= link_to "Modifica menu", edit_menus_path(@menu), class: "edit-link" %>
+    <div class="search-container">
+    <form id="find-form" action="<%= ricerca_path %>" method="get">
+        <div class="find-input" style="display: flex; align-items: center;">
+        <button type="submit" style="background: none; border: none; margin-bottom: 80px; cursor: pointer; padding: 0;">
+            <ion-icon name="search-outline" style="color: black;"></ion-icon>
+        </button>
+        <input type="text" id="findbar" name="query" placeholder="Inserisci qui il nome del ristorante" value="<%= params[:query] %>">
+        </div>
+        <button type="submit" style="display: none;"></button>
+        <ion-icon id="filter-icon" name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px; cursor: pointer;"></ion-icon>
+        <ion-icon name="pin-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon>
+    </form>
+</div>
+<div class="categories" style="text-align: center; ">
+  <% if @categories.any? %>
+    <% @categories.each do |category| %>
+      <div class="category">
+        <h2><%= category %></h2>
+        <ul>
+          <% @piattos.select { |piatto| piatto.categoria == category }.each do |piatto| %>
+            <div class="piatto">
+              <%= piatto.nome %><br>
+              prezzo: <%= piatto.prezzo %>€<br>
+              ingredienti: <%= piatto.ingredienti %>
+            </div>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  <% else %>
+    <p>Non hai categorie nel menu.</p>
+  <% end %>
+</div>

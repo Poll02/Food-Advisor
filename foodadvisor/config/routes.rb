@@ -9,9 +9,7 @@ Rails.application.routes.draw do
   get 'critic_profile/update'
   get 'competizione/index'
   get 'support/index'
-  get 'menus/show'
-  get 'menus/edit'
-  get 'menus/update'
+  
   # rotta per la pagina principale
   root 'home#index'
 
@@ -63,6 +61,11 @@ Rails.application.routes.draw do
   get 'rest_profile', to: 'restaurateur_profiles#show'
   get 'admin_profile', to: 'admin_profile#show'
   get 'user_profile', to: 'user_profile#show'
+
+  #rotta per il menu
+  #get 'menu', to: 'menus#show'
+  # piatti
+  #resources :piattos, only: [:index, :show, :create, :destroy, :new]
 
   # Rotta per la pagina di registrazione
   get 'signup', to: 'registration#new'
@@ -125,11 +128,16 @@ Rails.application.routes.draw do
     collection do
       patch 'update_info', to: 'restaurateur_profiles#update_info'
     end
-
   end
+
+  resource :menus
+  resource :piattos
+
   resource :settings, only: [:show, :edit, :update, :destroy]
   resources :eventi, only: [:create]
   resources :info, only: [:show] 
+
+  
   
   # Rotte aggiunte per creare e distruggere un dipendente
   post 'info/create_dipendente', to: 'info#create_dipendente', as: 'create_dipendente_info'

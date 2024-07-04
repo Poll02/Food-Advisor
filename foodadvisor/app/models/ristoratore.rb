@@ -9,6 +9,15 @@ class Ristoratore < ApplicationRecord
     has_many :recipes, dependent: :destroy
     has_many :dipendentes, dependent: :destroy
     has_many :prenotaziones, dependent: :destroy
+    has_one :menu, dependent: :destroy
+    
+    after_create :create_associated_menu
+
+    private
+
+    def create_associated_menu
+      create_menu
+    end
 
   end
   

@@ -1,0 +1,46 @@
+<h1>Aggiungi Piatto a <%= @menu.ristoratore.nomeristorante %>'s menu</h1>
+
+<%= form_with(model: [@piatto], local: true) do |form| %>
+  <% if @piatto.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@piatto.errors.count, "errore") %> non consentono di salvare il piatto:</h2>
+
+      <ul>
+        <% @piatto.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :foto %>
+    <%= form.file_field :foto %>
+  </div>
+
+  <div class="field">
+    <%= form.label :nome %>
+    <%= form.text_field :nome %>
+  </div>
+
+  <div class="field">
+    <%= form.label :categoria %>
+    <%= form.text_field :categoria %>
+  </div>
+
+  <div class="field">
+    <%= form.label :ingredienti %>
+    <%= form.text_field :ingredienti %>
+  </div>
+
+  <div class="field">
+    <%= form.label :prezzo %>
+    <%= form.text_field :prezzo %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Aggiungi Piatto" %>
+  </div>
+<% end %>
+
+<%= link_to "Annulla", edit_menus_path(@menu), class: "cancel-link" %>

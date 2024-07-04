@@ -1,0 +1,23 @@
+<div class="menu-ristoratore-edit" style="text-align: center; ">
+  <div class="categories">
+    <% @categories.each do |category| %>
+      <div class="category">
+        <h2><%= category %></h2>
+        <ul>
+          <% @piattos.select { |piatto| piatto.categoria == category }.each do |piatto| %>
+            <div class="piatto">
+              <%= piatto.nome %><br>
+              prezzo: <%= piatto.prezzo %>€<br>
+              ingredienti: <%= piatto.ingredienti %>
+            </div>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+  </div>
+
+  <%= link_to "Aggiungi Piatto", new_piattos_path(@menu), class: "add-button" %>
+
+
+    <%= link_to "Annulla", menus_path(@menu), class: "cancel-link" %>
+</div>

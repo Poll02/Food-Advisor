@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_02_184656) do
+ActiveRecord::Schema.define(version: 2024_07_04_092344) do
 
   create_table "admins", force: :cascade do |t|
     t.integer "utente_id", null: false
@@ -85,6 +85,25 @@ ActiveRecord::Schema.define(version: 2024_07_02_184656) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["ristoratore_id"], name: "index_eventos_on_ristoratore_id"
+  end
+
+  create_table "menus", force: :cascade do |t|
+    t.integer "ristoratore_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ristoratore_id"], name: "index_menus_on_ristoratore_id"
+  end
+
+  create_table "piattos", force: :cascade do |t|
+    t.integer "menu_id", null: false
+    t.string "nome"
+    t.float "prezzo"
+    t.string "foto"
+    t.string "ingredienti"
+    t.string "categoria"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["menu_id"], name: "index_piattos_on_menu_id"
   end
 
   create_table "prenotaziones", force: :cascade do |t|
@@ -210,6 +229,8 @@ ActiveRecord::Schema.define(version: 2024_07_02_184656) do
   add_foreign_key "criticos", "users"
   add_foreign_key "dipendentes", "ristoratores"
   add_foreign_key "eventos", "ristoratores"
+  add_foreign_key "menus", "ristoratores"
+  add_foreign_key "piattos", "menus"
   add_foreign_key "prenotaziones", "ristoratores"
   add_foreign_key "prenotaziones", "users"
   add_foreign_key "problems", "clientes"
