@@ -62,7 +62,11 @@
   <% if @reviews.any? %>
     <% @reviews.each do |review| %>
       <div class="r-recensione">
-      <%= image_tag 'background.jpg', class: 'recensione-foto' %>    
+      <% if review.cliente.foto.present? %>
+          <%= image_tag review.cliente.foto, class: 'recensione-foto' %>
+        <% else %>
+          <%= image_tag 'background.jpg', class: 'recensione-foto' %>
+        <% end %>
       <div class="recensione-info">
         <p><%= review.cliente.user.username %></p>
         <p><%= review.stelle %></p>
@@ -77,7 +81,7 @@
     </div>
     <% end %>
   <%else%>
-    <p>Nessuna recensione trovata</p>
+    <p>Non hai nessuna recensione</p>
   <% end %>
 </div>
 
