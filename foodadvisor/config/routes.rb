@@ -131,7 +131,7 @@ Rails.application.routes.draw do
   end
 
   resource :menus
-  resource :piattos
+  resources :piattos, only: [:new, :create, :destroy]
 
   resource :settings, only: [:show, :edit, :update, :destroy]
   resources :eventi, only: [:create]

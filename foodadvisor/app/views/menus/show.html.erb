@@ -23,7 +23,12 @@
         <ul>
           <% @piattos.select { |piatto| piatto.categoria == category }.each do |piatto| %>
             <div class="piatto">
-              <%= piatto.nome %><br>
+              <% if piatto.foto.present? %>
+                 <%= image_tag piatto.foto, style: 'width: 50px; height: auto;' if piatto.foto.present? %>
+              <% else %>
+                <%= image_tag 'background.jpg', style: 'width: 50px; height: auto;' %>
+              <% end %>
+              <br><%= piatto.nome %><br>
               prezzo: <%= piatto.prezzo %>€<br>
               ingredienti: <%= piatto.ingredienti %>
             </div>
