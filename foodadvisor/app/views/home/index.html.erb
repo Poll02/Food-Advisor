@@ -7,6 +7,10 @@
             <span style="font-weight: bold;"><%= @current_user.cliente.user.nome %></span>
             <% elsif session[:role] == 'Ristoratore' %>
             <span style="font-weight: bold;"><%= @current_user.cliente.ristoratore.nomeristorante %></span>
+            <% elsif session[:role] == 'Critico' %>
+            <span style="font-weight: bold;"><%= @current_user.cliente.user.nome %></span>
+            <% elsif session[:role] == 'Admin' %>
+            <span style="font-weight: bold;"><%= @current_user.admin.nome %></span>
             <% end %>
             !
         </p> 
@@ -26,7 +30,7 @@
                 <%= link_to public_restaurant_profile_path(ristoratore.id), class: 'restaurant-link' do %>
                 <div class="restaurant-box">
                     <% if ristoratore.cliente.foto.present? %>
-                        <%= image_tag "background.jpg" %>
+                        <%= image_tag ristoratore.cliente.foto %>
                     <% else %>
                         <%= image_tag "background.jpg" %>
                     <% end %>

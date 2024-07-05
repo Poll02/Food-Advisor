@@ -10,6 +10,8 @@ class Utente < ApplicationRecord
     
     accepts_nested_attributes_for :cliente
 
+    
+
     # Metodo authenticate
     def authenticate(password)
       # implementazione di base di has_secure_password

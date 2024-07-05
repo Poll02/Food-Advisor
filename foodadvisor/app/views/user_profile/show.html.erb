@@ -1,5 +1,102 @@
-<!-- app/views/customers/show.html.erb -->
-<h1>Profilo del Cliente</h1>
-<p>Nome: <%= @user.name %></p>
-<p>Email: <%= @user.email %></p>
-<!-- Aggiungi altre informazioni pertinenti -->
+<div class="p-user-profile">
+    <div class="p-user-photo-details">
+        <% if @current_user.cliente.foto.present? %>
+                <%= image_tag @current_user.cliente.foto %>
+            <% else %>
+                <%= image_tag 'background.jpg' %> <!-- Immagine competizione -->
+            <% end %>
+        <div class="p-user-details">
+            <h1>Dettagli</h1>
+            <p style="font-weight: bold;">Username: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.username%></span></p>
+            <p style="font-weight: bold;">Nome: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.nome%></span></p>
+            <p style="font-weight: bold;">Cognome: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.cognome%></span></p>
+
+            <p style="font-weight: bold;">Data di Nascita: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.datanascita%></span></p>
+            <p style="font-weight: bold;">Data Iscrizione: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.created_at.strftime('%d/%m/%Y')%></span></p>
+            <p style="font-weight: bold;">Email: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.utente.email%></span></p>
+            <p style="font-weight: bold;">Telefono: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.utente.telefono%></span></p>
+
+        </div>
+
+    </div>
+    <p style=>Hai <span style="font-weight: bold; color: rgb(60, 173, 135);">100 follower</span> e <span style="font-weight: bold; color: rgb(60, 173, 135);">segui 100 utenti</span></p>
+    <hr id="divider" class="solid">
+    <h1>Ultime recensioni</h1>
+    <div class="priv-recents-reviews">
+        <% if @recensioni.any? %>
+            <% @recensioni.each do |recensione| %>
+            <% ristorante = Ristoratore.find(recensione.ristoratore_id) %>
+
+        <div class="public-r-reviews">
+            <%= image_tag ristorante.cliente.foto %> <!-- Foto Ristorante-->
+            <div class="public-review-details">
+                <h3><%= ristorante.nomeristorante %></h3> <!-- Nome Ristorante -->
+                <p><%= recensione.stelle %> stelle</p>
+              <p><%= recensione.commento %></p>
+              <p style="font-style: italic; font-size: 13px;">in data <%= recensione.created_at.strftime('%d/%m/%Y') %></p>
+            </div>
+          </div>
+          <% end %>
+          <% else %>
+            <p>Nessuna recensione trovata</p>
+          <% end %>
+    </div>
+    <hr id="divider" class="solid">
+    <h1>Competizioni a cui sei iscritto</h1>
+    <div class="p-user-fav-events">
+
+        <% if @iscrizioni.any? %>
+            <% @iscrizioni.each do |iscrizione| %>
+            <% competizione = Competizione.find(iscrizione.competizione_id) %>
+        <div class="comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>">
+            <%= image_tag competizione.locandina %>
+            <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
+              <p><%= competizione.nome %></p>
+              <p style="font-size: 13px; font-weight: normal;"><%= competizione.descrizione %></p>
+              <p style="font-size: 13px; font-weight: normal;">Requisiti: <%= competizione.requisiti %> <span>Premi: <%= competizione.premio %></span></p>
+            </div>
+          </div>
+          <% end %>
+          <% else %>
+            <p>Nessuna competizione trovata</p>
+          <% end %>
+
+    </div>
+    <hr id="divider" class="solid">
+    <h1>Le tue Prenotazioni</h1>
+    <div class="p-user-reservs">
+        <% if @prenotazioni.any? %>
+            <% @prenotazioni.each do |prenotazione| %>
+            <% ristorante_prenotazione = Ristoratore.find(prenotazione.ristoratore_id) %>
+
+            <div class="p-user-reserv-box">
+                <p style="font-weight: bold;">Ristorante: <span id="right-side-requisiti" style="font-weight: normal;"><%= ristorante_prenotazione.nomeristorante %></span></p>
+                <p style="font-weight: bold;">Numero Persone: <span id="right-side-requisiti" style="font-weight: normal;"><%= prenotazione.numero_persone %></span></p>
+                <p style="font-weight: bold;">Data: <span id="right-side-requisiti" style="font-weight: normal;"><%= prenotazione.data %></span></p>
+                <p style="font-weight: bold;">Orario: <span id="right-side-requisiti" style="font-weight: normal;"><%= prenotazione.orario.strftime('%H:%M') %></span></p>
+
+                <p style="font-weight: bold;">Effettuata: <span id="right-side-requisiti" style="font-weight: normal;"><%= prenotazione.created_at.strftime('%d/%m/%Y') %></span></p>
+
+
+
+
+
+
+            </div>
+            <% end %>
+            
+            <% else %>
+            <p>Nessuna prenotazione trovata</p>
+          <% end %>
+
+        
+    </div>
+          
+
+
+
+    
+
+
+
+</div>

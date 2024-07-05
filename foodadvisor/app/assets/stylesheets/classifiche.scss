@@ -64,12 +64,19 @@
     border-radius: 15px;
     padding: 10px;
     align-items: center;
+    margin: 1%;
+    width: 700px;
+}
+
+.night-mode .user-competition-ranking-box {
+    color: black;
 }
 
 .user-competition-ranking-box img{
     width: 200px;
     height: 100px;
     border-radius: 10px;
+    object-fit: cover;
 }
 
 

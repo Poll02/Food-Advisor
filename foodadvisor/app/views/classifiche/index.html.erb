@@ -74,20 +74,43 @@
 
     </div>
     <h3 style="font-size: 40px;">Classifiche di competizioni a cui partecipi</h3>
+    
+    <% if session[:role] == 'User' %>
+        <% if @competitions.any? %>
+    <% @competitions.each do |competition| %>
     <div class="user-competition-ranking">
         <div class="user-competition-ranking-box">
-            <%= image_tag 'background.jpg'%>   <!--Immagine competizione-->
+            <% if competition.locandina.present? %>
+                <%= image_tag competition.locandina %>
+            <% else %>
+                <%= image_tag 'background.jpg' %> <!-- Immagine competizione -->
+            <% end %>
             <div class="competition-ranking-details">
-                <p style="font-weight: bold;">Nome Competizione: <span style="font-weight: normal;">Nome Competizione</span></p>
-                <p style="font-weight: bold;">Punti: <span style="font-weight: normal;">Punti</span></p>
+                <p style="font-weight: bold;">Nome Competizione: <span style="font-weight: normal;"><%= competition.nome %></span></p>
+                
+                <% user_competition = competition.user_competitions.find_by(user: current_user.cliente.user) %>
+                <p style="font-weight: bold;">Punti: <span style="font-weight: normal;"><%= user_competition&.punti %></span></p>
+                
                 <h3>Top 3 Giocatori</h3>
-                <p style="font-weight: bold;">1. <span style="font-weight: normal;">Nome giocatore 1 con punti: punti</span></p>
-                <p style="font-weight: bold;">2. <span style="font-weight: normal;">Nome giocatore 2 con punti: punti</span></p>
-                <p style="font-weight: bold;">3. <span style="font-weight: normal;">Nome giocatore 3 con punti: punti</span></p>
-                <p style="font-weight: bold;">La tua posizione: <span style="font-weight: normal;">Tua posizione</span></p>
+                <% top_3_participants = competition.user_competitions.order(points: :desc).limit(3) %>
+                <% top_3_participants.each_with_index do |participant, index| %>
+                <p style="font-weight: bold;"><%= index + 1 %>. <span style="font-weight: normal;"><%= participant.user.nome %> con punti: <%= participant.punti %></span></p>
+                <% end %>
+
+                <p style="font-weight: bold;">La tua posizione: <span style="font-weight: normal;">
+                <% user_position = competition.user_competitions.order(points: :desc).pluck(:user_id).index(current_user.cliente.user.id) %>
+                <%= user_position.nil? ? 'Non partecipi a questa competizione' : (user_position + 1) %>
+                </span></p>
             </div>
         </div>
     </div>
+    <% end %>
+    <% else %>
+        <p>Non partecipi a nessuna competizione<p>
+    <% end %>
+    <% else %>
+        <p>Solo gli utenti normali possono partecipare a competizioni<p>
+    <% end %>
 
 
 </div>

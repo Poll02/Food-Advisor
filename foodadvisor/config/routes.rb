@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'preferiti/show'
   get 'user_profile/edit'
   get 'user_profile/show'
   get 'admin_profile/edit'
@@ -23,7 +24,9 @@ Rails.application.routes.draw do
   resources :problems, only: [:create]
   
   
-
+  # grafico
+  get 'bookings_per_week', to: 'info#bookings_per_week'
+  get 'daily_bookings_and_events', to: 'info#daily_bookings_and_events'
 
   #
   # Rotta per il form di login (GET e POST)
@@ -71,15 +74,12 @@ Rails.application.routes.draw do
   # Rotte per le pagine della dashboard
   get 'dashboard', to: 'restaurateur_profiles#show'
   get 'info', to: 'info#show'
-  get 'chat', to: 'chat#show'
   get 'settings', to: 'settings#show'
 
   # rotte per le pagine vetrina
   get 'public_restaurant_profile/:id', to: 'restaurateur_profiles#public_show', as: 'public_restaurant_profile'
   get 'public_user_profile/:id', to: 'user_profile#public_show', as: 'public_user_profile'
 
-  # per creare un evento
-  post 'restaurateur_profiles/create_event', to: 'restaurateur_profiles#create_event', as: 'create_event_restaurateur_profiles'
   # per i tag
   post 'restaurateur_profiles/:tag_id/add_tag', to: 'restaurateur_profiles#add_tag', as: 'add_tag'
   post 'restaurateur_profiles/:tag_id/remove_tag', to: 'restaurateur_profiles#remove_tag', as: 'remove_tag'
@@ -98,10 +98,12 @@ Rails.application.routes.draw do
   #get 'sessions/new'
   #get 'login', to: 'sessions#new'
   #post 'login', to: 'sessions#create'
-  get 'auth/google_oauth2/callback', to: 'sessions#create'
+  get 'auth/google_oauth2/callback', to: 'sessions#handle_google_login'
   get 'auth/failure', to: redirect('/')
     
-  get 'home/index' 
+  get 'home/index'
+  
+
 
   # rotte per la pagina di ricerca
   get 'ricerca', to: 'ricerca#index'
@@ -114,6 +116,8 @@ Rails.application.routes.draw do
   resource :restaurateur_profiles, only: [:show, :edit, :update] do
     post 'create_event', to: 'restaurateur_profiles#create_event'
     delete 'destroy_event/:id', to: 'restaurateur_profiles#destroy_event', as: 'destroy_event'
+    post 'create_recipe', to: 'restaurateur_profiles#create_recipe'
+    delete 'destroy_recipe/:id', to: 'restaurateur_profiles#destroy_recipe', as: 'destroy_recipe'
     post 'add_tag/:tag_id', to: 'restaurateur_profiles#add_tag'
     delete 'destroy_promotion/:id', to: 'restaurateur_profiles#destroy_promotion', as: 'destroy_promotion'
 
@@ -126,6 +130,17 @@ Rails.application.routes.draw do
   end
   resource :settings, only: [:show, :edit, :update, :destroy]
   resources :eventi, only: [:create]
+  resources :info, only: [:show] 
+  
+  # Rotte aggiunte per creare e distruggere un dipendente
+  post 'info/create_dipendente', to: 'info#create_dipendente', as: 'create_dipendente_info'
+  delete 'info/destroy_dipendente/:id', to: 'info#destroy_dipendente', as: 'destroy_dipendente'
+
+
+    #rotta per le recensioni
+    resources :reviews, only: [:create]
+    # rotta per visualizzare le recensioni pubbliche
+    get '/public_show', to: 'reviews#public_show', as: 'public_show_reviews'
 
 
 end

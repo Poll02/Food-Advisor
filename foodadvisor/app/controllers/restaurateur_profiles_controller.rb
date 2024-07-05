@@ -6,11 +6,21 @@ class RestaurateurProfilesController < ApplicationController
   before_action :set_restaurant_owner
   before_action :set_evento, only: [:destroy_event]
 
+  def public_show
+    @restaurant_owner = Restaurateur.find(params[:id])  # Esempio di come ottenere il ristoratore in base all'id
+    @reviews = @restaurant_owner.recensioni  # Esempio di come ottenere le recensioni del ristoratore
+
+    # Altri dati necessari per la vista
+
+    render 'public_show'
+  end
+
   def show
     @eventi = Evento.where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id).where("data >=?", Date.today)
     @promotions = @restaurant_owner.cliente.ristoratore.promotions
     @tags = @restaurant_owner.cliente.ristoratore.tags
     @recipes = @restaurant_owner.cliente.ristoratore.recipes
+    @reviews=Recensione.includes(cliente: :user).where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id)
   end
 
   def edit
@@ -90,6 +100,25 @@ class RestaurateurProfilesController < ApplicationController
     end
   end
 
+  def create_recipe
+    photo_path = save_locandina(params[:photo]) if params[:photo].present?
+  
+    @recipe = Recipe.new(
+      ristoratore_id: @restaurant_owner.cliente.ristoratore.id,
+      name: params[:name],
+      difficulty: params[:difficulty],
+      ingredients: params[:ingredients],
+      procedure: params[:procedure],
+      photo: photo_path
+    )
+  
+    if @recipe.save
+      redirect_to edit_restaurateur_profiles_path, notice: 'Ricetta creata con successo.'
+    else
+      redirect_to edit_restaurateur_profiles_path, alert: 'Errore nella creazione della ricetta.'
+    end
+  end
+
   def destroy_promotion
     @promotion = Promotion.find_by(id: params[:id])
 
@@ -102,6 +131,19 @@ class RestaurateurProfilesController < ApplicationController
     else
       render json: { success: false, error: 'Promozione non trovata' }, status: :not_found
     end
+  end
+
+  def destroy_recipe
+    @recipe = Recipe.find_by(id: params[:id])
+
+    if @recipe
+      @recipe.destroy
+      render json: { success: true }
+    else
+      render json: { success: false, error: 'Non sei autorizzato a eliminare questa ricetta.' }, status: :forbidden
+    end
+  rescue StandardError => e
+    render json: { success: false, error: e.message }, status: :unprocessable_entity
   end
 
   def destroy_event
@@ -122,6 +164,7 @@ class RestaurateurProfilesController < ApplicationController
     @promotions = Promotion.where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id)
     @tags = @restaurant_owner.cliente.ristoratore.tags
     @recipes = @restaurant_owner.cliente.ristoratore.recipes
+    @reviews=Recensione.includes(cliente: :user).where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id)
   end
 
   private

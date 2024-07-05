@@ -14,6 +14,8 @@ class SessionsController < ApplicationController
       if utente && utente.authenticate(params[:session][:password])
         if utente.cliente && utente.cliente.user && utente.cliente.user.critico
           log_in(utente, 'Critico')  # Login come critico
+        elsif utente.admin
+          log_in(utente, 'Admin')  # Login come utente amministratore
         else
           log_in(utente, 'User')  # Login come utente normale
         end
