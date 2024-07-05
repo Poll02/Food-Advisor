@@ -11,18 +11,15 @@
 utente1 = Utente.create(email: 'utente1@example.com', password: 'password1', telefono: '1234567890')
 utente2 = Utente.create(email: 'utente2@example.com', password: 'password2', telefono: '0987654321')
 utente3 = Utente.create(email: 'utente3@example.com', password: 'password3', telefono: '1112223333')
-utente4 = Utente.create(email: 'eleonora@gmail.com', password: 'eleonora', telefono: '1112523333')
 
 # Creazione di Clienti
 cliente1 = Cliente.create(utente: utente1, foto: 'ristoratore.jpg', dataiscrizione: '2023-01-01')
 cliente2 = Cliente.create(utente: utente2, foto: 'ristoratore.jpg', dataiscrizione: '2023-02-01')
-cliente3 = Cliente.create(utente: utente4, foto: 'ristoratore.jpg', dataiscrizione: '2023-02-01')
 # Creazione di Admin
 admin1 = Admin.create(utente: utente3, nome: 'Admin', cognome: 'One')
 # Creazione di Ristoratori
 ristoratore1 = Ristoratore.create(cliente: cliente1, piva: '12345678901', asporto: true, nomeristorante: 'Ristorante Uno', indirizzo: 'Via Uno, 1')
 ristoratore2 = Ristoratore.create(cliente: cliente2, piva: '09876543210', asporto: false, nomeristorante: 'Ristorante Due', indirizzo: 'Via Due, 2')
-ristoratore3 = Ristoratore.create(cliente: cliente3, piva: '18', asporto: false, nomeristorante: 'daNora', indirizzo: 'Via lago')
 # Creazione di Users
 user1 = User.create(cliente: cliente1, username: 'user1', nome: 'Nome1', cognome: 'Cognome1', datanascita: '1990-01-01')
 # Creazione di Critici

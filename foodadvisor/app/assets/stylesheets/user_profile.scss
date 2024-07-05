@@ -93,6 +93,66 @@
     flex-direction: column;
 }
 
+.p-user-profile{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.p-user-photo-details{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
+.p-user-photo-details img{
+    width: 120px;
+    height: 120px;
+    border-radius: 99px;
+}
+
+
+.p-user-details{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.priv-recents-reviews{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-height: 400px;
+    border: 1px solid #b8adad;
+    padding: 10px;
+}
+
+.p-user-fav-events{
+    display: flex;
+    gap: 20px;
+    width: 1000px;
+    max-height: 400px;
+    overflow-x: scroll;
+
+}
+
+.p-user-reservs{
+    display: flex;
+    gap: 20px;
+    width: 1000px;
+    max-height: 400px;
+    overflow-x: scroll;
+}
+
+.p-user-reserv-box{
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+
 
 
 

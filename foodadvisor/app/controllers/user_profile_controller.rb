@@ -6,6 +6,11 @@ class UserProfileController < ApplicationController
 
   def show
     @user = @current_user
+    @recensioni = Recensione.where(cliente_id: current_user.cliente.id).order(created_at: :desc)
+    @iscrizioni = UserCompetition.where(user_id: current_user.cliente.user.id)
+    @prenotazioni = Prenotazione.where(user_id: current_user.cliente.user.id).where('data >= ?', Date.today)
+
+
     # Logica per la pagina del profilo del cliente
   end
 

@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+    get 'preferiti/show'
+
     get 'user_profile/edit'
     get 'user_profile/show'
     get 'admin_profile/edit'
