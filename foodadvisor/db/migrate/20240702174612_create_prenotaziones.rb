@@ -6,6 +6,7 @@ class CreatePrenotaziones < ActiveRecord::Migration[6.0]
       t.integer :numero_persone, null: false
       t.date :data, null: false
       t.time :orario, null: false
+      t.boolean :valida, null: false, default: false
 
       t.timestamps
     end

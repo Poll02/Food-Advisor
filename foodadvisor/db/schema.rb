@@ -112,6 +112,7 @@ ActiveRecord::Schema.define(version: 2024_07_04_092344) do
     t.integer "numero_persone", null: false
     t.date "data", null: false
     t.time "orario", null: false
+    t.boolean "valida", default: false, null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["ristoratore_id"], name: "index_prenotaziones_on_ristoratore_id"

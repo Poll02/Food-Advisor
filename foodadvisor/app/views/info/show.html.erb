@@ -12,20 +12,23 @@
       <h3>Gestione Prenotazioni</h3>
       <div class="i-section">
         <% @prenotazioni.each do |prenotazione| %>
-  <div class="prenotazione">
-    <%= image_tag 'background.jpg' %>    
-    <div class="pren-info">
-      <p style="font-weight: bold;">Nome Cliente: <span style="font-weight: normal;"><%= prenotazione.user.nome %> <%= prenotazione.user.cognome %></span></p>
-      <p style="font-weight: bold;">N. Persone: <span style="font-weight: normal;"><%= prenotazione.numero_persone %></span></p>
-      <p style="font-weight: bold;">Data: <span style="font-weight: normal;"><%= prenotazione.data %></span></p>
-      <p style="font-weight: bold;">Orario: <span style="font-weight: normal;"><%= prenotazione.orario.strftime("%H:%M") %></span></p>
-    </div>
-    <div class="pren-icon">
-      <i class="fa-solid fa-check"></i>
-      <i class="fa-solid fa-ban"></i>
-    </div>
-  </div>
-<% end %>
+          <div class="prenotazione">
+            <%= image_tag 'background.jpg' %>    
+            <div class="pren-info">
+              <p style="font-weight: bold;">Nome Cliente: <span style="font-weight: normal;"><%= prenotazione.user.nome %> <%= prenotazione.user.cognome %></span></p>
+              <p style="font-weight: bold;">N. Persone: <span style="font-weight: normal;"><%= prenotazione.numero_persone %></span></p>
+              <p style="font-weight: bold;">Data: <span style="font-weight: normal;"><%= prenotazione.data %></span></p>
+              <p style="font-weight: bold;">Orario: <span style="font-weight: normal;"><%= prenotazione.orario.strftime("%H:%M") %></span></p>
+            </div>
+            <div class="pren-icon">
+              <!-- Icona fa-check -->
+              <i class="fa-solid fa-check check-icon" data-prenotazione-id="<%= prenotazione.id %>"></i>
+        
+              <!-- Icona fa-ban -->
+              <i class="fa-solid fa-ban delete-icon" data-prenotazione-id="<%= prenotazione.id %>"></i>
+            </div>
+          </div>
+        <% end %>
 
       </div>
     </div>
@@ -385,6 +388,87 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
+  // JS per la validazione delle prenotazioni
+  document.addEventListener('DOMContentLoaded', function() {
+    const checkIcons = document.querySelectorAll('.check-icon');
+    const deleteIcons = document.querySelectorAll('.delete-icon');
 
+    checkIcons.forEach(icon => {
+      icon.addEventListener('mouseenter', function() {
+        this.style.color = 'green';
+      });
+
+      icon.addEventListener('mouseleave', function() {
+        this.style.color = '';
+      });
+
+      icon.addEventListener('click', function() {
+        const prenotazioneId = this.getAttribute('data-prenotazione-id');
+        setPrenotazioneValida(prenotazioneId);
+      });
+    });
+
+    deleteIcons.forEach(icon => {
+      icon.addEventListener('mouseenter', function() {
+        this.style.color = 'red';
+      });
+
+      icon.addEventListener('mouseleave', function() {
+        this.style.color = '';
+      });
+
+      icon.addEventListener('click', function() {
+        const prenotazioneId = this.getAttribute('data-prenotazione-id');
+        deletePrenotazione(prenotazioneId);
+      });
+    });
+
+    function setPrenotazioneValida(prenotazioneId) {
+      const authenticityToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+      // Esegui una richiesta Ajax per impostare la prenotazione come valida
+      fetch(`/prenotazione/${prenotazioneId}/set_valida`, {
+        method: 'PATCH',  // Puoi usare 'PUT' se preferisci
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': authenticityToken
+        },
+        body: JSON.stringify({ valida: true })
+      })
+      .then(response => {
+        if (response.ok) {
+          // Aggiorna l'interfaccia o ricarica la pagina come necessario
+          location.reload();  // Esempio: Ricarica la pagina
+        } else {
+          console.error('Errore durante l\'impostazione della prenotazione come valida');
+        }
+      })
+      .catch(error => {
+        console.error('Errore durante la richiesta Ajax:', error);
+      });
+    }
+
+    function deletePrenotazione(prenotazioneId) {
+      const authenticityToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+      // Esegui una richiesta Ajax per eliminare la prenotazione
+      fetch(`/prenotazione/${prenotazioneId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': authenticityToken
+        }
+      })
+      .then(response => {
+        if (response.ok) {
+          // Aggiorna l'interfaccia o ricarica la pagina come necessario
+          location.reload();  // Esempio: Ricarica la pagina
+        } else {
+          console.error('Errore durante l\'eliminazione della prenotazione');
+        }
+      })
+      .catch(error => {
+        console.error('Errore durante la richiesta Ajax:', error);
+      });
+    }
+  });
 </script>
 

@@ -7,9 +7,7 @@ class InfoController < ApplicationController
   
   def show
     @dipendenti = @restaurant_owner.cliente.ristoratore.dipendentes
-    @prenotazioni = Prenotazione.where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id)
-    @prenotazioni_oggi = Prenotazione.where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id, data: Date.today)
-
+    @prenotazioni = Prenotazione.where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id, valida: false)
   end
 
   def create_dipendente
@@ -51,7 +49,7 @@ class InfoController < ApplicationController
     start_date = Date.parse(params[:start_date])
     end_date = start_date.end_of_week(:sunday)
 
-    bookings = Prenotazione.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+    bookings = Prenotazione.where(created_at: start_date.beginning_of_day..end_date.end_of_day, valida: true)
                       .group("DATE(created_at)")
                       .count
 
@@ -71,7 +69,7 @@ class InfoController < ApplicationController
     end_date = Date.new(year, month, day).end_of_day
 
     # Query per le prenotazioni
-    @prenotazioni_oggi = Prenotazione.where(data: start_date..end_date)
+    @prenotazioni_oggi = Prenotazione.where(data: start_date..end_date, valida: true)
 
     # Query per gli eventi
     @eventi_oggi = Evento.where(data: start_date..end_date)
