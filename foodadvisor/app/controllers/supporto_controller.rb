@@ -5,7 +5,7 @@ class SupportoController < ApplicationController
     end
   
     def create_problem
-      @problem = current_user.problems.build(problem_params)
+      @problem = @current_user.problems.build(problem_params)
       if @problem.save
         redirect_to supporto_path, notice: 'Segnalazione inviata con successo.'
       else

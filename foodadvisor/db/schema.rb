@@ -176,9 +176,9 @@ ActiveRecord::Schema.define(version: 2024_07_04_092344) do
   end
 
   create_table "settings", force: :cascade do |t|
-    t.string "font", default: "default_font"
-    t.string "font_size", default: "default_size"
-    t.string "theme", default: "default_theme"
+    t.string "font", default: "Arial"
+    t.string "font_size", default: "medium"
+    t.string "theme", default: "day"
     t.integer "utente_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false

@@ -117,8 +117,8 @@ Prenotazione.create!(
   orario: Time.new(2024, 7, 5, 20, 0, 0)
 )
 Prenotazione.create!(
-  user_id: 3,
-  ristoratore_id: 3,
+  user_id: 1,
+  ristoratore_id: 2,
   numero_persone: 2,  
   data: Date.new(2024, 7, 3),  
   orario: Time.new(2024, 7, 10, 19, 30)
