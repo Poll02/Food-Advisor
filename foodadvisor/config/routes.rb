@@ -84,6 +84,7 @@ Rails.application.routes.draw do
     # rotte per le pagine vetrina
     get 'public_restaurant_profile/:id', to: 'restaurateur_profiles#public_show', as: 'public_restaurant_profile'
     get 'public_user_profile/:id', to: 'user_profile#public_show', as: 'public_user_profile'
+    get 'public_critic_profile/:id', to: 'critic_profile#public_show', as: 'public_critic_profile'
   
     # per i tag
     post 'restaurateur_profiles/:tag_id/add_tag', to: 'restaurateur_profiles#add_tag', as: 'add_tag'
@@ -108,7 +109,6 @@ Rails.application.routes.draw do
       
     get 'home/index'
     
-  
   
     # rotte per la pagina di ricerca
     get 'ricerca', to: 'ricerca#index'

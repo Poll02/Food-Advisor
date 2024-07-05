@@ -70,7 +70,7 @@
       <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Lascia una Recensione</h2>
-        <% if current_user.present? %>
+        <% if current_user.present? && session[:role] == 'User' %>
         <%= form_with( url: reviews_path, method: "post", local: true) do |form| %>
           <%= form.hidden_field :cliente_id, value: @current_user.cliente.id %>
           <%= form.hidden_field :ristoratore_id, value: @restaurant_owner.cliente.id %>
@@ -185,14 +185,25 @@
       <% if @reviews.any? %>
         <% @reviews.each do |review| %>
           <div class="public-r-reviews">
-            <%= image_tag 'background.jpg' %>
-            <div class="public-review-details">
-              <h3><%= review.cliente.user.username %></h3> <!-- Assumi che il cliente abbia un attributo 'nome' -->
-              <p><%= review.stelle %> stelle</p>
-              <p><%= review.commento %></p>
-              <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
-            </div>
+            <% if review.cliente.foto.present? %>
+              <%= image_tag review.cliente.foto, class: 'recensione-foto' %>
+            <% else %>
+              <%= image_tag 'background.jpg', class: 'recensione-foto' %>
+            <% end %>
+          <div class="public-review-details">
+            <p><%= review.cliente.user.username %></p>
+            <p style="font-style: italic; font-size: 13px;"><%= review.stelle %> stelle</p>
+            <p><%= review.commento %></p>
+            <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
           </div>
+          <div class="public-review-icon">
+            <i class="fa-regular fa-thumbs-up"></i>
+            <i class="fa-solid fa-share-nodes"></i>
+            <% if session[:role] == 'Admin' %>
+              <i class="fa-solid fa-trash"></i>
+            <% end %>
+          </div>
+        </div>
         <% end %>
       <% else %>
         <p>Nessuna recensione trovata</p>

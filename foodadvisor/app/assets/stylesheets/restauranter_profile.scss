@@ -477,6 +477,7 @@ tr.flavor .piatto {
 
 .public-r-reviews{
   display: flex;
+  justify-content: space-between;
   gap: 20px;
   width: 1200px;
   border: 1px solid #ccc;
@@ -495,9 +496,17 @@ tr.flavor .piatto {
   background-color: #ddd7d7;
 }
 
-.public-reviews-details{
+.public-review-details{
   display: flex;
   flex-direction: column;
+}
+
+.public-review-icon {
+  font-size: 1.3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  cursor: pointer;
 }
 
 .public-r-reviews img{
@@ -508,7 +517,7 @@ tr.flavor .piatto {
 
 .reviews-filters{
   display: flex;
-gap: 30px;
+  gap: 30px;
 }
 
 /* The reserv-modal (background) */

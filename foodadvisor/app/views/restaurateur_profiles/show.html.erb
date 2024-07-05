@@ -62,7 +62,7 @@
   <% if @reviews.any? %>
     <% @reviews.each do |review| %>
       <div class="r-recensione">
-      <% if review.cliente.foto.present? %>
+        <% if review.cliente.foto.present? %>
           <%= image_tag review.cliente.foto, class: 'recensione-foto' %>
         <% else %>
           <%= image_tag 'background.jpg', class: 'recensione-foto' %>
@@ -71,6 +71,7 @@
         <p><%= review.cliente.user.username %></p>
         <p><%= review.stelle %></p>
         <p><%= review.commento %></p>
+        <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
       </div>
       <div class="recensione-icon">
         <i class="fa-regular fa-thumbs-up"></i>

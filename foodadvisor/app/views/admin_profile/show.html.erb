@@ -1,0 +1,118 @@
+<h3>Nuove registrazioni</h3>
+<div class="nuoviUtenti">
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Cognome</th>
+                <th>Nome Ristorante</th>
+                <th>Ruolo</th>
+                <th>Email</th>
+                <th>Indirizzo</th>
+                <th>Asporto</th>
+                <th>Certificato</th>
+                <th>Data Iscrizione</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @clienti.each do |cliente| %>
+                <% 
+                    url = if cliente.respond_to?(:ristoratore) && cliente.ristoratore.present?
+                            public_restaurant_profile_path(cliente.ristoratore)
+                        elsif cliente.user.respond_to?(:critico) && cliente.user.critico.present?
+                            public_critic_profile_path(cliente.user.critico)
+                        else
+                            public_user_profile_path(cliente.user)
+                        end
+                %>
+                <tr onclick="window.location='<%= url %>'" style="cursor: pointer;">
+                    <td>
+                        <% if cliente.respond_to?(:user) && cliente.user.present? %>
+                            <%= cliente.user.nome %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.respond_to?(:user) && cliente.user.present? %>
+                            <%= cliente.user.cognome %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.respond_to?(:ristoratore) && cliente.ristoratore.present? %>
+                            <%= cliente.ristoratore.nomeristorante %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.respond_to?(:ristoratore) && cliente.ristoratore.present? %>
+                            Ristoratore
+                        <% elsif cliente.user.respond_to?(:critico) && cliente.user.critico.present? %>
+                            Critico
+                        <% else %>
+                            User
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.respond_to?(:utente) && cliente.utente.present? %>
+                            <%= cliente.utente.email %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.respond_to?(:ristoratore) && cliente.ristoratore.present? %>
+                            <%= cliente.ristoratore.indirizzo %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.respond_to?(:ristoratore) && cliente.ristoratore.present? %>
+                            <%= cliente.ristoratore.asporto ? 'Sì' : 'No' %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.user.respond_to?(:critico) && cliente.user.critico.present? %>
+                            <%= cliente.user.critico.certificato ? 'Sì' : 'No' %>
+                        <% end %>
+                    </td>
+                    <td><%= cliente.created_at.strftime('%d/%m/%Y') %></td>
+                </tr>
+            <% end %>
+
+            <% if @clienti.size < 5 %>
+                <% (5 - @clienti.size).times do %>
+                    <tr>
+                        <td colspan="9">&nbsp;</td>
+                    </tr>
+                <% end %>
+            <% end %>
+        </tbody>
+    </table>
+</div>
+
+
+<h3>Segnalazioni</h3>
+<div class="gestioneSegnalazioni">
+    <div class="segnalazione">
+        <div class="segnalazioneInfo">
+            <p>Da: __________ A: __________ <p>
+            <p>Motivo: ____________ </p>
+        </div>
+        <div class="segnalazioneAction">
+            <button>Rimuovi recensione</button>
+            <button>Blocca profilo segnalato</button>
+        </div>
+    </div>
+</div>
+<h3>Invia comunicazioni</h3>
+<div class="inviaNotifiche">
+    <form>
+        <div class="form-group">
+            <label for="email">A:</label>
+            <input type="email" id="email" placeholder="Inserisci l'email del destinatario" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <textarea id="message" rows="5" class="form-control" placeholder="Inserisci il corpo della notifica" required></textarea>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="alert('Notifica inviata!')">Invia Notifica</button>
+            <button type="reset" class="btn btn-secondary">Azzerare</button>
+        </div>
+    </form>
+</div>
+
