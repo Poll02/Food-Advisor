@@ -68,9 +68,12 @@
           <%= image_tag 'background.jpg', class: 'recensione-foto' %>
         <% end %>
       <div class="recensione-info">
-        <p><%= review.cliente.user.username %></p>
-        <p><%= review.stelle %></p>
-        <p><%= review.commento %></p>
+  <p style="font-weight: bold";><%= review.cliente.user.username %></p>
+            <p>
+              <% review.stelle.times do %>
+                <ion-icon name="star" style="font-size: 15px;"></ion-icon>
+              <% end %>
+            </p>         <p><%= review.commento %></p>
         <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
       </div>
       <div class="recensione-icon">

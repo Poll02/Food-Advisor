@@ -4,6 +4,8 @@ class PreferitiController < ApplicationController
   before_action :require_logged_in, except: [:public_show]
   before_action :require_customer, except: [:public_show]
   def show
+    @ristoranti_ids = FavRistoranti.where(user_id: current_user.cliente.user.id).pluck(:ristoratore_id)
+    @ristoranti_preferiti = Ristoratore.where(id: @ristoranti_ids)
   end
 
 

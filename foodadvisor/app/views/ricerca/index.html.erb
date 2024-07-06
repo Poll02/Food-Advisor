@@ -17,6 +17,8 @@
     <div class="results-and-details-container">
         <div class="results-container">
             <% @ristoratori.each do |ristoratore| %>
+            <% @media = ristoratore.media_stelle%>
+            <% @numero = ristoratore.n_recensioni%>
                 <div class="result-box">
                     <% if ristoratore.cliente.foto.present? %>
                         <%= link_to public_restaurant_profile_path(ristoratore.id), class: 'restaurant-link' do %>
@@ -29,7 +31,7 @@
                     <% end %>
                     <div class="result-text">
                         <h3><%= ristoratore.nomeristorante %></h3>
-                        <p>N stelle, N. recensioni</p>
+                        <p><%=@media%><ion-icon name="star" style="font-size: 15px;"></ion-icon>, <%= @numero %> recensioni</p>
                     </div>
                 </div>
                 <hr class="solid" id="divider">

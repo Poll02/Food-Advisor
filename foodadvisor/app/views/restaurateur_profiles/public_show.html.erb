@@ -15,8 +15,8 @@
     <i class="fa-regular fa-star"></i>
         <div class="rest-info-public">
             <h1 style="font-size: 50px; color: black; "><%= @restaurant_owner.nomeristorante %></h1>
-            <h2>n. stelle</h2>
-            <h3>n. recensioni</h3>
+            <h2><%=@restaurant_owner.media_stelle%> stelle</h2>
+            <h3><%=@restaurant_owner.n_recensioni%> recensioni</h3>
             <% if @tags.present? %>
               <h2 style="margin-top: 20px;">TAGS: </h2>
               <% @tags.each do |tag| %>
@@ -46,6 +46,10 @@
     <div class="review-reserve-buttons">
         <button type="button" class="review">Lascia una Recensione</button>
         <button type="button" style="background-color: rgb(234, 183, 121);" class="open-reserv-modal">Prenota un Tavolo</button>
+        <button type="button" id="add-rest-to-fav" data-ristoratore-id="<%= @restaurant_owner.id %>" style="background-color: rgb(71, 200, 82);">Aggiungi ai Preferiti</button>
+        <button type="button" id="report-rest" style="background-color: rgb(221, 60, 60);">Segnala</button>
+
+
 
         <div id="reservModal" class="reserv-modal">
           <div class="reserv-modal-content">
@@ -191,9 +195,12 @@
               <%= image_tag 'background.jpg', class: 'recensione-foto' %>
             <% end %>
           <div class="public-review-details">
-            <p><%= review.cliente.user.username %></p>
-            <p style="font-style: italic; font-size: 13px;"><%= review.stelle %> stelle</p>
-            <p><%= review.commento %></p>
+            <p style="font-weight: bold";><%= review.cliente.user.username %></p>
+            <p>
+              <% review.stelle.times do %>
+                <ion-icon name="star" style="font-size: 15px;"></ion-icon>
+              <% end %>
+            </p>            <p><%= review.commento %></p>
             <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
           </div>
           <div class="public-review-icon">
@@ -317,6 +324,38 @@ document.addEventListener("DOMContentLoaded", function() {
 
   document.querySelector('.review').onclick = openModal;
   document.querySelector('.close').onclick = closeModal;
+});
+
+//Ristorante ai preferiti
+document.addEventListener('DOMContentLoaded', () => {
+  const addToFavButton = document.getElementById('add-rest-to-fav');
+
+  if (addToFavButton) {
+    addToFavButton.addEventListener('click', () => {
+      const ristoratoreId = addToFavButton.getAttribute('data-ristoratore-id');
+
+      fetch('/add_rest_to_favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ ristoratore_id: ristoratoreId })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Ristorante aggiunto ai preferiti con successo!');
+        } else {
+          alert(`Errore: ${data.error}`);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Si è verificato un errore. Riprova.');
+      });
+    });
+  }
 });
 
 </script>
