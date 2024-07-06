@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  get 'user_notifications/index'
     get 'preferiti/show'
 
     get 'user_profile/edit'
@@ -24,15 +23,11 @@ Rails.application.routes.draw do
     get 'supporto', to: 'supporto#index'
 
     
-    resources :problems do
-      member do
-        put 'aggiorna_stato_problema', to: 'problems#aggiorna_stato_problema'
-      end
-    end
+    resources :problems 
+    put '/aggiorna_stato_problema/:id', to: 'problems#aggiorna_stato_problema'
 
     
-    resources :notifications, only: [:new, :create]
-    resources :user_notifications, only: [:index]
+    
     
     # grafico
     get 'bookings_per_week', to: 'info#bookings_per_week'

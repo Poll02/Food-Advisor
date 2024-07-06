@@ -1,16 +1,3 @@
-<!-- Mostra il messaggio di successo o errore -->
-<% if flash[:notice] %>
-  <div class="alert alert-success" role="alert">
-    <%= flash[:notice] %>
-  </div>
-<% end %>
-
-<% if flash[:alert] %>
-  <div class="alert alert-danger" role="alert">
-    <%= flash[:alert] %>
-  </div>
-<% end %>
-
 <h3>Nuove registrazioni</h3>
 <div class="nuoviUtenti">
     <table>
@@ -112,74 +99,98 @@
         </div>
     </div>
 </div>
-
 <h3>Problemi</h3>
 <div class="gestioneProblemi">
-  <table>
-    <thead>
-      <tr>
-        <th>ID cliente</th>
-        <th>Problema</th>
-        <th>Data</th>
-        <th>Stato</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @problemi.each do |problema| %>
-        <tr>
-          <td><%= problema.cliente_id %></td>
-          <td><%= problema.text %></td>
-          <td><%= problema.created_at.strftime('%d/%m/%Y') %></td>
-          <td>
-            <% if problema.stato == false %>
-              <%= form_with(url: aggiorna_stato_problema_problem_path(problema), method: :put, class: 'update-status-form', data: { confirm: 'Sei sicuro di voler segnare questo problema come risolto?' }) do %>
-                <%= button_tag type: 'submit', class: 'btn btn-danger' do %>
-                  Da risolvere
-                <% end %>
-              <% end %>
-            <% else %>
-              <button class="btn btn-success" disabled>Risolto</button>
+    <table>
+        <thead>
+            <tr>
+                <th>ID cliente</th>
+                <th>Problema</th>
+                <th>Data</th>
+                <th>Stato</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @problemi.each do |problema| %>
+                <tr>
+                    <td>
+                        <%= problema.cliente_id %>
+                    </td>
+                    <td>
+                        <%= problema.text %>
+                    </td>
+                    <td>
+                        <%= problema.created_at.strftime('%d/%m/%Y') %>
+                    </td>
+                    <td>
+                        <% if problema.stato == false %>
+                            <button class="btn btn-danger btn-da-risolvere" data-id="<%= problema.id %>">Da risolvere</button>
+                        <% else %>
+                            <button class="btn btn-success" disabled>Risolto</button>
+                        <% end %>
+                    </td>
+                </tr>
             <% end %>
-          </td>
-        </tr>
-      <% end %>
 
-      <% if @problemi.empty? %>
-        <tr>
-          <td colspan="4">&nbsp;</td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+            <% if @problemi.size < 1 %>
+                <tr>
+                    <td colspan="4">&nbsp;</td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
 </div>
-
 <h3>Invia comunicazioni</h3>
 <div class="inviaNotifiche">
-  <%= form_with model: @notification, url: notifications_path, local: true do |form| %>
-    <div class="form-group">
-      <%= form.label :email, 'A:' %>
-      <%= form.email_field :email, placeholder: 'Inserisci l\'email del destinatario', class: 'form-control', required: true %>
-    </div>
-    <div class="form-group">
-      <%= form.text_area :message, rows: 5, class: 'form-control', placeholder: 'Inserisci il corpo della notifica', required: true %>
-    </div>
-    <div class="form-group">
-      <%= form.submit 'Invia Notifica', class: 'btn btn-primary' %>
-      <%= form.button 'Azzerare', type: 'reset', class: 'btn btn-secondary' %>
-    </div>
-  <% end %>
+    <form>
+        <div class="form-group">
+            <label for="email">A:</label>
+            <input type="email" id="email" placeholder="Inserisci l'email del destinatario" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <textarea id="message" rows="5" class="form-control" placeholder="Inserisci il corpo della notifica" required></textarea>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-primary" onclick="alert('Notifica inviata!')">Invia Notifica</button>
+            <button type="reset" class="btn btn-secondary">Azzerare</button>
+        </div>
+    </form>
 </div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const updateForms = document.querySelectorAll('.update-status-form');
-    updateForms.forEach(form => {
-      form.addEventListener('submit', function(event) {
-        const confirmMessage = this.getAttribute('data-confirm');
-        if (!confirm(confirmMessage)) {
-          event.preventDefault();
-        }
-      });
+    // Script per gestire il clic sul pulsante "Da risolvere" e inviare una richiesta AJAX
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttonsDaRisolvere = document.querySelectorAll('.btn-da-risolvere');
+        
+        buttonsDaRisolvere.forEach(button => {
+            button.addEventListener('click', function () {
+                const problemaId = this.getAttribute('data-id');
+                
+                // Esegui una richiesta AJAX per aggiornare lo stato del problema
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                fetch(`/aggiorna_stato_problema/${problemaId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken  // Includi il token CSRF nelle intestazioni
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Errore durante l\'aggiornamento dello stato del problema');
+                    }
+                    // Aggiorna il pulsante visivamente
+                    this.classList.remove('btn-danger');
+                    this.classList.add('btn-success');
+                    this.textContent = 'Risolto';
+                    this.disabled = true;
+                })
+                .catch(error => {
+                    console.error('Errore:', error);
+                    // Gestione degli errori
+                });
+            });
+        });
     });
-  });
 </script>

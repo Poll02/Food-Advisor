@@ -70,18 +70,15 @@ border-left: 1px solid rgb(156, 156, 156);
 }
 
 .details-container{
+    width: 450px;
+    height: 450px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
 }
 
-.details-container img{
-    width: 300px;
-    height: 300px;
-    border-radius: 20px;
-    margin-right: 20px;
-}
+
 .dialog {
     display: none;
     position: fixed;

@@ -11,15 +11,13 @@ class ProblemsController < ApplicationController
   end
 
   def aggiorna_stato_problema
-    @problem = Problem.find(params[:id])
-
+    @problem = Problem.find(params[:id]) # Assume che il parametro :id sia passato come parte della richiesta PUT
+    
     if @problem.update(stato: true)
-      flash[:notice] = 'Stato del problema aggiornato con successo'
+      render json: { status: 'success', message: 'Stato del problema aggiornato con successo' }
     else
-      flash[:alert] = 'Errore durante l\'aggiornamento dello stato del problema'
+      render json: { status: 'error', message: 'Errore durante l\'aggiornamento dello stato del problema' }, status: :unprocessable_entity
     end
-
-    redirect_to admin_profile_path
   end
 
   private

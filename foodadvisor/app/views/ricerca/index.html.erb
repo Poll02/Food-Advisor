@@ -40,7 +40,20 @@
             
         <div class="vertical-divider"></div>
         <div class="details-container">
-            <%= image_tag 'background.jpg' %> <!--Posizione sulla Mappa-->
+        <div class="map-container">
+        <% @ristoranteprova = Ristoratore.find(3) %>
+        <% @name = @ristoranteprova.format_restaurant_name%>
+        <iframe 
+            width="450" 
+            height="450" 
+            frameborder="0" style="border:0"
+            referrerpolicy="no-referrer-when-downgrade"
+            load="lazy" allowfullscreen
+            src="https://www.google.com/maps/embed/v1/place?q=<%=@name%>&key=AIzaSyC9a9KDxjv1HNDVAeLEVYJDdjX2eYKPRzM">
+        </iframe>
+
+        </div>
+        
             <p>Indicazioni stradali</p>
         </div>
     </div>

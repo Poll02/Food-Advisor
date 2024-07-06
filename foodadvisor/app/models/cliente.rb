@@ -4,7 +4,6 @@ class Cliente < ApplicationRecord
     has_one :ristoratore, dependent: :destroy
     has_one :user, dependent: :destroy
     has_many :problems, dependent: :destroy
-    has_many :notifications, dependent: :destroy
 
     accepts_nested_attributes_for :user, :ristoratore
   end

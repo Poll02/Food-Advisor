@@ -31,11 +31,7 @@
                 <%= link_to public_restaurant_profile_path(ristorante.id), class: 'restaurant-link' do %>
 
                 <div class="public-r-reviews">
-                    <% if ristorante.cliente.foto.present? %>
-                        <%= image_tag ristorante.cliente.foto %> <!-- Foto Ristorante-->
-                    <% else %>
-                        <%= image_tag 'background.jpg' %> <!-- Immagine competizione -->
-                    <% end %>
+                    <%= image_tag ristorante.cliente.foto %> <!-- Foto Ristorante-->
                     <div class="public-review-details">
                         <h3><%= ristorante.nomeristorante %></h3> <!-- Nome Ristorante -->
                         <p><%= recensione.stelle %> stelle</p>

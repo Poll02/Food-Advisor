@@ -14,6 +14,16 @@ class Ristoratore < ApplicationRecord
     has_many :fav_ristoranti, dependent: :destroy
   has_many :favorited_by_users, through: :fav_ristoranti, source: :user
 
+  def format_restaurant_name
+    # Rimuove i doppi spazi
+    name = nomeristorante.squeeze(" ")
+    # Sostituisce gli spazi con il carattere '+'
+    name = name.gsub(" ", "+")
+    # Rimuove eventuali virgolette
+    name = name.delete('"')
+    name
+  end
+  
   def media_stelle
     recensiones.average(:stelle).to_f
   end
