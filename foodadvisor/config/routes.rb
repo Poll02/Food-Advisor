@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get 'user_notifications/index'
     get 'preferiti/show'
 
     get 'user_profile/edit'
@@ -27,7 +28,8 @@ Rails.application.routes.draw do
     put '/aggiorna_stato_problema/:id', to: 'problems#aggiorna_stato_problema'
 
     
-    
+    resources :notifications, only: [:new, :create]
+    resources :user_notifications, only: [:index]
     
     # grafico
     get 'bookings_per_week', to: 'info#bookings_per_week'

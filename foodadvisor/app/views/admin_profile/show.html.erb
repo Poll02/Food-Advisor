@@ -142,20 +142,21 @@
 </div>
 <h3>Invia comunicazioni</h3>
 <div class="inviaNotifiche">
-    <form>
-        <div class="form-group">
-            <label for="email">A:</label>
-            <input type="email" id="email" placeholder="Inserisci l'email del destinatario" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <textarea id="message" rows="5" class="form-control" placeholder="Inserisci il corpo della notifica" required></textarea>
-        </div>
-        <div class="form-group">
-            <button type="button" class="btn btn-primary" onclick="alert('Notifica inviata!')">Invia Notifica</button>
-            <button type="reset" class="btn btn-secondary">Azzerare</button>
-        </div>
-    </form>
+  <%= form_with model: @notification, url: notifications_path, local: true do |form| %>
+    <div class="form-group">
+      <%= form.label :email, 'A:' %>
+      <%= form.email_field :email, placeholder: 'Inserisci l\'email del destinatario', class: 'form-control', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.text_area :message, rows: 5, class: 'form-control', placeholder: 'Inserisci il corpo della notifica', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.submit 'Invia Notifica', class: 'btn btn-primary' %>
+      <%= form.button 'Azzerare', type: 'reset', class: 'btn btn-secondary' %>
+    </div>
+  <% end %>
 </div>
+
 
 <script>
     // Script per gestire il clic sul pulsante "Da risolvere" e inviare una richiesta AJAX

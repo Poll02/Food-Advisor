@@ -12,7 +12,6 @@
     </svg>
   
     <div class="rest-foto-name">
-    <i class="fa-regular fa-star"></i>
         <div class="rest-info-public">
             <h1 style="font-size: 50px; color: black; "><%= @restaurant_owner.nomeristorante %></h1>
             <h2><%=@restaurant_owner.media_stelle%> stelle</h2>
@@ -36,8 +35,12 @@
     <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.email %></span></p>
     <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.telefono %></span></p>
     <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"> <%= @restaurant_owner.indirizzo %></span></p>
-    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> <%= @restaurant_owner.asporto %></span></p>
-    
+    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> 
+      <% if @restaurant_owner.asporto == true %>
+        si
+      <% else %>
+        no
+      <% end %>
   </div>
   
   

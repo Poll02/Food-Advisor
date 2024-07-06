@@ -88,6 +88,58 @@
     padding: 1%;
 }
 
+.gestioneProblemi table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.gestioneProblemi th, .gestioneProblemi td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.gestioneProblemi th {
+    background-color: #f2f2f2;
+    color: black;
+}
+
+.gestioneProblemi tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.gestioneProblemi tr:hover {
+    background-color: #f1f1f1;
+}
+
+.gestioneProblemi .btn {
+    padding: 5px 10px;
+    font-size: 14px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.gestioneProblemi .btn-da-risolvere {
+    background-color: #dc3545;
+    color: white;
+}
+
+.gestioneProblemi .btn-da-risolvere:hover {
+    background-color: #c82333;
+}
+
+.gestioneProblemi .btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.gestioneProblemi .btn-success[disabled] {
+    background-color: #28a745;
+    cursor: not-allowed;
+}
+
+
 
 // NOTIFICHE
 .inviaNotifiche {

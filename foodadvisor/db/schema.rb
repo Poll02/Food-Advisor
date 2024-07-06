@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_06_110750) do
+ActiveRecord::Schema.define(version: 2024_07_06_135610) do
 
   create_table "admins", force: :cascade do |t|
     t.integer "utente_id", null: false
@@ -119,6 +119,15 @@ ActiveRecord::Schema.define(version: 2024_07_06_110750) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["ristoratore_id"], name: "index_menus_on_ristoratore_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.integer "cliente_id"
+    t.string "email"
+    t.text "message"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cliente_id"], name: "index_notifications_on_cliente_id"
   end
 
   create_table "piattos", force: :cascade do |t|
@@ -264,6 +273,7 @@ ActiveRecord::Schema.define(version: 2024_07_06_110750) do
   add_foreign_key "fav_ristorantis", "ristoratores"
   add_foreign_key "fav_ristorantis", "users"
   add_foreign_key "menus", "ristoratores"
+  add_foreign_key "notifications", "clientes"
   add_foreign_key "piattos", "menus"
   add_foreign_key "prenotaziones", "ristoratores"
   add_foreign_key "prenotaziones", "users"

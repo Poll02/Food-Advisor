@@ -1,0 +1,22 @@
+<h3>Le tue notifiche</h3>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Data</th>
+      <th>Messaggio</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @notifications.each do |notification| %>
+      <tr>
+        <td><%= notification.created_at.strftime('%d/%m/%Y') %></td>
+        <td><%= notification.message %></td>
+      </tr>
+    <% end %>
+    <% if @notifications.empty? %>
+      <tr>
+        <td colspan="2">Nessuna notifica trovata</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
