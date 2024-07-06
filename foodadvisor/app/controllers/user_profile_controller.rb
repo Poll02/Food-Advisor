@@ -16,6 +16,8 @@ class UserProfileController < ApplicationController
 
   def public_show
     @user = User.find(params[:id])
+    @iscrizioni = UserCompetition.where(user_id: @user.id)
+
   end
 
   def determine_layout

@@ -74,6 +74,9 @@ Rails.application.routes.draw do
   
     # Rotta per la pagina di registrazione
     get 'signup', to: 'registration#new'
+
+    post 'add_rest_to_favorites', to: 'favorites#add_rest_to_favorites'
+
     
     #route for placement
     get 'competizioni', to: 'competizione#index'
