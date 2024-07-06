@@ -130,8 +130,3 @@ Prenotazione.create!(
   data: Date.new(2024, 7, 3),  
   orario: Time.new(2024, 7, 10, 19, 30)
 )
-
-FavRistoranti.create!(
-  user_id: 2,
-  ristoratore_id: 3
-)
