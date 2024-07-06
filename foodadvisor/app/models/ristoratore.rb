@@ -25,7 +25,8 @@ class Ristoratore < ApplicationRecord
   end
   
   def media_stelle
-    recensiones.average(:stelle).to_f
+    media = recensiones.average(:stelle).to_f
+    media_arrotondata = media.round(2)
   end
 
   def n_recensioni

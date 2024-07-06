@@ -203,6 +203,16 @@ ActiveRecord::Schema.define(version: 2024_07_06_110750) do
     t.index ["cliente_id"], name: "index_ristoratores_on_cliente_id"
   end
 
+  create_table "segnalaziones", force: :cascade do |t|
+    t.integer "recensione_id", null: false
+    t.integer "cliente_id", null: false
+    t.string "motivo"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cliente_id"], name: "index_segnalaziones_on_cliente_id"
+    t.index ["recensione_id"], name: "index_segnalaziones_on_recensione_id"
+  end
+
   create_table "settings", force: :cascade do |t|
     t.string "font", default: "Arial"
     t.string "font_size", default: "medium"
@@ -273,6 +283,8 @@ ActiveRecord::Schema.define(version: 2024_07_06_110750) do
   add_foreign_key "recensiones", "competiziones"
   add_foreign_key "recensiones", "ristoratores"
   add_foreign_key "ristoratores", "clientes"
+  add_foreign_key "segnalaziones", "clientes"
+  add_foreign_key "segnalaziones", "recensiones"
   add_foreign_key "settings", "utentes"
   add_foreign_key "user_competitions", "competiziones", on_delete: :cascade
   add_foreign_key "user_competitions", "users"
