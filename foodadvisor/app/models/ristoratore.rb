@@ -15,7 +15,8 @@ class Ristoratore < ApplicationRecord
   has_many :favorited_by_users, through: :fav_ristoranti, source: :user
 
   def media_stelle
-    recensiones.average(:stelle).to_f
+    media = recensiones.average(:stelle).to_f
+    media_arrotondata = media.round(2)
   end
 
   def n_recensioni

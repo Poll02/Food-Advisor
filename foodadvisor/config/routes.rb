@@ -160,7 +160,7 @@ Rails.application.routes.draw do
     resources :eventi, only: [:create]
     resources :info, only: [:show] 
   
-    
+    resource :segnalaziones, only: [:create]
     
     # Rotte aggiunte per creare e distruggere un dipendente
     post 'info/create_dipendente', to: 'info#create_dipendente', as: 'create_dipendente_info'

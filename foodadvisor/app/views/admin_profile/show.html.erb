@@ -101,6 +101,42 @@
 
 <h3>Segnalazioni</h3>
 <div class="gestioneSegnalazioni">
+<% if @segnalazioni.any? %>
+  <% @segnalazioni.each do |segnalazione| %>
+    <div class="segnalazione">
+      <div class="segnalazioneInfo">
+        <p>Da: <%= segnalazione.cliente_id %>  A: <%= segnalazione.recensione.cliente_id %>  <p>
+        <p>Motivo: <%= segnalazione.motivo %>  </p>
+      </div>
+      <div class="segnalazioneAction">
+        <button>Rimuovi recensione</button>
+        <button>Blocca profilo segnalato</button>
+      </div>
+    </div>
+    <br><br>
+    <div class="public-r-reviews">
+            <% if segnalazione.recensione.cliente.foto.present? %>
+              <%= image_tag segnalazione.recensione.cliente.foto, class: 'recensione-foto' %>
+            <% else %>
+              <%= image_tag 'background.jpg', class: 'recensione-foto' %>
+            <% end %>
+          <div class="public-review-details">
+            <p style="font-weight: bold";><%= segnalazione.recensione.cliente.user.username %></p>
+            <p>
+              <% segnalazione.recensione.stelle.times do %>
+                <ion-icon name="star" style="font-size: 15px;"></ion-icon>
+              <% end %>
+            </p>            <p><%= segnalazione.recensione.commento %></p>
+            <p style="font-style: italic; font-size: 13px;">in data <%= segnalazione.recensione.created_at.strftime('%d/%m/%Y') %></p>
+          </div>
+          <div class="public-review-icon">
+            <i class="fa-regular fa-thumbs-up"></i>
+            <i class="fa-solid fa-share-nodes"></i>
+            
+          </div>
+        </div>
+  <%end%>
+<% elsif %>
     <div class="segnalazione">
         <div class="segnalazioneInfo">
             <p>Da: __________ A: __________ <p>
@@ -111,6 +147,7 @@
             <button>Blocca profilo segnalato</button>
         </div>
     </div>
+<% end %>
 </div>
 
 <h3>Problemi</h3>

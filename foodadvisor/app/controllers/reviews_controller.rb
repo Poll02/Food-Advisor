@@ -8,11 +8,6 @@ class ReviewsController < ApplicationController
         )
         @review.cliente = @current_user.cliente
         @review.ristoratore = @restaurant_owner.ristoratore
-
-        Rails.logger.debug { "Review: #{@review.inspect}" }
-        Rails.logger.debug { "Cliente: #{@current_user.cliente.inspect}" }
-        #Rails.logger.debug { "Ristoratore: #{@restaurant_owner.inspect}" }
-
         if @review.save
           flash[:notice] = 'Recensione salvata con successo!'
           redirect_to public_restaurant_profile_path(@review.ristoratore_id)
