@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_04_092344) do
+ActiveRecord::Schema.define(version: 2024_07_06_110750) do
 
   create_table "admins", force: :cascade do |t|
     t.integer "utente_id", null: false
@@ -87,6 +87,33 @@ ActiveRecord::Schema.define(version: 2024_07_04_092344) do
     t.index ["ristoratore_id"], name: "index_eventos_on_ristoratore_id"
   end
 
+  create_table "fav_events", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "event_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["event_id"], name: "index_fav_events_on_event_id"
+    t.index ["user_id"], name: "index_fav_events_on_user_id"
+  end
+
+  create_table "fav_recipes", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "recipe_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["recipe_id"], name: "index_fav_recipes_on_recipe_id"
+    t.index ["user_id"], name: "index_fav_recipes_on_user_id"
+  end
+
+  create_table "fav_ristorantis", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "ristoratore_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ristoratore_id"], name: "index_fav_ristorantis_on_ristoratore_id"
+    t.index ["user_id"], name: "index_fav_ristorantis_on_user_id"
+  end
+
   create_table "menus", force: :cascade do |t|
     t.integer "ristoratore_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -121,6 +148,7 @@ ActiveRecord::Schema.define(version: 2024_07_04_092344) do
 
   create_table "problems", force: :cascade do |t|
     t.string "text"
+    t.boolean "stato", default: false, null: false
     t.integer "cliente_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -229,6 +257,12 @@ ActiveRecord::Schema.define(version: 2024_07_04_092344) do
   add_foreign_key "criticos", "users"
   add_foreign_key "dipendentes", "ristoratores"
   add_foreign_key "eventos", "ristoratores"
+  add_foreign_key "fav_events", "events"
+  add_foreign_key "fav_events", "users"
+  add_foreign_key "fav_recipes", "recipes"
+  add_foreign_key "fav_recipes", "users"
+  add_foreign_key "fav_ristorantis", "ristoratores"
+  add_foreign_key "fav_ristorantis", "users"
   add_foreign_key "menus", "ristoratores"
   add_foreign_key "piattos", "menus"
   add_foreign_key "prenotaziones", "ristoratores"

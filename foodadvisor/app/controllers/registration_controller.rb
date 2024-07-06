@@ -35,7 +35,7 @@ class RegistrationController < ApplicationController
     end
   
     if @utente.save
-      redirect_to root_path, notice: "Registrazione utente completata con successo!"
+      redirect_to login_path, notice: "Registrazione utente completata con successo!"
     else
       render :new_user
     end
@@ -55,7 +55,7 @@ class RegistrationController < ApplicationController
     end
 
     if @utente.save
-      redirect_to root_path, notice: "Registrazione critico completata con successo!"
+      redirect_to login_path, notice: "Registrazione critico completata con successo!"
     else
       render :new_critico
     end
@@ -75,7 +75,7 @@ class RegistrationController < ApplicationController
     end
 
     if @utente.save
-      redirect_to root_path, notice: "Registrazione ristoratore completata con successo!"
+      redirect_to login_path, notice: "Registrazione ristoratore completata con successo!"
     else
       render :new_ristoratore
     end

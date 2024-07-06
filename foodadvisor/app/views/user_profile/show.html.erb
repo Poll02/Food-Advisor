@@ -1,3 +1,5 @@
+<%= link_to 'Modifica', edit_user_profile_path %>
+
 <div class="p-user-profile">
     <div class="p-user-photo-details">
         <% if @current_user.cliente.foto.present? %>
@@ -25,18 +27,20 @@
     <div class="priv-recents-reviews">
         <% if @recensioni.any? %>
             <% @recensioni.each do |recensione| %>
-            <% ristorante = Ristoratore.find(recensione.ristoratore_id) %>
+                <% ristorante = Ristoratore.find(recensione.ristoratore_id) %>
+                <%= link_to public_restaurant_profile_path(ristorante.id), class: 'restaurant-link' do %>
 
-        <div class="public-r-reviews">
-            <%= image_tag ristorante.cliente.foto %> <!-- Foto Ristorante-->
-            <div class="public-review-details">
-                <h3><%= ristorante.nomeristorante %></h3> <!-- Nome Ristorante -->
-                <p><%= recensione.stelle %> stelle</p>
-              <p><%= recensione.commento %></p>
-              <p style="font-style: italic; font-size: 13px;">in data <%= recensione.created_at.strftime('%d/%m/%Y') %></p>
-            </div>
-          </div>
-          <% end %>
+                <div class="public-r-reviews">
+                    <%= image_tag ristorante.cliente.foto %> <!-- Foto Ristorante-->
+                    <div class="public-review-details">
+                        <h3><%= ristorante.nomeristorante %></h3> <!-- Nome Ristorante -->
+                        <p><%= recensione.stelle %> stelle</p>
+                    <p><%= recensione.commento %></p>
+                    <p style="font-style: italic; font-size: 13px;">in data <%= recensione.created_at.strftime('%d/%m/%Y') %></p>
+                    </div>
+                </div>
+                <% end %>
+            <% end %>
           <% else %>
             <p>Nessuna recensione trovata</p>
           <% end %>

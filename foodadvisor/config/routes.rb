@@ -3,6 +3,7 @@ Rails.application.routes.draw do
 
     get 'user_profile/edit'
     get 'user_profile/show'
+    put 'user_profile/update'
     get 'admin_profile/edit'
     get 'admin_profile/show'
     get 'profile/show'
@@ -20,7 +21,12 @@ Rails.application.routes.draw do
   
     get 'classifiche', to: 'classifiche#index'
     get 'supporto', to: 'supporto#index'
-    resources :problems
+
+    
+    resources :problems 
+    put '/aggiorna_stato_problema/:id', to: 'problems#aggiorna_stato_problema'
+
+    
     
     
     # grafico
@@ -74,6 +80,9 @@ Rails.application.routes.draw do
   
     # Rotta per la pagina di registrazione
     get 'signup', to: 'registration#new'
+
+    post 'add_rest_to_favorites', to: 'favorites#add_rest_to_favorites'
+
     
     #route for placement
     get 'competizioni', to: 'competizione#index'
@@ -135,6 +144,10 @@ Rails.application.routes.draw do
       end
     end
   
+    resource :user_profile, only: [:show, :edit, :update] do
+      put 'update', on: :member
+    end
+
     resource :menus
     resources :piattos, only: [:new, :create, :destroy]
   

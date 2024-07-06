@@ -77,6 +77,17 @@
     margin: 5px 0;
 }
 
+// PROBLEMI
+.gestioneProblemi {
+    display: flex;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    max-height: 300px; /* Puoi regolare questa altezza in base alle tue necessità */
+    overflow-y: auto;
+    margin: 1% 0 1% 0;
+    padding: 1%;
+}
+
 
 // NOTIFICHE
 .inviaNotifiche {

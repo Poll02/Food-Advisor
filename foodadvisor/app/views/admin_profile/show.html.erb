@@ -99,6 +99,47 @@
         </div>
     </div>
 </div>
+<h3>Problemi</h3>
+<div class="gestioneProblemi">
+    <table>
+        <thead>
+            <tr>
+                <th>ID cliente</th>
+                <th>Problema</th>
+                <th>Data</th>
+                <th>Stato</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @problemi.each do |problema| %>
+                <tr>
+                    <td>
+                        <%= problema.cliente_id %>
+                    </td>
+                    <td>
+                        <%= problema.text %>
+                    </td>
+                    <td>
+                        <%= problema.created_at.strftime('%d/%m/%Y') %>
+                    </td>
+                    <td>
+                        <% if problema.stato == false %>
+                            <button class="btn btn-danger btn-da-risolvere" data-id="<%= problema.id %>">Da risolvere</button>
+                        <% else %>
+                            <button class="btn btn-success" disabled>Risolto</button>
+                        <% end %>
+                    </td>
+                </tr>
+            <% end %>
+
+            <% if @problemi.size < 1 %>
+                <tr>
+                    <td colspan="4">&nbsp;</td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+</div>
 <h3>Invia comunicazioni</h3>
 <div class="inviaNotifiche">
     <form>
@@ -116,3 +157,40 @@
     </form>
 </div>
 
+<script>
+    // Script per gestire il clic sul pulsante "Da risolvere" e inviare una richiesta AJAX
+    document.addEventListener('DOMContentLoaded', function () {
+        const buttonsDaRisolvere = document.querySelectorAll('.btn-da-risolvere');
+        
+        buttonsDaRisolvere.forEach(button => {
+            button.addEventListener('click', function () {
+                const problemaId = this.getAttribute('data-id');
+                
+                // Esegui una richiesta AJAX per aggiornare lo stato del problema
+                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                fetch(`/aggiorna_stato_problema/${problemaId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken  // Includi il token CSRF nelle intestazioni
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Errore durante l\'aggiornamento dello stato del problema');
+                    }
+                    // Aggiorna il pulsante visivamente
+                    this.classList.remove('btn-danger');
+                    this.classList.add('btn-success');
+                    this.textContent = 'Risolto';
+                    this.disabled = true;
+                })
+                .catch(error => {
+                    console.error('Errore:', error);
+                    // Gestione degli errori
+                });
+            });
+        });
+    });
+</script>

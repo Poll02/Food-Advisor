@@ -3,6 +3,8 @@ class Utente < ApplicationRecord
 
     has_one :cliente, dependent: :destroy
     has_one :admin, dependent: :destroy
+    has_one :user, through: :cliente
+    has_one :ristoratore, through: :cliente
 
     has_one :setting, dependent: :destroy
     after_create :create_default_settings

@@ -9,11 +9,14 @@ class RestaurateurProfilesController < ApplicationController
   def public_show
     @restaurant_owner = Restaurateur.find(params[:id])  # Esempio di come ottenere il ristoratore in base all'id
     @reviews = @restaurant_owner.recensioni  # Esempio di come ottenere le recensioni del ristoratore
+   
 
     # Altri dati necessari per la vista
 
     render 'public_show'
   end
+
+  
 
   def show
     @eventi = Evento.where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id).where("data >=?", Date.today)

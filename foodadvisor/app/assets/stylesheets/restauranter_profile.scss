@@ -128,8 +128,9 @@
 }
 
 .recensione-foto {
-  width: 100px;  
-  height: auto;
+  width: 80px;  
+  height: 80px;
+  border-radius: 99px;
 }
 
 .recensione-info {
@@ -474,7 +475,8 @@ tr.flavor .piatto {
 
 .public-r-reviews{
   display: flex;
-  justify-content: space-between;
+  margin-bottom: 30px;
+  justify-content: flex-start;
   gap: 20px;
   width: 1200px;
   border: 1px solid #ccc;
