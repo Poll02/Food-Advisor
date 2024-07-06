@@ -70,7 +70,7 @@
       <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Lascia una Recensione</h2>
-        <% if current_user.present? && session[:role] == 'User' %>
+        <% if current_user.present? && !(@current_user.cliente.ristoratore.present?)%>
         <%= form_with( url: reviews_path, method: "post", local: true) do |form| %>
           <%= form.hidden_field :cliente_id, value: @current_user.cliente.id %>
           <%= form.hidden_field :ristoratore_id, value: @restaurant_owner.cliente.id %>
@@ -99,6 +99,10 @@
           <br><br>
           <%= form.submit "Invia" %>
         <% end %>
+        <%elsif current_user.present? && @current_user.cliente.ristoratore.present?%>
+            I ristoratori non possono recensire i ristoranti, per recensire un ristorante è necessario accedere come utente!
+        <%else%>
+            Per recensire un ristorante devi essere loggato come Utente!
         <%end%>
       </div>
     </div>

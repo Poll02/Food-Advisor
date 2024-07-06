@@ -7,7 +7,7 @@ class ReviewsController < ApplicationController
           commento: params[:commento]
         )
         @review.cliente = @current_user.cliente
-        @review.ristoratore = @restaurant_owner
+        @review.ristoratore = @restaurant_owner.ristoratore
 
         Rails.logger.debug { "Review: #{@review.inspect}" }
         Rails.logger.debug { "Cliente: #{@current_user.cliente.inspect}" }
@@ -27,5 +27,5 @@ class ReviewsController < ApplicationController
   end
   
   def set_restaurant_owner
-    @restaurant_owner = Ristoratore.find(params[:ristoratore_id])
+    @restaurant_owner = Cliente.find(params[:ristoratore_id])
   end
