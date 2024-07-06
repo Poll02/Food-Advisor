@@ -12,12 +12,15 @@ class NotificationsController < ApplicationController
           @notification = user.cliente.notifications.new(notification_params)
           if @notification.save
             UserMailer.with(notification: @notification).send_notification.deliver_later
-            redirect_to admin_profile_path, notice: 'Notifica inviata con successo!'
+            flash[:notice] = 'Notifica inviata con successo!'
+            redirect_to admin_profile_path
           else
+            flash[:alert] = 'Errore durante il salvataggio della notifica.'
             render 'admin_profile/show'
           end
         else
-          redirect_to admin_profile_path, alert: 'Utente non trovato!'
+            flash[:alert] = 'Utente non trovato!'
+            redirect_to admin_profile_path
         end
       end
       

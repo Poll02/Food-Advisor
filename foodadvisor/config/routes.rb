@@ -24,8 +24,11 @@ Rails.application.routes.draw do
     get 'supporto', to: 'supporto#index'
 
     
-    resources :problems 
-    put '/aggiorna_stato_problema/:id', to: 'problems#aggiorna_stato_problema'
+    resources :problems do
+      member do
+        put 'aggiorna_stato_problema', to: 'problems#aggiorna_stato_problema'
+      end
+    end
 
     
     resources :notifications, only: [:new, :create]
