@@ -46,19 +46,27 @@ class InfoController < ApplicationController
   end
 
   def bookings_per_week
+    Rails.logger.info("inizio grafico")
+    
     start_date = Date.parse(params[:start_date])
-    end_date = start_date.end_of_week(:sunday)
+    end_date = start_date.end_of_week(:sunday) + 1.day
+    rist = @restaurant_owner.cliente.ristoratore.id
+    
+    Rails.logger.info("data inizio: #{start_date}")
+    Rails.logger.info("data fine: #{end_date}")
 
-    bookings = Prenotazione.where(created_at: start_date.beginning_of_day..end_date.end_of_day, valida: true)
-                      .group("DATE(created_at)")
-                      .count
-
+    Rails.logger.info("id ristorante: #{rist}")
+  
+    bookings = Prenotazione.where(data: start_date..end_date, valida: true, ristoratore_id: rist)
+                           .group("DATE(data)")
+                           .count
+  
     reviews = Recensione.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
-                    .group("DATE(created_at)")
-                    .count
-
+                        .group("DATE(created_at)")
+                        .count
+  
     render json: { bookings: bookings, reviews: reviews }
-  end
+  end  
 
   def daily_bookings_and_events
     year = params[:year].to_i
