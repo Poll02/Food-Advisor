@@ -86,20 +86,20 @@ class RegistrationController < ApplicationController
 
   def user_params
     params.require(:utente).permit(:email, :password, :password_confirmation, :telefono,
-                                   cliente_attributes: [:id, :foto, :dataiscrizione,
+                                   cliente_attributes: [:id, :foto,
                                                         user_attributes: [:username, :nome, :cognome, :datanascita]])
   end
   
   def critico_params
     params.require(:utente).permit(:email, :password, :password_confirmation, :telefono,
-                                   cliente_attributes: [:id, :foto, :dataiscrizione,
+                                   cliente_attributes: [:id, :foto,
                                                         user_attributes: [:username, :nome, :cognome, :datanascita,
                                                                           critico_attributes: [:certificato]]])
   end
   
   def ristoratore_params
     params.require(:utente).permit(:email, :password, :password_confirmation, :telefono,
-                                   cliente_attributes: [:id, :foto, :dataiscrizione,
+                                   cliente_attributes: [:id, :foto,
                                                         ristoratore_attributes: [:piva, :asporto, :nomeristorante, :indirizzo]])
   end
   

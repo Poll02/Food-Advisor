@@ -6,10 +6,10 @@ utente4 = Utente.create(email: 'utente4@example.com', password: 'password4', tel
 utente5 = Utente.create(email: 'utente5@example.com', password: 'password5', telefono: '1112245554')
 
 # Creazione di Clienti
-cliente1 = Cliente.create(utente: utente1, foto: 'ristoratore.jpg', dataiscrizione: '2023-01-01')
-cliente2 = Cliente.create(utente: utente2, foto: 'ristoratore.jpg', dataiscrizione: '2023-02-01')
-cliente3 = Cliente.create(utente: utente4, foto: 'user.jpg', dataiscrizione: '2023-03-01')
-cliente4 = Cliente.create(utente: utente5, foto: 'user.jpg', dataiscrizione: '2023-04-01')
+cliente1 = Cliente.create(utente: utente1, foto: 'ristoratore.jpg')
+cliente2 = Cliente.create(utente: utente2, foto: 'ristoratore.jpg')
+cliente3 = Cliente.create(utente: utente4, foto: 'user.jpg')
+cliente4 = Cliente.create(utente: utente5, foto: 'user.jpg')
 
 # Creazione di Admin
 admin1 = Admin.create(utente: utente3, nome: 'Admin', cognome: 'One')

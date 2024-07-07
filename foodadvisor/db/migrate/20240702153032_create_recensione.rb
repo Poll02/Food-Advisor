@@ -7,6 +7,7 @@ class CreateRecensione < ActiveRecord::Migration[6.1]
       t.string :commento
       t.boolean :pinnata, default: false
       t.integer :stelle
+      t.integer :like, dafault: 0
 
       t.timestamps
     end
