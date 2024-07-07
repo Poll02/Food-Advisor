@@ -107,7 +107,7 @@
     display: flex;
     justify-content: space-between;
     font-weight: bold;
-    border-bottom: 1px solid #ccc;
+    border: 1px solid #ccc;
     padding: 1%;
   }
   
@@ -120,6 +120,8 @@
   .days {
     display: flex;
     flex-wrap: wrap;
+    border-radius: 0 0 10px 10px; // agg
+    border: 1px solid #ccc; // agg
   }
   
   .day {

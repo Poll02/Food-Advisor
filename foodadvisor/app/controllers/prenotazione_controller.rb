@@ -3,16 +3,24 @@ class PrenotazioneController < ApplicationController
   before_action :set_prenotazione, only: [:set_valida, :destroy]
 
   def create
+    Rails.logger.info("Inizio creazione prenotazione")
+    
     @prenotazione = Prenotazione.new(prenotazione_params)
     @prenotazione.user_id = @current_user.cliente.user.id
+    Rails.logger.info("User ID assegnato alla prenotazione: #{@prenotazione.user_id}")
+    
     @prenotazione.valida = false  # Impostare valida a false
-
+    Rails.logger.info("Prenotazione impostata come non valida")
+  
     if @prenotazione.save
+      Rails.logger.info("Prenotazione creata con successo")
       render json: { success: true }
     else
+      Rails.logger.error("Errore nella creazione della prenotazione: #{@prenotazione.errors.full_messages.join(", ")}")
       render json: { success: false }
     end
   end
+  
 
   def set_valida
     @prenotazione.update(valida: true)

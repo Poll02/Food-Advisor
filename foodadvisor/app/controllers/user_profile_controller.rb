@@ -3,7 +3,7 @@ class UserProfileController < ApplicationController
 
   before_action :require_logged_in, except: [:public_show]
   before_action :require_customer, except: [:public_show]
-  before_action :set_user, only: [:show, :edit, :update]
+  before_action :set_user, only: [:show, :edit, :update, :monthly_bookings_user, :daily_bookings_user]
 
   def show
     @recensioni = Recensione.where(cliente_id: current_user.cliente.id).order(created_at: :desc)
@@ -41,11 +41,47 @@ class UserProfileController < ApplicationController
 
   end
 
-  def determine_layout
-    action_name == 'public_show' ? 'application' : 'with_sidebar'
+  def daily_bookings_user
+    year = params[:year].to_i
+    month = params[:month].to_i
+    day = params[:day].to_i
+
+    # Formatta la data come stringa 'YYYY-MM-DD'
+    formatted_date = Date.new(year, month, day).strftime('%Y-%m-%d')
+
+    # Query per le prenotazioni
+    @prenotazioni_oggi = Prenotazione.where(data: formatted_date, valida: true, user_id: @user.cliente.user.id)
+
+    # Renderizza il JSON con tutte le informazioni
+    render json: {
+      prenotazioni: @prenotazioni_oggi
+    }
+  end
+
+  def monthly_bookings_user
+    year = params[:year].to_i
+    month = params[:month].to_i
+
+    start_date = Date.new(year, month, 1)
+    end_date = start_date.end_of_month
+
+    # Formatta le date come stringhe 'YYYY-MM-DD'
+    start_date_str = start_date.strftime('%Y-%m-%d')
+    end_date_str = end_date.strftime('%Y-%m-%d')
+
+    # Query per le prenotazioni del mese
+    prenotazioni = Prenotazione.where('data >= ? AND data <= ? AND valida = ? AND user_id = ?', start_date_str, end_date_str, true, @user.cliente.user.id)
+
+    render json: {
+      bookings: prenotazioni
+    }
   end
 
   private
+
+  def determine_layout
+    action_name == 'public_show' ? 'application' : 'with_sidebar'
+  end
 
   def set_user
     @user = @current_user

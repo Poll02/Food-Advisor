@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
   get 'user_notifications/index'
     get 'preferiti/show'
-
     get 'user_profile/edit'
     get 'user_profile/show'
     put 'user_profile/update'
@@ -10,7 +9,7 @@ Rails.application.routes.draw do
     get 'profile/show'
     get 'critic_profile/show'
     get 'critic_profile/edit'
-    get 'critic_profile/update'
+    put 'critic_profile/update'
     get 'competizione/index'
     get 'support/index'
     
@@ -36,6 +35,12 @@ Rails.application.routes.draw do
     # grafico
     get 'bookings_per_week', to: 'info#bookings_per_week'
     get 'daily_bookings_and_events', to: 'info#daily_bookings_and_events'
+
+    # grafici personali
+    get 'daily_bookings', to: 'critic_profile#daily_bookings'
+    get 'monthly_bookings', to: 'critic_profile#monthly_bookings'
+    get 'daily_bookings_user', to: 'user_profile#daily_bookings_user'
+    get 'monthly_bookings_user', to: 'user_profile#monthly_bookings_user'
   
     #
     # Rotta per il form di login (GET e POST)
@@ -149,6 +154,10 @@ Rails.application.routes.draw do
     end
   
     resource :user_profile, only: [:show, :edit, :update] do
+      put 'update', on: :member
+    end
+
+    resource :critic_profile, only: [:show, :edit, :update] do
       put 'update', on: :member
     end
 
