@@ -175,10 +175,8 @@ Rails.application.routes.draw do
     delete 'info/destroy_dipendente/:id', to: 'info#destroy_dipendente', as: 'destroy_dipendente'
   
   
-      #rotta per le recensioni
-      resources :reviews, only: [:create]
-      # rotta per visualizzare le recensioni pubbliche
-      get '/public_show', to: 'reviews#public_show', as: 'public_show_reviews'
+    #rotta per le recensioni
+    resources :reviews, only: [:create, :destroy]
   
   
   end

@@ -2,9 +2,8 @@
 class Recensione < ApplicationRecord
   belongs_to :cliente
   belongs_to :ristoratore
-  belongs_to :competizione, optional: true
 
-  has_many :recensione, dependent: :destroy
+  has_many :segnalazione, dependent: :destroy
   # Altre associazioni e validazioni
   validates :cliente_id, presence: true
   validates :ristoratore_id, presence: true
