@@ -9,7 +9,7 @@
             <input type="radio" id="critico" name="role" value="critico"> Critico
         </label>
         <label for="admin">
-            <input type="radio" id="admin" name="role" value="admin"> Admin
+            <input type="radio" id="admin" name="role" value="ristoratore"> Ristoratore
         </label>
     </div>
     <div class="registrazioniForm">
@@ -169,7 +169,7 @@
           enableForm(utenteForm);
         } else if (this.value === 'critico') {
           enableForm(criticoForm);
-        } else if (this.value === 'admin') {
+        } else if (this.value === 'ristoratore') {
           enableForm(ristoratoreForm);
         }
       });

@@ -1,4 +1,16 @@
 <div class="pagina-vetrina">
+    <% if flash[:notice] %>
+      <div class="alert alert-success" role="alert">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+
+    <% if flash[:alert] %>
+      <div class="alert alert-danger" role="alert">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
       <!-- Stelle vuote -->
         <symbol id="empty-star" viewBox="0 0 576 512">
@@ -186,34 +198,44 @@
       <p>Data</p>
       <p>Numero di stelle da a</p>
     </div>
-    <div class="public-r-reviews-grid">
+    <div class="public-r-reviews-grid"> 
       <% if @reviews.any? %>
         <% @reviews.each do |review| %>
           <div class="public-r-reviews">
-            <% if review.cliente.foto.present? %>
-              <%= image_tag review.cliente.foto, class: 'recensione-foto' %>
-            <% else %>
-              <%= image_tag 'background.jpg', class: 'recensione-foto' %>
-            <% end %>
-          <div class="public-review-details">
-            <p style="font-weight: bold";><%= review.cliente.user.username %></p>
-            <p>
-              <% review.stelle.times do %>
-                <ion-icon name="star" style="font-size: 15px;"></ion-icon>
+            <div class="public-review-details">
+              <% if review.cliente.foto.present? %>
+                <%= image_tag review.cliente.foto, class: 'recensione-foto' %>
+              <% else %>
+                <%= image_tag 'background.jpg', class: 'recensione-foto' %>
               <% end %>
-            </p>            <p><%= review.commento %></p>
-            <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
+              <div class="public-review-text">
+                <p style="font-weight: bold";><%= review.cliente.user.username %></p>
+                <p>
+                  <% review.stelle.times do %>
+                    <ion-icon name="star" style="font-size: 15px;"></ion-icon>
+                  <% end %>
+                </p>
+                <p><%= review.commento %></p>
+                <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
+              </div>
+            </div>
+            <div class="public-review-icon">
+              <%= form_with url: add_like_review_path(review), method: :post, remote: true, html: { class: 'like-form' } do %>
+          <%= hidden_field_tag :review_id, review.id %>
+          <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
+          <button type="submit" class="like-button">
+            <i class="fa-regular fa-thumbs-up like-icon"></i>
+          </button>
+        <% end %>
+
+              <i class="fa-solid fa-share-nodes"></i>
+              <% if session[:role] == 'Admin' %>
+                <i class="fa-solid fa-trash"></i>
+              <% else %>
+                <i class="fa fa-exclamation-circle report-icon" data-review="<%= review.id %>"></i>
+              <% end %> 
+            </div>
           </div>
-          <div class="public-review-icon">
-            <i class="fa-regular fa-thumbs-up"></i>
-            <i class="fa-solid fa-share-nodes"></i>
-            <% if session[:role] == 'Admin' %>
-              <i class="fa-solid fa-trash"></i>
-            <% else %>
-              <i class="fa fa-exclamation-circle report-icon" data-review="<%= review.id %>"></i>
-            <% end %> 
-          </div>
-        </div>
         <% end %>
       <% else %>
         <p>Nessuna recensione trovata</p>

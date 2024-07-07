@@ -102,45 +102,29 @@
 
 
         </div>
-    </div>
+    </div>  
 
     <div class="popular-reviews-and-reserv-container" style="display: flex; margin-top: 30px; justify-content: space-evenly; margin-bottom: 30px;">
         <div class="reviews-container" style="padding: 10px; border-radius: 10px;">
             <h3 style="margin-bottom: 20px;">Recensioni Popolari</h3>
             <div class="popular-reviews-container" style="display: flex; flex-direction: column;">
-                <div class="popular-reviews-box" style="display: flex; ">
+                <% @reviews.each do |review| %>
+                    <%= link_to public_user_profile_path(review.cliente.user.id), class: 'user-link' do %>
+                    <div class="popular-reviews-box" style="display: flex; width: 600px; ">
                     <%= image_tag 'background.jpg' %>
                     <div class="popular-reviews-box-text">
-                        <h3>Nome Utente</h3>
-                        <p>Testo della Recensione</p>
-                        <p style="font-style: italic; font-size: 13px;">Nome Ristorante<span> - </span> <span style="font-style: normal;">Data Recensione</span></p>
+                        <h3><%= review.cliente.user.nome %></h3>
+                        <p style="font-style: italic; font-size: 13px;"><%= review.ristoratore.nomeristorante %><span> - </span><span style="font-style: normal;"><%= review.created_at.strftime('%d/%m/%Y') %></span></p>
+                        <p><%= review.stelle %></p>
+                        <p><%= review.commento %></p>
+                        <p><%= review.like %></p>
                     </div>
-                </div>
-                <hr class="solid" id="divider">
-                <div class="popular-reviews-box" style="display: flex; ">
-                    <%= image_tag 'background.jpg' %>
-                    <div class="popular-reviews-box-text">
-                        <h3>Nome Utente</h3>
-                        <p>Testo della Recensione</p>
-                        <p style="font-style: italic; font-size: 13px;">Nome Ristorante<span> - </span> <span style="font-style: normal;">Data Recensione</span></p>
                     </div>
+                    <hr class="solid" id="divider">
+                    <% end %>
+                <% end %>
                 </div>
-                <hr class="solid" id="divider">
-
-                <div class="popular-reviews-box" style="display: flex;">
-                    <%= image_tag 'background.jpg' %>
-                    <div class="popular-reviews-box-text">
-                        <h3>Nome Utente</h3>
-                        <p>Testo della Recensione</p>
-                        <p style="font-style: italic; font-size: 13px;">Nome Ristorante<span> - </span> <span style="font-style: normal;">Data Recensione</span></p>
-                    </div>
-                </div>
-                <hr class="solid" id="divider">
-
             </div>
-
-        </div>
-
         <div class="reserv-container" style="margin-left: 30px; display: flex; justify-content: center; align-items: center; width: 20%;">
             <h2>Accedi al <a href="<%=login_path %>"><span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span></a>  per effettuare e visualizzare le tue prenotazioni!</h3>
 

@@ -38,7 +38,7 @@ class UserProfileController < ApplicationController
   def public_show
     @user = User.find(params[:id])
     @iscrizioni = UserCompetition.where(user_id: @user.id)
-
+    @reviews = Recensione.where(cliente_id: @user.cliente.id).order(created_at: :desc)
   end
 
   def daily_bookings_user

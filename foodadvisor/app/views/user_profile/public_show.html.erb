@@ -13,28 +13,40 @@
         </div>
     </div>
     <div class="public-u-follow-btn">
-        <button type="button">Inizia a Seguire</button>
         <button type="button" style="background-color: red;">Segnala</button>
+    </div>
 
-    </div>
     <hr class="solid" id="divider" style="width: 80%;">
+    <h1>Ultime Recensioni</h1>
+
     <div class="public-u-recents-reviews" style="max-height: 600px; overflow-y: scroll;">
-        <h1>Ultime Recensioni</h1>
-        <div class="r-recensioni">
-            <div class="public-r-reviews" style="margin-bottom: 20px;">
-              <%= image_tag 'background.jpg'%>
-              <div class="public-review-details">
-                <h3>Nome Ristorante</h3>
-                <p>n. stelle</p>
-                <p>Testo della recensione. Il testo dovrebbe rispettare dei caratteri minimi e massimi e dobbiamo decidere come gestirne la visualizzazione</p>
-                <p style="font-style: italic; font-size: 13px;">in data DATA</p>
-              </div>
-              
+        <% if @reviews.any? %>
+            <% @reviews.each do |review| %>
+            <div class="r-recensioni" style="display:flex; justify-content: space-between; ">
+                <div class="public-r-reviews" style="margin-bottom: 20px; display: flex; flex-direction: row; ">
+                    <% if review.ristoratore.cliente.foto.present? %>
+                        <%= image_tag review.ristoratore.cliente.foto %> <!-- Supponendo che il ristorante abbia un'immagine associata -->
+                    <% else %>
+                        <%= image_tag 'background.jpg' %>
+                    <% end %>
+                    <div class="public-review-details">
+                        <h3><%= review.ristoratore.nomeristorante %></h3>
+                        <p><%= pluralize(review.stelle, 'stella') %></p>
+                        <p><%= truncate(review.commento, length: 200) %></p> <!-- Tronca il testo della recensione a 200 caratteri -->
+                        <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
+                    </div>
+                </div>
+                <div class="public-r-rev-icon">
+                    <p>icone</p>
+                </div>
             </div>
-            
-            
-          </div>
+            <% end %>
+        <% else %>
+            <p>L'utente non ha lasciato alcuna recensione.</p>
+        <% end %>
     </div>
+
+
     <hr class="solid" id="divider" style="width: 80%;">
     <h1>Competizioni a cui l'utente partecipa</h1>
 
