@@ -1,4 +1,16 @@
-ActiveRecord::Schema.define(version: 2024_07_06_135610) do
+# This file is auto-generated from the current state of the database. Instead
+# of editing this file, please use the migrations feature of Active Record to
+# incrementally modify your database, and then regenerate this schema definition.
+#
+# This file is the source Rails uses to define your schema when running `bin/rails
+# db:schema:load`. When creating a new database, `bin/rails db:schema:load` tends to
+# be faster and is potentially less error prone than running all of your
+# migrations from scratch. Old migrations may fail to apply correctly if those
+# migrations use external dependencies or application code.
+#
+# It's strongly recommended that you check this file into your version control system.
+
+ActiveRecord::Schema.define(version: 2024_07_07_072722) do
 
   create_table "admins", force: :cascade do |t|
     t.integer "utente_id", null: false
@@ -200,6 +212,16 @@ ActiveRecord::Schema.define(version: 2024_07_06_135610) do
     t.index ["cliente_id"], name: "index_ristoratores_on_cliente_id"
   end
 
+  create_table "segnalaziones", force: :cascade do |t|
+    t.integer "recensione_id", null: false
+    t.integer "cliente_id", null: false
+    t.string "motivo"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cliente_id"], name: "index_segnalaziones_on_cliente_id"
+    t.index ["recensione_id"], name: "index_segnalaziones_on_recensione_id"
+  end
+
   create_table "settings", force: :cascade do |t|
     t.string "font", default: "Arial"
     t.string "font_size", default: "medium"
@@ -271,6 +293,8 @@ ActiveRecord::Schema.define(version: 2024_07_06_135610) do
   add_foreign_key "recensiones", "competiziones"
   add_foreign_key "recensiones", "ristoratores"
   add_foreign_key "ristoratores", "clientes"
+  add_foreign_key "segnalaziones", "clientes"
+  add_foreign_key "segnalaziones", "recensiones"
   add_foreign_key "settings", "utentes"
   add_foreign_key "user_competitions", "competiziones", on_delete: :cascade
   add_foreign_key "user_competitions", "users"

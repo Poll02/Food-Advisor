@@ -557,3 +557,10 @@ tr.flavor .piatto {
   cursor: pointer;
 }
 
+.fa-exclamation-circle {
+  transition: color 0.3s ease;
+}
+
+.fa-exclamation-circle:hover {
+  color: red;
+}
