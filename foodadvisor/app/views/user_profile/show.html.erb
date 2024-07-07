@@ -3,10 +3,10 @@
 <div class="p-user-profile">
     <div class="p-user-photo-details">
         <% if @current_user.cliente.foto.present? %>
-                <%= image_tag @current_user.cliente.foto %>
-            <% else %>
-                <%= image_tag 'background.jpg' %> <!-- Immagine competizione -->
-            <% end %>
+            <%= image_tag @current_user.cliente.foto %>
+        <% else %>
+            <%= image_tag 'background.jpg' %> <!-- Immagine competizione -->
+        <% end %>
         <div class="p-user-details">
             <h1>Dettagli</h1>
             <p style="font-weight: bold;">Username: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.username%></span></p>
@@ -19,7 +19,6 @@
             <p style="font-weight: bold;">Telefono: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.utente.telefono%></span></p>
 
         </div>
-
     </div>
     <p style=>Hai <span style="font-weight: bold; color: rgb(60, 173, 135);">100 follower</span> e <span style="font-weight: bold; color: rgb(60, 173, 135);">segui 100 utenti</span></p>
     <hr id="divider" class="solid">
