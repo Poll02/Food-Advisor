@@ -127,6 +127,7 @@
                   <p style="font-size: 13px; font-weight: normal;"><%= evento.descrizione %></p>
                   <p style="font-size: 13px; font-weight: normal;"><%= evento.data %></p>
                   <p style="font-size: 13px; font-weight: normal;"><%= evento.luogo %></p>
+                  <button type="submit" data-evento-id="<%= evento.id %>" id="add-event-fav">Preferiti +</button>
                 </div>
               </div>
             <% end %>
@@ -170,6 +171,8 @@
             <p style="font-size: 13px; font-weight: normal;">Difficoltà: <span><%= recipe.difficulty %></span></p>
             <p style="font-size: 13px; font-weight: normal;">Ingredienti: <span><%= recipe.ingredients %></span></p>
             <p style="font-size: 13px; font-weight: normal; font-style: italic;">Clicca per vedere il procedimento</p>
+            <button type="submit" data-recipe-id="<%= recipe.id %>" id="add-recipe-fav">Preferiti +</button>
+
           </div>
         </div>
       <% end %>
@@ -406,6 +409,62 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+document.getElementById('add-event-fav').addEventListener('click', function(event) {
+    event.preventDefault();
+    
+    const eventoId = this.getAttribute('data-evento-id');
+    
+    fetch('/add_event_to_favorites', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({ evento_id: eventoId })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Evento aggiunto ai preferiti!');
+      } else {
+        alert('Errore: ' + data.error);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Si è verificato un errore durante l\'aggiunta dell\'evento ai preferiti.');
+    });
+  });
+
+  document.getElementById('add-recipe-fav').addEventListener('click', function(event) {
+    event.preventDefault();
+    
+    const recipeId = this.getAttribute('data-recipe-id');
+    
+    fetch('/add_recipe_to_favorites', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({ recipe_id: recipeId })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Ricetta aggiunta ai preferiti!');
+      } else {
+        alert('Errore: ' + data.error);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Si è verificato un errore durante l\'aggiunta della ricetta ai preferiti.');
+    });
+  });
 
 </script>
 

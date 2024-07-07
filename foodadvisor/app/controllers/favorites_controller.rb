@@ -24,6 +24,64 @@ class FavoritesController < ApplicationController
         end
       end
     end
+
+    def add_recipe_to_favorites
+      recipe_id = params[:recipe_id]
+      if session[:role] == 'User'
+        user_id = current_user.cliente.user.id
+      else
+        render json: { success: false, error: 'Devi essere loggato come utente per aggiungere ai preferiti.' }, status: :unauthorized
+      end
+
+
+  
+      if FavRecipe.exists?(user_id: user_id, recipe_id: recipe_id)
+        render json: { success: false, error: 'Ricetta già nei preferiti' }, status: :unprocessable_entity
+      else
+        favorite = FavRecipe.new(user_id: user_id, recipe_id: recipe_id)
+  
+        if favorite.save
+          render json: { success: true }
+        else
+          render json: { success: false, error: favorite.errors.full_messages.to_sentence }, status: :unprocessable_entity
+        end
+      end
+    end
+
+    def add_event_to_favorites
+      evento_id = params[:evento_id]
+      Rails.logger.info("Prendo id evento #{evento_id}" )
+
+      if session[:role] == 'User'
+        user_id = current_user.cliente.user.id
+        Rails.logger.info("Set user id #{user_id}" )
+
+      else
+        render json: { success: false, error: 'Devi essere loggato come utente per aggiungere ai preferiti.' }, status: :unauthorized
+      end
+
+
+  
+      if FavEvents.exists?(user_id: user_id, event_id: evento_id)
+        render json: { success: false, error: 'Ristorante già nei preferiti' }, status: :unprocessable_entity
+      else
+        Rails.logger.info("Inizio creazione" )
+
+        favorite = FavEvents.new(user_id: user_id, event_id: evento_id)
+        Rails.logger.info("Debug #{evento_id}" )
+
+
+
+  
+        if favorite.save
+          Rails.logger.info("Fine creazione" )
+
+          render json: { success: true }
+        else
+          render json: { success: false, error: favorite.errors.full_messages.to_sentence }, status: :unprocessable_entity
+        end
+      end
+    end
   
     private
   

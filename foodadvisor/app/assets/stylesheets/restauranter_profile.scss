@@ -564,3 +564,33 @@ tr.flavor .piatto {
 .fa-exclamation-circle:hover {
   color: red;
 }
+
+#add-event-fav{
+  margin-top: 10px;
+  border: 1px solid black;
+  width: 100px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 50px;
+  cursor: pointer;
+
+}
+
+#add-event-fav:hover{
+  background-color: rgb(186, 207, 209);
+}
+
+#add-recipe-fav{
+  margin-top: 10px;
+  border: 1px solid black;
+  width: 100px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 50px;
+  cursor: pointer;
+
+}
+
+#add-recipe-fav:hover{
+  background-color: rgb(186, 207, 209);
+}

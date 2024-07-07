@@ -3,6 +3,10 @@ class PrenotazioneController < ApplicationController
   before_action :set_prenotazione, only: [:set_valida, :destroy]
 
   def create
+    if session[:role] != 'User'
+      render json: { success: false, error: 'Devi essere loggato come utente per prenotare' }, status: :unauthorized
+      return
+    end
     Rails.logger.info("Inizio creazione prenotazione")
     
     @prenotazione = Prenotazione.new(prenotazione_params)

@@ -1,15 +1,30 @@
 <div class="favourites" style="display: flex; flex-direction: column;">
-    <h1>Eventi Preferiti </h1>
+    <h1>Ricette Preferite</h1>
     <div class="p-user-fav-events">
+        <% if @ricette_preferite.any? %>
+        <% @ricette_preferite.each do |ricetta| %>
+
         <div class="restaurant-box">
-              <%= image_tag 'background.jpg', class: 'evento-foto' %>
+              <% if ricetta.photo.present? %>
+                        <%= image_tag ricetta.photo %>
+                    <% else %>
+                        <%= image_tag "background.jpg" %>
+                    <% end %>
             <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
-              <p>Nome evento</p>
-              <p style="font-size: 13px; font-weight: normal;">Desc evento</p>
-              <p style="font-size: 13px; font-weight: normal;">Data evento</p>
-              <p style="font-size: 13px; font-weight: normal;">Luogo</p>
+              <p><%= ricetta.name%></p>
+              <p style="font-size: 13px; font-weight: normal;"><%= ricetta.difficulty%></p>
+              <p style="font-size: 13px; font-weight: normal;"><%= ricetta.ingredients%></p>
+              <p style="font-size: 13px; font-weight: normal;"><%= ricetta.procedure%></p>
             </div>
           </div>
+        <% end %>
+        <% else %>
+        <p>Nessuna ricetta tra i preferiti<p>
+        <% end %>
+
+
+
+
           
     </div>
     <hr id="divider" class="solid">

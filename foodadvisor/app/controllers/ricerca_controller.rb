@@ -6,4 +6,9 @@ class RicercaController < ApplicationController
             @ristoratori = Ristoratore.limit(10)
           end
     end
+
+    def map_info
+      ristoratore = Ristoratore.find(params[:id])
+      render json: { name: ristoratore.format_restaurant_name }
+    end
 end
