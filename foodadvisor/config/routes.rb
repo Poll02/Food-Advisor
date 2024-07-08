@@ -171,6 +171,8 @@ Rails.application.routes.draw do
     resources :piattos, only: [:new, :create, :destroy]
   
     resource :settings, only: [:show, :edit, :update, :destroy]
+    put 'update_credentials', to: 'settings#update_credentials'
+    post 'verify_password', to: 'settings#verify_password'
     resources :eventi, only: [:create]
     resources :info, only: [:show] 
   

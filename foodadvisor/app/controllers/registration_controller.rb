@@ -6,7 +6,7 @@ class RegistrationController < ApplicationController
     @utente.cliente.build_user
     @utente.cliente.user.build_critico
   end
-  
+
   def new_user
     @utente = Utente.new
     @utente.build_cliente.build_user
@@ -35,10 +35,10 @@ class RegistrationController < ApplicationController
     end
   
     if @utente.save
-      flash[:notice] = "Registrazione ristoratore completata con successo!"
+      flash[:notice] = "Registrazione utente completata con successo!"
       redirect_to login_path
     else
-      flash[:alert] = "Si è verificato un errore durante la registrazione"
+      flash[:alert] = @utente.errors.full_messages.join(', ')
       redirect_to signup_path
     end
   end
@@ -56,11 +56,20 @@ class RegistrationController < ApplicationController
       @utente.cliente.foto = uploaded_file.original_filename
     end
 
+    if params[:utente][:cliente_attributes][:user_attributes][:critico_attributes][:certificato]
+      uploaded_file = params[:utente][:cliente_attributes][:user_attributes][:critico_attributes][:certificato]
+      file_path = Rails.root.join('app', 'assets', 'images', uploaded_file.original_filename)
+      File.open(file_path, 'wb') do |file|
+        file.write(uploaded_file.read)
+      end
+      @utente.cliente.user.critico.certificato = uploaded_file.original_filename
+    end
+
     if @utente.save
       flash[:notice] = "Registrazione critico completata con successo!"
       redirect_to login_path
     else
-      flash[:alert] = "Si è verificato un errore durante la registrazione"
+      flash[:alert] = @utente.errors.full_messages.join(', ')
       redirect_to signup_path
     end
   end
@@ -82,12 +91,11 @@ class RegistrationController < ApplicationController
       flash[:notice] = "Registrazione ristoratore completata con successo!"
       redirect_to login_path
     else
-      flash[:alert] = "Si è verificato un errore durante la registrazione"
+      flash[:alert] = @utente.errors.full_messages.join(', ')
       redirect_to signup_path
     end
   end
   
-
   private
 
   def user_params
@@ -108,5 +116,4 @@ class RegistrationController < ApplicationController
                                    cliente_attributes: [:id, :foto,
                                                         ristoratore_attributes: [:piva, :asporto, :nomeristorante, :indirizzo]])
   end
-  
 end

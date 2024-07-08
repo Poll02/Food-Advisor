@@ -2,7 +2,11 @@
     <h1 style="font-size: 40px; margin-bottom: 20px;">Profilo di <span style="color: #28a745;"><%= @user.username %></span></h1>
     <div class="public-u-foto-info">
         <div class="public-u-foto">
-            <%= image_tag 'background.jpg' %>
+            <% if @user.cliente.foto.present? %>
+                <%= image_tag @user.cliente.foto %>
+            <% else %>
+                <%= image_tag 'user.jpg' %>
+            <% end %>
         </div>
         <div class="public-u-info">
             <p style="font-weight: bold;">Nome: <span style="font-weight: normal;"><%= @user.nome %></span></p>

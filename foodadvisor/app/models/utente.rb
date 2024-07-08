@@ -1,10 +1,10 @@
 class Utente < ApplicationRecord
     has_secure_password
 
-    validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
-    validates :password, presence: true, length: { minimum: 4 }, format: { with: /(?=.*[A-Z])/ }
-    validates :password_confirmation, presence: true
-    validates :telefono, presence: true, uniqueness: true, format: { with: /\A[0-9+\(\)#\.\s\/ext-]+$\z/ }
+    validates :email, presence: { message: "non può essere vuota" }, uniqueness: { message: "già presente nel database" }, format: { with: URI::MailTo::EMAIL_REGEXP, message: "non è valida" }
+    validates :password, presence: { message: "non può essere vuota" }, length: { minimum: 4, message: "deve essere lunga almeno 4 caratteri" }, format: { with: /(?=.*[A-Z])/, message: "non è valida" }
+    validates :password_confirmation, presence: { message: "non può essere vuota" }
+    validates :telefono, presence: true, uniqueness: { message: "già presente nel database" }, format: { with: /\A[0-9+\(\)#\.\s\/ext-]+$\z/, message: "non è valido" }
 
     has_one :cliente, dependent: :destroy
     has_one :admin, dependent: :destroy

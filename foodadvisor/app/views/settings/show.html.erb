@@ -1,4 +1,15 @@
 <div class="impostazioni">
+  <% if flash[:notice] %>
+            <div class="alert alert-success" role="alert">
+                <%= flash[:notice] %>
+            </div>
+            <% end %>
+
+            <% if flash[:alert] %>
+            <div class="alert alert-danger" role="alert">
+                <%= flash[:alert] %>
+            </div>
+        <% end %>
   <h1>Impostazioni</h1>
   <p>Stile dell'applicazione</p>
   <div class="s-section">
@@ -17,10 +28,23 @@
       <%= @setting.theme == 'day' ? 'Giorno' : 'Notte' %>
     </p>
   </div>
-  <p>Gestisci le tue preferenze</p>
+  <p>Gestisci le tue credenziali</p>
   <div class="s-section">
-    <p>Gestisci le notifiche</p>
-    <p>Tag di preferenza</p>
+    <% if session[:role] == 'Ristoratore' %>
+      <p>
+        <strong>Piva: </strong>
+        <%= @current_user.cliente.ristoratore.piva %>
+      </p>
+    <% else %>
+      <p>
+        <strong>Email: </strong>
+        <%= @current_user.email %>
+      </p>
+    <% end %>
+    <p>
+      <strong>Password: </strong>
+      <%= masked_password(@current_user.password_digest) %>
+    </p>
   </div>
 
   <%= link_to 'Modifica Impostazioni', edit_settings_path %>
