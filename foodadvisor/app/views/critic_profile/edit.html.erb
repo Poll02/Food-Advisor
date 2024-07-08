@@ -2,34 +2,22 @@
 
 <%= form_with model: @current_user, url: '/critic_profile/update', method: :put, local: true, multipart: true do |f| %>
   <div class="p-user-photo-details">
-    <% if @current_user.cliente.foto.present? %>
-      <%= image_tag @current_user.cliente.foto %>
-    <% else %>
-      <%= image_tag 'user.jpg' %>
-    <% end %>
-    <div class="p-user-details">
-      <h1>Dettagli</h1>
-
-      <%= f.fields_for :cliente do |c| %>
-        <%= c.label :foto, "Foto" %>
-        <%= c.file_field :foto %>
-
-        <%= c.fields_for :user do |u| %>
-          <p style="font-weight: bold;">Username: <%= u.text_field :username, id: "right-side-requisiti", style: "font-weight: normal;" %></p>
-          <p style="font-weight: bold;">Nome: <%= u.text_field :nome, id: "right-side-requisiti", style: "font-weight: normal;" %></p>
-          <p style="font-weight: bold;">Cognome: <%= u.text_field :cognome, id: "right-side-requisiti", style: "font-weight: normal;" %></p>
-          <p style="font-weight: bold;">Data di Nascita: <%= u.date_field :datanascita, id: "right-side-requisiti", style: "font-weight: normal;" %></p>
-
-          <%= u.fields_for :critico do |r| %>
-            <p style="font-weight: bold;">Certificato: <%= r.file_field :certificato, id: "right-side-requisiti", style: "font-weight: normal;" %></p>
-          <% end %>
+        <% if @current_user.cliente.foto.present? %>
+            <%= image_tag @current_user.cliente.foto %>
+        <% else %>
+            <%= image_tag 'user.jpg' %> <!-- Immagine competizione -->
         <% end %>
+        <div class="p-user-details">
+            <h1>Dettagli</h1>
+            <p style="font-weight: bold;">Username: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.username%></span></p>
+            <p style="font-weight: bold;">Nome: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.nome%></span></p>
+            <p style="font-weight: bold;">Cognome: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.cognome%></span></p>
 
-        <p style="font-weight: bold;">Email: <%= f.email_field :email, id: "right-side-requisiti", style: "font-weight: normal;" %></p>
-        <p style="font-weight: bold;">Telefono: <%= f.telephone_field :telefono, id: "right-side-requisiti", style: "font-weight: normal;" %></p>
-      <% end %>
+            <p style="font-weight: bold;">Data di Nascita: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.datanascita%></span></p>
+            <p style="font-weight: bold;">Data Iscrizione: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.created_at.strftime('%d/%m/%Y')%></span></p>
+            <p style="font-weight: bold;">Email: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.utente.email%></span></p>
+            <p style="font-weight: bold;">Telefono: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.utente.telefono%></span></p>
 
-      <%= f.submit "Salva modifiche" %>
+        </div>
     </div>
-  </div>
 <% end %>

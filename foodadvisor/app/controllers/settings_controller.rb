@@ -19,38 +19,36 @@ class SettingsController < ApplicationController
     end
   end
 
-  def update_credentials
-    @current_user = current_user
-  
-    # Aggiornamento delle credenziali di base
-    if @current_user.cliente
-      if @current_user.cliente.ristoratore
-        if params[:utente][:piva].present?
-          @current_user.cliente.ristoratore.update(piva: params[:utente][:piva])
-        end
+  def update_credentials  
+     # Log dei parametri ricevuti
+    logger.info "Params ricevuti: #{params.inspect}"
+    logger.info "User params: #{user_params.inspect}"
+
+    # Controllare la password corrente
+    if params[:current_password].present? && @current_user.authenticate(params[:current_password])
+      logger.info "Password corrente corretta."
+
+      # Se password_digest è nil, impostarlo alla password corrente
+      if params[:utente][:password].blank?
+        @current_user.password = params[:current_password]
+        @current_user.password_confirmation = params[:current_password]
+        logger.info "Password digest era nil, impostato alla password corrente."
       end
-      @current_user.update(email: params[:utente][:email])
-    end
-  
-    # Verifica della password corrente e aggiornamento della nuova password
-    if params[:utente][:password].present?
-      if @current_user.authenticate(params[:current_password])
-        # Se la password corrente è corretta, aggiorna la password
-        if @current_user.update(user_params)
-          flash[:notice] = 'Credenziali aggiornate con successo.'
-          redirect_to settings_path
-        else
-          flash[:alert] = 'Errore nell\'aggiornamento delle credenziali.'
-          render :edit
-        end
+      if @current_user.update(user_params)
+        # Reindirizza l'utente con un messaggio di successo
+        logger.info "Aggiornamento credenziali riuscito."
+        flash[:notice] = 'Credenziali aggiornate con successo.'
+        redirect_to settings_path 
       else
-        flash[:alert] = 'Password corrente non corretta.'
-        redirect_to edit_settings_path
+        # Rendi la vista del form con errori
+        logger.error "Errore aggiornamento credenziali: #{@current_user.errors.full_messages.join(", ")}"
+        flash[:alert] = 'Errore aggiornamento credenziali.'
+        render :edit
       end
     else
-      # Se non è fornita una nuova password, non aggiornare la password
-      flash[:notice] = 'Credenziali aggiornate con successo.'
-      redirect_to settings_path
+      logger.error "Password corrente non corretta o non presente."
+      flash[:alert] = 'Password corrente non corretta.'
+      render :edit
     end
   end
   
@@ -70,11 +68,7 @@ class SettingsController < ApplicationController
   private
 
   def user_params
-    if session[:role] == 'Ristoratore'
-      params.require(:utente).permit(:email, :password, :password_confirmation, cliente_attributes: [:id, ristoratore_attributes: [:id, :piva]])
-    else
-      params.require(:utente).permit(:email, :password, :password_confirmation)
-    end
+    params.require(:utente).permit(:email, :password, :password_confirmation, cliente_attributes: [:id, ristoratore_attributes: [:id, :nomeristorante, :piva, :indirizzo], user_attributes: [:id, :username, :nome, :cognome]])
   end
 
   def set_user

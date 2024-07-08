@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
     else # Login normale
       utente = Utente.find_by(email: params[:session][:email].downcase)
 
-      if utente && utente.authenticate(params[:session][:password])
+      if utente && utente.authenticate(params[:session][:password]) && !utente.cliente.ristoratore
         if utente.cliente && utente.cliente.user && utente.cliente.user.critico
           log_in(utente, 'Critico')  # Login come critico
         elsif utente.admin

@@ -81,13 +81,11 @@
 
     </div>
 
+    <% if session[:role] == 'User' || session[:role] == 'Critico' %>
     <div id="reviewModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Lascia una Recensione</h2>
-        <% if session[:role] == 'Admin' %>
-              Admin
-        <% elsif current_user.present? && !(@current_user.cliente.ristoratore.present?)%>
         <%= form_with( url: reviews_path, method: "post", local: true) do |form| %>
           <%= form.hidden_field :cliente_id, value: @current_user.cliente.id %>
           <%= form.hidden_field :ristoratore_id, value: @restaurant_owner.cliente.id %>
@@ -116,9 +114,9 @@
           <br><br>
           <%= form.submit "Invia" %>
         <% end %>
-        <%end%>
       </div>
     </div>
+    <% end %>
 
 
       <h1>Eventi</h1>

@@ -38,35 +38,76 @@
   <p>Gestisci le tue credenziali</p>
   <div class="s-section">
     <%= form_for(@current_user, url: update_credentials_path, method: :put, html: { onsubmit: "return confirmPassword()" }) do |f| %>
-  <% if @current_user.cliente && @current_user.cliente.ristoratore %>
-    <div class="field">
-      <%= f.label :piva, "Piva: " %>
-      <%= f.text_field :piva, value: @current_user.cliente.ristoratore.piva %>
-    </div>
-  <% end %>
+      <!-- Cliente fields -->
+      <%= f.fields_for :cliente do |cliente_form| %>
+        <!-- Ristoratore fields -->
+        <% if session[:role] == 'Ristoratore' %>
+          <%= cliente_form.fields_for :ristoratore do |ristoratore_form| %>
+            <div class="field">
+              <%= ristoratore_form.label :nomeristorante, "Nome Ristorante: " %>
+              <%= ristoratore_form.text_field :nomeristorante %>
+            </div>
 
-  <div class="field">
-    <%= f.label :email, "Email: " %>
-    <%= f.email_field :email %>
-  </div>
+            <div class="field">
+              <%= ristoratore_form.label :indirizzo, "Indirizzo: " %>
+              <%= ristoratore_form.text_field :indirizzo %>
+            </div>
 
-  <!-- Campo nascosto per current_password -->
-  <%= hidden_field_tag :current_password, nil, id: "current_password_field" %>
-  
-  <div class="field">
-    <%= f.label :password, "Nuova Password: " %>
-    <%= f.password_field :password, id: "password_field", onchange: "toggleConfirmPassword()" %>
-  </div>
+            <div class="field">
+              <%= ristoratore_form.label :piva, "Piva: " %>
+              <%= ristoratore_form.text_field :piva %>
+            </div>
+          <% end %>
+        <% end %>
 
-  <div class="field">
-    <%= f.label :password_confirmation, "Conferma Nuova Password: " %>
-    <%= f.password_field :password_confirmation, id: "password_confirmation_field", disabled: true %>
-  </div>
+        <!-- User fields -->
+        <% if session[:role] == 'User' %>
+          <%= cliente_form.fields_for :user do |user_form| %>
+            <div class="field">
+              <%= user_form.label :username, "Username: " %>
+              <%= user_form.text_field :username %>
+            </div>
 
-  <div class="actions">
-    <%= f.submit "Aggiorna Credenziali" %>
+            <div class="field">
+              <%= user_form.label :nome, "Nome: " %>
+              <%= user_form.text_field :nome %>
+            </div>
+
+            <div class="field">
+              <%= user_form.label :cognome, "Cognome: " %>
+              <%= user_form.text_field :cognome %>
+            </div>
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <!-- Email field -->
+      <div class="field">
+        <%= f.label :email, "Email: " %>
+        <%= f.email_field :email %>
+      </div>
+
+      <!-- Hidden field for current_password -->
+      <%= hidden_field_tag :current_password, nil, id: "current_password_field" %>
+      
+      <!-- Password field -->
+      <div class="field">
+        <%= f.label :password, "Nuova Password: " %>
+        <%= f.password_field :password, id: "password_field", onchange: "toggleConfirmPassword()" %>
+      </div>
+
+      <!-- Password confirmation field -->
+      <div class="field">
+        <%= f.label :password_confirmation, "Conferma Nuova Password: " %>
+        <%= f.password_field :password_confirmation, id: "password_confirmation_field", disabled: true %>
+      </div>
+
+      <!-- Submit button -->
+      <div class="actions">
+        <%= f.submit "Aggiorna Credenziali" %>
+      </div>
+    <% end %>
   </div>
-<% end %>
 
   </div>
 </div>

@@ -30,17 +30,37 @@
   </div>
   <p>Gestisci le tue credenziali</p>
   <div class="s-section">
-    <% if session[:role] == 'Ristoratore' %>
+    <% if session[:role] == 'User' || session[:role] == 'Critico' %>
+      <p>
+        <strong>Username: </strong>
+        <%= @current_user.cliente.user.username %>
+      </p>
+      <p>
+        <strong>Nome: </strong>
+        <%= @current_user.cliente.user.nome %>
+      </p>
+      <p>
+        <strong>Cognome: </strong>
+        <%= @current_user.cliente.user.cognome %>
+      </p>
+    <% elsif session[:role] == 'Ristoratore' %>
+      <p>
+        <strong>Nome ristorante: </strong>
+        <%= @current_user.cliente.ristoratore.nomeristorante %>
+      </p>
+      <p>
+        <strong>Indirizzo: </strong>
+        <%= @current_user.cliente.ristoratore.indirizzo %>
+      </p>
       <p>
         <strong>Piva: </strong>
         <%= @current_user.cliente.ristoratore.piva %>
       </p>
-    <% else %>
-      <p>
-        <strong>Email: </strong>
-        <%= @current_user.email %>
-      </p>
     <% end %>
+    <p>
+      <strong>Email: </strong>
+      <%= @current_user.email %>
+    </p>
     <p>
       <strong>Password: </strong>
       <%= masked_password(@current_user.password_digest) %>
