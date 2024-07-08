@@ -1,14 +1,7 @@
 <%= stylesheet_link_tag 'login', media: 'all' %>
 
 <div class="login-page">
-    <div class="login-text-container" style="display: flex; flex-direction: column; width: 20%;">
-        <h1>Esegui l'accesso come utente</h1>
-        <p>Per scrivere Recensioni, partecipare ad Eventi, gestire Prenotazioni e competere con gli altri utenti! oppure</p>
-        <h1>Accedi come Ristoratore</h1>
-        <p>Per gestire il tuo ristorante, pubblicizzare Eventi e guadagnare punti in classifica!</p>
-    </div>
-
-    <div class="login-container">
+    <div class="avvisi" style="position: absolute; top: 60px; z-index: 1; ">
         <% if flash[:notice] %>
             <div class="alert alert-success" role="alert">
                 <%= flash[:notice] %>
@@ -20,10 +13,21 @@
                 <%= flash[:alert] %>
             </div>
         <% end %>
+    </div>
+    <div class="login-text-container" style="display: flex; flex-direction: column; width: 20%;">
+        <h1>Esegui l'accesso come utente</h1>
+        <p>Per scrivere Recensioni, partecipare ad Eventi, gestire Prenotazioni e competere con gli altri utenti! oppure</p>
+        <h1>Accedi come Ristoratore</h1>
+        <p>Per gestire il tuo ristorante, pubblicizzare Eventi e guadagnare punti in classifica!</p>
+    </div>
+
+    <div class="login-container">
+        
             <div class="login-form-container">
                 <h1 style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">Login Utente<span><ion-icon name="person"></ion-icon></span></h1>
                 <!-- app/views/sessions/new.html.erb -->
                 <%= form_with(url: user_login_path, local: true, id: "user-login-form") do %>
+    
                     <div class="input-container">
                         <%= label_tag :email, "Email", id: "login-label" %>
                         <%= text_field_tag 'session[email]', nil, id: "login-input" %>
@@ -61,11 +65,6 @@
         <h1 style="margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 10px;">Login Ristoratore<span><ion-icon name="pizza"></ion-icon></span></h1>
             
         <%= form_with(url: restaurateur_login_path, local: true, id: "restaurateur-login-form") do %>
-                <% if flash.now[:alert] %>
-                    <div class="alert alert-danger" style="color: red; font-style: italic;">
-                        <%= flash.now[:alert] %>
-                    </div>
-                <% end %>
 
                 <div class="input-container">
                     <%= label_tag :piva, "P. IVA", id: "login-label" %>

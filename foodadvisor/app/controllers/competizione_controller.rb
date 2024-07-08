@@ -8,6 +8,11 @@ class CompetizioneController < ApplicationController
 
 
   def join_competition
+    if session[:role] != 'User'
+      render json: { success: false, error: 'Devi essere loggato come utente per partecipare alle competizioni.' }, status: :unauthorized
+      return
+    end
+
     Rails.logger.debug "join_competition called with params: #{params.inspect}"
 
     competizione = Competizione.find(params[:id])

@@ -22,7 +22,7 @@ class SessionsController < ApplicationController
 
         redirect_to root_path
       else
-        flash[:alert] = 'Combinazione email/password non valida per l\'utente.'
+        flash.now[:alert] = 'Combinazione email/password non valida per l\'utente.'
         render 'new'  # Renderizza nuovamente il form di login per l'utente
       end
     end
@@ -35,7 +35,7 @@ class SessionsController < ApplicationController
       log_in(restauratore.cliente.utente, 'Ristoratore')  # Effettua il login con l'utente associato al ristoratore
       redirect_to root_path
     else
-      flash[:alert] = 'Combinazione P.IVA/password non valida per il ristoratore.'
+      flash.now[:alert] = 'Combinazione P.IVA/password non valida per il ristoratore.'
       render 'new'  # Renderizza nuovamente il form di login per il ristoratore
     end
   end

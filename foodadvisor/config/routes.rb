@@ -91,6 +91,10 @@ Rails.application.routes.draw do
     get 'signup', to: 'registration#new'
 
     post 'add_rest_to_favorites', to: 'favorites#add_rest_to_favorites'
+    post 'add_event_to_favorites', to: 'favorites#add_event_to_favorites'
+    post 'add_recipe_to_favorites', to: 'favorites#add_recipe_to_favorites'
+
+
 
     
     #route for placement
@@ -133,6 +137,8 @@ Rails.application.routes.draw do
     # rotte per la pagina di ricerca
     get 'ricerca', to: 'ricerca#index'
     get 'logout', to: 'sessions#destroy'
+    get 'ricerca/:id/map_info', to: 'ricerca#map_info'
+
   
     get 'support', to: 'support#index'
     
