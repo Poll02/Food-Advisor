@@ -1,9 +1,38 @@
-# Creazione degli Utenti
-utente1 = Utente.create(email: 'utente1@example.com', password: 'password1', telefono: '1234567890')
-utente2 = Utente.create(email: 'utente2@example.com', password: 'password2', telefono: '0987654321')
-utente3 = Utente.create(email: 'utente3@example.com', password: 'password3', telefono: '1112223333')
-utente4 = Utente.create(email: 'utente4@example.com', password: 'password4', telefono: '1112244444')
-utente5 = Utente.create(email: 'utente5@example.com', password: 'password5', telefono: '1112245554')
+# Creazione degli Utenti con validazioni aggiornate
+utente1 = Utente.create(
+  email: 'utente1@example.com', 
+  password: 'Password1', 
+  password_confirmation: 'Password1',
+  telefono: '1234567890'
+)
+
+utente2 = Utente.create(
+  email: 'utente2@example.com', 
+  password: 'Password2', 
+  password_confirmation: 'Password2',
+  telefono: '0987654321'
+)
+
+utente3 = Utente.create(
+  email: 'utente3@example.com', 
+  password: 'Password3', 
+  password_confirmation: 'Password3',
+  telefono: '1112223333'
+)
+
+utente4 = Utente.create(
+  email: 'utente4@example.com', 
+  password: 'Password4', 
+  password_confirmation: 'Password4',
+  telefono: '1112244444'
+)
+
+utente5 = Utente.create(
+  email: 'utente5@example.com', 
+  password: 'Password5', 
+  password_confirmation: 'Password5',
+  telefono: '1112245555'
+)
 
 # Creazione di Clienti
 cliente1 = Cliente.create(utente: utente1, foto: 'ristoratore.jpg')
@@ -13,15 +42,44 @@ cliente4 = Cliente.create(utente: utente5, foto: 'user.jpg')
 
 # Creazione di Admin
 admin1 = Admin.create(utente: utente3, nome: 'Admin', cognome: 'One')
+
 # Creazione di Ristoratori
-ristoratore1 = Ristoratore.create(cliente: cliente1, piva: '12345678901', asporto: true, nomeristorante: 'Ristorante Uno', indirizzo: 'Via Uno, 1')
-ristoratore2 = Ristoratore.create(cliente: cliente2, piva: '09876543210', asporto: false, nomeristorante: 'Ristorante Due', indirizzo: 'Via Due, 2')
-# Creazione di Users
-user1 = User.create(cliente: cliente3, username: 'user1', nome: 'Nome3', cognome: 'Cognome3', datanascita: '1990-01-01')
-user2 = User.create(cliente: cliente4, username: 'user2', nome: 'Nome4', cognome: 'Cognome4', datanascita: '1990-04-01')
+ristoratore1 = Ristoratore.create(
+  cliente: cliente1, 
+  piva: '12345678901', 
+  asporto: true, 
+  nomeristorante: 'Ristorante Uno', 
+  indirizzo: 'Via Uno, 1'
+)
+
+ristoratore2 = Ristoratore.create(
+  cliente: cliente2, 
+  piva: '09876543210', 
+  asporto: false, 
+  nomeristorante: 'Ristorante Due', 
+  indirizzo: 'Via Due, 2'
+)
+
+# Creazione di Users con validazione per username
+user1 = User.create(
+  cliente: cliente3, 
+  username: 'user1', # Assicurarsi che non superi la lunghezza massima
+  nome: 'Nome3', 
+  cognome: 'Cognome3', 
+  datanascita: '1990-01-01'
+)
+
+user2 = User.create(
+  cliente: cliente4, 
+  username: 'user2', # Assicurarsi che non superi la lunghezza massima
+  nome: 'Nome4', 
+  cognome: 'Cognome4', 
+  datanascita: '1990-04-01'
+)
 
 # Creazione di Critici
 critico1 = Critico.create(user: user1, certificato: 'Certificato1')
+
 
 #creazione di tag
 Tag.create(nome: 'Italian', categoria: 'Cuisine')

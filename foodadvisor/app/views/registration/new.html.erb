@@ -1,5 +1,17 @@
 <div class="registration-page">
   <div class="regForm">
+    <% if flash[:notice] %>
+      <div class="alert alert-success" role="alert">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+
+    <% if flash[:alert] %>
+      <div class="alert alert-danger" role="alert">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+
     <h1>Registrati</h1>
     <div class="radio-container">
         <label for="user">
@@ -20,6 +32,7 @@
 
           <%= f.label :password %>
           <%= f.password_field :password %>
+          <p style="font-size: 10px; color: gray; margin: 1%; text-align: center; ">la password deve avere una lunghezza minima di 4 caratteri e contenere al suo interno almeno una lettera maiuscola</p>
 
           <%= f.label :password_confirmation, "Conferma Password" %>
           <%= f.password_field :password_confirmation %>
@@ -59,6 +72,7 @@
 
           <%= f.label :password %>
           <%= f.password_field :password %>
+          <p style="font-size: 10px; color: gray; margin: 1%; text-align: center; ">la password deve avere una lunghezza minima di 4 caratteri e contenere al suo interno almeno una lettera maiuscola</p>
 
           <%= f.label :password_confirmation, "Conferma Password" %>
           <%= f.password_field :password_confirmation %>
@@ -103,6 +117,7 @@
 
           <%= f.label :password %>
           <%= f.password_field :password %>
+          <p style="font-size: 10px; color: gray; margin: 1%; text-align: center; ">la password deve avere una lunghezza minima di 4 caratteri e contenere al suo interno almeno una lettera maiuscola</p>
 
           <%= f.label :password_confirmation, "Conferma Password" %>
           <%= f.password_field :password_confirmation %>
@@ -124,8 +139,8 @@
               </div>
 
               <%= ristoratore_fields.label :nomeristorante, "Nome Ristorante" %>
-              <!-- per garantire il corretto uso di maps inserisci il nome esattamente come è registrato su google -->
               <%= ristoratore_fields.text_field :nomeristorante %>
+              <p style="font-size: 10px; color: gray; margin: 1%; text-align: center; ">per garantire il corretto uso di maps inserisci il nome esattamente come è registrato su google</p>
 
               <%= ristoratore_fields.label :indirizzo %>
               <%= ristoratore_fields.text_field :indirizzo %>

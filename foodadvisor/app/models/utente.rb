@@ -1,6 +1,11 @@
 class Utente < ApplicationRecord
     has_secure_password
 
+    validates :email, presence: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
+    validates :password, presence: true, length: { minimum: 4 }, format: { with: /(?=.*[A-Z])/ }
+    validates :password_confirmation, presence: true
+    validates :telefono, presence: true, uniqueness: true, format: { with: /\A[0-9+\(\)#\.\s\/ext-]+$\z/ }
+
     has_one :cliente, dependent: :destroy
     has_one :admin, dependent: :destroy
     has_one :user, through: :cliente

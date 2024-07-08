@@ -35,9 +35,11 @@ class RegistrationController < ApplicationController
     end
   
     if @utente.save
-      redirect_to login_path, notice: "Registrazione utente completata con successo!"
+      flash[:notice] = "Registrazione ristoratore completata con successo!"
+      redirect_to login_path
     else
-      render :new_user
+      flash[:alert] = "Si è verificato un errore durante la registrazione"
+      redirect_to signup_path
     end
   end
   
@@ -55,9 +57,11 @@ class RegistrationController < ApplicationController
     end
 
     if @utente.save
-      redirect_to login_path, notice: "Registrazione critico completata con successo!"
+      flash[:notice] = "Registrazione critico completata con successo!"
+      redirect_to login_path
     else
-      render :new_critico
+      flash[:alert] = "Si è verificato un errore durante la registrazione"
+      redirect_to signup_path
     end
   end
   
@@ -75,9 +79,11 @@ class RegistrationController < ApplicationController
     end
 
     if @utente.save
-      redirect_to login_path, notice: "Registrazione ristoratore completata con successo!"
+      flash[:notice] = "Registrazione ristoratore completata con successo!"
+      redirect_to login_path
     else
-      render :new_ristoratore
+      flash[:alert] = "Si è verificato un errore durante la registrazione"
+      redirect_to signup_path
     end
   end
   
