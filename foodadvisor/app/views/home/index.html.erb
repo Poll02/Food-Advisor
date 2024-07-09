@@ -112,14 +112,16 @@
                 <% if @reviews.any? %>
                     <% @reviews.each do |review| %>
                         <%= link_to public_user_profile_path(review.cliente.user.id), class: 'user-link' do %>
-                        <div class="popular-reviews-box" style="display: flex; width: 600px; ">
+                        <div class="popular-reviews-box" style="display: flex; width: 600px; color: black; ">
                             <%= image_tag 'background.jpg' %>
                             <div class="popular-reviews-box-text">
-                                <h3><%= review.cliente.user.nome %></h3>
+                                <h3><%= review.cliente.user.username %></h3>
                                 <p style="font-style: italic; font-size: 13px;"><%= review.ristoratore.nomeristorante %><span> - </span><span style="font-style: normal;"><%= review.created_at.strftime('%d/%m/%Y') %></span></p>
-                                <p><%= review.stelle %></p>
+                                <% review.stelle.times do %>
+                    <ion-icon name="star" style="font-size: 15px;"></ion-icon>
+                  <% end %>
                                 <p><%= review.commento %></p>
-                                <p><%= review.like %></p>
+                                <p style="font-weight: bold;">Likes: <span style="font-weight: normal;"><%= review.like %></p>
                             </div>
                         </div>
                         <hr class="solid" id="divider">

@@ -30,6 +30,7 @@
     <hr id="divider" class="solid">
     <h1>Ristoranti Preferiti</h1>
     <div class="restaurants-grid">
+            <% if @ristoranti_preferiti.any? %>
             <% @ristoranti_preferiti.each do |ristoratore| %>
             <% @media = ristoratore.media_stelle%>
             <% @numero = ristoratore.n_recensioni%>
@@ -49,6 +50,10 @@
                     </div>
                 </div>
                 <% end %>
+                <% end %>
+
+                <% else %>
+                <p>Nessun ristorante tra i preferiti</p>
             <% end %>          
         </div>
 

@@ -24,8 +24,8 @@
     </svg>
   
     <div class="rest-foto-name">
-        <div class="rest-info-public">
-            <h1 style="font-size: 50px; color: black; "><%= @restaurant_owner.nomeristorante %></h1>
+        <div class="rest-info-public" style="max-width: 400px; overflow-wrap: break-word;">
+            <h1 style="font-size: 50px; color: black;"><%= @restaurant_owner.nomeristorante %></h1>
             <h2><%=@restaurant_owner.media_stelle%> stelle</h2>
             <h3><%=@restaurant_owner.n_recensioni%> recensioni</h3>
             <% if @tags.present? %>
@@ -47,7 +47,19 @@
     <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.email %></span></p>
     <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.telefono %></span></p>
     <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"> <%= @restaurant_owner.indirizzo %></span></p>
-    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> <%= @restaurant_owner.asporto %></span></p>
+    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> 
+      <% if @restaurant_owner.asporto %>
+      Si
+      <% else %>
+      No
+      <% end %>
+
+
+
+
+
+    
+    </span></p>
     
   </div>
   
@@ -226,8 +238,8 @@
               <%= form_with url: add_like_review_path(review), method: :post, remote: true, html: { class: 'like-form' } do %>
           <%= hidden_field_tag :review_id, review.id %>
           <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
-          <button type="submit" class="like-button">
-            <i class="fa-regular fa-thumbs-up like-icon"></i>
+          <button type="submit" class="like-button" style="background: none; border: none;">
+            <i class="fa-regular fa-thumbs-up like-icon" style="font-size: 20px;"></i>
           </button>
         <% end %>
 
