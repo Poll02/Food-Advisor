@@ -1,3 +1,15 @@
+<div class="pagina-info">
+  <% if flash[:notice] %>
+      <div class="alert alert-success" role="alert">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+
+    <% if flash[:alert] %>
+      <div class="alert alert-danger" role="alert">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
 <h1>Info</h1>
 <div class="flex-container-info">
     <div class="column">
@@ -73,6 +85,10 @@
       <h2>Aggiungi Dipendente</h2>
       <%= form_with(url: create_dipendente_info_path, method: :post, local: true) do |form| %>
         <div class="form-group">
+          <%= form.label :foto, "Foto URL" %>
+          <%= form.file_field :foto, class: "form-control" %>
+        </div>
+        <div class="form-group">
           <%= form.label :nome, "Nome" %>
           <%= form.text_field :nome, class: "form-control" %>
         </div>
@@ -87,11 +103,7 @@
         <div class="form-group">
           <%= form.label :assunzione, "Data di Assunzione" %>
           <%= form.date_field :assunzione, class: "form-control" %>
-        </div>
-        <div class="form-group">
-          <%= form.label :foto, "Foto URL" %>
-          <%= form.text_field :foto, class: "form-control" %>
-        </div>
+        </div>        
         <div class="form-group">
           <%= form.submit "Salva Dipendente", class: "btn btn-primary" %>
           <button type="button" id="resetBtnDipendente">Azzera</button>
@@ -99,17 +111,17 @@
       <% end %>
     </div>
   </div> 
-  <!-- Finestra di conferma eliminazione ricetta -->
+  <!-- Finestra di conferma eliminazione dipendente -->
   <div id="confirmModalDipendente" class="modal">s
     <div class="modal-content">
       <span class="close-confirm-dipendente">&times;</span>
       <h2>Conferma Eliminazione</h2>
-      <p>Sei sicuro di voler eliminare questo evento?</p>
+      <p>Sei sicuro di voler eliminare il dipendente?</p>
       <button id="confirmDeleteBtnDipendente">Conferma</button>
       <button id="cancelDeleteBtnDipendente">Annulla</button>
     </div>
   </div>
-
+<div>
 
 
   <script>

@@ -2,6 +2,7 @@
 class ReviewsController < ApplicationController
   before_action :set_restaurant_owner, only: [:create]
   before_action :set_review, only: [:destroy]
+  before_action :find_review, only: [:add_like]
 
   def create
       @review = Recensione.new(
@@ -35,8 +36,25 @@ class ReviewsController < ApplicationController
     end
   end
 
+  def add_like
+    if @review.cliente_id == current_user.cliente.id
+      flash[:alert] = "Non puoi mettere like alle tue stesse recensioni."
+    else
+      @review.increment!(:like)
+      flash[:notice] = "Like aggiunto con successo."
+    end
+    redirect_to public_restaurant_profile_path(params[:restaurant_owner_id])
+  end
+
   private
 
+  def find_review
+    Rails.logger.info("sto iniziando la ricerca della recensione")
+    @review = Recensione.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    flash[:alert] = "Recensione non trovata."
+    redirect_to public_restaurant_profile_path(params[:restaurant_owner_id])
+  end
 
   def set_restaurant_owner
     @restaurant_owner = Cliente.find(params[:ristoratore_id])

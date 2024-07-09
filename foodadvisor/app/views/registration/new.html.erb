@@ -1,127 +1,197 @@
-<h1>registrati</h1>
-<!-- app/views/utentes/new_user.html.erb -->
-<h3>Utente</h3>
-<%= form_for @utente, url: create_user_registration_path do |f| %>
-  <%= f.label :email %>
-  <%= f.text_field :email %>
-
-  <%= f.label :password %>
-  <%= f.password_field :password %>
-
-  <%= f.label :password_confirmation %>
-  <%= f.password_field :password_confirmation %>
-
-  <%= f.label :telefono %>
-  <%= f.text_field :telefono %>
-
-  <%= f.fields_for :cliente do |cliente_fields| %>
-    <%= cliente_fields.label :foto %>
-    <%= cliente_fields.file_field :foto %>
-
-    <%= cliente_fields.label :dataiscrizione %>
-    <%= cliente_fields.date_field :dataiscrizione %>
-
-    <%= cliente_fields.fields_for :user do |user_fields| %>
-      <%= user_fields.label :username %>
-      <%= user_fields.text_field :username %>
-
-      <%= user_fields.label :nome %>
-      <%= user_fields.text_field :nome %>
-
-      <%= user_fields.label :cognome %>
-      <%= user_fields.text_field :cognome %>
-
-      <%= user_fields.label :datanascita %>
-      <%= user_fields.date_field :datanascita %>
+<div class="registration-page">
+  <div class="regForm">
+    <% if flash[:notice] %>
+      <div class="alert alert-success" role="alert">
+        <%= flash[:notice] %>
+      </div>
     <% end %>
-  <% end %>
 
-  <%= f.submit "Registrati come Utente" %>
-<% end %>
-
-<h3>critico</h3>
-<!-- app/views/utentes/new_critico.html.erb -->
-<%= form_for @utente, url: create_critico_registration_path do |f| %>
-  <!-- Campi per Utente, Cliente, User e Critico -->
-  <%= f.label :email %>
-  <%= f.text_field :email %>
-
-  <%= f.label :password %>
-  <%= f.password_field :password %>
-
-  <%= f.label :password_confirmation %>
-  <%= f.password_field :password_confirmation %>
-
-  <%= f.label :telefono %>
-  <%= f.text_field :telefono %>
-
-  <%= f.fields_for :cliente do |cliente_fields| %>
-    <%= cliente_fields.label :foto %>
-    <%= cliente_fields.file_field :foto %>
-
-    <%= cliente_fields.label :dataiscrizione %>
-    <%= cliente_fields.date_field :dataiscrizione %>
-
-    <%= cliente_fields.fields_for :user do |user_fields| %>
-      <%= user_fields.label :username %>
-      <%= user_fields.text_field :username %>
-
-      <%= user_fields.label :nome %>
-      <%= user_fields.text_field :nome %>
-
-      <%= user_fields.label :cognome %>
-      <%= user_fields.text_field :cognome %>
-
-      <%= user_fields.label :datanascita %>
-      <%= user_fields.date_field :datanascita %>
-
-      <%= user_fields.fields_for :critico do |critico_fields| %>
-        <%= critico_fields.label :certificato %>
-        <%= critico_fields.text_field :certificato %>
-      <% end %>
+    <% if flash[:alert] %>
+      <div class="alert alert-danger" role="alert">
+        <%= flash[:alert] %>
+      </div>
     <% end %>
-  <% end %>
 
-  <%= f.submit "Registrati come Critico" %>
-<% end %>
-<h3>ristoratore</h3>
-<!-- app/views/utentes/new_ristoratore.html.erb -->
-<%= form_for @utente, url: create_ristoratore_registration_path do |f| %>
-  <!-- Campi per Utente, Cliente e Ristoratore -->
-  <%= f.label :email %>
-  <%= f.text_field :email %>
+    <h1>Registrati</h1>
+    <div class="radio-container">
+        <label for="user">
+            <input type="radio" id="user" name="role" value="user" checked> User
+        </label>
+        <label for="critico">
+            <input type="radio" id="critico" name="role" value="critico"> Critico
+        </label>
+        <label for="admin">
+            <input type="radio" id="admin" name="role" value="ristoratore"> Ristoratore
+        </label>
+    </div>
+    <div class="registrazioniForm">
+      <div class="utenteForm" id="utenteForm">
+        <%= form_for @utente, url: create_user_registration_path do |f| %>
+          <%= f.label :email %>
+          <%= f.text_field :email %>
 
-  <%= f.label :password %>
-  <%= f.password_field :password %>
+          <%= f.label :password %>
+          <%= f.password_field :password %>
+          <p style="font-size: 10px; color: gray; margin: 1%; text-align: center; ">la password deve avere una lunghezza minima di 4 caratteri e contenere al suo interno almeno una lettera maiuscola</p>
 
-  <%= f.label :password_confirmation %>
-  <%= f.password_field :password_confirmation %>
+          <%= f.label :password_confirmation, "Conferma Password" %>
+          <%= f.password_field :password_confirmation %>
 
-  <%= f.label :telefono %>
-  <%= f.text_field :telefono %>
+          <%= f.label :telefono %>
+          <%= f.text_field :telefono %>
 
-  <%= f.fields_for :cliente do |cliente_fields| %>
-    <%= cliente_fields.label :foto %>
-    <%= cliente_fields.file_field :foto %>
+          <%= f.fields_for :cliente do |cliente_fields| %>
+            <%= cliente_fields.label :foto %>
+            <%= cliente_fields.file_field :foto %>
 
-    <%= cliente_fields.label :dataiscrizione %>
-    <%= cliente_fields.date_field :dataiscrizione %>
+            <%= cliente_fields.fields_for :user do |user_fields| %>
+              <%= user_fields.label :username %>
+              <%= user_fields.text_field :username %>
 
-    <%= cliente_fields.fields_for :ristoratore do |ristoratore_fields| %>
-      <%= ristoratore_fields.label :piva %>
-      <%= ristoratore_fields.text_field :piva %>
+              <%= user_fields.label :nome %>
+              <%= user_fields.text_field :nome %>
 
-      <%= ristoratore_fields.label :asporto %>
-      <%= ristoratore_fields.check_box :asporto %>
+              <%= user_fields.label :cognome %>
+              <%= user_fields.text_field :cognome %>
 
-      <%= ristoratore_fields.label :nomeristorante %>
-      <%= ristoratore_fields.text_field :nomeristorante %>
+              <%= user_fields.label :datanascita %>
+              <%= user_fields.date_field :datanascita %>
+            <% end %>
+          <% end %>
 
-      <%= ristoratore_fields.label :indirizzo %>
-      <%= ristoratore_fields.text_field :indirizzo %>
-    <% end %>
-  <% end %>
+          <%= f.submit "Registrati come Utente" %>
+        <% end %>
+      </div>
 
-  <%= f.submit "Registrati come Ristoratore" %>
-<% end %>
+      <div class="criticoForm disabled-form" id="criticoForm">
+        <!-- app/views/utentes/new_critico.html.erb -->
+        <%= form_for @utente, url: create_critico_registration_path do |f| %>
+          <!-- Campi per Utente, Cliente, User e Critico -->
+          <%= f.label :email %>
+          <%= f.text_field :email %>
 
+          <%= f.label :password %>
+          <%= f.password_field :password %>
+          <p style="font-size: 10px; color: gray; margin: 1%; text-align: center; ">la password deve avere una lunghezza minima di 4 caratteri e contenere al suo interno almeno una lettera maiuscola</p>
+
+          <%= f.label :password_confirmation, "Conferma Password" %>
+          <%= f.password_field :password_confirmation %>
+
+          <%= f.label :telefono %>
+          <%= f.text_field :telefono %>
+
+          <%= f.fields_for :cliente do |cliente_fields| %>
+            <%= cliente_fields.label :foto %>
+            <%= cliente_fields.file_field :foto %>
+
+            <%= cliente_fields.fields_for :user do |user_fields| %>
+              <%= user_fields.label :username %>
+              <%= user_fields.text_field :username %>
+
+              <%= user_fields.label :nome %>
+              <%= user_fields.text_field :nome %>
+
+              <%= user_fields.label :cognome %>
+              <%= user_fields.text_field :cognome %>
+
+              <%= user_fields.label :datanascita %>
+              <%= user_fields.date_field :datanascita %>
+
+              <%= user_fields.fields_for :critico do |critico_fields| %>
+                <%= critico_fields.label :certificato %>
+                <%= critico_fields.file_field :certificato %>
+              <% end %>
+            <% end %>
+          <% end %>
+
+          <%= f.submit "Registrati come Critico" %>
+        <% end %>
+      </div>
+
+      <div class="ristoratoreForm disabled-form" id="ristoratoreForm">
+        <!-- app/views/utentes/new_ristoratore.html.erb -->
+        <%= form_for @utente, url: create_ristoratore_registration_path do |f| %>
+          <!-- Campi per Utente, Cliente e Ristoratore -->
+          <%= f.label :email %>
+          <%= f.text_field :email %>
+
+          <%= f.label :password %>
+          <%= f.password_field :password %>
+          <p style="font-size: 10px; color: gray; margin: 1%; text-align: center; ">la password deve avere una lunghezza minima di 4 caratteri e contenere al suo interno almeno una lettera maiuscola</p>
+
+          <%= f.label :password_confirmation, "Conferma Password" %>
+          <%= f.password_field :password_confirmation %>
+
+          <%= f.label :telefono %>
+          <%= f.text_field :telefono %>
+
+          <%= f.fields_for :cliente do |cliente_fields| %>
+            <%= cliente_fields.label :foto %>
+            <%= cliente_fields.file_field :foto %>
+
+            <%= cliente_fields.fields_for :ristoratore do |ristoratore_fields| %>
+              <%= ristoratore_fields.label :piva, "Partita IVA" %>
+              <%= ristoratore_fields.text_field :piva %>
+
+              <div style="display: flex; align-items: center;">
+                <%= ristoratore_fields.label :asporto %>
+                <%= ristoratore_fields.check_box :asporto %>
+              </div>
+
+              <%= ristoratore_fields.label :nomeristorante, "Nome Ristorante" %>
+              <%= ristoratore_fields.text_field :nomeristorante %>
+              <p style="font-size: 10px; color: gray; margin: 1%; text-align: center; ">per garantire il corretto uso di maps inserisci il nome esattamente come è registrato su google</p>
+
+              <%= ristoratore_fields.label :indirizzo %>
+              <%= ristoratore_fields.text_field :indirizzo %>
+            <% end %>
+          <% end %>
+
+          <%= f.submit "Registrati come Ristoratore" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const radioButtons = document.querySelectorAll('input[name="role"]');
+    const utenteForm = document.getElementById('utenteForm');
+    const criticoForm = document.getElementById('criticoForm');
+    const ristoratoreForm = document.getElementById('ristoratoreForm');
+
+    function disableAllForms() {
+      utenteForm.classList.add('disabled-form');
+      criticoForm.classList.add('disabled-form');
+      ristoratoreForm.classList.add('disabled-form');
+
+      utenteForm.querySelectorAll('input, select, textarea, button').forEach(element => element.disabled = true);
+      criticoForm.querySelectorAll('input, select, textarea, button').forEach(element => element.disabled = true);
+      ristoratoreForm.querySelectorAll('input, select, textarea, button').forEach(element => element.disabled = true);
+    }
+
+    function enableForm(form) {
+      form.classList.remove('disabled-form');
+      form.querySelectorAll('input, select, textarea, button').forEach(element => element.disabled = false);
+    }
+
+    radioButtons.forEach(radio => {
+      radio.addEventListener('change', function() {
+        disableAllForms();
+        if (this.value === 'user') {
+          enableForm(utenteForm);
+        } else if (this.value === 'critico') {
+          enableForm(criticoForm);
+        } else if (this.value === 'ristoratore') {
+          enableForm(ristoratoreForm);
+        }
+      });
+    });
+
+    // Abilita il form utente per default quando la pagina viene caricata
+    document.getElementById('user').checked = true;
+    enableForm(utenteForm);
+  });
+</script>

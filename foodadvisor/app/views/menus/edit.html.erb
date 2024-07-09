@@ -1,4 +1,15 @@
 <div class="menu-ristoratore-edit" style="text-align: center; ">
+    <% if flash[:notice] %>
+      <div class="alert alert-success" role="alert">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+
+    <% if flash[:alert] %>
+      <div class="alert alert-danger" role="alert">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
   <h1 style="font-size: 50px; "><%= @menu.ristoratore.nomeristorante %>'s Menu</h1>
   <div class="categories">
     <% @categories.each do |category| %>

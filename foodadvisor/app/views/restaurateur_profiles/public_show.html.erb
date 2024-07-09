@@ -1,4 +1,16 @@
 <div class="pagina-vetrina">
+    <% if flash[:notice] %>
+      <div class="alert alert-success" role="alert">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+
+    <% if flash[:alert] %>
+      <div class="alert alert-danger" role="alert">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+
     <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
       <!-- Stelle vuote -->
         <symbol id="empty-star" viewBox="0 0 576 512">
@@ -12,8 +24,8 @@
     </svg>
   
     <div class="rest-foto-name">
-        <div class="rest-info-public">
-            <h1 style="font-size: 50px; color: black; "><%= @restaurant_owner.nomeristorante %></h1>
+        <div class="rest-info-public" style="max-width: 400px; overflow-wrap: break-word;">
+            <h1 style="font-size: 50px; color: black;"><%= @restaurant_owner.nomeristorante %></h1>
             <h2><%=@restaurant_owner.media_stelle%> stelle</h2>
             <h3><%=@restaurant_owner.n_recensioni%> recensioni</h3>
             <% if @tags.present? %>
@@ -28,14 +40,26 @@
           <% if @restaurant_owner.cliente.foto.present? %>
             <%= image_tag @restaurant_owner.cliente.foto %>
         <% else %>
-            <%= image_tag "background.jpg" %>
+            <%= image_tag "user.jpg" %>
         <% end %>
   <div class="rest-info-public-right">
     <h3>Informazioni</h3>
     <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.email %></span></p>
     <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.telefono %></span></p>
     <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"> <%= @restaurant_owner.indirizzo %></span></p>
-    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> <%= @restaurant_owner.asporto %></span></p>
+    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> 
+      <% if @restaurant_owner.asporto %>
+      Si
+      <% else %>
+      No
+      <% end %>
+
+
+
+
+
+    
+    </span></p>
     
   </div>
   
@@ -45,6 +69,7 @@
     <div class="review-reserve-buttons">
         <button type="button" class="review">Lascia una Recensione</button>
         <button type="button" style="background-color: rgb(234, 183, 121);" class="open-reserv-modal">Prenota un Tavolo</button>
+        <%= link_to public_show_menus_path(@restaurant_owner.id), class: 'user-link' do %><button type="button" style="background-color: rgb(234, 123, 121);" >Menù</button><% end %>
         <button type="button" id="add-rest-to-fav" data-ristoratore-id="<%= @restaurant_owner.id %>" style="background-color: rgb(71, 200, 82);">Aggiungi ai Preferiti</button>
         <button type="button" id="report-rest" style="background-color: rgb(221, 60, 60);">Segnala</button>
 
@@ -69,13 +94,11 @@
 
     </div>
 
+    <% if session[:role] == 'User' || session[:role] == 'Critico' %>
     <div id="reviewModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Lascia una Recensione</h2>
-        <% if session[:role] == 'Admin' %>
-              Admin
-        <% elsif current_user.present? && !(@current_user.cliente.ristoratore.present?)%>
         <%= form_with( url: reviews_path, method: "post", local: true) do |form| %>
           <%= form.hidden_field :cliente_id, value: @current_user.cliente.id %>
           <%= form.hidden_field :ristoratore_id, value: @restaurant_owner.cliente.id %>
@@ -104,9 +127,9 @@
           <br><br>
           <%= form.submit "Invia" %>
         <% end %>
-        <%end%>
       </div>
     </div>
+    <% end %>
 
 
       <h1>Eventi</h1>
@@ -127,6 +150,7 @@
                   <p style="font-size: 13px; font-weight: normal;"><%= evento.descrizione %></p>
                   <p style="font-size: 13px; font-weight: normal;"><%= evento.data %></p>
                   <p style="font-size: 13px; font-weight: normal;"><%= evento.luogo %></p>
+                  <button type="submit" data-evento-id="<%= evento.id %>" id="add-event-fav">Preferiti +</button>
                 </div>
               </div>
             <% end %>
@@ -170,6 +194,8 @@
             <p style="font-size: 13px; font-weight: normal;">Difficoltà: <span><%= recipe.difficulty %></span></p>
             <p style="font-size: 13px; font-weight: normal;">Ingredienti: <span><%= recipe.ingredients %></span></p>
             <p style="font-size: 13px; font-weight: normal; font-style: italic;">Clicca per vedere il procedimento</p>
+            <button type="submit" data-recipe-id="<%= recipe.id %>" id="add-recipe-fav">Preferiti +</button>
+
           </div>
         </div>
       <% end %>
@@ -182,38 +208,69 @@
     
     <h1 style="margin-bottom: 20px;">Recensioni</h1>
     <div class="reviews-filters">
-      <p style="font-weight: bold;">Filtra per:</p>
-      <p>Data</p>
-      <p>Numero di stelle da a</p>
-    </div>
-    <div class="public-r-reviews-grid">
+    <form action="<%= public_restaurant_profile_path %>" method="GET" id="filterForm">
+    <label for="date">Data:</label>
+    <input type="date" id="date" name="date" value="<%= params[:date] %>">
+
+    <label for="stars_from">Numero di stelle da:</label>
+    <input type="number" id="stars_from" name="stars_from" min="1" max="5" value="<%= params[:stars_from] %>">
+
+    <label for="stars_to">Numero di stelle a:</label>
+    <input type="number" id="stars_to" name="stars_to" min="1" max="5" value="<%= params[:stars_to] %>">
+
+    <label for="order">Ordine:</label>
+    <select id="order" name="order">
+        <option value="asc" <%= 'selected' if params[:order] == 'asc' %>>Ascendente</option>
+        <option value="desc" <%= 'selected' if params[:order] == 'desc' %>>Discendente</option>
+    </select>
+
+    <!-- Campo nascosto per l'ID del ristoratore -->
+    <input type="hidden" id="id" name="id" value="<%= @restaurant_owner.id %>">
+
+    <button type="submit">Cerca</button>
+    <button type="button" onclick="resetForm()">Azzera</button>
+</form>
+
+</div>
+
+    <div class="public-r-reviews-grid"> 
       <% if @reviews.any? %>
         <% @reviews.each do |review| %>
           <div class="public-r-reviews">
-            <% if review.cliente.foto.present? %>
-              <%= image_tag review.cliente.foto, class: 'recensione-foto' %>
-            <% else %>
-              <%= image_tag 'background.jpg', class: 'recensione-foto' %>
-            <% end %>
-          <div class="public-review-details">
-            <p style="font-weight: bold";><%= review.cliente.user.username %></p>
-            <p>
-              <% review.stelle.times do %>
-                <ion-icon name="star" style="font-size: 15px;"></ion-icon>
+            <div class="public-review-details">
+              <% if review.cliente.foto.present? %>
+                <%= image_tag review.cliente.foto, class: 'recensione-foto' %>
+              <% else %>
+                <%= image_tag 'background.jpg', class: 'recensione-foto' %>
               <% end %>
-            </p>            <p><%= review.commento %></p>
-            <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
+              <div class="public-review-text">
+                <p style="font-weight: bold";><%= review.cliente.user.username %></p>
+                <p>
+                  <% review.stelle.times do %>
+                    <ion-icon name="star" style="font-size: 15px;"></ion-icon>
+                  <% end %>
+                </p>
+                <p><%= review.commento %></p>
+                <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
+              </div>
+            </div>
+            <div class="public-review-icon">
+              <%= form_with url: add_like_review_path(review), method: :post, remote: true, html: { class: 'like-form' } do %>
+          <%= hidden_field_tag :review_id, review.id %>
+          <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
+          <button type="submit" class="like-button" style="background: none; border: none;">
+            <i class="fa-regular fa-thumbs-up like-icon" style="font-size: 20px;"></i>
+          </button>
+        <% end %>
+
+              <i class="fa-solid fa-share-nodes"></i>
+              <% if session[:role] == 'Admin' %>
+                <i class="fa-solid fa-trash"></i>
+              <% else %>
+                <i class="fa fa-exclamation-circle report-icon" data-review="<%= review.id %>"></i>
+              <% end %> 
+            </div>
           </div>
-          <div class="public-review-icon">
-            <i class="fa-regular fa-thumbs-up"></i>
-            <i class="fa-solid fa-share-nodes"></i>
-            <% if session[:role] == 'Admin' %>
-              <i class="fa-solid fa-trash"></i>
-            <% else %>
-              <i class="fa fa-exclamation-circle report-icon" data-review="<%= review.id %>"></i>
-            <% end %> 
-          </div>
-        </div>
         <% end %>
       <% else %>
         <p>Nessuna recensione trovata</p>
@@ -242,6 +299,35 @@
 </div>
 
 <script>
+  // azzero i campi del form delle recensioni
+   window.onload = function() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var dateParam = urlParams.get('date');
+        var starsFromParam = urlParams.get('stars_from');
+        var starsToParam = urlParams.get('stars_to');
+        var orderParam = urlParams.get('order');
+
+        // Imposta i valori dei campi in base ai parametri della query string se presenti
+        document.getElementById("date").value = dateParam || ""; // Se dateParam è null, usa una stringa vuota
+        document.getElementById("stars_from").value = starsFromParam || "1";
+        document.getElementById("stars_to").value = starsToParam || "5";
+        document.getElementById("order").value = orderParam || "asc";
+    };
+
+    // Funzione per azzerare i campi del form
+    function resetForm() {
+        document.getElementById("filterForm").reset(); // Resetta il form
+
+        // Imposta la data corrente nel campo "Data"
+        document.getElementById("date").valueAsDate = new Date();
+
+        // Imposta "0" nei campi "Numero di stelle da" e "Numero di stelle a"
+        document.getElementById("stars_from").value = "1";
+        document.getElementById("stars_to").value = "5";
+
+        // Imposta il valore predefinito "Ascendente" nel campo "Ordine"
+        document.getElementById("order").value = "asc";
+    }
 //JS modale segnalazione
 document.addEventListener("DOMContentLoaded", function() {
 
@@ -406,6 +492,62 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+document.getElementById('add-event-fav').addEventListener('click', function(event) {
+    event.preventDefault();
+    
+    const eventoId = this.getAttribute('data-evento-id');
+    
+    fetch('/add_event_to_favorites', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({ evento_id: eventoId })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Evento aggiunto ai preferiti!');
+      } else {
+        alert('Errore: ' + data.error);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Si è verificato un errore durante l\'aggiunta dell\'evento ai preferiti.');
+    });
+  });
+
+  document.getElementById('add-recipe-fav').addEventListener('click', function(event) {
+    event.preventDefault();
+    
+    const recipeId = this.getAttribute('data-recipe-id');
+    
+    fetch('/add_recipe_to_favorites', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({ recipe_id: recipeId })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Ricetta aggiunta ai preferiti!');
+      } else {
+        alert('Errore: ' + data.error);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Si è verificato un errore durante l\'aggiunta della ricetta ai preferiti.');
+    });
+  });
 
 </script>
 

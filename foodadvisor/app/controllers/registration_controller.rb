@@ -6,7 +6,7 @@ class RegistrationController < ApplicationController
     @utente.cliente.build_user
     @utente.cliente.user.build_critico
   end
-  
+
   def new_user
     @utente = Utente.new
     @utente.build_cliente.build_user
@@ -35,9 +35,11 @@ class RegistrationController < ApplicationController
     end
   
     if @utente.save
-      redirect_to login_path, notice: "Registrazione utente completata con successo!"
+      flash[:notice] = "Registrazione utente completata con successo!"
+      redirect_to login_path
     else
-      render :new_user
+      flash[:alert] = @utente.errors.full_messages.join(', ')
+      redirect_to signup_path
     end
   end
   
@@ -54,10 +56,21 @@ class RegistrationController < ApplicationController
       @utente.cliente.foto = uploaded_file.original_filename
     end
 
+    if params[:utente][:cliente_attributes][:user_attributes][:critico_attributes][:certificato]
+      uploaded_file = params[:utente][:cliente_attributes][:user_attributes][:critico_attributes][:certificato]
+      file_path = Rails.root.join('app', 'assets', 'images', uploaded_file.original_filename)
+      File.open(file_path, 'wb') do |file|
+        file.write(uploaded_file.read)
+      end
+      @utente.cliente.user.critico.certificato = uploaded_file.original_filename
+    end
+
     if @utente.save
-      redirect_to login_path, notice: "Registrazione critico completata con successo!"
+      flash[:notice] = "Registrazione critico completata con successo!"
+      redirect_to login_path
     else
-      render :new_critico
+      flash[:alert] = @utente.errors.full_messages.join(', ')
+      redirect_to signup_path
     end
   end
   
@@ -75,32 +88,32 @@ class RegistrationController < ApplicationController
     end
 
     if @utente.save
-      redirect_to login_path, notice: "Registrazione ristoratore completata con successo!"
+      flash[:notice] = "Registrazione ristoratore completata con successo!"
+      redirect_to login_path
     else
-      render :new_ristoratore
+      flash[:alert] = @utente.errors.full_messages.join(', ')
+      redirect_to signup_path
     end
   end
   
-
   private
 
   def user_params
     params.require(:utente).permit(:email, :password, :password_confirmation, :telefono,
-                                   cliente_attributes: [:id, :foto, :dataiscrizione,
+                                   cliente_attributes: [:id, :foto,
                                                         user_attributes: [:username, :nome, :cognome, :datanascita]])
   end
   
   def critico_params
     params.require(:utente).permit(:email, :password, :password_confirmation, :telefono,
-                                   cliente_attributes: [:id, :foto, :dataiscrizione,
+                                   cliente_attributes: [:id, :foto,
                                                         user_attributes: [:username, :nome, :cognome, :datanascita,
                                                                           critico_attributes: [:certificato]]])
   end
   
   def ristoratore_params
     params.require(:utente).permit(:email, :password, :password_confirmation, :telefono,
-                                   cliente_attributes: [:id, :foto, :dataiscrizione,
+                                   cliente_attributes: [:id, :foto,
                                                         ristoratore_attributes: [:piva, :asporto, :nomeristorante, :indirizzo]])
   end
-  
 end

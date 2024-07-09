@@ -475,9 +475,8 @@ tr.flavor .piatto {
 
 .public-r-reviews{
   display: flex;
-  margin-bottom: 30px;
-  justify-content: flex-start;
-  gap: 20px;
+  margin-bottom: 10px;
+  justify-content: space-between;
   width: 1200px;
   border: 1px solid #ccc;
   padding: 10px;
@@ -488,7 +487,6 @@ tr.flavor .piatto {
 .public-r-reviews-grid{
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
 .public-r-reviews:hover{
@@ -497,7 +495,13 @@ tr.flavor .piatto {
 
 .public-review-details{
   display: flex;
+  flex-direction: row;
+}
+
+.public-review-text {
+  display: flex;
   flex-direction: column;
+  margin-left: 10px;
 }
 
 .public-review-icon {
@@ -563,4 +567,42 @@ tr.flavor .piatto {
 
 .fa-exclamation-circle:hover {
   color: red;
+}
+
+// prova like
+#flash-messages .notice {
+  color: green;
+}
+#flash-messages .alert {
+  color: red;
+}
+
+#add-event-fav{
+  margin-top: 10px;
+  border: 1px solid black;
+  width: 100px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 50px;
+  cursor: pointer;
+
+}
+
+#add-event-fav:hover{
+  background-color: rgb(186, 207, 209);
+}
+
+#add-recipe-fav{
+  margin-top: 10px;
+  border: 1px solid black;
+  width: 100px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 50px;
+  cursor: pointer;
+
+}
+
+#add-recipe-fav:hover{
+  background-color: rgb(186, 207, 209);
 }

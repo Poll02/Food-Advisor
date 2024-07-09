@@ -11,5 +11,7 @@ class Recensione < ApplicationRecord
   validates :commento, presence: true, length: { minimum: 0, maximum: 500 }
 
   delegate :user, to: :cliente, prefix: true
+
+  scope :top_rated, -> { order(like: :desc).limit(5) }
 end
   

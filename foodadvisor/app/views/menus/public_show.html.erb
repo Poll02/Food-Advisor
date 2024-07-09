@@ -1,75 +1,75 @@
-<!-- show.html.erb -->
-<div class="ricerca-menu-container" style="text-align: center;"> 
-  <h1 style="font-size: 50px;"><%= @menu.ristoratore.nomeristorante %>'s Menu</h1>
-  <%= link_to "Modifica menu", edit_menus_path(@menu), class: "edit-link" %>
-  <div class="search-container">
-    <form id="find-form" action="<%= menus_path(@menu) %>" method="get">
-      <div class="find-input" style="display: flex; align-items: center;">
-        <button type="submit" style="background: none; border: none; margin-bottom: 80px; cursor: pointer; padding: 0;">
-          <ion-icon name="search-outline" style="color: black;"></ion-icon>
-        </button>
-        <input type="text" id="findbar" name="query" placeholder="Inserisci qui il nome del piatto" value="<%= params[:query] %>">
-      </div>
-      <button type="submit" style="display: none;"></button>
-      <ion-icon id="filter-menu-icon" name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px; cursor: pointer;"></ion-icon>
-    </form>
-  </div>
-  <div class="categories" style="text-align: center;">
-    <% if @categories.any? %>
-      <% @categories.each do |category| %>
-        <div class="category">
-          <h2><%= category %></h2>
-          <ul>
-            <% @piattos.select { |piatto| piatto.categoria == category }.each do |piatto| %>
-              <div class="piatto">
-                <% if piatto.foto.present? %>
-                  <%= image_tag piatto.foto, style: 'width: 50px; height: auto;' if piatto.foto.present? %>
-                <% else %>
-                  <%= image_tag 'background.jpg', style: 'width: 50px; height: auto;' %>
-                <% end %>
-                <br><%= piatto.nome %><br>
-                prezzo: <%= piatto.prezzo %>€<br>
-                ingredienti: <%= piatto.ingredienti %>
-              </div>
-            <% end %>
-          </ul>
+<div class="pagina-menu">
+    <%= link_to public_restaurant_profile_path(@restaurateur_profile.id), class: 'user-link' do %>Torna alla pagina vetrina del ristoratore<% end %>
+    <div class="ricerca-menu-container" style="text-align: center;">
+    <h1 style="font-size: 50px;"><%= @menu.ristoratore.nomeristorante %>'s Menu</h1>
+    <div class="search-container">
+        <form id="find-form" action="<%= public_show_menus_path(@menu) %>" method="get">
+        <div class="find-input" style="display: flex; align-items: center;">
+            <button type="submit" style="background: none; border: none; margin-bottom: 80px; cursor: pointer; padding: 0;">
+            <ion-icon name="search-outline" style="color: black;"></ion-icon>
+            </button>
+            <input type="text" id="findbar" name="query" placeholder="Inserisci qui il nome del piatto" value="<%= params[:query] %>">
         </div>
-      <% end %>
-    <% else %>
-      <p>Non hai categorie nel menu.</p>
-    <% end %>
-  </div>
-</div>
-
-<!-- Finestra di dialogo -->
-<div id="dialog" class="dialog-menu">
-  <div class="dialog-content-menu">
-    <span class="close-button">&times;</span>
-    <form id="filter-form">
-      <h4>Applica dei filtri alla tua ricerca</h4>
-      <label for="categoria">Categoria:</label>
-      <select id="categoria">
-        <option value="">Tutte le categorie</option>
+        <button type="submit" style="display: none;"></button>
+        <ion-icon id="filter-menu-icon" name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px; cursor: pointer;"></ion-icon>
+        </form>
+    </div>
+    <div class="categories" style="text-align: center;">
+        <% if @categories.any? %>
         <% @categories.each do |category| %>
-          <option value="<%= category %>" <%= 'selected' if params[:categoria] == category %>><%= category %></option>
+            <div class="category">
+            <h2><%= category %></h2>
+            <ul>
+                <% @piattos.select { |piatto| piatto.categoria == category }.each do |piatto| %>
+                <div class="piatto">
+                    <% if piatto.foto.present? %>
+                    <%= image_tag piatto.foto, style: 'width: 50px; height: auto;' if piatto.foto.present? %>
+                    <% else %>
+                    <%= image_tag 'background.jpg', style: 'width: 50px; height: auto;' %>
+                    <% end %>
+                    <br><%= piatto.nome %><br>
+                    prezzo: <%= piatto.prezzo %>€<br>
+                    ingredienti: <%= piatto.ingredienti %>
+                </div>
+                <% end %>
+            </ul>
+            </div>
         <% end %>
-      </select>
-      <br>
-      <label for="prezzoMin">Prezzo minimo:</label>
-      <input type="number" id="prezzoMin" min="0" step="0.01" value="<%= params[:prezzoMin] %>">
+        <% else %>
+        <p>Il menu è in fase di aggiornamento.</p>
+        <% end %>
+    </div>
+    </div>
 
-      <label for="prezzoMax">Prezzo massimo:</label>
-      <input type="number" id="prezzoMax" min="0" step="0.01" value="<%= params[:prezzoMax] %>"><br>
-      
-      <label for="ingredienti">Ingredienti principali:</label>
-      <input type="text" id="ingredienti" placeholder="Inserisci ingredienti separati da virgola" value="<%= params[:ingredienti] %>">
-      
-      <button type="button" id="apply-filters">Applica filtri</button>
-      <button type="button" id="reset-filters">Azzera filtri</button>
-    </form>
-  </div>
+    <!-- Finestra di dialogo -->
+    <div id="dialog" class="dialog-menu">
+    <div class="dialog-content-menu">
+        <span class="close-button">&times;</span>
+        <form id="filter-form">
+        <h4>Applica dei filtri alla tua ricerca</h4>
+        <label for="categoria">Categoria:</label>
+        <select id="categoria">
+            <option value="">Tutte le categorie</option>
+            <% @categories.each do |category| %>
+            <option value="<%= category %>" <%= 'selected' if params[:categoria] == category %>><%= category %></option>
+            <% end %>
+        </select>
+        <br>
+        <label for="prezzoMin">Prezzo minimo:</label>
+        <input type="number" id="prezzoMin" min="0" step="0.01" value="<%= params[:prezzoMin] %>">
+
+        <label for="prezzoMax">Prezzo massimo:</label>
+        <input type="number" id="prezzoMax" min="0" step="0.01" value="<%= params[:prezzoMax] %>"><br>
+        
+        <label for="ingredienti">Ingredienti principali:</label>
+        <input type="text" id="ingredienti" placeholder="Inserisci ingredienti separati da virgola" value="<%= params[:ingredienti] %>">
+        
+        <button type="button" id="apply-filters">Applica filtri</button>
+        <button type="button" id="reset-filters">Azzera filtri</button>
+        </form>
+    </div>
+    </div>
 </div>
-
 
 
 <script>

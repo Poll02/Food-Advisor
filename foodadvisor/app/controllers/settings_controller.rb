@@ -19,6 +19,50 @@ class SettingsController < ApplicationController
     end
   end
 
+  def update_credentials  
+     # Log dei parametri ricevuti
+    logger.info "Params ricevuti: #{params.inspect}"
+    logger.info "User params: #{user_params.inspect}"
+
+    # Controllare la password corrente
+    if params[:current_password].present? && @current_user.authenticate(params[:current_password])
+      logger.info "Password corrente corretta."
+
+      # Se password_digest è nil, impostarlo alla password corrente
+      if params[:utente][:password].blank?
+        @current_user.password = params[:current_password]
+        @current_user.password_confirmation = params[:current_password]
+        logger.info "Password digest era nil, impostato alla password corrente."
+      end
+      # se viene caricata la foto
+      if params[:utente][:cliente_attributes][:foto]
+        uploaded_file = params[:utente][:cliente_attributes][:foto]
+        file_path = Rails.root.join('app', 'assets', 'images', uploaded_file.original_filename)
+        File.open(file_path, 'wb') do |file|
+          file.write(uploaded_file.read)
+        end
+        params[:utente][:cliente_attributes][:foto] = uploaded_file.original_filename
+      end
+      # aggiornamento informazioni
+      if @current_user.update(user_params)
+        # Reindirizza l'utente con un messaggio di successo
+        logger.info "Aggiornamento credenziali riuscito."
+        flash[:notice] = 'Credenziali aggiornate con successo.'
+        redirect_to settings_path 
+      else
+        # Rendi la vista del form con errori
+        logger.error "Errore aggiornamento credenziali: #{@current_user.errors.full_messages.join(", ")}"
+        flash[:alert] = 'Errore aggiornamento credenziali.'
+        render :edit
+      end
+    else
+      logger.error "Password corrente non corretta o non presente."
+      flash[:alert] = 'Password corrente non corretta.'
+      render :edit
+    end
+  end
+  
+
   def destroy
     begin
       @user.destroy
@@ -32,6 +76,10 @@ class SettingsController < ApplicationController
   end
 
   private
+
+  def user_params
+    params.require(:utente).permit(:email, :password, :password_confirmation, cliente_attributes: [:id, :foto, ristoratore_attributes: [:id, :nomeristorante, :piva, :indirizzo], user_attributes: [:id, :username, :nome, :cognome]])
+  end
 
   def set_user
     @user = current_user

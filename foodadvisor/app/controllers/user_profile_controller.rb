@@ -15,30 +15,10 @@ class UserProfileController < ApplicationController
     # @user viene impostato dal before_action :set_user
   end
 
-  def update
-    if @user.update(utente_params)
-      Rails.logger.debug "Impostazioni profilo aggiornate" # Utilizzo del logger di Rails
-      # Se la foto è stata aggiornata, copiala in assets/images
-      if params[:utente][:cliente_attributes][:foto].present?
-        Rails.logger.debug "presente immagine" # Utilizzo del logger di Rails
-        photo_path = save_locandina(params[:utente][:cliente_attributes][:foto])
-        @user.cliente.foto = photo_path
-        Rails.logger.debug "in user ho: #{@user.cliente.foto}" # Utilizzo del logger di Rails
-      end
-      redirect_to user_profile_path, notice: 'I tuoi dettagli sono stati aggiornati con successo.'
-    else
-      flash[:error] = 'Errore durante l\'aggiornamento del profilo.'
-      render :edit
-    end
-  rescue ActiveRecord::InvalidForeignKey => e
-    flash[:error] = "Errore durante l'aggiornamento del profilo: #{e.message}"
-    render :edit
-  end  
-
   def public_show
     @user = User.find(params[:id])
     @iscrizioni = UserCompetition.where(user_id: @user.id)
-
+    @reviews = Recensione.where(cliente_id: @user.cliente.id).order(created_at: :desc)
   end
 
   def daily_bookings_user

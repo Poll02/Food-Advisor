@@ -32,6 +32,7 @@
                     <div class="result-text">
                         <h3><%= ristoratore.nomeristorante %></h3>
                         <p><%=@media%><ion-icon name="star" style="font-size: 15px;"></ion-icon>, <%= @numero %> recensioni</p>
+                        <p id="map-details" style="font-style: italic; cursor: pointer;" data-ristoratore-id = <%=ristoratore.id%>>Vedi sulla mappa</p>
                     </div>
                 </div>
                 <hr class="solid" id="divider">
@@ -41,20 +42,21 @@
         <div class="vertical-divider"></div>
         <div class="details-container">
         <div class="map-container">
-        <% @ristoranteprova = Ristoratore.find(3) %>
-        <% @name = @ristoranteprova.format_restaurant_name%>
+        <% @ristorante_maps = Ristoratore.find(3) %>
+        <% @name = @ristorante_maps.format_restaurant_name%>
         <iframe 
+            id="rest-map"
             width="450" 
             height="450" 
             frameborder="0" style="border:0"
             referrerpolicy="no-referrer-when-downgrade"
             load="lazy" allowfullscreen
-            src="https://www.google.com/maps/embed/v1/place?q=<%=@name%>&key=AIzaSyC9a9KDxjv1HNDVAeLEVYJDdjX2eYKPRzM">
+            src="">
         </iframe>
 
         </div>
         
-            <p>Indicazioni stradali</p>
+            <p>Posizione sulla mappa</p>
         </div>
     </div>
 </div>
@@ -120,4 +122,24 @@ document.addEventListener('DOMContentLoaded', (event) => {
         window.location.href = `<%= ricerca_path %>?query=${query}&star_rating=${starRating}`;
     });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('#map-details').forEach(function(element) {
+    element.addEventListener('click', function() {
+      const ristoratoreId = this.getAttribute('data-ristoratore-id');
+      
+      fetch(`/ricerca/${ristoratoreId}/map_info`)
+        .then(response => response.json())
+        .then(data => {
+          const mapIframe = document.getElementById('rest-map');
+          const placeName = encodeURIComponent(data.name); // Assicurati che il nome sia URL-encoded
+          const apiKey = 'AIzaSyC9a9KDxjv1HNDVAeLEVYJDdjX2eYKPRzM'; 
+
+          mapIframe.src = `https://www.google.com/maps/embed/v1/place?q=${placeName}&key=${apiKey}`;
+        })
+        .catch(error => console.error('Error fetching map info:', error));
+    });
+  });
+});
+
 </script>

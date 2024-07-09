@@ -91,6 +91,10 @@ Rails.application.routes.draw do
     get 'signup', to: 'registration#new'
 
     post 'add_rest_to_favorites', to: 'favorites#add_rest_to_favorites'
+    post 'add_event_to_favorites', to: 'favorites#add_event_to_favorites'
+    post 'add_recipe_to_favorites', to: 'favorites#add_recipe_to_favorites'
+
+
 
     
     #route for placement
@@ -105,6 +109,7 @@ Rails.application.routes.draw do
     get 'public_restaurant_profile/:id', to: 'restaurateur_profiles#public_show', as: 'public_restaurant_profile'
     get 'public_user_profile/:id', to: 'user_profile#public_show', as: 'public_user_profile'
     get 'public_critic_profile/:id', to: 'critic_profile#public_show', as: 'public_critic_profile'
+    get 'public_show_menus/:id', to: 'menus#public_show', as: 'public_show_menus'
   
     # per i tag
     post 'restaurateur_profiles/:tag_id/add_tag', to: 'restaurateur_profiles#add_tag', as: 'add_tag'
@@ -133,6 +138,8 @@ Rails.application.routes.draw do
     # rotte per la pagina di ricerca
     get 'ricerca', to: 'ricerca#index'
     get 'logout', to: 'sessions#destroy'
+    get 'ricerca/:id/map_info', to: 'ricerca#map_info'
+
   
     get 'support', to: 'support#index'
     
@@ -165,6 +172,8 @@ Rails.application.routes.draw do
     resources :piattos, only: [:new, :create, :destroy]
   
     resource :settings, only: [:show, :edit, :update, :destroy]
+    put 'update_credentials', to: 'settings#update_credentials'
+    post 'verify_password', to: 'settings#verify_password'
     resources :eventi, only: [:create]
     resources :info, only: [:show] 
   
@@ -176,7 +185,11 @@ Rails.application.routes.draw do
   
   
     #rotta per le recensioni
-    resources :reviews, only: [:create, :destroy]
+    resources :reviews, only: [:create, :destroy] do
+      member do
+        post 'add_like'
+      end
+    end
   
   
   end

@@ -1,4 +1,15 @@
 <div class="support-container">
+  <% if flash[:notice] %>
+    <div class="alert alert-success" role="alert">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+
+  <% if flash[:alert] %>
+    <div class="alert alert-danger" role="alert">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
     <div class="header-and-img">
         <h1 style="font-size: 54px; max-width: 300px;">Supporto e Assistenza Clienti</h1>
         <%= image_tag 'support.png' %>
@@ -19,17 +30,6 @@
           <p>Se hai bisogno di assistenza, puoi segnalare un problema usando il form qui sotto.</p>
         
           <%= form_with model: @problem, url: problems_path, local: true do |form| %>
-            <% if @problem.errors.any? %>
-              <div id="error_explanation">
-                <h2><%= pluralize(@problem.errors.count, "errore") %> impediscono la creazione del problema:</h2>
-                <ul>
-                  <% @problem.errors.full_messages.each do |message| %>
-                    <li><%= message %></li>
-                  <% end %>
-                </ul>
-              </div>
-            <% end %>
-
             <div class="field">
               <%= form.label :text, "Descrizione del problema" %>
               <%= form.text_area :text %>

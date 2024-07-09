@@ -1,13 +1,5 @@
 <%= link_to 'Salva', rest_profile_path %>
 
-<div class="ristorante">
-  <% if @restaurant_owner.cliente.foto.present? %>
-  <%= image_tag @restaurant_owner.cliente.foto, class: 'r-foto' %>
-  <% else %>
-  <%= image_tag 'background.jpg', class: 'r-foto' %>
-  <% end %>
-</div>
-
 <h3>Tags</h3>
 <div class="r-statistiche">
   <div class="r-stat">

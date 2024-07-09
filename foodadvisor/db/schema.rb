@@ -33,7 +33,6 @@ ActiveRecord::Schema.define(version: 2024_07_07_072722) do
   create_table "clientes", force: :cascade do |t|
     t.integer "utente_id", null: false
     t.string "foto"
-    t.date "dataiscrizione"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["utente_id"], name: "index_clientes_on_utente_id"
@@ -181,6 +180,7 @@ ActiveRecord::Schema.define(version: 2024_07_07_072722) do
     t.string "commento"
     t.boolean "pinnata", default: false
     t.integer "stelle"
+    t.integer "like", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["cliente_id"], name: "index_recensiones_on_cliente_id"
