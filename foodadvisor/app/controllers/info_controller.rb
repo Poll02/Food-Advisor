@@ -23,12 +23,12 @@ class InfoController < ApplicationController
     )
   
     if @dipendente.save
-      redirect_to info_path, notice: 'Evento creato con successo.'
+      flash[:notice] = 'Dipendente creato con successo.'
+      redirect_to info_path
     else
-      redirect_to info_path, alert: 'Errore nella creazione dell\'evento.'
+      flash[:alert] = 'Errore durante la creazione del dipendente.'
+      redirect_to info_path
     end
-  rescue ArgumentError => e
-    redirect_to info_path, alert: "Errore nella data dell'evento: #{e.message}"
   end
 
   def destroy_dipendente

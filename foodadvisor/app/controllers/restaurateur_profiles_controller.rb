@@ -4,19 +4,7 @@ class RestaurateurProfilesController < ApplicationController
   before_action :require_logged_in, except: [:public_show]
   before_action :require_restaurant_owner, except: [:public_show]
   before_action :set_restaurant_owner
-  before_action :set_evento, only: [:destroy_event]
-
-  def public_show
-    @restaurant_owner = Restaurateur.find(params[:id])  # Esempio di come ottenere il ristoratore in base all'id
-    @reviews = @restaurant_owner.recensioni  # Esempio di come ottenere le recensioni del ristoratore
-   
-
-    # Altri dati necessari per la vista
-
-    render 'public_show'
-  end
-
-  
+  before_action :set_evento, only: [:destroy_event]  
 
   def show
     @eventi = Evento.where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id).where("data >=?", Date.today)
@@ -168,6 +156,24 @@ class RestaurateurProfilesController < ApplicationController
     @tags = @restaurant_owner.cliente.ristoratore.tags
     @recipes = @restaurant_owner.cliente.ristoratore.recipes
     @reviews=Recensione.includes(cliente: :user).where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id)
+
+    if params[:date].present?
+      @reviews = @reviews.where("DATE(created_at) = ?", params[:date])
+    end
+
+    if params[:stars_from].present?
+      @reviews = @reviews.where("stelle >= ?", params[:stars_from])
+    end
+
+    if params[:stars_to].present?
+      @reviews = @reviews.where("stelle <= ?", params[:stars_to])
+    end
+
+    if params[:order].present?
+      order = params[:order] == 'asc' ? 'ASC' : 'DESC'
+      @reviews = @reviews.order("created_at #{order}")
+    end
+
   end
 
   private

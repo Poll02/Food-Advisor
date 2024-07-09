@@ -24,8 +24,8 @@
     </svg>
   
     <div class="rest-foto-name">
-        <div class="rest-info-public">
-            <h1 style="font-size: 50px; color: black; "><%= @restaurant_owner.nomeristorante %></h1>
+        <div class="rest-info-public" style="max-width: 400px; overflow-wrap: break-word;">
+            <h1 style="font-size: 50px; color: black;"><%= @restaurant_owner.nomeristorante %></h1>
             <h2><%=@restaurant_owner.media_stelle%> stelle</h2>
             <h3><%=@restaurant_owner.n_recensioni%> recensioni</h3>
             <% if @tags.present? %>
@@ -47,7 +47,19 @@
     <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.email %></span></p>
     <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.telefono %></span></p>
     <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"> <%= @restaurant_owner.indirizzo %></span></p>
-    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> <%= @restaurant_owner.asporto %></span></p>
+    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> 
+      <% if @restaurant_owner.asporto %>
+      Si
+      <% else %>
+      No
+      <% end %>
+
+
+
+
+
+    
+    </span></p>
     
   </div>
   
@@ -196,10 +208,31 @@
     
     <h1 style="margin-bottom: 20px;">Recensioni</h1>
     <div class="reviews-filters">
-      <p style="font-weight: bold;">Filtra per:</p>
-      <p>Data</p>
-      <p>Numero di stelle da a</p>
-    </div>
+    <form action="<%= public_restaurant_profile_path %>" method="GET" id="filterForm">
+    <label for="date">Data:</label>
+    <input type="date" id="date" name="date" value="<%= params[:date] %>">
+
+    <label for="stars_from">Numero di stelle da:</label>
+    <input type="number" id="stars_from" name="stars_from" min="1" max="5" value="<%= params[:stars_from] %>">
+
+    <label for="stars_to">Numero di stelle a:</label>
+    <input type="number" id="stars_to" name="stars_to" min="1" max="5" value="<%= params[:stars_to] %>">
+
+    <label for="order">Ordine:</label>
+    <select id="order" name="order">
+        <option value="asc" <%= 'selected' if params[:order] == 'asc' %>>Ascendente</option>
+        <option value="desc" <%= 'selected' if params[:order] == 'desc' %>>Discendente</option>
+    </select>
+
+    <!-- Campo nascosto per l'ID del ristoratore -->
+    <input type="hidden" id="id" name="id" value="<%= @restaurant_owner.id %>">
+
+    <button type="submit">Cerca</button>
+    <button type="button" onclick="resetForm()">Azzera</button>
+</form>
+
+</div>
+
     <div class="public-r-reviews-grid"> 
       <% if @reviews.any? %>
         <% @reviews.each do |review| %>
@@ -225,8 +258,8 @@
               <%= form_with url: add_like_review_path(review), method: :post, remote: true, html: { class: 'like-form' } do %>
           <%= hidden_field_tag :review_id, review.id %>
           <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
-          <button type="submit" class="like-button">
-            <i class="fa-regular fa-thumbs-up like-icon"></i>
+          <button type="submit" class="like-button" style="background: none; border: none;">
+            <i class="fa-regular fa-thumbs-up like-icon" style="font-size: 20px;"></i>
           </button>
         <% end %>
 
@@ -266,6 +299,35 @@
 </div>
 
 <script>
+  // azzero i campi del form delle recensioni
+   window.onload = function() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var dateParam = urlParams.get('date');
+        var starsFromParam = urlParams.get('stars_from');
+        var starsToParam = urlParams.get('stars_to');
+        var orderParam = urlParams.get('order');
+
+        // Imposta i valori dei campi in base ai parametri della query string se presenti
+        document.getElementById("date").value = dateParam || ""; // Se dateParam è null, usa una stringa vuota
+        document.getElementById("stars_from").value = starsFromParam || "1";
+        document.getElementById("stars_to").value = starsToParam || "5";
+        document.getElementById("order").value = orderParam || "asc";
+    };
+
+    // Funzione per azzerare i campi del form
+    function resetForm() {
+        document.getElementById("filterForm").reset(); // Resetta il form
+
+        // Imposta la data corrente nel campo "Data"
+        document.getElementById("date").valueAsDate = new Date();
+
+        // Imposta "0" nei campi "Numero di stelle da" e "Numero di stelle a"
+        document.getElementById("stars_from").value = "1";
+        document.getElementById("stars_to").value = "5";
+
+        // Imposta il valore predefinito "Ascendente" nel campo "Ordine"
+        document.getElementById("order").value = "asc";
+    }
 //JS modale segnalazione
 document.addEventListener("DOMContentLoaded", function() {
 
