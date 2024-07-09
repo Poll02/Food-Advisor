@@ -1,22 +1,5 @@
 <%= link_to 'Salva', rest_profile_path %>
 
-<div class="ristorante">
-  <% if @restaurant_owner.cliente.foto.present? %>
-    <%= image_tag @restaurant_owner.cliente.foto, class: 'r-foto'  %>
-  <% else %>
-    <%= image_tag 'user.jpg', class: 'r-foto' %>
-  <% end %>
-   
-  <div class="r-info">
-    <p style="font-weight: bold;">Nome del ristorante: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.nomeristorante %></span></p>
-    <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.indirizzo %></span></p>
-    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%= @restaurant_owner.email %></span></p>
-    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%= @restaurant_owner.telefono %></span></p>
-    <p style="font-weight: bold;">Data di registrazione: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.created_at %></span></p>
-    <p style="font-weight: bold;">Asporto: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.asporto %></span></p>
-  </div>
-</div>
-
 <h3>Tags</h3>
 <div class="r-statistiche">
   <div class="r-stat">

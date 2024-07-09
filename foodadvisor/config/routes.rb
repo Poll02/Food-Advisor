@@ -109,6 +109,7 @@ Rails.application.routes.draw do
     get 'public_restaurant_profile/:id', to: 'restaurateur_profiles#public_show', as: 'public_restaurant_profile'
     get 'public_user_profile/:id', to: 'user_profile#public_show', as: 'public_user_profile'
     get 'public_critic_profile/:id', to: 'critic_profile#public_show', as: 'public_critic_profile'
+    get 'public_show_menus/:id', to: 'menus#public_show', as: 'public_show_menus'
   
     # per i tag
     post 'restaurateur_profiles/:tag_id/add_tag', to: 'restaurateur_profiles#add_tag', as: 'add_tag'

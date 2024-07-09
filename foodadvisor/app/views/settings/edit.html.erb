@@ -1,15 +1,15 @@
 <div class="impostazioni">
   <% if flash[:notice] %>
-            <div class="alert alert-success" role="alert">
-                <%= flash[:notice] %>
-            </div>
-            <% end %>
+    <div class="alert alert-success" role="alert">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
 
-            <% if flash[:alert] %>
-            <div class="alert alert-danger" role="alert">
-                <%= flash[:alert] %>
-            </div>
-        <% end %>
+  <% if flash[:alert] %>
+    <div class="alert alert-danger" role="alert">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
   <h1>Impostazioni</h1>
   <p>Stile dell'applicazione</p>
   <div class="s-section">
@@ -40,6 +40,11 @@
     <%= form_for(@current_user, url: update_credentials_path, method: :put, html: { onsubmit: "return confirmPassword()" }) do |f| %>
       <!-- Cliente fields -->
       <%= f.fields_for :cliente do |cliente_form| %>
+        <div class="field">
+          <%= cliente_form.label :foto, "Foto: " %>
+          <%= cliente_form.file_field :foto %>
+        </div>
+
         <!-- Ristoratore fields -->
         <% if session[:role] == 'Ristoratore' %>
           <%= cliente_form.fields_for :ristoratore do |ristoratore_form| %>

@@ -34,6 +34,16 @@ class SettingsController < ApplicationController
         @current_user.password_confirmation = params[:current_password]
         logger.info "Password digest era nil, impostato alla password corrente."
       end
+      # se viene caricata la foto
+      if params[:utente][:cliente_attributes][:foto]
+        uploaded_file = params[:utente][:cliente_attributes][:foto]
+        file_path = Rails.root.join('app', 'assets', 'images', uploaded_file.original_filename)
+        File.open(file_path, 'wb') do |file|
+          file.write(uploaded_file.read)
+        end
+        params[:utente][:cliente_attributes][:foto] = uploaded_file.original_filename
+      end
+      # aggiornamento informazioni
       if @current_user.update(user_params)
         # Reindirizza l'utente con un messaggio di successo
         logger.info "Aggiornamento credenziali riuscito."
@@ -68,7 +78,7 @@ class SettingsController < ApplicationController
   private
 
   def user_params
-    params.require(:utente).permit(:email, :password, :password_confirmation, cliente_attributes: [:id, ristoratore_attributes: [:id, :nomeristorante, :piva, :indirizzo], user_attributes: [:id, :username, :nome, :cognome]])
+    params.require(:utente).permit(:email, :password, :password_confirmation, cliente_attributes: [:id, :foto, ristoratore_attributes: [:id, :nomeristorante, :piva, :indirizzo], user_attributes: [:id, :username, :nome, :cognome]])
   end
 
   def set_user

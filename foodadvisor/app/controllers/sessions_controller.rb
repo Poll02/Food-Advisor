@@ -11,16 +11,18 @@ class SessionsController < ApplicationController
     else # Login normale
       utente = Utente.find_by(email: params[:session][:email].downcase)
 
-      if utente && utente.authenticate(params[:session][:password]) && !utente.cliente.ristoratore
-        if utente.cliente && utente.cliente.user && utente.cliente.user.critico
-          log_in(utente, 'Critico')  # Login come critico
-        elsif utente.admin
+      if utente && utente.authenticate(params[:session][:password]) 
+        if utente.admin
           log_in(utente, 'Admin')  # Login come utente normale
-        else
-          log_in(utente, 'User')  # Login come utente normale
+          redirect_to root_path
+        elsif utente.cliente.user
+          if utente.cliente.user.critico
+            log_in(utente, 'Critico')  # Login come critico
+          else 
+            log_in(utente, 'User')  # Login come utente normale
+          end
+          redirect_to root_path
         end
-
-        redirect_to root_path
       else
         flash.now[:alert] = 'Combinazione email/password non valida per l\'utente.'
         render 'new'  # Renderizza nuovamente il form di login per l'utente
