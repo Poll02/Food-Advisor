@@ -49,6 +49,7 @@ class FavoritesController < ApplicationController
     end
 
     def add_event_to_favorites
+      Rails.logger.info("aggiungo evento ai preferiti: #{params[:evento_id]}" )
       evento_id = params[:evento_id]
       Rails.logger.info("Prendo id evento #{evento_id}" )
 
@@ -62,12 +63,12 @@ class FavoritesController < ApplicationController
 
 
   
-      if FavEvents.exists?(user_id: user_id, event_id: evento_id)
+      if FavEvent.exists?(user_id: user_id, event_id: evento_id)
         render json: { success: false, error: 'Ristorante già nei preferiti' }, status: :unprocessable_entity
       else
         Rails.logger.info("Inizio creazione" )
 
-        favorite = FavEvents.new(user_id: user_id, event_id: evento_id)
+        favorite = FavEvent.new(user_id: user_id, event_id: evento_id)
         Rails.logger.info("Debug #{evento_id}" )
 
 

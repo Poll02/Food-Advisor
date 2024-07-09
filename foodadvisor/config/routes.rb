@@ -31,6 +31,8 @@ Rails.application.routes.draw do
 
     resources :notifications, only: [:new, :create]
     resources :user_notifications, only: [:index]
+
+    post 'restaurateur_profiles/update_pin', to: 'restaurateur_profiles#update_pin', as: 'update_pin_restaurateur_profile'
     
     # grafico
     get 'bookings_per_week', to: 'info#bookings_per_week'
