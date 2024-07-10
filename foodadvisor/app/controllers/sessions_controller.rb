@@ -62,6 +62,18 @@ class SessionsController < ApplicationController
         Rails.logger.info("Utente trovato nel database")
         # Operazioni da eseguire se l'utente esiste già nel database
         Rails.logger.info("dati utente user completi #{@user.cliente.user.inspect}")
+        # Salva l'utente nel database
+        if @user.update({facebook_id: profile['id'], name: profile['name']})
+            Rails.logger.info("Utente aggiornato con successo nel database")
+            # Effettua il login dell'utente
+    
+            log_in(@user, 'User')  # Effettua il login con l'utente associato al ristoratore
+            render json: { success: true, user: @user }
+        else
+            Rails.logger.info("aggiornamento non effettuato")
+            Rails.logger.info("Errori di validazione: #{@user.errors.full_messages}")
+            render json: { success: false, errors: @user.errors.full_messages }
+        end
 
       else
         Rails.logger.info("Utente non trovato nel database, quindi ne creo uno nuovo")
@@ -72,37 +84,34 @@ class SessionsController < ApplicationController
         @user.cliente.build_user
         Rails.logger.info("utente buildato")
 
-        @user.password = SecureRandom.hex(10)
+        @user.email = profile['email']
+        @user.password = generate_password
+        Rails.logger.info("password: #{@user.password}")
         @user.password_confirmation = @user.password
 
+        @user.telefono = nil
         @user.name = profile['name']
         @user.facebook_id = profile['id']
 
-        @user.cliente.user.nome = profile['name']
         @user.cliente.user.username = profile['name']
+        profile['name'] = profile['name'].split(" ")
+        @user.cliente.user.nome = profile['name'][0]
         @user.cliente.user.cognome = profile['last_name']
         @user.cliente.foto = profile.dig('picture', 'data', 'url') if profile.dig('picture', 'data', 'url').present?
+        if @user.save
+            log_in(@user, 'User')  # Effettua il login con l'utente associato al ristoratore
+            session[:tmp_password] = @user.password
+            Rails.logger.info("Login effettuato con successo")
+            render json: { success: true, user: @user, temporary_password: @user.password}
+        else
+            Rails.logger.info("errore nella registrazione utente")
+            Rails.logger.info("Errori di validazione: #{@user.errors.full_messages}")
+            render json: { success: false, errors: @user.errors.full_messages }
+        end
       end
+      #Rails.logger.info("campo nome da aggiungere #{profile['id']}")
+      #Rails.logger.info("campo nome da agg #{profile['name']}")
 
-      
-    
-
-      Rails.logger.info("campo nome da aggiungere #{profile['id']}")
-      Rails.logger.info("campo nome da agg #{profile['name']}")
-
-  
-    # Salva l'utente nel database
-    if @user.update({facebook_id: profile['id'], name: profile['name']})
-      Rails.logger.info("Utente aggiornato con successo nel database")
-      # Effettua il login dell'utente
-      
-      log_in(@user, 'User')  # Effettua il login con l'utente associato al ristoratore
-      render json: { success: true, user: @user }
-    else
-      Rails.logger.info("aggiornamento non effettuato")
-      Rails.logger.info("Errori di validazione: #{@user.errors.full_messages}")
-      render json: { success: false, errors: @user.errors.full_messages }
-    end
   end
   
   
@@ -119,5 +128,16 @@ class SessionsController < ApplicationController
     log_in(utente, 'User') # Imposta il ruolo come 'User'
     redirect_to root_path
   end
+
+  # Genera una password casuale di lunghezza 10 con almeno una lettera maiuscola
+  def generate_password
+    password = SecureRandom.hex(5)  # Genera una stringa esadecimale casuale di 10 caratteri (5 byte)
+    unless password.match(/[A-Z]/)  # Verifica se la password contiene almeno una lettera maiuscola
+      random_index = SecureRandom.random_number(password.length)
+      password[random_index] = ('A'..'Z').to_a.sample  # Sostituisci un carattere casuale con una lettera maiuscola
+    end
+    password
+  end
+
 
 end

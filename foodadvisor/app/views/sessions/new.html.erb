@@ -5,6 +5,7 @@
                 <%= flash[:notice] %>
             </div>
             <% end %>
+            
 
             <% if flash[:alert] %>
             <div class="alert alert-danger" role="alert">
@@ -45,8 +46,6 @@
                         <ion-icon name="logo-google"></ion-icon>Accedi con Google
                     </button></a>
                     
-                    
-                    <div class="fb-login-button" data-width="300" data-size="" scope="public_profile,email" onlogin="checkLoginState();" data-button-type="" data-layout="" data-auto-logout-link="true" data-use-continue-as="false"></div>
                     <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
                     </fb:login-button>
                     <div id="status">

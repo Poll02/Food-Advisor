@@ -1,4 +1,5 @@
-<%= link_to 'Modifica', edit_user_profile_path %>
+<%= link_to 'Modifica', edit_user_profile_path %> 
+
 
 <div class="p-user-profile">
     <div class="p-user-photo-details">
@@ -19,6 +20,9 @@
             <p style="font-weight: bold;">Telefono: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.utente.telefono%></span></p>
 
         </div>
+        <%if session[:tmp_password].present?%>
+          <p class="tmp_password">La tua password temporanea è: <%= session[:tmp_password]%> cambiala al più presto!</p>
+        <%end%>
     </div>
     <hr id="divider" class="solid">
     <h1>I tuoi impegni</h1>
@@ -217,3 +221,17 @@
 });
 
 </script>
+
+<style>
+  .tmp_password {
+    background-color: #ffcccc;
+    padding: 10px;
+    border: 1px solid #e74c3c;
+    border-radius: 5px;
+    text-align: right;
+  }
+
+  .tmp_password strong {
+    font-weight: bold;
+  }
+</style>
