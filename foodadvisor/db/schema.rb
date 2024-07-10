@@ -240,7 +240,7 @@ ActiveRecord::Schema.define(version: 2024_07_10_074050) do
   create_table "user_competitions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "competizione_id", null: false
-    t.integer "punti", default: 0
+    t.integer "punti_competizione", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["competizione_id"], name: "index_user_competitions_on_competizione_id"
@@ -253,6 +253,7 @@ ActiveRecord::Schema.define(version: 2024_07_10_074050) do
     t.string "nome"
     t.string "cognome"
     t.date "datanascita"
+    t.integer "punti", default: 0
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["cliente_id"], name: "index_users_on_cliente_id"

@@ -6,6 +6,7 @@ class CreateUsers < ActiveRecord::Migration[6.1]
       t.string :nome
       t.string :cognome
       t.date :datanascita
+      t.integer :punti, default: 0
 
       t.timestamps
     end
