@@ -208,6 +208,58 @@
   <% end %>
 </div>
 
+<h3>Gestione Competizioni</h3>
+<div class="admin-competition-container">
+  <div class="create-container">
+    <p style="font-weight: bold;">Crea una competizione</p>
+    <%= form_with model: @competizione, url: competizione_create_path, local: true do |form| %>
+    <div class="form-group">
+      <%= form.label :nome, 'Nome Competizione:' %>
+      <%= form.text_field :nome, class: 'form-control', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :requisiti, 'Requisiti:' %>
+      <%= form.text_field :requisiti, class: 'form-control', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :premi, 'Premi:' %>
+      <%= form.text_field :premi, class: 'form-control', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :locandina, 'Foto:' %>
+      <%= form.file_field :locandina, class: 'form-control', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :descrizione, 'Descrizione:' %>
+      <%= form.text_area :descrizione, class: 'form-control', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :datainizio, 'Data Inizio:' %>
+      <%= form.date_field :datainizio, class: 'form-control', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :datafine, 'Data Fine:' %>
+      <%= form.date_field :datafine, class: 'form-control', required: true %>
+    </div>
+    <%= form.submit 'Crea Competizione', class: 'btn btn-primary' %>
+    <%= form.button 'Azzerare', type: 'reset', class: 'btn btn-secondary' %>
+
+    
+    
+  <% end %>
+
+  </div>
+  <div class="points-container">
+    <p style="font-weight: bold;" class="form-control">Assegna Punti</p>
+
+
+  </div>
+  
+
+
+
+</div>
+
 <style>
 .public-r-reviews {
   margin-right: 50px;

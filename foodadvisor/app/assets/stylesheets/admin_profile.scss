@@ -243,3 +243,23 @@
     background-color: #6c757d;
     color: #fff;
 }
+
+.admin-competition-container{
+    display: flex;
+    gap: 100px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+
+}
+
+.create-container{
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+}
+
+.points-container{
+    display: flex;
+    flex-direction: column;
+    padding: 1%;
+}

@@ -70,7 +70,7 @@
   <%= link_to 'Modifica Impostazioni', edit_settings_path %>
   <br>
   <%= form_with url: settings_path(current_user), method: :delete, data: { confirm: 'Sei sicuro di voler eliminare il tuo account?' } do |form| %>
-    <%= form.submit 'Elimina l\'account' %>
+    <%= form.submit 'Elimina l\'account', id: 'del-acc-btn' %>
   <% end %>  
   
 </div>
