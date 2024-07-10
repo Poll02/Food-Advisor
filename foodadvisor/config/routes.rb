@@ -15,6 +15,10 @@ Rails.application.routes.draw do
     
     # rotta per la pagina principale
     root 'home#index'
+    get 'root', to: 'home#index' 
+
+    #caalback fb
+    post 'auth/facebook/callback', to: 'sessions#facebook'
   
     # Defines the root path route ("/")
     # root "posts#index"
