@@ -4,7 +4,6 @@ class User < ApplicationRecord
     validates :username, presence: true, uniqueness: { message: "già in uso" }, length: { maximum: 20 }
     validates :nome, presence: true, length: { maximum: 20 }
     validates :cognome, presence: true, length: { maximum: 20 }
-    validates :datanascita, presence: true
     validate :datanascita_must_be_in_the_past
     
     has_one :critico
@@ -17,8 +16,8 @@ class User < ApplicationRecord
     has_many :fav_recipe, dependent: :destroy
     has_many :favorite_recipes, through: :fav_recipe, source: :recipe
 
-    has_many :fav_events, dependent: :destroy
-    has_many :favorite_events, through: :fav_events, source: :event
+    has_many :fav_event, dependent: :destroy
+    has_many :favorite_events, through: :fav_event, source: :event
 
     accepts_nested_attributes_for :critico
 

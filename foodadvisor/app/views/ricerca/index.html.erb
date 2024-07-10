@@ -31,8 +31,9 @@
                     <% end %>
                     <div class="result-text">
                         <h3><%= ristoratore.nomeristorante %></h3>
-                        <p><%=@media%><ion-icon name="star" style="font-size: 15px;"></ion-icon>, <%= @numero %> recensioni</p>
-                        <p id="map-details" style="font-style: italic; cursor: pointer;" data-ristoratore-id = <%=ristoratore.id%>>Vedi sulla mappa</p>
+                        <p><%= @media %><ion-icon name="star" style="font-size: 15px;"></ion-icon>, <%= @numero %> recensioni</p>
+                        <p><%= ristoratore.indirizzo %></p>
+                        <p id="map-details" style="font-style: italic; cursor: pointer;" data-ristoratore-id = <%= ristoratore.id %>>Vedi sulla mappa</p>
                     </div>
                 </div>
                 <hr class="solid" id="divider">
@@ -42,8 +43,6 @@
         <div class="vertical-divider"></div>
         <div class="details-container">
         <div class="map-container">
-        <% @ristorante_maps = Ristoratore.find(3) %>
-        <% @name = @ristorante_maps.format_restaurant_name%>
         <iframe 
             id="rest-map"
             width="450" 

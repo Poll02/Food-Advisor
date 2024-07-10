@@ -148,6 +148,19 @@ class RestaurateurProfilesController < ApplicationController
     render json: { success: false, error: e.message }, status: :unprocessable_entity
   end
 
+  def update_pin
+    @review = Recensione.find(params[:review_id])
+
+    if @review.pinnata
+      flash[:alert] = 'La recensione è già pinnata.'
+    else
+      @review.update(pinnata: true)
+      flash[:notice] = 'Recensione pin successfully updated.'
+    end
+
+    redirect_back(fallback_location: restaurateur_profiles_path)
+  end
+
   # Nuova azione pubblica per mostrare il profilo vetrina
   def public_show
     @restaurant_owner = Ristoratore.find(params[:id])
@@ -155,7 +168,7 @@ class RestaurateurProfilesController < ApplicationController
     @promotions = Promotion.where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id)
     @tags = @restaurant_owner.cliente.ristoratore.tags
     @recipes = @restaurant_owner.cliente.ristoratore.recipes
-    @reviews=Recensione.includes(cliente: :user).where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id)
+    @reviews=Recensione.includes(cliente: :user).where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id).order(pinnata: :desc)
 
     if params[:date].present?
       @reviews = @reviews.where("DATE(created_at) = ?", params[:date])

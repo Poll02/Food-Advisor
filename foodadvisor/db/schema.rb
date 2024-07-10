@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_07_072722) do
+ActiveRecord::Schema.define(version: 2024_07_10_074050) do
 
   create_table "admins", force: :cascade do |t|
     t.integer "utente_id", null: false
@@ -264,6 +264,8 @@ ActiveRecord::Schema.define(version: 2024_07_07_072722) do
     t.string "telefono"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "facebook_id"
+    t.string "name"
   end
 
   add_foreign_key "admins", "utentes"
