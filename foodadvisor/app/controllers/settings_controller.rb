@@ -24,6 +24,12 @@ class SettingsController < ApplicationController
     logger.info "Params ricevuti: #{params.inspect}"
     logger.info "User params: #{user_params.inspect}"
 
+    Rails.logger.info("NUOVA PASSWORD: #{params[:password]}")
+    if params[:utente][:password].present?
+      session.delete(:tmp_password)
+      Rails.logger.info("Variabile di sessione distrutta")
+    end
+
     # Controllare la password corrente
     if params[:current_password].present? && @current_user.authenticate(params[:current_password])
       logger.info "Password corrente corretta."
