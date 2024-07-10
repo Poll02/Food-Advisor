@@ -46,7 +46,6 @@ Rails.application.routes.draw do
     # Rotta per il form di login (GET e POST)
     get 'login', to: 'sessions#new'
   
-  
     get '/registration/user', to: 'registration#new_user', as: 'new_user_registration'
     post '/registration/user', to: 'registration#create_user', as: 'create_user_registration'
   
@@ -61,9 +60,7 @@ Rails.application.routes.draw do
     
   
     resources :sessions, only: [:new, :create, :destroy]
-  
-  
-  
+
     # Rotte per le competizioni
     resources :competizione, only: [:index, :show] do
       member do

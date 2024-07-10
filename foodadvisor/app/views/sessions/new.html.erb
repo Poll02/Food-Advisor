@@ -1,4 +1,5 @@
-<%= stylesheet_link_tag 'login', media: 'all' %>
+
+
 
 <div class="login-page">
     <div class="avvisi" style="position: absolute; top: 60px; z-index: 1; ">
@@ -15,7 +16,7 @@
         <% end %>
     </div>
     <div class="login-text-container" style="display: flex; flex-direction: column; width: 20%;">
-        <h1>Esegui l'accesso come utente</h1>
+        <h1>Accedi come utente</h1>
         <p>Per scrivere Recensioni, partecipare ad Eventi, gestire Prenotazioni e competere con gli altri utenti! oppure</p>
         <h1>Accedi come Ristoratore</h1>
         <p>Per gestire il tuo ristorante, pubblicizzare Eventi e guadagnare punti in classifica!</p>
@@ -41,22 +42,25 @@
                         <%= check_box_tag 'session[remember_me]' %>
                     </div>
                     <%= submit_tag 'Accedi', id: "login-btn" %>
+                <% end %>
                     <hr class='solid' id='divider'>
                     <a href="/auth/google_oauth2/callback"><button type="button" id="login-btn" style="background-color: rgb(6, 176, 176); margin-bottom: 10px;">
                         <ion-icon name="logo-google"></ion-icon>Accedi con Google
                     </button></a>
-                    <button type="button" id="login-btn" style="background-color: rgb(97, 35, 195);">
-                        <ion-icon name="logo-facebook"></ion-icon>Accedi con Facebook
-                    </button>
+        
+                    <div id="status">
+                    </div>
+
                     <div class="password-forgot-container">
                         <p id="forgot-password">Ho dimenticato la password</p>
                     </div>
+
                     <div class="register-container">
                         <hr class='solid' style="width: 25%;" id='divider'>
                         <p style="font-size: 13px; cursor: pointer;"><a href="<%= signup_path %>">Iscriviti</a></p>
                         <hr class='solid' style="width: 25%;" id='divider'>
                     </div>
-                <% end %>
+                
 
         </div>
     </div>
@@ -97,3 +101,4 @@
         </div>
     </div>
 </div>
+
