@@ -7,6 +7,17 @@ class CompetizioneController < ApplicationController
   end
 
 
+  def create
+    @competizione = Competizione.new(competizione_params)
+    if @competizione.save
+      flash[:notice] = 'Competizione creata con successo!'
+      redirect_to admin_profile_path
+    else
+      flash[:alert] = 'Errore durante la creazione della competizione'
+      render 'admin_profile/show'
+    end
+    end 
+
   def join_competition
     if session[:role] != 'User'
       render json: { success: false, error: 'Devi essere loggato come utente per partecipare alle competizioni.' }, status: :unauthorized
@@ -54,4 +65,8 @@ class CompetizioneController < ApplicationController
       render json: { success: false, error: 'Devi essere loggato per partecipare.' }
     end
   end
+
+  def competizione_params
+    params.require(:competizione).permit(:nome, :descrizione, :requisiti, :foto, )
+    end
 end

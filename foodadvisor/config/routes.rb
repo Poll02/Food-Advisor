@@ -101,6 +101,7 @@ Rails.application.routes.draw do
     
     #route for placement
     get 'competizioni', to: 'competizione#index'
+    get 'competizione_create', to: 'competizione#create'
     
     # Rotte per le pagine della dashboard
     get 'dashboard', to: 'restaurateur_profiles#show'
