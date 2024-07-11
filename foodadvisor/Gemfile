@@ -26,11 +26,8 @@ gem 'jquery-rails'
 # Use Active Model has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
-<<<<<<< HEAD
 # fb
 gem 'koala'
-=======
->>>>>>> 614b79e59f97a28d31134d378a4cfb87d3bbe0fa
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'

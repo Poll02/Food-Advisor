@@ -26,6 +26,8 @@ Rails.application.routes.draw do
     get 'classifiche', to: 'classifiche#index'
     get 'supporto', to: 'supporto#index'
 
+    get 'about', to: 'about#index'
+
     
     resources :problems do
       member do
@@ -147,8 +149,7 @@ Rails.application.routes.draw do
     get 'logout', to: 'sessions#destroy'
     get 'ricerca/:id/map_info', to: 'ricerca#map_info'
 
-    get 'about', to: 'about#index'
-
+  
     get 'support', to: 'support#index'
     
     resources :promotions, only: [:index]
@@ -191,7 +192,7 @@ Rails.application.routes.draw do
     post 'info/create_dipendente', to: 'info#create_dipendente', as: 'create_dipendente_info'
     delete 'info/destroy_dipendente/:id', to: 'info#destroy_dipendente', as: 'destroy_dipendente'
   
-  
+    post 'update_review', to: 'reviews#update'
     #rotta per le recensioni
     resources :reviews, only: [:create, :destroy] do
       member do

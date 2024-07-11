@@ -30,16 +30,39 @@ class ReviewsController < ApplicationController
     end
   end  
 
+  def update
+    Rails.logger.info("parametri #{params[:stelle]} ---- #{params[:new_comment]}")
+    @review=Recensione.find(params[:reviewId])
+    if params[:stelle].present? && params[:new_comment].present?
+      @review.update(stelle: params[:stelle], commento: params[:new_comment])
+    elsif params[:new_comment].present?
+      if @review.update(stelle: params[:stelle])
+        flash[:notice] = 'Recensione aggiornata con successo!' 
+      else
+        flash[:alert] = 'Errore durante il salvataggio della recensione'
+      end
+    elsif params[:new_comment].present?
+      if @review.update(commento: params[:new_comment])
+        flash[:notice] = 'Recensione aggiornata con successo!'
+      else
+        flash[:alert] = 'Errore durante il salvataggio della recensione'
+      end
+    else
+      flash[:alert] = 'Errore durante il salvataggio della recensione'
+    end
+    redirect_to public_restaurant_profile_path(@review.ristoratore_id)
+  end
+
   def destroy
-      logger.info "ID: #{@review.id}"
-      logger.info "Cliente: #{@review.cliente_id}"
-      logger.info "Cliente: #{@review.ristoratore_id}"
-      logger.info "Stelle: #{@review.stelle}"
-      logger.info "Commento: #{@review.commento}"
-      logger.info "Data creazione: #{@review.created_at}"
+    @restauranteur=@review.ristoratore_id
     if @review.segnalazione.destroy_all && @review.destroy
       flash[:notice] = 'Recensione eliminata con successo!'
-        redirect_to admin_profile_path(@current_user)
+        @user_type=Admin.where(utente_id: @current_user.id)
+        if @user_type.present?
+          redirect_to admin_profile_path(@current_user)
+        else
+          redirect_to public_restaurant_profile_path(@restauranteur)
+        end
     else
       flash[:alert] = 'Errore durante la rimozione della recensione'
       redirect_back(fallback_location: root_path)
@@ -71,7 +94,13 @@ class ReviewsController < ApplicationController
   end
 
   def set_review
-    @review = Recensione.find(params[:id])
+    @user_type=Admin.where(utente_id: @current_user.id)
+    if @user_type.present?
+      @review = Recensione.find(params[:id])
+    else
+      @review = Recensione.find(params[:Rid])
+    end
+    
   end
 
 end

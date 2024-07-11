@@ -223,7 +223,7 @@
         <option value="desc" <%= 'selected' if params[:order] == 'desc' %>>Discendente</option>
     </select>
 
-    <!-- Campo nascosto per l'ID del ristoratore -->
+    <!-- Campo nascosto per ID del ristoratore -->
     <input type="hidden" id="id" name="id" value="<%= @restaurant_owner.id %>">
 
     <button type="submit">Cerca</button>
@@ -266,7 +266,11 @@
               <% if session[:role] == 'Admin' %>
                 <i class="fa-solid fa-trash"></i>
               <% else %>
-                <i class="fa fa-exclamation-circle report-icon" data-review="<%= review.id %>"></i>
+                <% if @current_user.cliente.id != review.cliente_id%>
+                  <i class="fa fa-exclamation-circle report-icon" data-review="<%= review.id %>"></i>
+                <% elsif @current_user.cliente.id == review.cliente_id %>
+                  <i class="fa-solid fa-pen-to-square change-icon" data-review="<%= review.id %>" data-review-star="<%= review.stelle %>" data-review-commento="<%= review.commento %>"></i>
+                <% end %>
               <% end %> 
             </div>
           </div>
@@ -279,7 +283,7 @@
     <div id="reportModal" class="modal">
         <div class="modal-content">
           <span id="closeReport" class="close">&times;</span>
-          <h2>Lascia una Recensione</h2>
+          <h2>Segnala la Recensione</h2>
           <% if current_user.present? %>
             <%= form_with( url: segnalaziones_path, method: "post", local: true) do |form| %>
               <%= form.hidden_field :recensione_id%>
@@ -293,11 +297,102 @@
           <% end %>
         </div>
     </div>
+    
 
+    <div id="changeReviewModal" class="modal">
+  <div class="modal-content">
+    <span id="closeChangeModal" class="close">&times;</span>
+    <h2>Modifica la tua Recensione</h2>
+    <%= form_with( url: update_review_path, method: "post") do |form| %>
+      <%= form.hidden_field :reviewId%>
+      <div>
+        <label>Stelle:</label>
+        <div class="star-rating" id="reviewStars">
+          <svg class="star" viewBox="0 0 576 512" onclick="selectNewStar(1)">
+            <use xlink:href="#empty-star"></use>
+          </svg>
+          <svg class="star" viewBox="0 0 576 512" onclick="selectNewStar(2)">
+            <use xlink:href="#empty-star"></use>
+          </svg>
+          <svg class="star" viewBox="0 0 576 512" onclick="selectNewStar(3)">
+            <use xlink:href="#empty-star"></use>
+          </svg>
+          <svg class="star" viewBox="0 0 576 512" onclick="selectNewStar(4)">
+            <use xlink:href="#empty-star"></use>
+          </svg>
+          <svg class="star" viewBox="0 0 576 512" onclick="selectNewStar(5)">
+            <use xlink:href="#empty-star"></use>
+          </svg>
+        </div>
+        <%= form.hidden_field :stelle, id: "new_stars" %>
+      </div>
+      <br><br>
+          <%= form.label :new_comment, "Commento:" %>
+          <%= form.text_area :new_comment, id: "new_comment", rows: 4, cols: 50 %>
+      <br><br>
+      <%= form.submit "Invia" %>
+    <% end %>
+    <%= form_with(url: review_path, method: "delete") do %>
+      <%= hidden_field_tag :Rid %>
+      <button type="submit">Elimina</button>
+    <% end %>
+  </div>
+</div>
     
 </div>
 
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll('.change-icon').forEach(icon => {
+    icon.addEventListener('click', (event) => {
+      const review = event.target.getAttribute('data-review');
+      const stars = event.target.getAttribute('data-review-star');
+      const comment = event.target.getAttribute('data-review-commento');
+
+      document.getElementById('reviewId').value = review;
+      
+      document.getElementById('Rid').value = review;
+      console.log(review)
+      document.getElementById('new_stars').value = stars;
+      document.getElementById('new_comment').value = comment; // Imposta il valore del commento qui
+
+      updateStars(stars);
+      openModal(); // Passa il commento alla funzione openModal
+    });
+  });
+
+  function openModal(comment) {
+    document.getElementById('changeReviewModal').style.display = 'block';
+  }
+
+  function closeReportModal() {
+    document.getElementById('changeReviewModal').style.display = 'none';
+  }
+
+  function updateStars(stars) {
+    const starElements = document.querySelectorAll('#reviewStars .star use');
+    starElements.forEach((star, index) => {
+      star.setAttribute('xlink:href', index < stars ? '#filled-star' : '#empty-star');
+    });
+  }
+
+  window.onclick = function(event) {
+    var modal = document.getElementById('changeReviewModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+  document.querySelector('#closeChangeModal').onclick = closeReportModal;
+});
+// Function to handle star rating selection
+function selectNewStar(value) {
+  document.querySelectorAll('#changeReviewModal .star use').forEach((use, index) => {
+    use.setAttribute('xlink:href', index < value ? '#filled-star' : '#empty-star');
+  });
+
+  document.getElementById('new_stars').value = value;
+
+}
   // azzero i campi del form delle recensioni
    window.onload = function() {
         var urlParams = new URLSearchParams(window.location.search);
@@ -329,7 +424,7 @@
     }
 //JS modale segnalazione
 document.addEventListener("DOMContentLoaded", function() {
-
+  
   document.querySelectorAll('.report-icon').forEach(icon => {
     icon.addEventListener('click', (event) => {
       const review = event.target.getAttribute('data-review');
