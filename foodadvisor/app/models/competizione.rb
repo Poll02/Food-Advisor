@@ -6,7 +6,7 @@ class Competizione < ApplicationRecord
   validates :premio, presence: true
   validates :data_inizio, presence: true
   validates :data_fine, presence: true
-  validate :date_range
+  #validate :date_range
 
   has_many :user_competitions
   has_many :users, through: :user_competitions

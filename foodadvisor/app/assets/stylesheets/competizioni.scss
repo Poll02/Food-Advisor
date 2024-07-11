@@ -29,6 +29,24 @@
     scrollbar-width: none;
 }
 
+.btn-success-punti {
+    background-color: #28a745; /* Verde */
+    color: white; /* Testo bianco */
+    border: none; /* Rimuove i bordi predefiniti */
+    border-radius: 20px;
+    padding: 10px 20px; /* Aggiunge un po' di padding */
+    text-align: center; /* Allinea il testo al centro */
+    text-decoration: none; /* Rimuove la sottolineatura */
+    display: inline-block; /* Imposta il bottone come inline-block */
+    font-size: 12px; /* Imposta la dimensione del testo */
+    cursor: pointer; /* Mostra il cursore a mano */
+  }
+  
+  .btn-success-punti:hover {
+    background-color: #218838; /* Verde più scuro per hover */
+  }
+  
+
 .btn-danger {
     background-color: #dc3545;
     color: white;

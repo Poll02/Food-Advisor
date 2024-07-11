@@ -111,7 +111,7 @@
                 <% if @reviews.any? %>
                     <% @reviews.each do |review| %>
                         <%= link_to public_user_profile_path(review.cliente.user.id), class: 'user-link' do %>
-                        <div class="popular-reviews-box" style="display: flex; width: 600px; color: black; ">
+                        <div class="popular-reviews-box" style="display: flex; width: 600px; ">
                             <%= image_tag 'background.jpg' %>
                             <div class="popular-reviews-box-text">
                                 <h3><%= review.cliente.user.username %></h3>

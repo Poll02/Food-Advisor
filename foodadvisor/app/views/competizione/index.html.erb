@@ -80,7 +80,8 @@
         <%= form.button 'Azzerare', type: 'reset', class: 'btn btn-secondary' %> 
       <% end %>
       <h1>Le tue competizioni</h1>
-      <% @competizioni_ristoratore.each do |competizione| %>
+      <div class="comp-grid">
+        <% @competizioni_ristoratore.each do |competizione| %>
           <div class="comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>">
             <% if competizione.locandina.present? %>
               <%= image_tag competizione.locandina %>
@@ -91,21 +92,25 @@
               <p><%= competizione.nome %></p>
               <p style="font-size: 13px; font-weight: normal;"><%= competizione.descrizione %></p>
               <p style="font-size: 13px; font-weight: normal;">Requisiti: <%= competizione.requisiti %> <span>Premi: <%= competizione.premio %></span></p>
-              <div class="bottoni-comp" style="display: flex; flex-directions: row; " >
-                <%= button_to 'Elimina Competizione', delete_competizione_competizione_path(competizione), method: :delete, data: { confirm: 'Sei sicuro di voler eliminare questa competizione?' }, class: 'btn btn-danger' %>
-                <% if competizione.data_fine < Date.today %>
-                  <%= link_to 'Assegna Punti', assegna_punti_path(competizione), class: 'btn btn-success', data: { confirm: 'Sei sicuro di voler assegnare i punti per questa competizione?' } %>
+              <div class="bottoni-comp" style="display: flex; flex-directions: row; ">
+                <% if competizione.user_competitions.any? %>
+                  <% if competizione.data_fine < Date.today %>
+                    <%= link_to 'Assegna Punti', assegna_punti_competizione_path(competizione), class: 'btn btn-success-punti', data: { confirm: 'Sei sicuro di voler assegnare i punti per questa competizione?' } %>
+                  <% end %>
+                <% else %>
+                  <%= button_to 'Elimina Competizione', delete_competizione_competizione_path(competizione), method: :delete, data: { confirm: 'Sei sicuro di voler eliminare questa competizione?' }, class: 'btn btn-danger' %>
                 <% end %>
               </div>
             </div>
           </div>
         <% end %>
+      </div>
     <% end %>
 
     <h1>Tutte le competizioni</h1>
     <form id="find-competizione-form">
       <div class="find-input" style="display: flex; align-items: center;">
-        <ion-icon name="search-outline" style="margin-bottom: 30px;"></ion-icon>
+        <ion-icon name="search-outline" style="margin-bottom: 30px; color: black; "></ion-icon>
         <input type="text" id="findbar" placeholder="Cerca una competizione">
       </div>
     </form>

@@ -151,6 +151,22 @@ Competizione.create!(
   data_fine: DateTime.new(2024, 9, 15, 10, 0, 0),
   ristoratore_id: 2  # Sostituisci con l'ID reale del ristoratore
 )
+# Competizione 4
+competizione = Competizione.create!(
+  nome: "Competizione Estiva",
+  descrizione: "Una competizione culinaria estiva",
+  premio: "Cena gratuita per due",
+  data_inizio: DateTime.new(2024, 6, 10),
+  data_fine: DateTime.new(2024, 7, 9),
+  ristoratore_id: 2 # Assicurati di usare un ID di ristoratore valido
+)
+
+# Creazione di una user_competition per l'utente con ID 5 e la competizione appena creata
+UserCompetition.create!(
+  user_id: 1,
+  competizione_id: 4,
+  punti_competizione: 10
+)
 
 # evento
 Evento.create(nome:"cena",luogo:"casa di nora",data:DateTime.new(2024, 7, 20, 18, 0, 0),descrizione:"g",ristoratore_id:2)

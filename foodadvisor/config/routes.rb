@@ -70,7 +70,7 @@ Rails.application.routes.draw do
     # Rotte per le competizioni
     resources :competizione, only: [:index, :create] do
       member do
-        post 'assegna_punti', to: 'competizione#assegna_punti'
+        get 'assegna_punti', to: 'competizione#assegna_punti'
         post 'join', to: 'competizione#join_competition'
         delete 'delete_competizione', to: 'competizione#destroy'
       end
