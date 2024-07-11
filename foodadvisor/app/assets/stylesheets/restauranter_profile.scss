@@ -569,6 +569,13 @@ tr.flavor .piatto {
   color: red;
 }
 
+.fa-pen-to-square {
+  transition: color 0.3s ease;
+}
+
+.fa-pen-to-square:hover {
+  color: green;
+}
 // prova like
 #flash-messages .notice {
   color: green;

@@ -19,7 +19,7 @@ class SegnalazionesController < ApplicationController
         end
       end
   
-      flash[:notice] = 'Segnalazione salvata con successo!'
+      flash[:notice] = 'Segnalazione salvata con successo! La segnalazione verrà verificata da un admin!'
       redirect_to public_restaurant_profile_path(@recensione.ristoratore_id)
     else
       flash[:alert] = 'Errore durante il salvataggio della segnalazione'
