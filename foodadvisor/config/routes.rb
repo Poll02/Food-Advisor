@@ -147,7 +147,8 @@ Rails.application.routes.draw do
     get 'logout', to: 'sessions#destroy'
     get 'ricerca/:id/map_info', to: 'ricerca#map_info'
 
-  
+    get 'about', to: 'about#index'
+
     get 'support', to: 'support#index'
     
     resources :promotions, only: [:index]

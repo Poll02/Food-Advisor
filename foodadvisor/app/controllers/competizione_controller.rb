@@ -168,5 +168,5 @@ class CompetizioneController < ApplicationController
   # devi salvare localmente la locandina
   def competizione_params
     params.require(:competizione).permit(:nome, :descrizione, :requisiti, :quantitareq, :locandina, :premio, :data_inizio, :data_fine, :ristoratore_id )
-    end
+  end
 end
