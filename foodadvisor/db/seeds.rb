@@ -124,10 +124,7 @@ Competizione.create!(
   nome: "Concorso di cucina 2024",
   descrizione: "Partecipa al nostro concorso di cucina e mostra le tue abilità culinarie!",
   locandina: "competizione_cucina.jpg",
-  requisiti: "Aperto a tutti i chef amatoriali e professionisti",
   premio: "Buoni pasto e visibilità sul nostro sito web",
-  tag: "Cucina, Concorso, Chef",
-  owner: 2,  # Sostituisci con l'ID reale del proprietario della competizione
   data_inizio: DateTime.new(2024, 8, 1, 12, 0, 0),
   data_fine: DateTime.new(2024, 8, 15, 12, 0, 0),
   ristoratore_id: 1  # Sostituisci con l'ID reale del ristoratore
@@ -138,10 +135,7 @@ Competizione.create!(
   nome: "Festival di cocktail estivi",
   descrizione: "Un festival estivo dedicato ai cocktail più innovativi!",
   locandina: "competizione_cocktails.jpg",
-  requisiti: "Aperto a tutti gli appassionati di cocktail",
   premio: "Voucher per barman professionisti",
-  tag: "Cocktail, Bar, Festival",
-  owner: 2,  # Sostituisci con l'ID reale del proprietario della competizione
   data_inizio: DateTime.new(2024, 7, 20, 18, 0, 0),
   data_fine: DateTime.new(2024, 7, 25, 22, 0, 0),
   ristoratore_id: 2  # Sostituisci con l'ID reale del ristoratore
@@ -152,10 +146,7 @@ Competizione.create!(
   nome: "Challenge di pasticceria 2024",
   descrizione: "Metti alla prova le tue abilità in pasticceria!",
   locandina: "competizione_pasticceria.jpeg",
-  requisiti: "Aperto a tutti gli appassionati di dolci",
   premio: "Corso di pasticceria avanzato",
-  tag: "Pasticceria, Dolci, Challenge",
-  owner: 3,  # Sostituisci con l'ID reale del proprietario della competizione
   data_inizio: DateTime.new(2024, 9, 1, 10, 0, 0),
   data_fine: DateTime.new(2024, 9, 15, 10, 0, 0),
   ristoratore_id: 2  # Sostituisci con l'ID reale del ristoratore

@@ -68,11 +68,14 @@ Rails.application.routes.draw do
     resources :sessions, only: [:new, :create, :destroy]
 
     # Rotte per le competizioni
-    resources :competizione, only: [:index, :show] do
+    resources :competizione, only: [:index, :create] do
       member do
+        post 'assegna_punti', to: 'competizione#assegna_punti'
         post 'join', to: 'competizione#join_competition'
+        delete 'delete_competizione', to: 'competizione#destroy'
       end
     end
+    post '/competizione/create', to: 'competizione#create', as: 'create_competizione'
   
     #resources :prenotazioni, controller: 'prenotazione', only: [:create]
     resources :prenotazione do

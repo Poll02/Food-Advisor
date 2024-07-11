@@ -20,15 +20,35 @@ class PrenotazioneController < ApplicationController
       Rails.logger.info("Prenotazione creata con successo")
       render json: { success: true }
     else
-      Rails.logger.error("Errore nella creazione della prenotazione: #{@prenotazione.errors.full_messages.join(", ")}")
-      render json: { success: false }
+      Rails.logger.error("Errore nella creazione della prenotazione: #{@prenotazione.errors.full_messages}")
+      render json: { success: false, error: @prenotazione.errors.full_messages.join(", ") }
     end
   end
   
-
   def set_valida
-    @prenotazione.update(valida: true)
-    render json: { success: true }
+    @prenotazione = Prenotazione.find(params[:id])
+  
+    if @prenotazione.update(valida: true)
+      Rails.logger.info("Prenotazione validata con successo")
+      
+      # Aggiunta dei punti alle competizioni dell'utente
+      user = @prenotazione.user
+      user.user_competitions.each do |uc|
+        if uc.competizione.data_fine >= Date.today
+          uc.punti_competizione += 5
+          uc.save!
+          Rails.logger.info("Aggiunti 5 punti alla competizione #{uc.competizione.nome}")
+        end
+      end
+      
+      render json: { success: true }
+    else
+      Rails.logger.error("Errore durante la validazione della prenotazione: #{@prenotazione.errors.full_messages}")
+      render json: { success: false, error: @prenotazione.errors.full_messages.join(", ") }
+    end
+  rescue StandardError => e
+    Rails.logger.error("Errore durante l'aggiunta dei punti alle competizioni dell'utente: #{e.message}")
+    render json: { success: false, error: "Errore durante l'aggiunta dei punti alle competizioni dell'utente" }, status: :internal_server_error
   end
 
   def destroy

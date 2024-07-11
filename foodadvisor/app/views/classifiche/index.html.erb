@@ -6,17 +6,19 @@
             <h2>Ristoranti</h2>
             <% if @top_restaurants.any? %>
                 <% @top_restaurants.each_with_index do |restaurant, index| %>
-                <div class="most-rewarded-rest-box">
-                    <p style="font-weight: bolder; color: #00b072;"><%= index + 1 %></p>
-                    <%= image_tag restaurant.cliente.foto || 'background.jpg' %>  
+                    <%= link_to public_restaurant_profile_path(restaurant.id), class: 'restaurant-link' do %>
+                        <div class="most-rewarded-rest-box">
+                            <p style="font-weight: bolder; color: #00b072;"><%= index + 1 %></p>
+                            <%= image_tag restaurant.cliente.foto || 'background.jpg' %>  
 
-                    <div class="name-and-stars">
-                    <h3><%= restaurant.nomeristorante %></h3>
-                    <p style="font-weight: bold;"><%= restaurant.media_stelle %> <span style="font-weight: normal;"><ion-icon name="star" style="font-size: 15px;"></ion-icon></span></p>
-                    <p style="font-style: italic;"><%= restaurant.n_recensioni %> recensioni</p>
-                    </div>
-                </div>
-                <hr class="solid" id="divider">
+                            <div class="name-and-stars">
+                            <h3><%= restaurant.nomeristorante %></h3>
+                            <p style="font-weight: bold;"><%= restaurant.media_stelle %> <span style="font-weight: normal;"><ion-icon name="star" style="font-size: 15px;"></ion-icon></span></p>
+                            <p style="font-style: italic;"><%= restaurant.n_recensioni %> recensioni</p>
+                            </div>
+                        </div>
+                        <hr class="solid" id="divider">
+                    <% end %>
                 <% end %>
             <% else %>
                 <p>Non ci sono ristoranti</p>
@@ -27,17 +29,19 @@
             <h2>Utenti</h2>
             <% if @top_users.any? %>
                 <% @top_users.each_with_index do |user, index| %>
-                    <div class="most-rewarded-user-box">
-                    <p style="font-weight: bolder; color: #00b072;"><%= index + 1 %></p>
-                    <%= image_tag user.cliente.foto || 'user.jpg' %>   
+                    <%= link_to public_user_profile_path(user.id) do %>
+                        <div class="most-rewarded-user-box">
+                        <p style="font-weight: bolder; color: #00b072;"><%= index + 1 %></p>
+                        <%= image_tag user.cliente.foto || 'user.jpg' %>   
 
-                    <div class="name-and-stars">
-                        <h3><%= user.nome %></h3>
-                        <p style="font-weight: bold;">Punti: <span style="font-weight: normal;"><%= user.punti %></span></p>
-                        <p style="font-style: italic;"><%= user.cliente.recensione.count %> recensioni</p>
-                    </div>
-                    </div>
-                    <hr class="solid" id="divider">
+                        <div class="name-and-stars">
+                            <h3><%= user.nome %></h3>
+                            <p style="font-weight: bold;">Punti: <span style="font-weight: normal;"><%= user.punti %></span></p>
+                            <p style="font-style: italic;"><%= user.cliente.recensione.count %> recensioni</p>
+                        </div>
+                        </div>
+                        <hr class="solid" id="divider">
+                    <% end %>
                 <% end %>
             <% else %>
                 <p>Non ci sono ristoratori</p>
@@ -67,12 +71,12 @@
                     <% else session[:role] == 'Admin' %>
                         <% user_competition = competition.user_competitions.find_by(user: current_user.admin) %>
                     <% end %>
-                    <p style="font-weight: bold;">Punti: <span style="font-weight: normal;"><%= user_competition&.punti %></span></p>
+                    <p style="font-weight: bold;">Punti: <span style="font-weight: normal;"><%= user_competition&.punti_competizione %></span></p>
                     
                     <h3>Top 3 Giocatori</h3>
-                    <% top_3_participants = competition.user_competitions.order(points: :desc).limit(3) %>
+                    <% top_3_participants = competition.user_competitions.order(punti_competizione: :desc).limit(3) %>
                     <% top_3_participants.each_with_index do |participant, index| %>
-                        <p style="font-weight: bold;"><%= index + 1 %>. <span style="font-weight: normal;"><%= participant.user.nome %> con punti: <%= participant.punti %></span></p>
+                        <p style="font-weight: bold;"><%= index + 1 %>. <span style="font-weight: normal;"><%= participant.user.nome %> con punti: <%= participant.punti_competizione %></span></p>
                     <% end %>
 
                     <% if session[:role] != 'Admin' && session[:role] != 'Ristoratore' %>

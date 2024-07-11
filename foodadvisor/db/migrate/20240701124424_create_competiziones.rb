@@ -6,8 +6,7 @@ class CreateCompetiziones < ActiveRecord::Migration[6.1]
       t.string :locandina
       t.string :requisiti
       t.string :premio
-      t.string :tag
-      t.integer :owner, null: false
+      t.integer :quantitareq, default: 0
       t.datetime :data_inizio
       t.datetime :data_fine
       t.references :ristoratore, null: false, foreign_key: true

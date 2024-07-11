@@ -71,7 +71,11 @@
             <% @iscrizioni.each do |iscrizione| %>
             <% competizione = Competizione.find(iscrizione.competizione_id) %>
         <div class="comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>">
-            <%= image_tag competizione.locandina %>
+            <% if competizione.locandina.present? %>
+              <%= image_tag competizione.locandina %>
+            <% else %>
+              <%= image_tag 'background.jpg' %>
+            <% end %>
             <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
               <p><%= competizione.nome %></p>
               <p style="font-size: 13px; font-weight: normal;"><%= competizione.descrizione %></p>

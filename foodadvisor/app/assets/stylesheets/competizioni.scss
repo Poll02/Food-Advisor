@@ -29,6 +29,21 @@
     scrollbar-width: none;
 }
 
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .btn-danger:hover {
+    background-color: #c82333;
+  }
+  
+
 @keyframes scrollLeft{
 from {transform: translate(1000px)}
 to{transform: translate()}

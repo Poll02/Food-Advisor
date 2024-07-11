@@ -5,20 +5,30 @@ class ReviewsController < ApplicationController
   before_action :find_review, only: [:add_like]
 
   def create
-      @review = Recensione.new(
-        stelle: params[:stelle],
-        commento: params[:commento]
-      )
-      @review.cliente = @current_user.cliente
-      @review.ristoratore = @restaurant_owner.ristoratore
-      if @review.save
-        flash[:notice] = 'Recensione salvata con successo!'
-        redirect_to public_restaurant_profile_path(@review.ristoratore_id)
-      else
-        flash[:alert] = 'Errore durante il salvataggio della recensione'
-        redirect_back(fallback_location: root_path)
+    @review = Recensione.new(
+      stelle: params[:stelle],
+      commento: params[:commento]
+    )
+    @review.cliente = @current_user.cliente
+    @review.ristoratore = @restaurant_owner.ristoratore
+    
+    if @review.save
+      # Aggiunta di due punti a punti_competizione di UserCompetition associata per competizioni attive
+      @current_user.cliente.user.user_competitions.each do |uc|
+        if uc.competizione.data_fine >= Date.today
+          uc.punti_competizione += 2
+          uc.save!
+          Rails.logger.info("Aggiunti 2 punti alla competizione #{uc.competizione.nome} per l'utente #{uc.user.nome}")
+        end
       end
-  end
+  
+      flash[:notice] = 'Recensione salvata con successo!'
+      redirect_to public_restaurant_profile_path(@review.ristoratore_id)
+    else
+      flash[:alert] = 'Errore durante il salvataggio della recensione'
+      redirect_back(fallback_location: root_path)
+    end
+  end  
 
   def destroy
       logger.info "ID: #{@review.id}"

@@ -1,20 +1,106 @@
 <div class="classifica-page">
+  <% if flash[:notice] %>
+    <div class="alert alert-success" role="alert">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+
+  <% if flash[:alert] %>
+    <div class="alert alert-danger" role="alert">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
     <h1>Consigliate</h1>
     <div class="recommended">
       <div class="comp-grid">
         <% @competizioni.each do |competizione| %>
           <div class="comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>">
-            <%= image_tag competizione.locandina %>
+            <% if competizione.locandina.present? %>
+              <%= image_tag competizione.locandina %>
+            <% else %>
+              <%= image_tag "background.jpg" %>
+            <% end %>
             <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
               <p><%= competizione.nome %></p>
               <p style="font-size: 13px; font-weight: normal;"><%= competizione.descrizione %></p>
               <p style="font-size: 13px; font-weight: normal;">Requisiti: <%= competizione.requisiti %> <span>Premi: <%= competizione.premio %></span></p>
-              <button type="button" data-competizione-id="<%= competizione.id %>" class="iscriviti-button">Iscriviti</button>
+              <div class="bottoni-comp" style="display: flex; flex-directions: row; " >
+                <button type="button" data-competizione-id="<%= competizione.id %>" class="iscriviti-button">Iscriviti</button>
+              </div>
             </div>
           </div>
         <% end %>
       </div>
     </div>
+
+    <% if session[:role] == 'Ristoratore' %>
+      <h1>Crea una competizione</h1>
+      <%= form_with model: @competizione, url: create_competizione_path, method: :post, local: true do |form| %>
+        <%= form.fields_for :competizione do |cf| %>
+          <div class="form-group">
+            <%= cf.label :nome, 'Nome:' %>
+            <%= cf.text_field :nome, class: 'form-control', required: true %>
+          </div>
+          <div class="form-group">
+            <%= cf.label :descrizione, 'Descrizione:' %>
+            <%= cf.text_area :descrizione, class: 'form-control', required: true, readonly: true, value: "2 punti: lasciare una recensione\n5 punti: effettuare una prenotazione\n3 punti: ricevi un like alla recensione\n-5 punti: il tuo profilo viene segnalato\n-2 punti: la tua recensione viene segnalata" %>
+          </div>
+          <div class="form-group">
+            <%= cf.label :locandina, 'Locandina:' %>
+            <%= cf.file_field :locandina, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= cf.label :requisiti, 'Requisiti:' %>
+            <%= cf.select :requisiti, options_for_select([
+              ['Nessuno', 'nessuno'],
+              ['Devi aver effettuato almeno delle prenotazioni', 'prenotazioni'],
+              ['Numero minimo di recensioni lasciate', 'recensioni'],
+              ['Punti minimi', 'punti']
+            ], selected: 'nessuno'), {}, { class: 'form-control' } %>
+          </div>
+          <div class="form-group">
+            <%= cf.label :quantitareq, 'Quantità:' %>
+            <%= cf.number_field :quantitareq, value: 0, class: 'form-control' %>
+          </div>
+          <div class="form-group">
+            <%= cf.label :premio, 'Premio:' %>
+            <%= cf.text_field :premio, class: 'form-control', required: true %>
+          </div>
+          <div class="form-group">
+            <%= cf.label :data_inizio, 'Data inizio:' %>
+            <%= cf.date_field :data_inizio, class: 'form-control', required: true %>
+          </div>
+          <div class="form-group">
+            <%= cf.label :data_fine, 'Data fine:' %>
+            <%= cf.date_field :data_fine, class: 'form-control', required: true %>
+          </div>
+          <%= cf.hidden_field :ristoratore_id, value: current_user.cliente.ristoratore.id %>
+        <% end %>
+        <%= form.submit 'Crea Competizione', class: 'btn btn-primary' %>
+        <%= form.button 'Azzerare', type: 'reset', class: 'btn btn-secondary' %> 
+      <% end %>
+      <h1>Le tue competizioni</h1>
+      <% @competizioni_ristoratore.each do |competizione| %>
+          <div class="comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>">
+            <% if competizione.locandina.present? %>
+              <%= image_tag competizione.locandina %>
+            <% else %>
+              <%= image_tag "background.jpg" %>
+            <% end %>
+            <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
+              <p><%= competizione.nome %></p>
+              <p style="font-size: 13px; font-weight: normal;"><%= competizione.descrizione %></p>
+              <p style="font-size: 13px; font-weight: normal;">Requisiti: <%= competizione.requisiti %> <span>Premi: <%= competizione.premio %></span></p>
+              <div class="bottoni-comp" style="display: flex; flex-directions: row; " >
+                <%= button_to 'Elimina Competizione', delete_competizione_competizione_path(competizione), method: :delete, data: { confirm: 'Sei sicuro di voler eliminare questa competizione?' }, class: 'btn btn-danger' %>
+                <% if competizione.data_fine < Date.today %>
+                  <%= link_to 'Assegna Punti', assegna_punti_path(competizione), class: 'btn btn-success', data: { confirm: 'Sei sicuro di voler assegnare i punti per questa competizione?' } %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+    <% end %>
 
     <h1>Tutte le competizioni</h1>
     <form id="find-competizione-form">
@@ -29,7 +115,11 @@
         <h1>Risultati</h1>
         <% @competizioni.each do |competizione| %>
           <div class="left-side-comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>"  data-date="<%= competizione.data_inizio %>" data-endate="<%= competizione.data_fine %>" data-id="<% competizione.id %>">
-            <%= image_tag competizione.locandina %>
+            <% if competizione.locandina.present? %>
+              <%= image_tag competizione.locandina %>
+            <% else %>
+              <%= image_tag "background.jpg" %>
+            <% end %>
             <div class="comp-details">
               <h3><%= competizione.nome %></h3>
               <p><%= competizione.descrizione %></p>
@@ -42,7 +132,11 @@
       <div class="vertical-divider"></div>
       <div class="right-side" id="right-side" style="display: none;">
         <% if @competizioni.any? %>
-          <%= image_tag @competizioni.first.locandina, id: 'right-side-image' %>
+          <% if @competizioni.first.locandina.present? %>
+            <%= image_tag @competizioni.first.locandina, id: 'right-side-image' %>
+          <% else %>
+            <%= image_tag 'background.jpg', id: 'right-side-image' %>
+          <% end %>
           <h1 id="right-side-nome"><%= @competizioni.first.nome %></h1>
           <p style="font-weight: bold;">ID: <span id="right-side-id" style="font-weight: normal;"><%= @competizioni.first.id %></span></p>
           <p style="font-weight: bold;">Descrizione: <span id="right-side-descrizione" style="font-weight: normal;"><%= @competizioni.first.descrizione %></span></p>
