@@ -1,33 +1,43 @@
-<!-- app/views/menu/edit.html.erb -->
-<h1>Modifica Menu</h1>
+<div class="menu-ristoratore-edit" style="text-align: center; ">
+    <% if flash[:notice] %>
+      <div class="alert alert-success" role="alert">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
 
-<%= form_for(@menu) do |f| %>
-  <div class="field">
-    <%= f.label :name, "Nome del Menu" %><br>
-    <%= f.text_field :name %>
+    <% if flash[:alert] %>
+      <div class="alert alert-danger" role="alert">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+  <h1 style="font-size: 50px; "><%= @menu.ristoratore.nomeristorante %>'s Menu</h1>
+  <div class="categories">
+    <% @categories.each do |category| %>
+      <div class="category">
+        <h2><%= category %></h2>
+        <ul>
+          <% @piattos.select { |piatto| piatto.categoria == category }.each do |piatto| %>
+            <div class="piatto">
+              <% if piatto.foto.present? %>
+                 <%= image_tag piatto.foto, style: 'width: 50px; height: auto;' if piatto.foto.present? %>
+              <% else %>
+                <%= image_tag 'background.jpg', style: 'width: 50px; height: auto;' %>
+              <% end %>
+              <br><%= piatto.nome %><br>
+              prezzo: <%= piatto.prezzo %>€<br>
+              ingredienti: <%= piatto.ingredienti %><br>
+              <%= form_with url: piatto_path(piatto), method: :post, local: true do %>
+                <input type="hidden" name="_method" value="delete">
+                <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+                <input type="submit" value="Elimina" class="delete-button" data-confirm="Sei sicuro di voler eliminare questo piatto?">
+              <% end %>
+            </div>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
   </div>
 
-  <h2>Piatti</h2>
-  <%= f.fields_for :dishes do |dish_form| %>
-    <div class="field">
-      <%= dish_form.label :name, "Nome del Piatto" %><br>
-      <%= dish_form.text_field :name %>
-    </div>
-    <div class="field">
-      <%= dish_form.label :price, "Prezzo" %><br>
-      <%= dish_form.text_field :price %>
-    </div>
-    <div class="field">
-      <%= dish_form.label :ingredients, "Ingredienti" %><br>
-      <%= dish_form.text_area :ingredients %>
-    </div>
-    <div class="field">
-      <%= dish_form.check_box :_destroy %>
-      <%= dish_form.label :_destroy, "Rimuovi Piatto" %>
-    </div>
-  <% end %>
-
-  <div class="actions">
-    <%= f.submit "Salva Menu" %>
-  </div>
-<% end %>
+  <%= link_to "Aggiungi Piatto", new_piatto_path(@menu), class: "add-button" %>
+  <%= link_to "Salva", menus_path(@menu) %>
+</div>

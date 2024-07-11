@@ -1,12 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>NomeApp</title>
+  <title>FoodAdvisor</title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
   <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- link per i font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Arial&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Times+New+Roman&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+New&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap"> 
+
+
+  <style>
+    body {
+      font-family: <%= @user_settings[:font] %>;
+      font-size: <%= @user_settings[:font_size] %>;
+    }
+  </style>
+
 </head>
 <body>
   <%= render 'layouts/navbar' %> <!-- Barra di navigazione -->
@@ -14,10 +29,22 @@
   <div class="dashboard">
     <aside class="sidebar">
       <ul>
-        <li><%= link_to 'Dashboard', dashboard_path %></li>
-        <li><%= link_to 'Info', info_path %></li>
-        <li><%= link_to 'Menu', menus_path %></li>
-        <li><%= link_to 'Chat', chat_path %></li>
+        <% case session[:role] %>
+          <% when 'Admin' %>
+            <li><%= link_to 'Dashboard', admin_profile_path %></li>
+          <% when 'Ristoratore' %>
+            <li><%= link_to 'Dashboard', dashboard_path %></li>
+            <li><%= link_to 'Info', info_path %></li>
+            <li><%= link_to 'Menu', menus_path %></li>
+            <li><%= link_to 'Le tue notifiche', user_notifications_path %></li>
+          <% when 'User' %>
+            <li><%= link_to 'Dashboard', user_profile_path %></li>
+            <li><%= link_to 'Preferiti', preferiti_show_path %></li>
+            <li><%= link_to 'Le tue notifiche', user_notifications_path %></li>
+          <% when 'Critico' %>
+            <li><%= link_to 'Dashboard', critic_profile_path %></li>
+            <li><%= link_to 'Le tue notifiche', user_notifications_path %></li>
+        <% end %>
         <li><%= link_to raw('<i class="fa fa-cog" aria-hidden="true"></i>'), settings_path %></li>
       </ul>
     </aside>
@@ -30,5 +57,18 @@
 
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- js per i grafici (libreria chart.js) -->
+  <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var settingTheme = "<%= @user_settings[:theme] %>";
+  
+    if (settingTheme === 'night') {
+      document.body.classList.add('night-mode');
+    } else {
+      document.body.classList.remove('night-mode');
+    }
+  });
+  
+  </script>
 </body>
 </html>

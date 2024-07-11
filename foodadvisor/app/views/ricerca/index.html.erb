@@ -1,59 +1,145 @@
 <%= stylesheet_link_tag 'ricerca', media: 'all' %>
 <div class="ricerca-container">
     <h1 style="font-size: 50px;">Cerca ristoranti</h1>
-    <form id="find-form">
+    <div class="search-container">
+    <form id="find-form" action="<%= ricerca_path %>" method="get">
         <div class="find-input" style="display: flex; align-items: center;">
-            <ion-icon name="search-outline" style="margin-bottom: 30px;"></ion-icon>
-            <input type="text" id="findbar" placeholder="Inserisci qui il nome del ristorante">
+        <button type="submit" style="background: none; border: none; margin-bottom: 80px; cursor: pointer; padding: 0;">
+            <ion-icon name="search-outline" style="color: black;"></ion-icon>
+        </button>
+        <input type="text" id="findbar" name="query" placeholder="Inserisci qui il nome del ristorante" value="<%= params[:query] %>">
         </div>
-        <ion-icon name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon> 
-        <ion-icon name="pin-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon> 
+        <button type="submit" style="display: none;"></button>
+        <ion-icon id="filter-icon" name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px; cursor: pointer;"></ion-icon>
+        <ion-icon name="pin-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon>
     </form>
+</div>
     <div class="results-and-details-container">
         <div class="results-container">
-            <div class="result-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="result-text">
-                    <h3>Nome Ristorante</h3>
-                    <p>Categoria, N stelle</p>
-                    <p>Descrizione</p>
-                    <p style="font-style: italic;">Posizione</p>
+            <% @ristoratori.each do |ristoratore| %>
+            <% @media = ristoratore.media_stelle%>
+            <% @numero = ristoratore.n_recensioni%>
+                <div class="result-box">
+                    <% if ristoratore.cliente.foto.present? %>
+                        <%= link_to public_restaurant_profile_path(ristoratore.id), class: 'restaurant-link' do %>
+                        <%= image_tag ristoratore.cliente.foto %>
+                        <% end %>
+                    <% else %>
+                        <%= link_to public_restaurant_profile_path(ristoratore.id), class: 'restaurant-link' do %>
+                        <%= image_tag "background.jpg" %>
+                        <% end %>
+                    <% end %>
+                    <div class="result-text">
+                        <h3><%= ristoratore.nomeristorante %></h3>
+                        <p><%=@media%><ion-icon name="star" style="font-size: 15px;"></ion-icon>, <%= @numero %> recensioni</p>
+                        <p id="map-details" style="font-style: italic; cursor: pointer;" data-ristoratore-id = <%=ristoratore.id%>>Vedi sulla mappa</p>
+                    </div>
                 </div>
-            </div>
-            <hr class="solid" id="divider">
-            <div class="result-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="result-text">
-                    <h3>Nome Ristorante</h3>
-                    <p>Categoria, N stelle</p>
-                    <p>Descrizione</p>
-                    <p style="font-style: italic;">Posizione</p>
-                </div>
-            </div>
-            <hr class="solid" id="divider">
-
-            <div class="result-box">
-                <%= image_tag 'background.jpg' %>
-                <div class="result-text">
-                    <h3>Nome Ristorante</h3>
-                    <p>Categoria, N stelle</p>
-                    <p>Descrizione</p>
-                    <p style="font-style: italic;">Posizione</p>
-                </div>
-            </div>
+                <hr class="solid" id="divider">
+            <% end %>
         </div>
+            
         <div class="vertical-divider"></div>
         <div class="details-container">
-            <%= image_tag 'background.jpg' %> <!--Posizione sulla Mappa-->
-            <p>Indicazioni stradali</p>
-
-
-
-            
+        <div class="map-container">
+        <% @ristorante_maps = Ristoratore.find(3) %>
+        <% @name = @ristorante_maps.format_restaurant_name%>
+        <iframe 
+            id="rest-map"
+            width="450" 
+            height="450" 
+            frameborder="0" style="border:0"
+            referrerpolicy="no-referrer-when-downgrade"
+            load="lazy" allowfullscreen
+            src="">
+        </iframe>
 
         </div>
+        
+            <p>Posizione sulla mappa</p>
+        </div>
     </div>
-
-
-
 </div>
+
+<!-- Finestra di dialogo -->
+<div id="dialog" class="dialog">
+    <div class="dialog-content">
+        <span class="close-button">&times;</span>
+        <form id="filter-form">
+            <h4>Applica dei filtri alla tua ricerca</h4>
+            <p>Stelle:<p>
+            <div class="stars">
+                <span class="star" data-value="1">&#9733;</span>
+                <span class="star" data-value="2">&#9733;</span>
+                <span class="star" data-value="3">&#9733;</span>
+                <span class="star" data-value="4">&#9733;</span>
+                <span class="star" data-value="5">&#9733;</span>
+            </div>
+            <p>Tag:</p>
+            <P>Km distanza:</p>
+            <input type="hidden" id="star-rating" name="star_rating" value="0">
+            <button type="button" id="apply-filters">Applica filtri</button>
+        </form>
+    </div>
+</div>
+<script>
+document.addEventListener('DOMContentLoaded', (event) => {
+    const dialog = document.getElementById('dialog');
+    const filterIcon = document.getElementById('filter-icon');
+    const closeButton = document.querySelector('.close-button');
+    const stars = document.querySelectorAll('.star');
+    const starRatingInput = document.getElementById('star-rating');
+    const applyFiltersButton = document.getElementById('apply-filters');
+
+    filterIcon.addEventListener('click', () => {
+        dialog.style.display = 'block';
+    });
+
+    closeButton.addEventListener('click', () => {
+        dialog.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target == dialog) {
+            dialog.style.display = 'none';
+        }
+    });
+
+    stars.forEach(star => {
+        star.addEventListener('click', () => {
+            const value = star.getAttribute('data-value');
+            starRatingInput.value = value;
+            stars.forEach(s => s.classList.remove('selected'));
+            for (let i = 0; i < value; i++) {
+                stars[i].classList.add('selected');
+            }
+        });
+    });
+
+    applyFiltersButton.addEventListener('click', () => {
+        const starRating = starRatingInput.value;
+        const query = document.getElementById('findbar').value;
+        window.location.href = `<%= ricerca_path %>?query=${query}&star_rating=${starRating}`;
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('#map-details').forEach(function(element) {
+    element.addEventListener('click', function() {
+      const ristoratoreId = this.getAttribute('data-ristoratore-id');
+      
+      fetch(`/ricerca/${ristoratoreId}/map_info`)
+        .then(response => response.json())
+        .then(data => {
+          const mapIframe = document.getElementById('rest-map');
+          const placeName = encodeURIComponent(data.name); // Assicurati che il nome sia URL-encoded
+          const apiKey = 'AIzaSyC9a9KDxjv1HNDVAeLEVYJDdjX2eYKPRzM'; 
+
+          mapIframe.src = `https://www.google.com/maps/embed/v1/place?q=${placeName}&key=${apiKey}`;
+        })
+        .catch(error => console.error('Error fetching map info:', error));
+    });
+  });
+});
+
+</script>

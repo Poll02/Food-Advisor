@@ -1,7 +1,140 @@
-<h1>Benvenuto nel tuo profilo personale</h1>
-<div>
-  <!-- Informazioni profilo ristoratore -->
-  <p>Email:</p>
-  <p>Nome del ristorante:</p>
-  <p>Data di registrazione:</p>
+<%= link_to 'Modifica', edit_restaurateur_profiles_path %>
+<% if flash[:notice] %>
+    <div class="alert alert-success" role="alert">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+
+  <% if flash[:alert] %>
+    <div class="alert alert-danger" role="alert">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+<div class="ristorante">
+
+  <% if @restaurant_owner.cliente.foto.present? %>
+    <%= image_tag @restaurant_owner.cliente.foto, class: 'r-foto'  %>
+  <% else %>
+    <%= image_tag 'user.jpg', class: 'r-foto' %>
+  <% end %>
+   
+  <div class="r-info">
+    <p style="font-weight: bold;">Nome del ristorante: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.nomeristorante %></span></p>
+    <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.indirizzo %></span></p>
+    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%= @restaurant_owner.email %></span></p>
+    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%= @restaurant_owner.telefono %></span></p>
+    <p style="font-weight: bold;">Data di registrazione: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.created_at %></span></p>
+    <p style="font-weight: bold;">Asporto: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.asporto %></span></p>
+  </div>
+</div>
+
+<h3>Tags</h3>
+<div class="r-statistiche">
+  <div class="r-stat">
+    <div class="r-tags">
+      <% if @tags.present? %>
+        <% @tags.each do |tag| %>
+          <span class="piatto"><%= tag.nome %></span>
+        <% end %>
+      <% else %>
+        <p>Nessun tag associato</p>
+      <% end %>
+    </div>
+  </div>
+</div>
+<h3>Promozioni</h3>
+<div class="r-promozioni">
+  <div class="promo-grid">
+    <% if @promotions.present? %>
+      <% @promotions.each do |promotion| %>
+        <div class="promo-box">
+          <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;"><%= promotion.tipo %></span></p>
+          <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;"><%= promotion.data_inizio %></span></p>
+          <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;"><%= promotion.data_fine %></span></p>
+          <p style="font-weight: bold;">Condizioni: <span style="font-weight: normal;"><%= promotion.condizioni %></span></p>
+        </div>
+        <div class="vertical-divider" style="height: 100px;"></div>
+      <% end %>
+    <% else %>
+      <p>Nessuna promozione attiva</p>
+    <% end %>
+  </div>
+</div>
+
+<h3>Recensioni</h3>
+<div class="r-recensioni">
+  <% if @reviews.any? %>
+    <% @reviews.each do |review| %>
+      <div class="r-recensione">
+        <% if review.cliente.foto.present? %>
+          <%= image_tag review.cliente.foto, class: 'recensione-foto' %>
+        <% else %>
+          <%= image_tag 'background.jpg', class: 'recensione-foto' %>
+        <% end %>
+      <div class="recensione-info">
+  <p style="font-weight: bold";><%= review.cliente.user.username %></p>
+            <p>
+              <% review.stelle.times do %>
+                <ion-icon name="star" style="font-size: 15px;"></ion-icon>
+              <% end %>
+            </p>         <p><%= review.commento %></p>
+        <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
+      </div>
+      <%= form_with url: update_pin_restaurateur_profile_path, method: :post, local: true do |form| %>
+  <%= form.hidden_field :review_id, value: review.id %>
+  <button type="submit" class="recensione-icon">
+    <i class="fa-solid fa-thumbtack"></i>
+  </button>
+<% end %>
+
+    </div>
+    <% end %>
+  <%else%>
+    <p>Non hai nessuna recensione</p>
+  <% end %>
+</div>
+
+<h3>Ricette Condivise</h3>
+<div class="r-ricette">
+  <% if @recipes.any? %>
+    <% @recipes.each do |recipe| %>
+      <div class="r-ricetta">
+        <% if recipe.photo.present? %>
+          <%= image_tag recipe.photo, class: 'ricetta-foto' %>
+        <% else %>
+          <%= image_tag 'background.jpg', class: 'ricetta-foto' %>
+        <% end %>
+        <div class="ricetta-info">
+          <p>Nome: <%= recipe.name %></p>
+          <p>Difficoltà: <%= recipe.difficulty %></p>
+          <p>Ingredienti: <%= recipe.ingredients %></p>
+          <p>Procedimento: <%= recipe.procedure %></p>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <p>Il ristoratore non ha condiviso alcuna ricetta.</p>
+  <% end %>
+</div>
+<h3>Eventi</h3>
+<div class="r-eventi">
+  <% if @eventi.any? %>
+    <% @eventi.each do |evento| %>
+      <div class="r-evento">
+        <% if evento.locandina.present? %>
+          <%= image_tag evento.locandina, class: 'evento-foto'  %>
+        <% else %>
+          <%= image_tag 'background.jpg', class: 'evento-foto' %>
+        <% end %>
+        <div class="evento-info">
+          <p><%= evento.nome %></p>
+          <p>Data: <%= evento.data %></p>
+          <p>Luogo: <%= evento.luogo %></p>
+          <p>Desc: <%= evento.descrizione %></p>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <p>Il ristoratore non ha creato alcun evento.</p>
+  <% end %>
 </div>

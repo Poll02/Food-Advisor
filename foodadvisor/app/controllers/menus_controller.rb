@@ -1,30 +1,85 @@
 class MenusController < ApplicationController
-  layout 'with_sidebar'
-  before_action :set_menu, only: [:show, :edit, :update]
+  layout :determine_layout
+
+  before_action :set_ristoratore, except: [:public_show]
+  before_action :set_menu, except: [:public_show]
 
   def show
-    # Il contenuto del menu è già impostato da set_menu
+    @piattos = @menu.piattos
+
+    if params[:query].present?
+      @piattos = @piattos.where('nome LIKE ?', "%#{params[:query]}%")
+    end
+
+    if params[:categoria].present?
+      @piattos = @piattos.where(categoria: params[:categoria])
+    end
+
+    if params[:prezzoMin].present?
+      @piattos = @piattos.where('prezzo >= ?', params[:prezzoMin].to_f)
+    end
+
+    if params[:prezzoMax].present?
+      @piattos = @piattos.where('prezzo <= ?', params[:prezzoMax].to_f)
+    end
+
+    if params[:ingredienti].present?
+      ingredienti = params[:ingredienti].split(',').map(&:strip)
+      ingredienti.each do |ingrediente|
+        @piattos = @piattos.where('ingredienti LIKE ?', "%#{ingrediente}%")
+      end
+    end
+
+    @categories = @piattos.map { |piatto| piatto.categoria }.uniq
   end
 
   def edit
-    # Il contenuto del menu è già impostato da set_menu
+    @piattos = @menu.piattos
+    @categories = @piattos.map { |piatto| piatto.categoria }.uniq
   end
 
-  def update
-    if @menu.update(menu_params)
-      redirect_to menus_path, notice: 'Menu aggiornato con successo.'
-    else
-      render :edit
+  def public_show
+    @restaurateur_profile = Ristoratore.find(params[:id])
+    @menu = @restaurateur_profile.menu
+    @piattos = @menu.piattos
+
+    if params[:query].present?
+      @piattos = @piattos.where('nome LIKE ?', "%#{params[:query]}%")
     end
+
+    if params[:categoria].present?
+      @piattos = @piattos.where(categoria: params[:categoria])
+    end
+
+    if params[:prezzoMin].present?
+      @piattos = @piattos.where('prezzo >= ?', params[:prezzoMin].to_f)
+    end
+
+    if params[:prezzoMax].present?
+      @piattos = @piattos.where('prezzo <= ?', params[:prezzoMax].to_f)
+    end
+
+    if params[:ingredienti].present?
+      ingredienti = params[:ingredienti].split(',').map(&:strip)
+      ingredienti.each do |ingrediente|
+        @piattos = @piattos.where('ingredienti LIKE ?', "%#{ingrediente}%")
+      end
+    end
+
+    @categories = @piattos.map { |piatto| piatto.categoria }.uniq
   end
 
   private
 
-  def set_menu
-    @menu = Menu.first_or_initialize
+  def determine_layout
+    action_name == 'public_show' ? 'application' : 'with_sidebar'
   end
 
-  def menu_params
-    params.require(:menu).permit(:name, dishes_attributes: [:id, :name, :price, :ingredients, :_destroy])
+  def set_ristoratore
+    @restaurateur_profile = @current_user.cliente.ristoratore
+  end
+
+  def set_menu
+    @menu = @restaurateur_profile.menu
   end
 end

@@ -1,0 +1,171 @@
+<div class="pagina-menu">
+    <%= link_to public_restaurant_profile_path(@restaurateur_profile.id), class: 'user-link' do %>Torna alla pagina vetrina del ristoratore<% end %>
+    <div class="ricerca-menu-container" style="text-align: center;">
+    <h1 style="font-size: 50px;"><%= @menu.ristoratore.nomeristorante %>'s Menu</h1>
+    <div class="search-container">
+        <form id="find-form" action="<%= public_show_menus_path(@menu) %>" method="get">
+        <div class="find-input" style="display: flex; align-items: center;">
+            <button type="submit" style="background: none; border: none; margin-bottom: 80px; cursor: pointer; padding: 0;">
+            <ion-icon name="search-outline" style="color: black;"></ion-icon>
+            </button>
+            <input type="text" id="findbar" name="query" placeholder="Inserisci qui il nome del piatto" value="<%= params[:query] %>">
+        </div>
+        <button type="submit" style="display: none;"></button>
+        <ion-icon id="filter-menu-icon" name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px; cursor: pointer;"></ion-icon>
+        </form>
+    </div>
+    <div class="categories" style="text-align: center;">
+        <% if @categories.any? %>
+        <% @categories.each do |category| %>
+            <div class="category">
+            <h2><%= category %></h2>
+            <ul>
+                <% @piattos.select { |piatto| piatto.categoria == category }.each do |piatto| %>
+                <div class="piatto">
+                    <% if piatto.foto.present? %>
+                    <%= image_tag piatto.foto, style: 'width: 100px; height: auto; border-radius: 15px' if piatto.foto.present? %>
+                    <% else %>
+                    <%= image_tag 'background.jpg', style: 'width: 100px; height: auto; border-radius: 15px' %>
+                    <% end %>
+                    <br><%= piatto.nome %><br>
+                    prezzo: <%= piatto.prezzo %>€<br>
+                    ingredienti: <%= piatto.ingredienti %>
+                </div>
+                <% end %>
+            </ul>
+            </div>
+        <% end %>
+        <% else %>
+        <p>Il menu è in fase di aggiornamento.</p>
+        <% end %>
+    </div>
+    </div>
+
+    <!-- Finestra di dialogo -->
+    <div id="dialog" class="dialog-menu">
+    <div class="dialog-content-menu">
+        <span class="close-button">&times;</span>
+        <form id="filter-form">
+        <h4>Applica dei filtri alla tua ricerca</h4>
+        <label for="categoria">Categoria:</label>
+        <select id="categoria">
+            <option value="">Tutte le categorie</option>
+            <% @categories.each do |category| %>
+            <option value="<%= category %>" <%= 'selected' if params[:categoria] == category %>><%= category %></option>
+            <% end %>
+        </select>
+        <br>
+        <label for="prezzoMin">Prezzo minimo:</label>
+        <input type="number" id="prezzoMin" min="0" step="0.01" value="<%= params[:prezzoMin] %>">
+
+        <label for="prezzoMax">Prezzo massimo:</label>
+        <input type="number" id="prezzoMax" min="0" step="0.01" value="<%= params[:prezzoMax] %>"><br>
+        
+        <label for="ingredienti">Ingredienti principali:</label>
+        <input type="text" id="ingredienti" placeholder="Inserisci ingredienti separati da virgola" value="<%= params[:ingredienti] %>">
+        
+        <button type="button" id="apply-filters">Applica filtri</button>
+        <button type="button" id="reset-filters">Azzera filtri</button>
+        </form>
+    </div>
+    </div>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const filterMenuIcon = document.getElementById('filter-menu-icon');
+    const dialog = document.getElementById('dialog');
+    const closeButton = document.querySelector('.close-button');
+    const applyFiltersButton = document.getElementById('apply-filters');
+    const resetFiltersButton = document.getElementById('reset-filters');
+
+    // Aprire la finestra modale al clic sull'icona
+    filterMenuIcon.addEventListener('click', function(event) {
+        const iconRect = filterMenuIcon.getBoundingClientRect();
+        dialog.style.top = `${iconRect.bottom}px`;
+        dialog.style.left = `${iconRect.left}px`;
+        dialog.style.display = 'block';
+
+        // Prepopolare i campi del modulo con i valori attuali dei parametri URL
+        const params = new URLSearchParams(window.location.search);
+        document.getElementById('categoria').value = params.get('categoria') || '';
+        document.getElementById('prezzoMin').value = params.get('prezzoMin') || '';
+        document.getElementById('prezzoMax').value = params.get('prezzoMax') || '';
+        document.getElementById('ingredienti').value = params.get('ingredienti') || '';
+    });
+
+    // Chiudere la finestra modale al clic sul pulsante di chiusura
+    closeButton.addEventListener('click', function() {
+        dialog.style.display = 'none';
+    });
+
+    // Applicare i filtri al clic sul pulsante "Applica filtri"
+    applyFiltersButton.addEventListener('click', function() {
+        // Recuperare i valori dei filtri
+        const query = document.getElementById('findbar').value;
+        const categoria = document.getElementById('categoria').value;
+        const prezzoMin = document.getElementById('prezzoMin').value;
+        const prezzoMax = document.getElementById('prezzoMax').value;
+        const ingredienti = document.getElementById('ingredienti').value;
+
+        // Eseguire la ricerca con i filtri
+        const url = buildUrlWithFilters(query, categoria, prezzoMin, prezzoMax, ingredienti);
+        window.location.href = url; // Esempio di come potresti gestire la navigazione verso la pagina di ricerca
+    });
+
+    // Azzerare i filtri al clic sul pulsante "Azzera filtri"
+    resetFiltersButton.addEventListener('click', function() {
+        document.getElementById('categoria').value = '';
+        document.getElementById('prezzoMin').value = '';
+        document.getElementById('prezzoMax').value = '';
+        document.getElementById('ingredienti').value = '';
+
+        // Eseguire la ricerca senza filtri
+        const query = document.getElementById('findbar').value;
+        const url = buildUrlWithFilters(query, '', '', '', '');
+        window.location.href = url;
+    });
+
+    // Funzione per costruire l'URL con i parametri dei filtri
+    function buildUrlWithFilters(query, categoria, prezzoMin, prezzoMax, ingredienti) {
+        let url = window.location.pathname; // Ottiene l'URL corrente
+        let params = new URLSearchParams(window.location.search);
+
+        // Aggiorna i parametri dell'URL
+        if (query) {
+            params.set('query', query);
+        } else {
+            params.delete('query');
+        }
+
+        if (categoria) {
+            params.set('categoria', categoria);
+        } else {
+            params.delete('categoria');
+        }
+
+        if (prezzoMin) {
+            params.set('prezzoMin', prezzoMin);
+        } else {
+            params.delete('prezzoMin');
+        }
+
+        if (prezzoMax) {
+            params.set('prezzoMax', prezzoMax);
+        } else {
+            params.delete('prezzoMax');
+        }
+
+        if (ingredienti) {
+            params.set('ingredienti', ingredienti);
+        } else {
+            params.delete('ingredienti');
+        }
+
+        return `${url}?${params.toString()}`;
+    }
+});
+
+
+</script>

@@ -1,0 +1,283 @@
+<!-- Mostra il messaggio di successo o errore -->
+<% if flash[:notice] %>
+  <div class="alert alert-success" role="alert">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
+
+<% if flash[:alert] %>
+  <div class="alert alert-danger" role="alert">
+    <%= flash[:alert] %>
+  </div>
+<% end %>
+
+<h3>Nuove registrazioni</h3>
+<div class="nuoviUtenti">
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Cognome</th>
+                <th>Nome Ristorante</th>
+                <th>Ruolo</th>
+                <th>Email</th>
+                <th>Indirizzo</th>
+                <th>Asporto</th>
+                <th>Certificato</th>
+                <th>Data Iscrizione</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @clienti.each do |cliente| %>
+                <% 
+                    url = if cliente.respond_to?(:ristoratore) && cliente.ristoratore.present?
+                            public_restaurant_profile_path(cliente.ristoratore)
+                        elsif cliente.user.respond_to?(:critico) && cliente.user.critico.present?
+                            public_critic_profile_path(cliente.user.critico)
+                        else
+                            public_user_profile_path(cliente.user)
+                        end
+                %>
+                <tr onclick="window.location='<%= url %>'" style="cursor: pointer;">
+                    <td>
+                        <% if cliente.respond_to?(:user) && cliente.user.present? %>
+                            <%= cliente.user.nome %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.respond_to?(:user) && cliente.user.present? %>
+                            <%= cliente.user.cognome %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.respond_to?(:ristoratore) && cliente.ristoratore.present? %>
+                            <%= cliente.ristoratore.nomeristorante %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.respond_to?(:ristoratore) && cliente.ristoratore.present? %>
+                            Ristoratore
+                        <% elsif cliente.user.respond_to?(:critico) && cliente.user.critico.present? %>
+                            Critico
+                        <% else %>
+                            User
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.respond_to?(:utente) && cliente.utente.present? %>
+                            <%= cliente.utente.email %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.respond_to?(:ristoratore) && cliente.ristoratore.present? %>
+                            <%= cliente.ristoratore.indirizzo %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.respond_to?(:ristoratore) && cliente.ristoratore.present? %>
+                            <%= cliente.ristoratore.asporto ? 'Sì' : 'No' %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.user.respond_to?(:critico) && cliente.user.critico.present? %>
+                            <%= cliente.user.critico.certificato ? 'Sì' : 'No' %>
+                        <% end %>
+                    </td>
+                    <td><%= cliente.created_at.strftime('%d/%m/%Y') %></td>
+                </tr>
+            <% end %>
+
+            <% if @clienti.size < 5 %>
+                <% (5 - @clienti.size).times do %>
+                    <tr>
+                        <td colspan="9">&nbsp;</td>
+                    </tr>
+                <% end %>
+            <% end %>
+        </tbody>
+    </table>
+</div>
+
+
+<h3>Segnalazioni</h3>
+<div class="gestioneSegnalazioni">
+<% if @segnalazioni.any? %>
+  <% @segnalazioni.each do |segnalazione| %>
+    <div class="segnalazione">
+      <div class="segnalazioneInfo">
+        <p class="info">Da: <%= segnalazione.cliente_id %>  A: <%= segnalazione.recensione.cliente_id %>  <p>
+        <p class="info">Motivo:  </p> <%= segnalazione.motivo %>
+      </div>
+      <div class="public-r-reviews">
+            <% if segnalazione.recensione.cliente.foto.present? %>
+              <%= image_tag segnalazione.recensione.cliente.foto, class: 'recensione-foto' %>
+            <% else %>
+              <%= image_tag 'background.jpg', class: 'recensione-foto' %>
+            <% end %>
+          <div class="public-review-details">
+            <p style="font-weight: bold";><%= segnalazione.recensione.cliente.user.username %></p>
+            <p>
+              <% segnalazione.recensione.stelle.times do %>
+                <ion-icon name="star" style="font-size: 15px;"></ion-icon>
+              <% end %>
+            </p>            <p><%= segnalazione.recensione.commento %></p>
+            <p style="font-style: italic; font-size: 13px;">in data <%= segnalazione.recensione.created_at.strftime('%d/%m/%Y') %></p>
+          </div>
+          <div class="public-review-icon">
+            <i class="fa-regular fa-thumbs-up"></i>
+            <i class="fa-solid fa-share-nodes"></i>
+            
+          </div>
+        </div>
+      <div class="segnalazioneAction">
+        <%= form_with model: segnalazione.recensione ,url: review_path(segnalazione.recensione), method: :delete, local: true do %>
+          <button type="submit">Rimuovi recensione</button>
+        <% end %>
+        <button>Blocca profilo segnalato</button>
+      </div>
+    </div>
+    <br><br>
+  <%end%>
+<% elsif %>
+    <div class="segnalazione">
+        <div class="segnalazioneInfo">
+            <p>Da: __________ A: __________ <p>
+            <p>Motivo: ____________ </p>
+        </div>
+        <div class="segnalazioneAction">
+            <button>Rimuovi recensione</button>
+            <button>Blocca profilo segnalato</button>
+        </div>
+    </div>
+<% end %>
+</div>
+<h3>Problemi</h3>
+<div class="gestioneProblemi">
+  <table>
+    <thead>
+      <tr>
+        <th>ID cliente</th>
+        <th>Problema</th>
+        <th>Data</th>
+        <th>Stato</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @problemi.each do |problema| %>
+        <tr>
+          <td><%= problema.cliente_id %></td>
+          <td><%= problema.text %></td>
+          <td><%= problema.created_at.strftime('%d/%m/%Y') %></td>
+          <td>
+            <% if problema.stato == false %>
+              <%= form_with(url: aggiorna_stato_problema_problem_path(problema), method: :put, class: 'update-status-form', data: { confirm: 'Sei sicuro di voler segnare questo problema come risolto?' }) do %>
+                <%= button_tag type: 'submit', class: 'btn btn-danger' do %>
+                  Da risolvere
+                <% end %>
+              <% end %>
+            <% else %>
+              <button class="btn btn-success" disabled>Risolto</button>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+
+      <% if @problemi.empty? %>
+        <tr>
+          <td colspan="4">&nbsp;</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<h3>Invia comunicazioni</h3>
+<div class="inviaNotifiche">
+  <%= form_with model: @notification, url: notifications_path, local: true do |form| %>
+    <div class="form-group">
+      <%= form.label :email, 'A:' %>
+      <%= form.email_field :email, placeholder: 'Inserisci l\'email del destinatario', class: 'form-control', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.text_area :message, rows: 5, class: 'form-control', placeholder: 'Inserisci il corpo della notifica', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.submit 'Invia Notifica', class: 'btn btn-primary' %>
+      <%= form.button 'Azzerare', type: 'reset', class: 'btn btn-secondary' %>
+    </div>
+  <% end %>
+</div>
+
+<h3>Gestione Competizioni</h3>
+<div class="admin-competition-container">
+  <div class="create-container">
+    <p style="font-weight: bold;">Crea una competizione</p>
+    <%= form_with model: @competizione, url: competizione_create_path, local: true do |form| %>
+    <div class="form-group">
+      <%= form.label :nome, 'Nome Competizione:' %>
+      <%= form.text_field :nome, class: 'form-control', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :requisiti, 'Requisiti:' %>
+      <%= form.text_field :requisiti, class: 'form-control', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :premi, 'Premi:' %>
+      <%= form.text_field :premi, class: 'form-control', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :locandina, 'Foto:' %>
+      <%= form.file_field :locandina, class: 'form-control', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :descrizione, 'Descrizione:' %>
+      <%= form.text_area :descrizione, class: 'form-control', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :datainizio, 'Data Inizio:' %>
+      <%= form.date_field :datainizio, class: 'form-control', required: true %>
+    </div>
+    <div class="form-group">
+      <%= form.label :datafine, 'Data Fine:' %>
+      <%= form.date_field :datafine, class: 'form-control', required: true %>
+    </div>
+    <%= form.submit 'Crea Competizione', class: 'btn btn-primary' %>
+    <%= form.button 'Azzerare', type: 'reset', class: 'btn btn-secondary' %>
+
+    
+    
+  <% end %>
+
+  </div>
+  <div class="points-container">
+    <p style="font-weight: bold;" class="form-control">Assegna Punti</p>
+
+
+  </div>
+  
+
+
+
+</div>
+
+<style>
+.public-r-reviews {
+  margin-right: 50px;
+  width: 250%;
+}
+
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const updateForms = document.querySelectorAll('.update-status-form');
+    updateForms.forEach(form => {
+      form.addEventListener('submit', function(event) {
+        const confirmMessage = this.getAttribute('data-confirm');
+        if (!confirm(confirmMessage)) {
+          event.preventDefault();
+        }
+      });
+    });
+  });
+</script>

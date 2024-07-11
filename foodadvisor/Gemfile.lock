@@ -63,7 +63,6 @@ GEM
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
     bcrypt (3.1.20)
-    bcrypt (3.1.20-java)
     bindex (0.8.1)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
@@ -81,12 +80,8 @@ GEM
     concurrent-ruby (1.3.3)
     crass (1.0.6)
     date (3.3.4)
-    date (3.3.4-java)
     erubi (1.13.0)
     ffi (1.16.3)
-    ffi (1.16.3-java)
-    ffi (1.16.3-x64-mingw32)
-    ffi (1.16.3-x86-mingw32)
     globalid (1.2.1)
       activesupport (>= 6.1)
     hirb (0.7.3)
@@ -95,6 +90,10 @@ GEM
     jbuilder (2.12.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
+    jquery-rails (4.6.0)
+      rails-dom-testing (>= 1, < 3)
+      railties (>= 4.2.0)
+      thor (>= 0.14, < 2.0)
     listen (3.9.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -111,9 +110,8 @@ GEM
     method_source (1.1.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.7)
-    minitest (5.24.0)
+    minitest (5.24.1)
     msgpack (1.7.2)
-    msgpack (1.7.2-java)
     net-imap (0.3.7)
       date
       net-protocol
@@ -124,23 +122,17 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
-    nio4r (2.7.3-java)
     nokogiri (1.15.6)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.15.6-java)
+    nokogiri (1.15.6-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.15.6-x64-mingw32)
-      racc (~> 1.4)
-    nokogiri (1.15.6-x86-mingw32)
+    nokogiri (1.15.6-x86_64-linux)
       racc (~> 1.4)
     public_suffix (5.1.1)
     puma (5.6.8)
       nio4r (~> 2.0)
-    puma (5.6.8-java)
-      nio4r (~> 2.0)
     racc (1.8.0)
-    racc (1.8.0-java)
     rack (2.2.9)
     rack-mini-profiler (2.3.4)
       rack (>= 1.2.0)
@@ -179,14 +171,12 @@ GEM
     rb-inotify (0.11.1)
       ffi (~> 1.0)
     regexp_parser (2.9.2)
-    rexml (3.3.0)
+    rexml (3.3.1)
       strscan
     rubyzip (2.3.2)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
-      ffi (~> 1.9)
-    sassc (2.4.0-x64-mingw32)
       ffi (~> 1.9)
     sassc-rails (2.1.2)
       railties (>= 4.0.0)
@@ -198,6 +188,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+    spring (4.2.1)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -205,16 +196,19 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.4)
+    sqlite3 (1.5.4)
+      mini_portile2 (~> 2.8.0)
+    sqlite3 (1.5.4-arm64-darwin)
+    sqlite3 (1.5.4-x86_64-linux)
     strscan (3.1.0)
-    strscan (3.1.0-java)
     thor (1.3.1)
-    tilt (2.3.0)
+    tilt (2.4.0)
     timeout (0.4.1)
+    turbolinks (5.2.1)
+      turbolinks-source (~> 5.2)
+    turbolinks-source (5.2.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2024.1)
-      tzinfo (>= 1.0.0)
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -227,19 +221,15 @@ GEM
     websocket (1.2.10)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
-    websocket-driver (0.7.6-java)
-      websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.6.16)
 
 PLATFORMS
-  java
+  arm64-darwin-23
   ruby
-  x64-mingw32
-  x86-mingw32
-  x86-mswin32
+  x86_64-linux
 
 DEPENDENCIES
   bcrypt (~> 3.1.7)
@@ -248,13 +238,16 @@ DEPENDENCIES
   capybara (>= 3.26)
   hirb
   jbuilder (~> 2.7)
+  jquery-rails
   listen (~> 3.3)
   puma (~> 5.0)
   rack-mini-profiler (~> 2.0)
   rails (~> 6.1.7, >= 6.1.7.8)
   sass-rails (>= 6)
   selenium-webdriver (>= 4.0.0.rc1)
-  sqlite3 (~> 1.4.0)
+  spring
+  sqlite3 (~> 1.5.0)
+  turbolinks (~> 5)
   tzinfo-data
   web-console (>= 4.1.0)
   webdrivers
@@ -263,4 +256,4 @@ RUBY VERSION
    ruby 2.7.2p137
 
 BUNDLED WITH
-   2.1.4
+   2.4.22

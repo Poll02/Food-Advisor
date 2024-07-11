@@ -1,0 +1,46 @@
+<div class="support-container">
+  <% if flash[:notice] %>
+    <div class="alert alert-success" role="alert">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+
+  <% if flash[:alert] %>
+    <div class="alert alert-danger" role="alert">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+    <div class="header-and-img">
+        <h1 style="font-size: 54px; max-width: 300px;">Supporto e Assistenza Clienti</h1>
+        <%= image_tag 'support.png' %>
+    </div>
+    <div class="contacts">
+        <h1>Contatti</h1>
+        <p style="display: flex; align-items: center;"><ion-icon name="call" style="font-size: 20px; margin-right: 20px;"></ion-icon> 3312811563</p>
+        <p style="display: flex; align-items: center;"><ion-icon name="logo-facebook" style="font-size: 20px; margin-right: 20px;"></ion-icon> FoodAdvisor</p>
+        <p style="display: flex; align-items: center;"><ion-icon name="logo-instagram" style="font-size: 20px; margin-right: 20px;"></ion-icon> FoodAdvisor</p>
+    </div>
+
+    <h1>Segnala un Problema</h1>
+    <div class="problems-form-container">
+        <% if flash[:notice] %>
+  <div class="notice" style="font-style: italic; color: green;"><%= flash[:notice] %></div>
+<% end %>
+        <% if logged_in? %>
+          <p>Se hai bisogno di assistenza, puoi segnalare un problema usando il form qui sotto.</p>
+        
+          <%= form_with model: @problem, url: problems_path, local: true do |form| %>
+            <div class="field">
+              <%= form.label :text, "Descrizione del problema" %>
+              <%= form.text_area :text %>
+            </div>
+
+            <div class="actions">
+              <%= form.submit "Invia" %>
+            </div>
+          <% end %>
+        <% else %>
+          <p>Devi essere loggato per creare un problema. <%= link_to 'Accedi', login_path %></p>
+        <% end %>
+    </div>
+</div>

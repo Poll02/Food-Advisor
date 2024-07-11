@@ -1,0 +1,81 @@
+.support-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.night-mode .support-container {
+    background-color: rgb(34, 34, 34);
+}
+
+.header-and-img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-and-img img{
+    width: 500px;
+}
+
+.contacts{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.problems-form-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.problems-form-container .field{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+.problems-form-container .field label{
+    font-weight: bold;
+}
+
+.problems-form-container .field textarea{
+    width: 500px;
+    height: 300px;
+    font-size: 13px;
+    border-radius: 10px;
+}
+
+.problems-form-container .actions{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.problems-form-container .actions input{
+    border: none;
+    font-size: 15px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    width: 100px;
+    color: white;
+    background-color: rgb(69, 177, 141);
+    padding: 5px;
+    border-radius: 15px;
+    cursor: pointer;
+    }
+
+.problems-form-container .actions input:hover{
+    filter: brightness(120%);
+}
+
+
+
+

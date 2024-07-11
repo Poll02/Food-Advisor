@@ -1,0 +1,61 @@
+<div class="favourites" style="display: flex; flex-direction: column;">
+    <h1>Ricette Preferite</h1>
+    <div class="p-user-fav-events">
+        <% if @ricette_preferite.any? %>
+        <% @ricette_preferite.each do |ricetta| %>
+
+        <div class="restaurant-box">
+              <% if ricetta.photo.present? %>
+                        <%= image_tag ricetta.photo %>
+                    <% else %>
+                        <%= image_tag "background.jpg" %>
+                    <% end %>
+            <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
+              <p><%= ricetta.name%></p>
+              <p style="font-size: 13px; font-weight: normal;"><%= ricetta.difficulty%></p>
+              <p style="font-size: 13px; font-weight: normal;"><%= ricetta.ingredients%></p>
+              <p style="font-size: 13px; font-weight: normal;"><%= ricetta.procedure%></p>
+            </div>
+          </div>
+        <% end %>
+        <% else %>
+        <p>Nessuna ricetta tra i preferiti<p>
+        <% end %>
+
+
+
+
+          
+    </div>
+    <hr id="divider" class="solid">
+    <h1>Ristoranti Preferiti</h1>
+    <div class="restaurants-grid">
+            <% if @ristoranti_preferiti.any? %>
+            <% @ristoranti_preferiti.each do |ristoratore| %>
+            <% @media = ristoratore.media_stelle%>
+            <% @numero = ristoratore.n_recensioni%>
+
+
+                <%= link_to public_restaurant_profile_path(ristoratore.id), class: 'restaurant-link' do %>
+                <div class="restaurant-box">
+                    <% if ristoratore.cliente.foto.present? %>
+                        <%= image_tag ristoratore.cliente.foto %>
+                    <% else %>
+                        <%= image_tag "background.jpg" %>
+                    <% end %>
+                    <div class="text-overlay">
+                        <%= ristoratore.nomeristorante %> 
+                        <p style="font-weight: normal;"><%= @media %><span style="font-weight: normal;"><ion-icon name="star" style="font-size: 15px; color: #00b072; margin-left: 10px;"></ion-icon></p>
+                        <p style="font-weight: normal; font-style: italic;"><%= @numero %> recensioni</p>
+                    </div>
+                </div>
+                <% end %>
+                <% end %>
+
+                <% else %>
+                <p>Nessun ristorante tra i preferiti</p>
+            <% end %>          
+        </div>
+
+
+</div>

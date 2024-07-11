@@ -1,2 +1,537 @@
-<h1>RestauranterProfile#edit</h1>
-<p>Find me in app/views/restauranter_profile/edit.html.erb</p>
+<%= link_to 'Salva', rest_profile_path %>
+
+<h3>Tags</h3>
+<div class="r-statistiche">
+  <div class="r-stat">
+    <div class="r-tags">
+      <% if @tags.present? %>
+        <% @tags.each do |tag| %>
+          <span class="piatto"><%= tag.nome %></span>
+        <% end %>
+      <% end %>
+      <table>
+        <% @categories.each do |category| %>
+          <tr class="<%= category.downcase.gsub(' ', '-') %>">
+            <td class="category-header"><%= category %></td>
+            <td class="dish-container">
+              <% tags = Tag.where(categoria: category) %>
+              <% tags.each do |tag| %>
+                <div class="piatto">
+                  <%= tag.nome %>
+                  <% if @tags.include?(tag) %>
+                    <%= form_with url: remove_tag_path(tag_id: tag.id), method: :post, class: 'inline-form' do %>
+                      <%= hidden_field_tag :tag_id, tag.id %>
+                      <%= hidden_field_tag :action_type, 'remove' %>
+                      <button type="submit" class="button-with-icon">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    <% end %>
+                  <% else %>
+                    <%= form_with url: add_tag_path(tag_id: tag.id), method: :post, class: 'inline-form' do %>
+                      <%= hidden_field_tag :tag_id, tag.id %>
+                      <%= hidden_field_tag :action_type, 'add' %>
+                      <button type="submit" class="button-with-icon">
+                        <i class="fas fa-plus"></i>
+                      </button>
+                    <% end %>
+                  <% end %>
+                </div>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+
+<h3>Promozioni</h3>
+<div class="r-promozioni">
+  <div class="promo-grid">
+    <% if @promotions.present? %>
+      <% @promotions.each do |promotion| %>
+        <div class="promo-box" id="promotion-<%= promotion.id %>">
+          <p style="font-weight: bold;">Tipo Promozione: <span style="font-weight: normal;"><%= promotion.tipo %></span></p>
+          <p style="font-weight: bold;">Data Inizio: <span style="font-weight: normal;"><%= promotion.data_inizio %></span></p>
+          <p style="font-weight: bold;">Data Fine: <span style="font-weight: normal;"><%= promotion.data_fine %></span></p>
+          <p style="font-weight: bold;">Condizioni: <span style="font-weight: normal;"><%= promotion.condizioni %></span></p>
+          <ion-icon name="close-circle-outline" class="del-promo-icon" id="del-promo-icon" data-promotion-id="<%= promotion.id %>" style="font-size: 25px; cursor: pointer;"></ion-icon>
+
+        </div>
+        <div class="vertical-divider" style="height: 100px;"></div>
+      <% end %>
+    <% else %>
+      <p>Nessuna promozione attiva</p>
+    <% end %>
+  </div>
+</div>
+<button type="button" id="add-promo-btn">Aggiungi Promozione</button>
+
+<h3>Ricette Condivise</h3>
+<div class="r-ricette">
+  <% if @recipes.any? %>
+    <% @recipes.each do |recipe| %>
+      <div class="r-ricetta" id="recipe-<%= recipe.id %>">
+        <% if recipe.photo.present? %>
+          <%= image_tag recipe.photo, class: 'ricetta-foto' %>
+        <% else %>
+          <%= image_tag 'background.jpg', class: 'ricetta-foto' %>
+        <% end %>
+        <div class="ricetta-info">
+          <p>Nome: <%= recipe.name %></p>
+          <p>Difficoltà: <%= recipe.difficulty %></p>
+          <p>Ingredienti: <%= recipe.ingredients %></p>
+          <p>Procedimento: <%= recipe.procedure %></p>
+        </div>
+        <i class="fa fa-trash delete-recipe-icon" data-recipe-id="<%= recipe.id %>" style="font-size: 15px; cursor: pointer;"></i>
+      </div>
+    <% end %>
+  <% else %>
+    <p>Il ristoratore non ha condiviso alcuna ricetta.</p>
+  <% end %>
+</div>
+<button type="button" id="add-recipe-btn">Aggiungi Ricetta</button>
+
+<h3>Eventi</h3>
+<div class="r-eventi">
+  <% if @eventi.any? %>
+    <% @eventi.each do |evento| %>
+      <div class="r-evento" id="evento-<%= evento.id %>">
+        <% if evento.locandina.present? %>
+          <%= image_tag evento.locandina, class: 'evento-foto'  %>
+        <% else %>
+          <%= image_tag 'background.jpg', class: 'evento-foto' %>
+        <% end %>
+        <div class="evento-info">
+          <p><%= evento.nome %></p>
+          <p>Data: <%= evento.data %></p>
+          <p>Luogo: <%= evento.luogo %></p>
+          <p>Desc: <%= evento.descrizione %></p>
+        </div>
+        <i class="fa fa-trash delete-icon" data-event-id="<%= evento.id %>" style="font-size: 15px; cursor: pointer;"></i>
+      </div>
+    <% end %>
+  <% else %>
+    <p>Il ristoratore non ha creato alcun evento.</p>
+  <% end %>
+</div>
+<button type="button" id="add-event-btn">Aggiungi Evento</button>
+
+<!-- Finestra modale creazione evento -->
+<div id="myModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Crea Nuovo Evento</h2>
+    <%= form_with(url: create_event_restaurateur_profiles_path, method: :post, local: true) do |form| %>
+      <div>
+        <%= form.label :nome, "Nome Evento" %>
+        <%= form.text_field :nome, class: "form-control" %>
+      </div>
+      <div>
+        <%= form.label :data, "Data Evento" %>
+        <%= form.date_field :data, id: "eventDate", class: "form-control" %>
+      </div>
+      <div>
+        <%= form.label :luogo, "Luogo Evento" %>
+        <%= form.text_field :luogo, class: "form-control" %>
+      </div>
+      <div>
+        <%= form.label :descrizione, "Descrizione Evento" %>
+        <%= form.text_area :descrizione, class: "form-control" %>
+      </div>
+      <div>
+        <%= form.label :locandina, "Locandina Evento" %>
+        <%= form.file_field :locandina, class: "form-control" %>
+      </div>
+      <div>
+        <%= form.submit "Crea Evento", class: "btn btn-primary" %>
+        <button type="button" id="resetBtn">Azzera</button>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+<!-- finestra modale creazione promozioni -->
+<div id="myModal2" class="modal">
+  <div class="modal-content">
+    <span class="close" id="close-promo-modal">&times;</span>
+    <h2>Aggiungi Promozione</h2>
+    <%= form_with(url: create_promotion_restaurateur_profiles_path, method: :post, local: true) do |form| %>
+      <div class="form-group">
+        <%= form.label :tipo, "Tipo Promozione" %>
+        <%= form.text_field :tipo, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= form.label :data_inizio, "Data Inizio" %>
+        <%= form.date_field :data_inizio, class: "form-control", id: "eventDatePromo" %>
+      </div>
+      <div class="form-group">
+        <%= form.label :data_fine, "Data Fine" %>
+        <%= form.date_field :data_fine, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= form.label :condizioni, "Condizioni" %>
+        <%= form.text_area :condizioni, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= form.submit "Salva Promozione", class: "btn btn-primary" %>
+        <button type="button" id="resetBtnPromo">Azzera</button>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+
+<!-- Finestra modale creazione ricette -->
+<div id="myModal3" class="modal">
+  <div class="modal-content">
+    <span class="close" id="close-recipe-modal">&times;</span>
+    <h2>Aggiungi Ricetta</h2>
+    <%= form_with(url: create_recipe_restaurateur_profiles_path, method: :post, local: true) do |form| %>
+      <div class="form-group">
+        <%= form.label :photo, "Foto ricetta" %>
+        <%= form.file_field :photo %>
+      </div>
+      <div class="form-group">
+        <%= form.label :name, "Nome" %>
+        <%= form.text_field :name, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= form.label :difficulty, "Difficoltà" %>
+        <%= form.text_field :difficulty, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= form.label :ingredients, "Ingredienti" %>
+        <%= form.text_field :ingredients, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= form.label :procedure, "Procedimento" %>
+        <%= form.text_field :procedure, class: "form-control" %>
+      </div>
+      <div class="form-group">
+        <%= form.submit "Salva Ricetta", class: "btn btn-primary" %>
+        <button type="button" id="resetBtnRecipe">Azzera</button>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<!-- Finestra di conferma eliminazione evento -->
+<div id="confirmModal" class="modal">s
+  <div class="modal-content">
+    <span class="close-confirm">&times;</span>
+    <h2>Conferma Eliminazione</h2>
+    <p>Sei sicuro di voler eliminare questo evento?</p>
+    <button id="confirmDeleteBtn">Conferma</button>
+    <button id="cancelDeleteBtn">Annulla</button>
+  </div>
+</div>
+
+<!-- Finestra di conferma eliminazione promozione -->
+<div id="confirmModalPromo" class="modal">s
+  <div class="modal-content">
+    <span class="close-confirm-promo">&times;</span>
+    <h2>Conferma Eliminazione</h2>
+    <p>Sei sicuro di voler eliminare questo evento?</p>
+    <button id="confirmDeleteBtnPromo">Conferma</button>
+    <button id="cancelDeleteBtnPromo">Annulla</button>
+  </div>
+</div>
+
+<!-- Finestra di conferma eliminazione ricetta -->
+<div id="confirmModalRecipe" class="modal">s
+  <div class="modal-content">
+    <span class="close-confirm-recipe">&times;</span>
+    <h2>Conferma Eliminazione</h2>
+    <p>Sei sicuro di voler eliminare questo evento?</p>
+    <button id="confirmDeleteBtnRecipe">Conferma</button>
+    <button id="cancelDeleteBtnRecipe">Annulla</button>
+  </div>
+</div>
+
+<script>
+  // JS per aprire la finestra degli eventi
+  document.addEventListener("DOMContentLoaded", function() {
+    var modal = document.getElementById("myModal");
+    var btn = document.getElementById("add-event-btn");
+    var span = document.getElementsByClassName("close")[0];
+    var resetBtn = document.getElementById("resetBtn");
+    var eventDateField = document.getElementById("eventDate");
+
+    // Imposta la data minima per il campo data
+    var today = new Date();
+    today.setDate(today.getDate() + 1); // Aggiungi un giorno alla data odierna
+    var minDate = today.toISOString().split('T')[0];
+    eventDateField.setAttribute('min', minDate);
+
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    resetBtn.onclick = function() {
+      var form = modal.querySelector("form");
+      form.reset();
+    }
+
+  
+  });
+
+
+  // JS per aprire la finestra delle promozioni
+  document.addEventListener("DOMContentLoaded", function() {
+    var modal2 = document.getElementById("myModal2");
+    var btn = document.getElementById("add-promo-btn");
+    var span = document.getElementById("close-promo-modal");
+    var resetBtn = document.getElementById("resetBtnPromo");
+    var eventDateField = document.getElementById("eventDatePromo");
+
+    // Imposta la data minima per il campo data
+    var today = new Date();
+    today.setDate(today.getDate() + 1); // Aggiungi un giorno alla data odierna
+    var minDate = today.toISOString().split('T')[0];
+    eventDateField.setAttribute('min', minDate);
+
+    btn.onclick = function() {
+      modal2.style.display = "block";
+    }
+
+    span.onclick = function() {
+      modal2.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal2) {
+        modal2.style.display = "none";
+      }
+    }
+
+    resetBtn.onclick = function() {
+      var form = modal2.querySelector("form");
+      form.reset();
+    }
+  });
+
+  // JS per aprire la finestra delle ricette
+  document.addEventListener("DOMContentLoaded", function() {
+    var modal = document.getElementById("myModal3");
+    var btn = document.getElementById("add-recipe-btn");
+    var span = document.getElementById("close-recipe-modal");
+    var resetBtn = document.getElementById("resetBtnRecipe");
+
+    btn.onclick = function() {
+      modal.style.display = "block";
+    }
+
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    resetBtn.onclick = function() {
+      var form = modal.querySelector("form");
+      form.reset();
+    }
+
+  
+  });
+
+  // JS per eliminazione evento
+  var confirmModal = document.getElementById("confirmModal");
+  var closeConfirmBtn = document.getElementsByClassName("close-confirm")[0];
+  var confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+  var cancelDeleteBtn = document.getElementById("cancelDeleteBtn");
+  var eventIdToDelete = null;
+
+  document.querySelectorAll('.delete-icon').forEach(function(deleteIcon) {
+    deleteIcon.onclick = function() {
+      eventIdToDelete = this.getAttribute('data-event-id');
+      confirmModal.style.display = "block";
+    }
+  });
+
+  closeConfirmBtn.onclick = function() {
+    confirmModal.style.display = "none";
+  }
+
+  cancelDeleteBtn.onclick = function() {
+    confirmModal.style.display = "none";
+    eventIdToDelete = null;
+  }
+
+  window.onclick = function(event) {
+    if (event.target == confirmModal) {
+      confirmModal.style.display = "none";
+      eventIdToDelete = null;
+    }
+  }
+
+  confirmDeleteBtn.onclick = function() {
+    if (eventIdToDelete) {
+      fetch(`/restaurateur_profiles/destroy_event/${eventIdToDelete}`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById(`evento-${eventIdToDelete}`).remove();
+            confirmModal.style.display = "none";
+          } else {
+            alert('Errore durante l\'eliminazione dell\'evento: ' + data.error);
+          }
+        }).catch(error => {
+          alert('Errore durante l\'eliminazione dell\'evento: ' + error.message);
+        });
+    }
+  }
+
+  // JS per eliminazione promozioni
+  var confirmPromoModal = document.getElementById("confirmModalPromo");
+  var closePromoConfirmBtn = document.getElementsByClassName("close-confirm-promo")[0];
+  var confirmPromoDeleteBtn = document.getElementById("confirmDeleteBtnPromo");
+  var cancelPromoDeleteBtn = document.getElementById("cancelDeleteBtnPromo");
+  var promoIdToDelete = null;
+
+  document.querySelectorAll('.del-promo-icon').forEach(function(deletePromoIcon) {
+    deletePromoIcon.onclick = function() {
+      promoIdToDelete = this.getAttribute('data-promotion-id');
+      console.log("Promo ID to delete:", promoIdToDelete); // Log per verificare ID della promozione da eliminare
+      confirmPromoModal.style.display = "block";
+    }
+  });
+
+  closePromoConfirmBtn.onclick = function() {
+    console.log("Close button clicked");
+    confirmPromoModal.style.display = "none";
+  }
+
+  cancelPromoDeleteBtn.onclick = function() {
+    console.log("Cancel delete button clicked");
+    confirmPromoModal.style.display = "none";
+    promoIdToDelete = null;
+  }
+
+  window.onclick = function(event) {
+    if (event.target == confirmPromoModal) {
+      console.log("Clicked outside modal");
+      confirmPromoModal.style.display = "none";
+      promoIdToDelete = null;
+    }
+  }
+
+  confirmPromoDeleteBtn.onclick = function() {
+    console.log("Confirm delete button clicked");
+    if (promoIdToDelete) {
+      fetch(`/restaurateur_profiles/destroy_promotion/${promoIdToDelete}`, {
+        method: 'DELETE',
+        headers: {
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json())
+        .then(data => {
+          console.log("Response from server:", data); // Log per verificare la risposta dal server
+          if (data.success) {
+            console.log("Promotion deleted successfully");
+            document.getElementById(`promotion-${promoIdToDelete}`).remove();
+            confirmPromoModal.style.display = "none";
+          } else {
+            console.error('Errore durante l\'eliminazione della promozione data: ' + data.error);
+            alert('Errore durante l\'eliminazione della promozione data: ' + data.error);
+          }
+        }).catch(error => {
+          console.error('Errore durante l\'eliminazione della promozione errore: ' + error.message);
+          alert('Errore durante l\'eliminazione della promozione errore: ' + error.message);
+        });
+    } else {
+      console.error("Promo ID to delete is null or undefined");
+      alert("Errore: ID promozione da eliminare non valido.");
+    }
+  }
+
+  // JS per eliminazione ricette
+var confirmRecipeModal = document.getElementById("confirmModalRecipe");
+var closeRecipeConfirmBtn = document.getElementsByClassName("close-confirm-recipe")[0];
+var confirmRecipeDeleteBtn = document.getElementById("confirmDeleteBtnRecipe");
+var cancelRecipeDeleteBtn = document.getElementById("cancelDeleteBtnRecipe");
+var recipeIdToDelete = null;
+
+document.querySelectorAll('.delete-recipe-icon').forEach(function(deleteRecipeIcon) {
+  deleteRecipeIcon.onclick = function() {
+    recipeIdToDelete = this.getAttribute('data-recipe-id');
+    console.log("Recipe ID to delete:", recipeIdToDelete); // Log per verificare ID della ricetta da eliminare
+    confirmRecipeModal.style.display = "block";
+  }
+});
+
+closeRecipeConfirmBtn.onclick = function() {
+  console.log("Close button clicked");
+  confirmRecipeModal.style.display = "none";
+}
+
+cancelRecipeDeleteBtn.onclick = function() {
+  console.log("Cancel delete button clicked");
+  confirmRecipeModal.style.display = "none";
+  recipeIdToDelete = null;
+}
+
+window.onclick = function(event) {
+  if (event.target == confirmRecipeModal) {
+    console.log("Clicked outside modal");
+    confirmRecipeModal.style.display = "none";
+    recipeIdToDelete = null;
+  }
+}
+
+confirmRecipeDeleteBtn.onclick = function() {
+  console.log("Confirm delete button clicked");
+  if (recipeIdToDelete) {
+    fetch(`/restaurateur_profiles/destroy_recipe/${recipeIdToDelete}`, {
+      method: 'DELETE',
+      headers: {
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+        'Content-Type': 'application/json'
+      }
+    }).then(response => response.json())
+      .then(data => {
+        console.log("Response from server:", data); // Log per verificare la risposta dal server
+        if (data.success) {
+          console.log("Recipe deleted successfully");
+          document.getElementById(`recipe-${recipeIdToDelete}`).remove();
+          confirmRecipeModal.style.display = "none";
+        } else {
+          console.error('Errore durante l\'eliminazione della ricetta data: ' + data.error);
+          alert('Errore durante l\'eliminazione della ricetta data: ' + data.error);
+        }
+      }).catch(error => {
+        console.error('Errore durante l\'eliminazione della ricetta errore: ' + error.message);
+        alert('Errore durante l\'eliminazione della ricetta errore: ' + error.message);
+      });
+  } else {
+    console.error("Recipe ID to delete is null or undefined");
+    alert("Errore: ID ricetta da eliminare non valido.");
+  }
+}
+
+  
+</script>
