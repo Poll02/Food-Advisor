@@ -10,9 +10,20 @@ class CompetizioneController < ApplicationController
   end
 
   def create
-    Rails.logger.info("inizio creazione competizione")
+    Rails.logger.info("inizio creazione competizione") 
     @competizione = Competizione.new(competizione_params)
     Rails.logger.info("parametri competizione #{competizione_params}")
+
+    # se c'è la foto la salviamo in locale
+    if params[:competizione][:locandina]
+      uploaded_file = params[:competizione][:locandina]
+      file_path = Rails.root.join('app', 'assets', 'images', uploaded_file.original_filename)
+      File.open(file_path, 'wb') do |file|
+        file.write(uploaded_file.read)
+      end
+      @competizione.locandina = uploaded_file.original_filename
+    end
+
     if @competizione.save
       flash[:notice] = 'Competizione creata con successo!'
     else
@@ -123,16 +134,54 @@ class CompetizioneController < ApplicationController
       return
     end
 
-    # Se tutti gli aggiornamenti sono stati fatti con successo, distruggi la competizione
-    if @competizione.destroy
-      flash[:notice] = 'Punti assegnati con successo a tutti i partecipanti e competizione eliminata!'
-    else
-      flash[:alert] = 'Errore durante l\'eliminazione della competizione.'
+    # Trova l'utente con il punteggio più alto nella competizione
+    user_with_highest_points = @competizione.user_competitions.order(punti_competizione: :desc).first.user
+
+    # Crea un nuovo premio
+    premio = Premi.new(
+      nomecompetizione: @competizione.nome,
+      nome: @competizione.premio,
+      data_inizio: @competizione.data_inizio,
+      ristoratore_id: current_user.cliente.ristoratore.id,
+      user_id: user_with_highest_points.id
+    )
+
+    unless premio.save
+      flash[:alert] = "Errore durante la creazione del premio: #{premio.errors.full_messages.to_sentence}"
+      redirect_to competizione_index_path
+      return
     end
 
-    #manca la parte di aggiunta buono
+    # Se tutti gli aggiornamenti sono stati fatti con successo, distruggi la competizione
+    if @competizione.destroy
+      flash[:notice] = 'Competizione eliminata con successo!'
+    else
+      flash[:alert] = 'Errore durante l\'eliminazione della competizione'
+    end
     redirect_to competizione_index_path
   end
+
+  def elimina_partecipante
+    @competizione = Competizione.find(params[:id])
+    @istanza = @competizione.user_competitions.find_by(user_id: @current_user.cliente.user.id)
+  
+    if @competizione.data_fine >= Date.today
+      if @istanza.destroy
+        flash[:notice] = 'Partecipazione cancellata con successo!'
+      else
+        flash[:alert] = 'Errore durante la rimozione della partecipazione'
+      end
+    else
+      flash[:alert] = 'La competizione è già finita, non puoi cancellare la tua partecipazione.'
+    end
+  
+    if session[:role] == 'Critico'
+      redirect_to critic_profile_path
+    else
+      redirect_to user_profile_path
+    end
+  end
+  
 
   private
   

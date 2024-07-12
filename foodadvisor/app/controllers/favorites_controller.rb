@@ -4,7 +4,7 @@ class FavoritesController < ApplicationController
   
     def add_rest_to_favorites
       ristoratore_id = params[:ristoratore_id]
-      if session[:role] == 'User'
+      if session[:role] == 'User' or session[:role] == 'Critico'
         user_id = current_user.cliente.user.id
       else
         render json: { success: false, error: 'Devi essere loggato come utente per aggiungere ai preferiti.' }, status: :unauthorized
@@ -27,7 +27,7 @@ class FavoritesController < ApplicationController
 
     def add_recipe_to_favorites
       recipe_id = params[:recipe_id]
-      if session[:role] == 'User'
+      if session[:role] == 'User' or session[:role] == 'Critico'
         user_id = current_user.cliente.user.id
       else
         render json: { success: false, error: 'Devi essere loggato come utente per aggiungere ai preferiti.' }, status: :unauthorized
@@ -41,42 +41,6 @@ class FavoritesController < ApplicationController
         favorite = FavRecipe.new(user_id: user_id, recipe_id: recipe_id)
   
         if favorite.save
-          render json: { success: true }
-        else
-          render json: { success: false, error: favorite.errors.full_messages.to_sentence }, status: :unprocessable_entity
-        end
-      end
-    end
-
-    def add_event_to_favorites
-      Rails.logger.info("aggiungo evento ai preferiti: #{params[:evento_id]}" )
-      evento_id = params[:evento_id]
-      Rails.logger.info("Prendo id evento #{evento_id}" )
-
-      if session[:role] == 'User'
-        user_id = current_user.cliente.user.id
-        Rails.logger.info("Set user id #{user_id}" )
-
-      else
-        render json: { success: false, error: 'Devi essere loggato come utente per aggiungere ai preferiti.' }, status: :unauthorized
-      end
-
-
-  
-      if FavEvent.exists?(user_id: user_id, event_id: evento_id)
-        render json: { success: false, error: 'Ristorante già nei preferiti' }, status: :unprocessable_entity
-      else
-        Rails.logger.info("Inizio creazione" )
-
-        favorite = FavEvent.new(user_id: user_id, event_id: evento_id)
-        Rails.logger.info("Debug #{evento_id}" )
-
-
-
-  
-        if favorite.save
-          Rails.logger.info("Fine creazione" )
-
           render json: { success: true }
         else
           render json: { success: false, error: favorite.errors.full_messages.to_sentence }, status: :unprocessable_entity

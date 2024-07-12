@@ -160,7 +160,8 @@
   border-radius: 10px;
   width: 400px;
   height: 260px;
-  overflow-y: scroll;
+  display: flex;
+  justify-content: space-between;
 }
 
 .night-mode .r-ricetta {
@@ -168,13 +169,15 @@
 }
 
 .ricetta-foto {
-  width: 120px;  
+  width: 150px;  
   height: auto;
-  border-radius: 10px
+  border-radius: 10px;
+  margin: 1%;
 }
 
 .ricetta-info {
   padding: 5px;
+  overflow-y: scroll;
 }
 
 .r-eventi {

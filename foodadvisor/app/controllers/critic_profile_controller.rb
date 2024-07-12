@@ -11,7 +11,9 @@ class CriticProfileController < ApplicationController
 
   def show
     @recensioni = Recensione.where(cliente_id: current_user.cliente.id).order(created_at: :desc)
+    @iscrizioni = UserCompetition.where(user_id: current_user.cliente.user.id)
     @prenotazioni = Prenotazione.where(user_id: current_user.cliente.user.id).where('data >= ?', Date.today)
+    @premi = Premi.where(id: current_user.cliente.user.id)
   end
 
   def edit

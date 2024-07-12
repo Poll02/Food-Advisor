@@ -21,7 +21,7 @@ class PreferitiController < ApplicationController
   end
 
   def require_customer
-    unless session[:role] == 'User'
+    unless session[:role] == 'User' or session[:role] == 'Critico'
       redirect_to root_path
     end
   end

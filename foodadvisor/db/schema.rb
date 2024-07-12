@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_10_074050) do
+ActiveRecord::Schema.define(version: 2024_07_12_073024) do
 
   create_table "admins", force: :cascade do |t|
     t.integer "utente_id", null: false
@@ -85,15 +85,6 @@ ActiveRecord::Schema.define(version: 2024_07_10_074050) do
     t.index ["ristoratore_id"], name: "index_eventos_on_ristoratore_id"
   end
 
-  create_table "fav_events", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "event_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["event_id"], name: "index_fav_events_on_event_id"
-    t.index ["user_id"], name: "index_fav_events_on_user_id"
-  end
-
   create_table "fav_recipes", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "recipe_id", null: false
@@ -138,6 +129,19 @@ ActiveRecord::Schema.define(version: 2024_07_10_074050) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["menu_id"], name: "index_piattos_on_menu_id"
+  end
+
+  create_table "premis", force: :cascade do |t|
+    t.string "nomecompetizione"
+    t.string "nome"
+    t.date "data_inizio"
+    t.date "data_fine"
+    t.integer "user_id", null: false
+    t.integer "ristoratore_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["ristoratore_id"], name: "index_premis_on_ristoratore_id"
+    t.index ["user_id"], name: "index_premis_on_user_id"
   end
 
   create_table "prenotaziones", force: :cascade do |t|
@@ -276,8 +280,6 @@ ActiveRecord::Schema.define(version: 2024_07_10_074050) do
   add_foreign_key "criticos", "users"
   add_foreign_key "dipendentes", "ristoratores"
   add_foreign_key "eventos", "ristoratores"
-  add_foreign_key "fav_events", "events"
-  add_foreign_key "fav_events", "users"
   add_foreign_key "fav_recipes", "recipes"
   add_foreign_key "fav_recipes", "users"
   add_foreign_key "fav_ristorantis", "ristoratores"
@@ -285,6 +287,8 @@ ActiveRecord::Schema.define(version: 2024_07_10_074050) do
   add_foreign_key "menus", "ristoratores"
   add_foreign_key "notifications", "clientes"
   add_foreign_key "piattos", "menus"
+  add_foreign_key "premis", "ristoratores"
+  add_foreign_key "premis", "users"
   add_foreign_key "prenotaziones", "ristoratores"
   add_foreign_key "prenotaziones", "users"
   add_foreign_key "problems", "clientes"

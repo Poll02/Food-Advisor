@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  get 'user_notifications/index'
+    
+    get 'user_notifications/index'
     get 'preferiti/show'
     get 'user_profile/edit'
     get 'user_profile/show'
@@ -75,6 +76,7 @@ Rails.application.routes.draw do
         get 'assegna_punti', to: 'competizione#assegna_punti'
         post 'join', to: 'competizione#join_competition'
         delete 'delete_competizione', to: 'competizione#destroy'
+        delete 'elimina_partecipante', to: 'competizione#elimina_partecipante'
       end
     end
     post '/competizione/create', to: 'competizione#create', as: 'create_competizione'

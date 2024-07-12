@@ -18,6 +18,7 @@ class Ristoratore < ApplicationRecord
   has_many :recensiones, dependent: :destroy
   has_many :fav_ristoranti, dependent: :destroy
   has_many :favorited_by_users, through: :fav_ristoranti, source: :user
+  has_many :premis
 
   def format_restaurant_name
     # Rimuove i doppi spazi
