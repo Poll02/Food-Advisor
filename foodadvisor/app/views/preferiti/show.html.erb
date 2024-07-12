@@ -15,8 +15,12 @@
               <p style="font-size: 13px; font-weight: normal;"><%= ricetta.difficulty%></p>
               <p style="font-size: 13px; font-weight: normal;"><%= ricetta.ingredients%></p>
               <p style="font-size: 13px; font-weight: normal;"><%= ricetta.procedure%></p>
+              <p style="color: red; font-style: italic; cursor: pointer; font-weight: normal;" id="remove-fav-recipe" data-recipe-id=<%= ricetta.id %>>Rimuovi</p>
+
             </div>
+
           </div>
+
         <% end %>
         <% else %>
         <p>Nessuna ricetta tra i preferiti<p>
@@ -48,8 +52,10 @@
                         <p style="font-weight: normal;"><%= @media %><span style="font-weight: normal;"><ion-icon name="star" style="font-size: 15px; color: #00b072; margin-left: 10px;"></ion-icon></p>
                         <p style="font-weight: normal; font-style: italic;"><%= @numero %> recensioni</p>
                     </div>
+                    <% end %>
+
+                    <p style="color: red; font-style: italic; cursor: pointer;" id="remove-fav-rest" data-rest-id=<%=ristoratore.id%>>Rimuovi</p>
                 </div>
-                <% end %>
                 <% end %>
 
                 <% else %>
@@ -59,3 +65,54 @@
 
 
 </div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('remove-fav-rest').addEventListener('click', function() {
+      var restId = this.getAttribute('data-rest-id');
+      if (confirm('Sei sicuro di voler rimuovere questo ristorante dai preferiti?')) {
+        fetch('/favorites/remove_rest_from_favorites', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': '<%= form_authenticity_token %>'
+          },
+          body: JSON.stringify({ ristoratore_id: restId })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('Ristorante rimosso dai preferiti.');
+          } else {
+            alert('Errore: ' + data.error);
+          }
+        });
+      }
+    });
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('remove-fav-recipe').addEventListener('click', function() {
+      var recipeId = this.getAttribute('data-recipe-id');
+      if (confirm('Sei sicuro di voler rimuovere questa ricetta dai preferiti?')) {
+        fetch('/favorites/remove_recipe_from_favorites', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': '<%= form_authenticity_token %>'
+          },
+          body: JSON.stringify({ recipe_id: recipeId })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('Ricetta rimossa dai preferiti.');
+          } else {
+            alert('Errore: ' + data.error);
+          }
+        });
+      }
+    });
+  });
+</script>

@@ -41,7 +41,7 @@
                     </div>
                     <%= submit_tag 'Accedi', id: "login-btn" %>
                 <% end %>
-                    <hr class='solid' id='divider'>
+                    <hr class="solid" style="width: 200px;" id="divider">
                     <a href="/auth/google_oauth2/callback"><button type="button" id="login-btn" style="background-color: rgb(6, 176, 176); margin-bottom: 10px;">
                         <ion-icon name="logo-google"></ion-icon>Accedi con Google
                     </button></a>
@@ -51,19 +51,11 @@
                     <div id="status">
                     </div>
 
-
-
-
-
-                    <div class="password-forgot-container">
-                        <p id="forgot-password">Ho dimenticato la password</p>
-                    </div>
-
                     <div class="register-container">
-                        <hr class='solid' style="width: 25%;" id='divider'>
-                        <p style="font-size: 13px; cursor: pointer;"><a href="<%= signup_path %>">Iscriviti</a></p>
-                        <hr class='solid' style="width: 25%;" id='divider'>
-                    </div>
+                    <hr class="solid" style="width: 50px;" id="divider">
+                    <p style="font-size: 13px; cursor: pointer;"><a href="<%= signup_path %>">Iscriviti</a></p>
+                    <hr class="solid" style="width: 50px" id="divider">
+                </div>
                 
 
         </div>
@@ -76,12 +68,12 @@
 
                 <div class="input-container">
                     <%= label_tag :piva, "P. IVA", id: "login-label" %>
-                    <%= text_field_tag 'restaurateur[piva]', nil, id: "piva-input" %>
+                    <%= text_field_tag 'restaurateur[piva]', nil, id: "login-input" %>
                 </div>
 
                 <div class="input-container">
                     <%= label_tag :password, "Password", id: "login-label" %>
-                    <%= password_field_tag 'restaurateur[password]', nil, id: "password-input" %>
+                    <%= password_field_tag 'restaurateur[password]', nil, id: "login-input" %>
                 </div>
 
                 <div class="rememberme-container">
@@ -92,13 +84,11 @@
                 <%= submit_tag 'Accedi', id: "login-btn" %>
                 <hr class="solid" id="divider">
 
-                <div class="password-forgot-container">
-                    <p id="r-forgot-password">Ho dimenticato la password</p>
-                </div>
+                
 
                 <div class="register-container">
                     <hr class="solid" style="width: 20%;" id="divider">
-                    <p style="font-size: 13px; cursor: pointer;"><a href="<%= signup_path %>">Diventa un ristoratore</a></p>
+                    <p style="font-size: 13px; cursor: pointer;"><a href="<%= signup_path %>">Iscriviti</a></p>
                     <hr class="solid" style="width: 20%;" id="divider">
                 </div>
             <% end %>
