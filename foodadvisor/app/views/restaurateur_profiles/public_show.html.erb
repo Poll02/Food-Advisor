@@ -587,33 +587,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-document.getElementById('add-event-fav').addEventListener('click', function(event) {
-    event.preventDefault();
-    
-    const eventoId = this.getAttribute('data-evento-id');
-    
-    fetch('/add_event_to_favorites', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-      },
-      credentials: 'same-origin',
-      body: JSON.stringify({ evento_id: eventoId })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert('Evento aggiunto ai preferiti!');
-      } else {
-        alert('Errore: ' + data.error);
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('Si è verificato un errore durante l\'aggiunta dell\'evento ai preferiti.');
-    });
-  });
+
 
   document.getElementById('add-recipe-fav').addEventListener('click', function(event) {
     event.preventDefault();

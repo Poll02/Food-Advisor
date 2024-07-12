@@ -10,41 +10,6 @@ class InfoController < ApplicationController
     @prenotazioni = Prenotazione.where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id, valida: false)
   end
 
-  def create_dipendente
-    foto_path = save_locandina(params[:foto]) if params[:foto].present?
-  
-    @dipendente = Dipendente.new(
-      ristoratore_id: @restaurant_owner.cliente.ristoratore.id,
-      nome: params[:nome],
-      cognome: params[:cognome],
-      assunzione: params[:assunzione],
-      ruolo: params[:ruolo],
-      foto: foto_path
-    )
-  
-    if @dipendente.save
-      flash[:notice] = 'Dipendente creato con successo.'
-      redirect_to info_path
-    else
-      flash[:alert] = 'Errore durante la creazione del dipendente.'
-      redirect_to info_path
-    end
-  end
-
-  def destroy_dipendente
-    @dipendente = Dipendente.find_by(id: params[:id])
-    
-    if @dipendente
-      if @dipendente.destroy
-        render json: { success: true }, status: :ok
-      else
-        render json: { success: false, error: 'Errore durante l\'eliminazione del dipendente' }, status: :unprocessable_entity
-      end
-    else
-      render json: { success: false, error: 'Dipendente non trovato' }, status: :not_found
-    end
-  end
-
   def bookings_per_week
     Rails.logger.info("inizio grafico")
     
@@ -91,6 +56,40 @@ class InfoController < ApplicationController
     }
   end
 
+  def create_dipendente
+    @dipendente = Dipendente.new(dipendente_params)
+
+    if params[:dipendente][:foto]
+      uploaded_file = params[:dipendente][:foto]
+      file_path = Rails.root.join('app', 'assets', 'images', uploaded_file.original_filename)
+      File.open(file_path, 'wb') do |file|
+        file.write(uploaded_file.read)
+      end
+      @dipendente.foto = uploaded_file.original_filename
+    end
+
+    if @dipendente.save
+      flash[:notice] = 'Dipendente creato con successo.'
+    else
+      flash[:alert] = 'Errore nella creazione.'
+    end
+    redirect_to info_path
+  end
+
+  def destroy_dipendente
+    @dipendente = Dipendente.find_by(id: params[:id])
+    
+    if @dipendente
+      if @dipendente.destroy
+        render json: { success: true }, status: :ok
+      else
+        render json: { success: false, error: 'Errore durante l\'eliminazione del dipendente' }, status: :unprocessable_entity
+      end
+    else
+      render json: { success: false, error: 'Dipendente non trovato' }, status: :not_found
+    end
+  end
+
   private
 
   def require_logged_in
@@ -109,19 +108,8 @@ class InfoController < ApplicationController
     @restaurant_owner = @current_user
   end
 
-  # Metodo per salvare l'immagine in assets/images e restituire il percorso
-  def save_locandina(image)
-    # Genera un nome univoco per l'immagine
-    filename = "#{SecureRandom.hex(8)}_#{image.original_filename}"
-    # Percorso completo di salvataggio
-    directory = Rails.root.join('app', 'assets', 'images')
-    path = File.join(directory, filename)
-    # Salva il file nell'immagine
-    File.open(path, 'wb') do |file|
-      file.write(image.read)
-    end
-    # Restituisce il percorso relativo dell'immagine
-    "/assets/#{filename}"
+  def dipendente_params
+    params.require(:dipendente).permit(:foto, :nome, :cognome, :ruolo, :assunzione, :ristoratore_id)
   end
 
 end

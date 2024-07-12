@@ -67,62 +67,48 @@
         <div class="dipendente">
           <%= image_tag dipendente.foto.present? ? dipendente.foto : 'background.jpg', class: 'dip-foto' %>    
           <div class="dip-info">
-            <p><%= dipendente.nome %></p>
-            <p><%= dipendente.cognome %></p>
-            <p><%= dipendente.ruolo %></p>
+            <p>Nome: <%= dipendente.nome %></p>
+            <p>Cognome: <%= dipendente.cognome %></p>
+            <p>Ruolo: <%= dipendente.ruolo %></p>
+            <p>Assunzione: <%= dipendente.assunzione.strftime("%d/%m/%Y") %></p>
           </div>
-          <ion-icon name="close-circle-outline" class="del-dipendente-icon" id="del-dipendente-icon" data-dipendente-id="<%= dipendente.id %>" style="font-size: 25px; cursor: pointer;"></ion-icon>
+          <button class="btn btn-danger remove-dipendente" data-dip-id="<%= dipendente.id %>">Elimina</button>
         </div>
       <% end %>
     <% end %>
   </div>
-  <button type="button" id="add-dipendente-btn">Aggiungi Dipendente</button>
-  
-  <!-- Modale per aggiungere dipendente -->
-  <div id="dipendenteModal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="close-dipendente-modal">&times;</span>
-      <h2>Aggiungi Dipendente</h2>
-      <%= form_with(url: create_dipendente_info_path, method: :post, local: true) do |form| %>
+  <div class="formDipendente">
+    <h2>Aggiungi Dipendente</h2>
+    <%= form_with(model: @dipendente, url: create_dipendente_path, local: true) do |form| %>
+      <%= form.fields_for :dipendente do |dipendente_form| %>
         <div class="form-group">
-          <%= form.label :foto, "Foto URL" %>
-          <%= form.file_field :foto, class: "form-control" %>
+          <%= dipendente_form.label :foto, "Foto URL" %>
+          <%= dipendente_form.file_field :foto, class: "form-control" %>
         </div>
         <div class="form-group">
-          <%= form.label :nome, "Nome" %>
-          <%= form.text_field :nome, class: "form-control" %>
+          <%= dipendente_form.label :nome, "Nome" %>
+          <%= dipendente_form.text_field :nome, class: "form-control" %>
         </div>
         <div class="form-group">
-          <%= form.label :cognome, "Cognome" %>
-          <%= form.text_field :cognome, class: "form-control" %>
+          <%= dipendente_form.label :cognome, "Cognome" %>
+          <%= dipendente_form.text_field :cognome, class: "form-control" %>
         </div>
         <div class="form-group">
-          <%= form.label :ruolo, "Ruolo" %>
-          <%= form.text_field :ruolo, class: "form-control" %>
+          <%= dipendente_form.label :ruolo, "Ruolo" %>
+          <%= dipendente_form.select :ruolo, options_for_select(['fattorino', 'cameriere', 'cassiere', 'sommelier', 'cuoco', 'lavapiatti', 'direttore di sala', 'aiuto-chef']), {}, class: "form-control" %>
         </div>
         <div class="form-group">
-          <%= form.label :assunzione, "Data di Assunzione" %>
-          <%= form.date_field :assunzione, class: "form-control" %>
-        </div>        
-        <div class="form-group">
-          <%= form.submit "Salva Dipendente", class: "btn btn-primary" %>
-          <button type="button" id="resetBtnDipendente">Azzera</button>
+          <%= dipendente_form.label :assunzione, "Data di Assunzione" %>
+          <%= dipendente_form.date_field :assunzione, class: "form-control" %>
         </div>
+        <%= dipendente_form.hidden_field :ristoratore_id, value: @current_user.cliente.ristoratore.id %> 
       <% end %>
-    </div>
-  </div> 
-  <!-- Finestra di conferma eliminazione dipendente -->
-  <div id="confirmModalDipendente" class="modal">s
-    <div class="modal-content">
-      <span class="close-confirm-dipendente">&times;</span>
-      <h2>Conferma Eliminazione</h2>
-      <p>Sei sicuro di voler eliminare il dipendente?</p>
-      <button id="confirmDeleteBtnDipendente">Conferma</button>
-      <button id="cancelDeleteBtnDipendente">Annulla</button>
-    </div>
+      <div class="form-group">
+        <%= form.submit "Salva Dipendente", class: "btn btn-primary" %>
+        <button type="button" id="resetBtnDipendente">Azzera</button>
+      </div>
+    <% end %>
   </div>
-<div>
-
 
   <script>
 // JS PER IL GRAFICO
@@ -305,101 +291,6 @@ document.addEventListener('DOMContentLoaded', function() {
   window.loadDailyData(currentDay);
 });
 
-
-
-
-
-  // JS per aprire la finestra dei dipendenti
-  document.addEventListener("DOMContentLoaded", function() {
-    var modal2 = document.getElementById("dipendenteModal");
-    var btn = document.getElementById("add-dipendente-btn");
-    var span = document.getElementById("close-dipendente-modal");
-    var resetBtn = document.getElementById("resetBtnDipendente");
-
-    btn.onclick = function() {
-      modal2.style.display = "block";
-    }
-
-    span.onclick = function() {
-      modal2.style.display = "none";
-    }
-
-    window.onclick = function(event) {
-      if (event.target == modal2) {
-        modal2.style.display = "none";
-      }
-    }
-
-    resetBtn.onclick = function() {
-      var form = modal2.querySelector("form");
-      form.reset();
-    }
-  });
-
-  // JS per eliminazione dipendenti
-  var confirmPromoModal = document.getElementById("confirmModalDipendente");
-  var closePromoConfirmBtn = document.getElementsByClassName("close-confirm-dipendente")[0];
-  var confirmPromoDeleteBtn = document.getElementById("confirmDeleteBtnDipendente");
-  var cancelPromoDeleteBtn = document.getElementById("cancelDeleteBtnDipendente");
-  var promoIdToDelete = null;
-
-  document.querySelectorAll('.del-dipendente-icon').forEach(function(deletePromoIcon) {
-    deletePromoIcon.onclick = function() {
-      promoIdToDelete = this.getAttribute('data-dipendente-id');
-      console.log("Dip ID to delete:", promoIdToDelete); // Log per verificare ID della promozione da eliminare
-      confirmPromoModal.style.display = "block";
-    }
-  });
-
-  closePromoConfirmBtn.onclick = function() {
-    console.log("Close button clicked");
-    confirmPromoModal.style.display = "none";
-  }
-
-  cancelPromoDeleteBtn.onclick = function() {
-    console.log("Cancel delete button clicked");
-    confirmPromoModal.style.display = "none";
-    promoIdToDelete = null;
-  }
-
-  window.onclick = function(event) {
-    if (event.target == confirmPromoModal) {
-      console.log("Clicked outside modal");
-      confirmPromoModal.style.display = "none";
-      promoIdToDelete = null;
-    }
-  }
-
-  confirmPromoDeleteBtn.onclick = function() {
-    console.log("Confirm delete dipendente button clicked");
-    if (promoIdToDelete) {
-      fetch(`/info/destroy_dipendente/${promoIdToDelete}`, {
-        method: 'DELETE',
-        headers: {
-          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-          'Content-Type': 'application/json'
-        }
-      }).then(response => response.json())
-        .then(data => {
-          console.log("Response from server:", data); // Log per verificare la risposta dal server
-          if (data.success) {
-            console.log("Dipendente deleted successfully");
-            document.getElementById(`dipendente-${promoIdToDelete}`).remove();
-            confirmPromoModal.style.display = "none";
-          } else {
-            console.error('Errore durante l\'eliminazione della promozione data: ' + data.error);
-            alert('Errore durante l\'eliminazione della promozione data: ' + data.error);
-          }
-        }).catch(error => {
-          console.error('Errore durante l\'eliminazione della promozione errore: ' + error.message);
-          alert('Errore durante l\'eliminazione del dipendente errore: ' + error.message);
-        });
-    } else {
-      console.error("Dip ID to delete is null or undefined");
-      alert("Errore: ID dipendente da eliminare non valido.");
-    }
-  }
-
   // JS per la validazione delle prenotazioni
   document.addEventListener('DOMContentLoaded', function() {
     const checkIcons = document.querySelectorAll('.check-icon');
@@ -482,4 +373,32 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
   });
+
+  // per i dipendenti
+  document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.remove-dipendente').forEach(function(button) {
+    button.addEventListener('click', function() {
+      var dipendenteId = this.getAttribute('data-dip-id');
+      if (confirm('Sei sicuro di voler eliminare questo dipendente?')) {
+        fetch('/info/destroy_dipendente/' + dipendenteId, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            alert('Dipendente eliminato con successo.');
+            document.getElementById('dipendente-' + dipendenteId).remove();
+          } else {
+            alert('Errore: ' + data.error);
+          }
+        });
+      }
+    });
+  });
+});
+
 </script>
