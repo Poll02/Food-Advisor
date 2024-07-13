@@ -253,14 +253,16 @@
                 <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
               </div>
             </div>
-            <div class="public-review-icon">
-              <%= form_with url: add_like_review_path(review), method: :post, remote: true, html: { class: 'like-form' } do %>
-          <%= hidden_field_tag :review_id, review.id %>
-          <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
-          <button type="submit" class="like-button" style="background: none; border: none;">
-            <i class="fa-regular fa-thumbs-up like-icon" style="font-size: 20px;"></i>
-          </button>
-        <% end %>
+            <div class="public-review-icon">     
+
+            <%= form_with url: add_like_review_path(review), method: :post, remote: true do %>
+              <%= hidden_field_tag :cliente_id, @current_user.cliente.id %>
+              <%= hidden_field_tag :review_id, review.id %>
+              <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
+              <%= submit_tag "👍", class: "thumb-button" %>
+            <% end %>
+
+            <div id="like-notice"></div>
 
               <i class="fa-solid fa-share-nodes"></i>
               <% if session[:role] == 'Admin' %>
@@ -286,7 +288,7 @@
           <h2>Segnala la Recensione</h2>
           <% if current_user.present? %>
             <%= form_with( url: segnalaziones_path, method: "post", local: true) do |form| %>
-              <%= form.hidden_field :recensione_id%>
+              <%= form.hidden_field :recensione_id %>
               Motivo della segnalazione
               <br><br>
               <%= form.label :commento, "Commento:" %>
@@ -342,6 +344,25 @@
 </div>
 
 <script>
+  // per il like
+document.addEventListener("DOMContentLoaded", function() {
+  const form = document.querySelector(".thumb-button").closest("form");
+  
+  form.addEventListener("ajax:success", function(event) {
+    const [data, status, xhr] = event.detail;
+    const notice = document.getElementById("like-notice");
+    notice.innerText = data.message;
+  });
+
+  form.addEventListener("ajax:error", function(event) {
+    const [data, status, xhr] = event.detail;
+    const notice = document.getElementById("like-notice");
+    notice.innerText = "Si è verificato un errore. Per favore riprova.";
+  });
+});
+
+
+  //
 document.addEventListener("DOMContentLoaded", function() {
   document.querySelectorAll('.change-icon').forEach(icon => {
     icon.addEventListener('click', (event) => {

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_12_073024) do
+ActiveRecord::Schema.define(version: 2024_07_12_204056) do
 
   create_table "admins", force: :cascade do |t|
     t.integer "utente_id", null: false
@@ -19,6 +19,15 @@ ActiveRecord::Schema.define(version: 2024_07_12_073024) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["utente_id"], name: "index_admins_on_utente_id"
+  end
+
+  create_table "assign_stars", force: :cascade do |t|
+    t.integer "cliente_id"
+    t.integer "recensione_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["cliente_id"], name: "index_assign_stars_on_cliente_id"
+    t.index ["recensione_id"], name: "index_assign_stars_on_recensione_id"
   end
 
   create_table "chooses", force: :cascade do |t|
@@ -273,6 +282,8 @@ ActiveRecord::Schema.define(version: 2024_07_12_073024) do
   end
 
   add_foreign_key "admins", "utentes"
+  add_foreign_key "assign_stars", "clientes"
+  add_foreign_key "assign_stars", "recensiones"
   add_foreign_key "chooses", "ristoratores", on_delete: :cascade
   add_foreign_key "chooses", "tags"
   add_foreign_key "clientes", "utentes"
