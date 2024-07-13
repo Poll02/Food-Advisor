@@ -74,8 +74,10 @@
                 <span class="star" data-value="4">&#9733;</span>
                 <span class="star" data-value="5">&#9733;</span>
             </div>
-            <p>Tag:</p>
-            <P>Km distanza:</p>
+            <p>Numero minimo di recensioni:</p>
+            <input type="number" id="min-reviews" name="min_reviews" min="0">
+            <p>Numero massimo di recensioni:</p>
+            <input type="number" id="max-reviews" name="max_reviews" min="0">
             <input type="hidden" id="star-rating" name="star_rating" value="0">
             <button type="button" id="apply-filters">Applica filtri</button>
         </form>
@@ -118,7 +120,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
     applyFiltersButton.addEventListener('click', () => {
         const starRating = starRatingInput.value;
         const query = document.getElementById('findbar').value;
-        window.location.href = `<%= ricerca_path %>?query=${query}&star_rating=${starRating}`;
+        const minReviews = document.getElementById('min-reviews').value;
+        const maxReviews = document.getElementById('max-reviews').value;
+        window.location.href = `<%= ricerca_path %>?query=${query}&star_rating=${starRating}&min_reviews=${minReviews}&max_reviews=${maxReviews}`;
     });
 });
 
@@ -140,5 +144,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+
 
 </script>
