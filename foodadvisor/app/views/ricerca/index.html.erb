@@ -62,88 +62,108 @@
 
 <!-- Finestra di dialogo -->
 <div id="dialog" class="dialog">
-    <div class="dialog-content">
-        <span class="close-button">&times;</span>
-        <form id="filter-form">
-            <h4>Applica dei filtri alla tua ricerca</h4>
-            <p>Stelle:<p>
-            <div class="stars">
-                <span class="star" data-value="1">&#9733;</span>
-                <span class="star" data-value="2">&#9733;</span>
-                <span class="star" data-value="3">&#9733;</span>
-                <span class="star" data-value="4">&#9733;</span>
-                <span class="star" data-value="5">&#9733;</span>
-            </div>
-            <p>Numero minimo di recensioni:</p>
-            <input type="number" id="min-reviews" name="min_reviews" min="0">
-            <p>Numero massimo di recensioni:</p>
-            <input type="number" id="max-reviews" name="max_reviews" min="0">
-            <input type="hidden" id="star-rating" name="star_rating" value="0">
-            <button type="button" id="apply-filters">Applica filtri</button>
-        </form>
-    </div>
+  <div class="dialog-content">
+    <span class="close-button">&times;</span>
+    <form id="filter-form">
+      <h4>Applica dei filtri alla tua ricerca</h4>
+      
+      <p>Tag:</p>
+      <div id="tag-buttons">
+        <% @tags.each do |tag| %>
+          <button type="button" class="tag-button" data-tag-id="<%= tag.id %>"><%= tag.nome %></button>
+        <% end %>
+      </div>
+
+      <p>Stelle:</p>
+      <div class="stars">
+        <span class="star" data-value="1">&#9733;</span>
+        <span class="star" data-value="2">&#9733;</span>
+        <span class="star" data-value="3">&#9733;</span>
+        <span class="star" data-value="4">&#9733;</span>
+        <span class="star" data-value="5">&#9733;</span>
+      </div>
+      <p>Numero minimo di recensioni:</p>
+      <input type="number" id="min-reviews" name="min_reviews" min="0">
+      <p>Numero massimo di recensioni:</p>
+      <input type="number" id="max-reviews" name="max_reviews" min="0">
+      <p>Servizio di asporto:</p>
+      <input type="checkbox" id="asporto" name="asporto">
+      <input type="hidden" id="star-rating" name="star_rating" value="0">
+      <input type="hidden" id="selected-tags" name="tags[]" value="">
+      <button type="button" id="apply-filters">Applica filtri</button>
+    </form>
+  </div>
 </div>
+
+
+
 <script>
 document.addEventListener('DOMContentLoaded', (event) => {
-    const dialog = document.getElementById('dialog');
-    const filterIcon = document.getElementById('filter-icon');
-    const closeButton = document.querySelector('.close-button');
-    const stars = document.querySelectorAll('.star');
-    const starRatingInput = document.getElementById('star-rating');
-    const applyFiltersButton = document.getElementById('apply-filters');
+  const dialog = document.getElementById('dialog');
+  const filterIcon = document.getElementById('filter-icon');
+  const closeButton = document.querySelector('.close-button');
+  const stars = document.querySelectorAll('.star');
+  const starRatingInput = document.getElementById('star-rating');
+  const applyFiltersButton = document.getElementById('apply-filters');
+  const tagButtons = document.querySelectorAll('.tag-button');
+  const selectedTagsInput = document.getElementById('selected-tags');
 
-    filterIcon.addEventListener('click', () => {
-        dialog.style.display = 'block';
-    });
+  filterIcon.addEventListener('click', () => {
+    dialog.style.display = 'block';
+  });
 
-    closeButton.addEventListener('click', () => {
-        dialog.style.display = 'none';
-    });
+  closeButton.addEventListener('click', () => {
+    dialog.style.display = 'none';
+  });
 
-    window.addEventListener('click', (event) => {
-        if (event.target == dialog) {
-            dialog.style.display = 'none';
-        }
-    });
+  window.addEventListener('click', (event) => {
+    if (event.target == dialog) {
+      dialog.style.display = 'none';
+    }
+  });
 
-    stars.forEach(star => {
-        star.addEventListener('click', () => {
-            const value = star.getAttribute('data-value');
-            starRatingInput.value = value;
-            stars.forEach(s => s.classList.remove('selected'));
-            for (let i = 0; i < value; i++) {
-                stars[i].classList.add('selected');
-            }
-        });
-    });
-
-    applyFiltersButton.addEventListener('click', () => {
-        const starRating = starRatingInput.value;
-        const query = document.getElementById('findbar').value;
-        const minReviews = document.getElementById('min-reviews').value;
-        const maxReviews = document.getElementById('max-reviews').value;
-        window.location.href = `<%= ricerca_path %>?query=${query}&star_rating=${starRating}&min_reviews=${minReviews}&max_reviews=${maxReviews}`;
-    });
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('#map-details').forEach(function(element) {
-    element.addEventListener('click', function() {
-      const ristoratoreId = this.getAttribute('data-ristoratore-id');
-      
-      fetch(`/ricerca/${ristoratoreId}/map_info`)
-        .then(response => response.json())
-        .then(data => {
-          const mapIframe = document.getElementById('rest-map');
-          const placeName = encodeURIComponent(data.name); // Assicurati che il nome sia URL-encoded
-          const apiKey = 'AIzaSyC9a9KDxjv1HNDVAeLEVYJDdjX2eYKPRzM'; 
-
-          mapIframe.src = `https://www.google.com/maps/embed/v1/place?q=${placeName}&key=${apiKey}`;
-        })
-        .catch(error => console.error('Error fetching map info:', error));
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      const value = star.getAttribute('data-value');
+      starRatingInput.value = value;
+      stars.forEach(s => s.classList.remove('selected'));
+      for (let i = 0; i < value; i++) {
+        stars[i].classList.add('selected');
+      }
     });
   });
+
+  let selectedTags = [];
+
+  tagButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tagId = button.getAttribute('data-tag-id');
+      if (selectedTags.includes(tagId)) {
+        selectedTags = selectedTags.filter(id => id !== tagId);
+        button.classList.remove('selected');
+      } else {
+        selectedTags.push(tagId);
+        button.classList.add('selected');
+      }
+      selectedTagsInput.value = selectedTags.join(',');
+    });
+  });
+
+  applyFiltersButton.addEventListener('click', () => {
+    const starRating = starRatingInput.value;
+    const query = document.getElementById('findbar').value;
+    const minReviews = document.getElementById('min-reviews').value;
+    const maxReviews = document.getElementById('max-reviews').value;
+    const asporto = document.getElementById('asporto').checked ? 1 : 0;
+
+    const tagParams = selectedTags.map(tag => `tags[]=${tag}`).join('&');
+
+    window.location.href = `<%= ricerca_path %>?query=${query}&star_rating=${starRating}&min_reviews=${minReviews}&max_reviews=${maxReviews}&asporto=${asporto}&${tagParams}`;
+  });
 });
+
+
+
 
 
 </script>

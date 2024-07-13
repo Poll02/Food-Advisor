@@ -24,7 +24,12 @@
     <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%= @restaurant_owner.email %></span></p>
     <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%= @restaurant_owner.telefono %></span></p>
     <p style="font-weight: bold;">Data di registrazione: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.created_at %></span></p>
-    <p style="font-weight: bold;">Asporto: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.asporto %></span></p>
+    <p style="font-weight: bold;">Asporto: <span style="font-weight: normal;">
+    <% if @restaurant_owner.cliente.ristoratore.asporto %>
+    Si
+    <% else %>
+    No
+    <% end %></span></p>
   </div>
 </div>
 

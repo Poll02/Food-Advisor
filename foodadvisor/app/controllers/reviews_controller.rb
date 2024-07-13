@@ -3,7 +3,6 @@ class ReviewsController < ApplicationController
   before_action :set_restaurant_owner, only: [:create]
   before_action :set_review, only: [:destroy]
   before_action :find_review, only: [:add_like]
-  belongs_to :ristoratore, foreign_key: :ristoratore_id
 
   def create
     @review = Recensione.new(
