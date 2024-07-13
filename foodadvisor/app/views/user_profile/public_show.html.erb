@@ -67,7 +67,7 @@
             <div class="public-u-competition-box-info">
                 <p style="font-weight: bold;">Nome Competizione: <span style="font-weight: normal;"> <%= competizione.nome %></span></p>
                 <p style="font-weight: bold;">Punti: <span style="font-weight: normal;"><%= iscrizione.punti_competizione %></span></p>
-                <p style="font-weight: bold;">Posizione in Classifica: <span style="font-weight: normal;">Posizione</span></p>
+                <p style="font-weight: bold;">Posizione in Classifica: <span style="font-weight: normal;"><%= @posizioni[competizione.id] %></span></p>
             </div>
 
         </div>
