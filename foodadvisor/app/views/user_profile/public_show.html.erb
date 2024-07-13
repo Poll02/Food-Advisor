@@ -59,10 +59,14 @@
             <% @iscrizioni.each do |iscrizione| %>
             <% competizione = Competizione.find(iscrizione.competizione_id) %>
         <div class="public-u-competition-box">
+        <% if competizione.locandina.present? %>
             <%= image_tag competizione.locandina %>
+            <% else  %>
+            <%= image_tag "background.jpg"  %>
+            <% end  %>
             <div class="public-u-competition-box-info">
                 <p style="font-weight: bold;">Nome Competizione: <span style="font-weight: normal;"> <%= competizione.nome %></span></p>
-                <p style="font-weight: bold;">Punti: <span style="font-weight: normal;"><%= iscrizione.punti %></span></p>
+                <p style="font-weight: bold;">Punti: <span style="font-weight: normal;"><%= iscrizione.punti_competizione %></span></p>
                 <p style="font-weight: bold;">Posizione in Classifica: <span style="font-weight: normal;">Posizione</span></p>
             </div>
 
