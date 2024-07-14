@@ -28,8 +28,8 @@
             <p style="font-weight: bold;">Telefono: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.utente.telefono%></span></p>
 
         </div>
-        <%if session[:tmp_password].present?%>
-          <p class="tmp_password">La tua password temporanea è: <%= session[:tmp_password]%> cambiala al più presto!</p>
+        <%if @user.tmp_password.present?%>
+          <p class="tmp_password">La tua password temporanea è: <%= @user.tmp_password%> cambiala al più presto!</p>
         <%end%>
     </div>
     <hr id="divider" class="solid">

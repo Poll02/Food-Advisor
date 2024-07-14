@@ -579,6 +579,14 @@ tr.flavor .piatto {
 .fa-pen-to-square:hover {
   color: green;
 }
+
+.fa-comments {
+  transition: color 0.3s ease;
+}
+
+.fa-comments:hover {
+  color: green;
+}
 // prova like
 #flash-messages .notice {
   color: green;

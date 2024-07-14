@@ -193,6 +193,11 @@ Rails.application.routes.draw do
     # Rotte aggiunte per creare e distruggere un dipendente
     post 'info/create_dipendente', to: 'info#create_dipendente', as: 'create_dipendente_info'
     delete 'info/destroy_dipendente/:id', to: 'info#destroy_dipendente', as: 'destroy_dipendente'
+
+    #rotte per le risposte dei ristoratori
+    post 'answer_create', to: 'answer#create'
+    post 'answer_update', to: 'answer#update'
+    delete 'answer_delete', to: 'answer#destroy'
   
     post 'update_review', to: 'reviews#update'
     #rotta per le recensioni

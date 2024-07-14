@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_12_073024) do
+ActiveRecord::Schema.define(version: 2024_07_12_150852) do
 
   create_table "admins", force: :cascade do |t|
     t.integer "utente_id", null: false
@@ -19,6 +19,16 @@ ActiveRecord::Schema.define(version: 2024_07_12_073024) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["utente_id"], name: "index_admins_on_utente_id"
+  end
+
+  create_table "answers", force: :cascade do |t|
+    t.integer "recensione_id", null: false
+    t.integer "ristoratore_id", null: false
+    t.string "risposta"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["recensione_id"], name: "index_answers_on_recensione_id"
+    t.index ["ristoratore_id"], name: "index_answers_on_ristoratore_id"
   end
 
   create_table "chooses", force: :cascade do |t|
@@ -214,12 +224,14 @@ ActiveRecord::Schema.define(version: 2024_07_12_073024) do
   end
 
   create_table "segnalaziones", force: :cascade do |t|
-    t.integer "recensione_id", null: false
+    t.integer "recensione_id"
     t.integer "cliente_id", null: false
+    t.integer "cliente_segnalato_id", null: false
     t.string "motivo"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["cliente_id"], name: "index_segnalaziones_on_cliente_id"
+    t.index ["cliente_segnalato_id"], name: "index_segnalaziones_on_cliente_segnalato_id"
     t.index ["recensione_id"], name: "index_segnalaziones_on_recensione_id"
   end
 
@@ -266,6 +278,7 @@ ActiveRecord::Schema.define(version: 2024_07_12_073024) do
     t.string "email"
     t.string "password_digest"
     t.string "telefono"
+    t.string "tmp_password"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "facebook_id"
@@ -273,6 +286,8 @@ ActiveRecord::Schema.define(version: 2024_07_12_073024) do
   end
 
   add_foreign_key "admins", "utentes"
+  add_foreign_key "answers", "recensiones"
+  add_foreign_key "answers", "ristoratores"
   add_foreign_key "chooses", "ristoratores", on_delete: :cascade
   add_foreign_key "chooses", "tags"
   add_foreign_key "clientes", "utentes"
@@ -297,6 +312,7 @@ ActiveRecord::Schema.define(version: 2024_07_12_073024) do
   add_foreign_key "recensiones", "ristoratores"
   add_foreign_key "ristoratores", "clientes"
   add_foreign_key "segnalaziones", "clientes"
+  add_foreign_key "segnalaziones", "clientes", column: "cliente_segnalato_id"
   add_foreign_key "segnalaziones", "recensiones"
   add_foreign_key "settings", "utentes"
   add_foreign_key "user_competitions", "competiziones", on_delete: :cascade

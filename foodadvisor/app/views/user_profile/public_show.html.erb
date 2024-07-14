@@ -1,4 +1,15 @@
 <div class="pagina-vetrina-utente">
+<% if flash[:notice] %>
+      <div class="alert alert-success" role="alert">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+
+    <% if flash[:alert] %>
+      <div class="alert alert-danger" role="alert">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
     <h1 style="font-size: 40px; margin-bottom: 20px;">Profilo di <span style="color: #28a745;"><%= @user.username %></span></h1>
     <div class="public-u-foto-info">
         <div class="public-u-foto">
@@ -17,7 +28,7 @@
         </div>
     </div>
     <div class="public-u-follow-btn">
-        <button type="button" style="background-color: red;">Segnala</button>
+    <button type="button" class="report-icon" id="report-rest" style="background-color: rgb(221, 60, 60);" data-report="<%= @user.id %>" data-type="user">Segnala</button>
     </div>
 
     <hr class="solid" id="divider" style="width: 80%;">
@@ -74,3 +85,58 @@
     </div>
 
 </div>
+
+<div id="reportModal" class="modal">
+<div class="modal-content">
+  <span id="closeReport" class="close">&times;</span>
+  <h2>Fai la tua segnalazione</h2>
+  <% if current_user.present? %>
+    <%= form_with( url: segnalaziones_path, method: "post", local: true) do |form| %>
+      <%= form.hidden_field :data_id%>
+      <%= form.hidden_field :type%>
+      Motivo della segnalazione
+      <br><br>
+      <%= form.label :commento, "Commento:" %>
+      <%= form.text_area :commento, id: "commento", rows: 4, cols: 50 %>
+      <br><br>
+      <%= form.submit "Invia" %>
+    <% end %>
+  <% end %>
+</div>
+</div>
+
+
+<script>
+//JS modale segnalazione
+document.addEventListener("DOMContentLoaded", function() {
+  
+  document.querySelectorAll('.report-icon').forEach(icon => {
+    icon.addEventListener('click', (event) => {
+      const review = event.target.getAttribute('data-report');
+      const type = event.target.getAttribute('data-type');
+
+      document.getElementById('data_id').value = review;
+      document.getElementById('type').value = type;
+
+
+      openModal();
+    });
+  });
+
+  function openModal() {
+    document.getElementById('reportModal').style.display = 'block';
+  }
+
+  function closeReportModal() {
+    document.getElementById('reportModal').style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    var modal = document.getElementById('reportModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+  document.querySelector('#closeReport').onclick = closeReportModal;
+});
+</script>

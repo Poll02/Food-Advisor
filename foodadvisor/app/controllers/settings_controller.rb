@@ -26,7 +26,7 @@ class SettingsController < ApplicationController
 
     Rails.logger.info("NUOVA PASSWORD: #{params[:password]}")
     if params[:utente][:password].present?
-      session.delete(:tmp_password)
+      @current_user.update(tmp_password: nil)
       Rails.logger.info("Variabile di sessione distrutta")
     end
 

@@ -4,6 +4,6 @@ class AdminProfileController < ApplicationController
   def show
     @clienti = Cliente.all
     @problemi = Problem.all.order(stato: :asc)
-    @segnalazioni = Segnalazione.includes(:recensione)
+    @segnalazioni = Segnalazione.all
   end
 end

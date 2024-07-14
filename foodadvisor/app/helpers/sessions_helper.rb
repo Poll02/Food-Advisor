@@ -28,6 +28,7 @@ module SessionsHelper
   def log_out
     session.delete(:user_id)
     session.delete(:role)
+    session.delete(:tmp_password)
     @current_user = nil
   end
 end

@@ -71,8 +71,8 @@
         <button type="button" style="background-color: rgb(234, 183, 121);" class="open-reserv-modal">Prenota un Tavolo</button>
         <%= link_to public_show_menus_path(@restaurant_owner.id), class: 'user-link' do %><button type="button" style="background-color: rgb(234, 123, 121);" >Menù</button><% end %>
         <button type="button" id="add-rest-to-fav" data-ristoratore-id="<%= @restaurant_owner.id %>" style="background-color: rgb(71, 200, 82);">Aggiungi ai Preferiti</button>
-        <button type="button" id="report-rest" style="background-color: rgb(221, 60, 60);">Segnala</button>
-
+        <button type="button" class="report-icon" id="report-rest" style="background-color: rgb(221, 60, 60);" data-report="<%= @restaurant_owner.cliente.id %>" data-type="ristorante">Segnala</button>
+        
 
 
         <div id="reservModal" class="reserv-modal">
@@ -260,6 +260,7 @@
           <button type="submit" class="like-button" style="background: none; border: none;">
             <i class="fa-regular fa-thumbs-up like-icon" style="font-size: 20px;"></i>
           </button>
+
         <% end %>
 
               <i class="fa-solid fa-share-nodes"></i>
@@ -267,13 +268,30 @@
                 <i class="fa-solid fa-trash"></i>
               <% else %>
                 <% if @current_user.cliente.id != review.cliente_id%>
-                  <i class="fa fa-exclamation-circle report-icon" data-review="<%= review.id %>"></i>
+                  <i class="fa fa-exclamation-circle report-icon" data-report="<%= review.id %>" data-type="recensione"></i>
                 <% elsif @current_user.cliente.id == review.cliente_id %>
                   <i class="fa-solid fa-pen-to-square change-icon" data-review="<%= review.id %>" data-review-star="<%= review.stelle %>" data-review-commento="<%= review.commento %>"></i>
                 <% end %>
               <% end %> 
             </div>
           </div>
+
+          <% if review.answer.present?%>
+          <div class="r-risposta" style="border: 1px solid #ccc; border-radius: 10px; display: flex; align-items: center; margin-left: 20%; padding: 10px;">
+          <% if review.answer.ristoratore.cliente.foto.present? %>
+            <%= image_tag review.answer.ristoratore.cliente.foto, class: 'recensione-foto' %>
+          <% else %>
+            <%= image_tag 'background.jpg', class: 'recensione-foto' %>
+          <% end %>
+          <div class="risposta-info" style="text-align: center; margin-left: 10px; flex: 1;">
+            <p style="font-weight: bold; margin: 0;"><%= review.answer.ristoratore.nomeristorante %></p>
+            <p style="margin: 0;"><%= review.answer.risposta %></p>
+            <p style="font-style: italic; font-size: 13px; margin: 0;">in data <%= review.answer.created_at.strftime('%d/%m/%Y') %></p>
+          </div>
+        </div>
+
+        <%end %>
+        
         <% end %>
       <% else %>
         <p>Nessuna recensione trovata</p>
@@ -283,10 +301,11 @@
     <div id="reportModal" class="modal">
         <div class="modal-content">
           <span id="closeReport" class="close">&times;</span>
-          <h2>Segnala la Recensione</h2>
+          <h2>Fai la tua segnalazione</h2>
           <% if current_user.present? %>
             <%= form_with( url: segnalaziones_path, method: "post", local: true) do |form| %>
-              <%= form.hidden_field :recensione_id%>
+              <%= form.hidden_field :data_id%>
+              <%= form.hidden_field :type%>
               Motivo della segnalazione
               <br><br>
               <%= form.label :commento, "Commento:" %>
@@ -427,9 +446,12 @@ document.addEventListener("DOMContentLoaded", function() {
   
   document.querySelectorAll('.report-icon').forEach(icon => {
     icon.addEventListener('click', (event) => {
-      const review = event.target.getAttribute('data-review');
+      const review = event.target.getAttribute('data-report');
+      const type = event.target.getAttribute('data-type');
 
-      document.getElementById('recensione_id').value = review;
+      document.getElementById('data_id').value = review;
+      document.getElementById('type').value = type;
+
 
       openModal();
     });

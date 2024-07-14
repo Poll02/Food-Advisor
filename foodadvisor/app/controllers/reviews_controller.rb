@@ -55,7 +55,7 @@ class ReviewsController < ApplicationController
 
   def destroy
     @restauranteur=@review.ristoratore_id
-    if @review.segnalazione.destroy_all && @review.destroy
+    if @review.segnalazione.destroy_all && (@review.answer.nil? || @review.answer.destroy) && @review.destroy 
       flash[:notice] = 'Recensione eliminata con successo!'
         @user_type=Admin.where(utente_id: @current_user.id)
         if @user_type.present?

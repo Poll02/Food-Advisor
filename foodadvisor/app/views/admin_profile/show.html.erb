@@ -11,7 +11,7 @@
   </div>
 <% end %>
 
-<h3>Nuove registrazioni</h3>
+<h3>Utenti registrati</h3>
 <div class="nuoviUtenti">
     <table>
         <thead>
@@ -25,6 +25,7 @@
                 <th>Asporto</th>
                 <th>Certificato</th>
                 <th>Data Iscrizione</th>
+                <th>Segnalato</th>
             </tr>
         </thead>
         <tbody>
@@ -84,6 +85,7 @@
                         <% end %>
                     </td>
                     <td><%= cliente.created_at.strftime('%d/%m/%Y') %></td>
+                    <td class="icon-cell"><i class="fa-solid fa-clipboard"></i>  <i class="fa-solid fa-person-circle-check"></i>  <i class="fa-solid fa-ban"></i></td>
                 </tr>
             <% end %>
 
@@ -103,25 +105,27 @@
 <div class="gestioneSegnalazioni">
 <% if @segnalazioni.any? %>
   <% @segnalazioni.each do |segnalazione| %>
+    <% if segnalazione.recensione_id.present? %>
+    <%= @recensione=Recensione.find(segnalazione.recensione_id) %>
     <div class="segnalazione">
       <div class="segnalazioneInfo">
-        <p class="info">Da: <%= segnalazione.cliente_id %>  A: <%= segnalazione.recensione.cliente_id %>  <p>
+        <p class="info">Da: <%= segnalazione.cliente_id %>  A: <%= @recensione.cliente_id %>  <p>
         <p class="info">Motivo:  </p> <%= segnalazione.motivo %>
       </div>
       <div class="public-r-reviews">
-            <% if segnalazione.recensione.cliente.foto.present? %>
-              <%= image_tag segnalazione.recensione.cliente.foto, class: 'recensione-foto' %>
+            <% if @recensione.cliente.foto.present? %>
+              <%= image_tag @recensione.cliente.foto, class: 'recensione-foto' %>
             <% else %>
               <%= image_tag 'background.jpg', class: 'recensione-foto' %>
             <% end %>
           <div class="public-review-details">
-            <p style="font-weight: bold";><%= segnalazione.recensione.cliente.user.username %></p>
+            <p style="font-weight: bold";><%= @recensione.cliente.user.username %></p>
             <p>
-              <% segnalazione.recensione.stelle.times do %>
+              <% @recensione.stelle.times do %>
                 <ion-icon name="star" style="font-size: 15px;"></ion-icon>
               <% end %>
-            </p>            <p><%= segnalazione.recensione.commento %></p>
-            <p style="font-style: italic; font-size: 13px;">in data <%= segnalazione.recensione.created_at.strftime('%d/%m/%Y') %></p>
+            </p>            <p><%= @recensione.commento %></p>
+            <p style="font-style: italic; font-size: 13px;">in data <%= @recensione.created_at.strftime('%d/%m/%Y') %></p>
           </div>
           <div class="public-review-icon">
             <i class="fa-regular fa-thumbs-up"></i>
@@ -130,13 +134,14 @@
           </div>
         </div>
       <div class="segnalazioneAction">
-        <%= form_with model: segnalazione.recensione ,url: review_path(segnalazione.recensione), method: :delete, local: true do %>
+        <%= form_with model: @recensione ,url: review_path(@recensione), method: :delete, local: true do %>
           <button type="submit">Rimuovi recensione</button>
         <% end %>
         <button>Blocca profilo segnalato</button>
       </div>
     </div>
     <br><br>
+    <%end%>
   <%end%>
 <% elsif %>
     <div class="segnalazione">
@@ -215,6 +220,15 @@
   margin-right: 50px;
   width: 250%;
 }
+
+.icon-cell {
+  width: 10%;
+}
+
+.icon-cell i{
+  padding: 0% 10% 0% 10%;
+}
+
 
 </style>
 
