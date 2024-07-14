@@ -17,7 +17,6 @@
             <%= image_tag 'user.jpg' %> <!-- Immagine competizione -->
         <% end %>
         <div class="p-user-details">
-            <h1>Dettagli</h1>
             <p style="font-weight: bold;">Username: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.username%></span></p>
             <p style="font-weight: bold;">Nome: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.nome%></span></p>
             <p style="font-weight: bold;">Cognome: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.cognome%></span></p>
@@ -33,8 +32,8 @@
         <%end%>
     </div>
     <hr id="divider" class="solid">
+    <h3>I tuoi premi</h3>
     <div class="premicompetizioni">
-      <h1>I tuoi premi</h1>
       <% if @premi.any? %>
         <% @premi.each do |premio| %>
           <div class="premio-box">
@@ -45,11 +44,11 @@
           </div>
         <% end %>
       <% else %>
-        <p>Partecipa alle competizioni per ottenere dei premi.</p>
+        <p style="color:gray; ">Partecipa alle competizioni per ottenere dei premi.</p>
       <% end %>
     </div> 
     <hr id="divider" class="solid">
-    <h1>I tuoi impegni</h1>
+    <h3>I tuoi impegni</h3>
     <div class="impegniPersonali">
         <div class="impegniSinistra">
             <div id="calendario">
@@ -61,7 +60,7 @@
         </div>
     </div>
     <hr id="divider" class="solid">
-    <h1>Ultime recensioni</h1>
+    <h3>Ultime recensioni</h3>
     <div class="priv-recents-reviews">
         <% if @recensioni.any? %>
             <% @recensioni.each do |recensione| %>
@@ -84,11 +83,11 @@
                 <% end %>
             <% end %>
           <% else %>
-            <p>Nessuna recensione trovata</p>
+            <p style="color: gray; ">Nessuna recensione trovata</p>
           <% end %>
     </div>
     <hr id="divider" class="solid">
-    <h1>Competizioni a cui sei iscritto</h1>
+    <h3>Competizioni a cui sei iscritto</h3>
     <div class="p-user-fav-events">
       <% if @iscrizioni.any? %>
         <% @iscrizioni.each do |iscrizione| %>
@@ -108,11 +107,11 @@
           </div>
         <% end %>
       <% else %>
-        <p>Nessuna competizione trovata</p>
+        <p style="color: gray; ">Non sei ancora iscritto ad una competizione</p>
       <% end %>
     </div>
     <hr id="divider" class="solid">
-    <h1>Le tue Prenotazioni</h1>
+    <h3>Le tue Prenotazioni</h3>
     <div class="p-user-reservs">
         <% if @prenotazioni.any? %>
             <% @prenotazioni.each do |prenotazione| %>
@@ -135,7 +134,7 @@
             <% end %>
             
             <% else %>
-            <p>Nessuna prenotazione trovata</p>
+            <p style="color: gray; ">Nessuna prenotazione trovata</p>
           <% end %>
 
         
@@ -186,7 +185,7 @@
       calendarHTML += `
         <div class="day" style="cursor: pointer;" onclick="loadDailyData(${day})">
           ${day}
-          ${hasBooking ? '<div class="booking-indicator" style="background-color: yellow; width: 10px; height: 10px; border-radius: 50%; margin: auto; margin-top: 2px;"></div>' : ''}
+          ${hasBooking ? '<div class="booking-indicator" style="background-color: #ffd166; width: 10px; height: 10px; border-radius: 50%; margin: auto; margin-top: 2px;"></div>' : ''}
         </div>
       `;
     }
@@ -213,11 +212,13 @@
           prenotazioniSection.innerHTML = '';
           data.prenotazioni.forEach(prenotazione => {
             const prenotazioneElement = document.createElement('div');
-            prenotazioneElement.classList.add('prenotazione');
+            prenotazioneElement.classList.add('prenotazionetavolo');
             prenotazioneElement.innerHTML = `
-              <div style="font-size: 13px; background-color: yellow;">${prenotazione.user_id} <br>
-              ${prenotazione.numero_persone} persone <br>
-              ${prenotazione.orario}</div>
+              <div style="font-size: 13px; background-color: #ffd166; padding: 1%; border-radius: 10px; ">
+                <p> ID cliente: ${prenotazione.user_id}</p>
+                <p> N persone: ${prenotazione.numero_persone}</p>
+                <p> Orario: ${prenotazione.orario}</p>
+              </div>
             `;
             prenotazioniSection.appendChild(prenotazioneElement);
           });

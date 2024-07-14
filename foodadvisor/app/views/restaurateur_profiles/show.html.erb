@@ -39,10 +39,11 @@
     <div class="r-tags">
       <% if @tags.present? %>
         <% @tags.each do |tag| %>
-          <span class="piatto"><%= tag.nome %></span>
+          <% category_class = tag.categoria.downcase.gsub(' ', '-') %>
+          <span class="piatto category-<%= category_class %>"><%= tag.nome %></span>
         <% end %>
       <% else %>
-        <p>Nessun tag associato</p>
+        <p style="color: gray; ">Non hai nessun tag associato</p>
       <% end %>
     </div>
   </div>
@@ -61,7 +62,7 @@
         <div class="vertical-divider" style="height: 100px;"></div>
       <% end %>
     <% else %>
-      <p>Nessuna promozione attiva</p>
+      <p style="color: gray; ">Non hai nessuna promozione attiva</p>
     <% end %>
   </div>
 </div>
@@ -95,7 +96,7 @@
     </div>
     <% end %>
   <%else%>
-    <p>Non hai nessuna recensione</p>
+    <p style="color: gray; ">Non hai ricevuto nessuna recensione</p>
   <% end %>
 </div>
 
@@ -118,7 +119,7 @@
       </div>
     <% end %>
   <% else %>
-    <p>Il ristoratore non ha condiviso alcuna ricetta.</p>
+    <p style="color: gray; ">Non hai condiviso alcuna ricetta.</p>
   <% end %>
 </div>
 <h3>Eventi</h3>
@@ -140,6 +141,6 @@
       </div>
     <% end %>
   <% else %>
-    <p>Il ristoratore non ha creato alcun evento.</p>
+    <p style="color: gray; ">Non hai creato alcun evento.</p>
   <% end %>
 </div>

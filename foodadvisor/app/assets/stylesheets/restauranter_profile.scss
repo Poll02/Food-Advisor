@@ -4,7 +4,7 @@
 }
 
 .ristorante {
-  border: 1px solid #b8adad;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   border-radius: 10px;
   padding: 1%;
   display: flex;
@@ -26,14 +26,13 @@
 
 .r-statistiche {
   padding: 1%;
-  border: 1px solid #b8adad;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   border-radius: 10px;
 }
 
 .r-promozioni {
-  max-width: 900px;
   padding: 1%;
-  border: 1px solid #b8adad;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   border-radius: 10px;
 }
 
@@ -86,23 +85,9 @@
   background-color: #28a745; 
 }
 
-.r-stories {
-  padding: 1%;
-  border: 1px solid #b8adad;
-  border-radius: 10px;
-}
-
-.night-mode .r-stories {
-  border-color: #555;
-}
-
-.r-storia {
-
-}
-
 .r-recensioni {
   padding: 1%;
-  border: 1px solid #b8adad;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -144,7 +129,7 @@
 
 .r-ricette {
   padding: 1%;
-  border: 1px solid #b8adad;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   border-radius: 10px;
   display: flex;
   flex-direction: row;
@@ -183,7 +168,7 @@
 
 .r-eventi {
   padding: 1%;
-  border: 1px solid #b8adad;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   border-radius: 10px;
   display: flex;
   flex-direction: row; /* Modifica per gestire l'allineamento verticale */
@@ -285,11 +270,28 @@
 
 }
 
+#add-event-btn{
+  font-size: 15px;
+  color: white;
+  background-color: #28a745;
+  border: none;
+  padding: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+
+}
+
 #add-promo-btn:hover{
   filter: brightness(120%);
 }
 
 #add-recipe-btn:hover{
+  filter: brightness(120%);
+}
+
+#add-event-btn:hover{
   filter: brightness(120%);
 }
 

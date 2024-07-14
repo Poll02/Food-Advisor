@@ -61,7 +61,7 @@
   <h3>Informazioni sui Dipendenti del Ristorante</h3>
   <div class="employees-section">
     <% if @dipendenti.empty? %>
-      <p>Non hai ancora inserito un dipendente.</p>
+      <p style="color: gray; ">Non hai ancora inserito un dipendente.</p>
     <% else %>
       <% @dipendenti.each do |dipendente| %>
         <div class="dipendente">

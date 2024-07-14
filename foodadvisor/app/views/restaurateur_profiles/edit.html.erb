@@ -1,12 +1,23 @@
 <%= link_to 'Salva', rest_profile_path %>
+<% if flash[:notice] %>
+    <div class="alert alert-success" role="alert">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
 
+  <% if flash[:alert] %>
+    <div class="alert alert-danger" role="alert">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
 <h3>Tags</h3>
 <div class="r-statistiche">
   <div class="r-stat">
     <div class="r-tags">
       <% if @tags.present? %>
         <% @tags.each do |tag| %>
-          <span class="piatto"><%= tag.nome %></span>
+          <% category_class = tag.categoria.downcase.gsub(' ', '-') %>
+          <span class="piatto category-<%= category_class %>"><%= tag.nome %></span>
         <% end %>
       <% end %>
       <table>
