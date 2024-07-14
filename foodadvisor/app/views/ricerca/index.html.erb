@@ -69,32 +69,29 @@
       <p>Tag:</p>
       <div id="tag-buttons">
         <% @tags.each do |tag| %>
-          <button type="button" class="tag-button" data-tag-id="<%= tag.id %>"><%= tag.nome %></button>
+          <button type="button" class="tag-button <%= 'selected' if params[:tags]&.include?(tag.id.to_s) %>" data-tag-id="<%= tag.id %>"><%= tag.nome %></button>
         <% end %>
       </div>
 
       <p>Stelle:</p>
       <div class="stars">
-        <span class="star" data-value="1">&#9733;</span>
-        <span class="star" data-value="2">&#9733;</span>
-        <span class="star" data-value="3">&#9733;</span>
-        <span class="star" data-value="4">&#9733;</span>
-        <span class="star" data-value="5">&#9733;</span>
+        <% (1..5).each do |i| %>
+          <span class="star <%= 'selected' if params[:star_rating].to_i >= i %>" data-value="<%= i %>">&#9733;</span>
+        <% end %>
       </div>
       <p>Numero minimo di recensioni:</p>
-      <input type="number" id="min-reviews" name="min_reviews" min="0">
+      <input type="number" id="min-reviews" name="min_reviews" min="0" value="<%= params[:min_reviews] %>">
       <p>Numero massimo di recensioni:</p>
-      <input type="number" id="max-reviews" name="max_reviews" min="0">
+      <input type="number" id="max-reviews" name="max_reviews" min="0" value="<%= params[:max_reviews] %>">
       <p>Servizio di asporto:</p>
-      <input type="checkbox" id="asporto" name="asporto">
-      <input type="hidden" id="star-rating" name="star_rating" value="0">
-      <input type="hidden" id="selected-tags" name="tags[]" value="">
+      <input type="checkbox" id="asporto" name="asporto" <%= 'checked' if params[:asporto] == '1' %>>
+      <input type="hidden" id="star-rating" name="star_rating" value="<%= params[:star_rating] %>">
+      <input type="hidden" id="selected-tags" name="tags[]" value="<%= params[:tags]&.join(',') %>">
       <button type="button" id="apply-filters">Applica filtri</button>
+      <button type="button" id="reset-filters">Azzera i filtri</button>
     </form>
   </div>
 </div>
-
-
 
 <script>
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -104,6 +101,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
   const stars = document.querySelectorAll('.star');
   const starRatingInput = document.getElementById('star-rating');
   const applyFiltersButton = document.getElementById('apply-filters');
+  const resetFiltersButton = document.getElementById('reset-filters');
   const tagButtons = document.querySelectorAll('.tag-button');
   const selectedTagsInput = document.getElementById('selected-tags');
 
@@ -132,11 +130,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
   });
 
-  let selectedTags = [];
+  let selectedTags = <%= params[:tags]&.map(&:to_i) || [] %>;
 
   tagButtons.forEach(button => {
     button.addEventListener('click', () => {
-      const tagId = button.getAttribute('data-tag-id');
+      const tagId = parseInt(button.getAttribute('data-tag-id'));
       if (selectedTags.includes(tagId)) {
         selectedTags = selectedTags.filter(id => id !== tagId);
         button.classList.remove('selected');
@@ -159,10 +157,37 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     window.location.href = `<%= ricerca_path %>?query=${query}&star_rating=${starRating}&min_reviews=${minReviews}&max_reviews=${maxReviews}&asporto=${asporto}&${tagParams}`;
   });
+
+  resetFiltersButton.addEventListener('click', () => {
+    document.getElementById('findbar').value = '';
+    starRatingInput.value = '0';
+    stars.forEach(star => star.classList.remove('selected'));
+    document.getElementById('min-reviews').value = '';
+    document.getElementById('max-reviews').value = '';
+    document.getElementById('asporto').checked = false;
+    selectedTags = [];
+    tagButtons.forEach(button => button.classList.remove('selected'));
+    selectedTagsInput.value = '';
+  });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('#map-details').forEach(function(element) {
+    element.addEventListener('click', function() {
+      const ristoratoreId = this.getAttribute('data-ristoratore-id');
+      
+      fetch(`/ricerca/${ristoratoreId}/map_info`)
+        .then(response => response.json())
+        .then(data => {
+          const mapIframe = document.getElementById('rest-map');
+          const placeName = encodeURIComponent(data.name); // Assicurati che il nome sia URL-encoded
+          const apiKey = 'AIzaSyC9a9KDxjv1HNDVAeLEVYJDdjX2eYKPRzM'; 
 
-
-
+          mapIframe.src = `https://www.google.com/maps/embed/v1/place?q=${placeName}&key=${apiKey}`;
+        })
+        .catch(error => console.error('Error fetching map info:', error));
+    });
+  });
+});
 
 </script>

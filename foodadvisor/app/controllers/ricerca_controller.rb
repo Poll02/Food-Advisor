@@ -9,11 +9,15 @@ class RicercaController < ApplicationController
 
     if params[:min_reviews].present? || params[:max_reviews].present?
       min_reviews = params[:min_reviews].present? ? params[:min_reviews].to_i : 0
-      max_reviews = params[:max_reviews].present? ? params[:max_reviews].to_i : Float::INFINITY
+      max_reviews = params[:max_reviews].present? ? params[:max_reviews].to_i : nil
       @ristoratori = @ristoratori
                       .joins(:recensiones)
                       .group('ristoratores.id')
-                      .having('COUNT(recensiones.id) BETWEEN ? AND ?', min_reviews, max_reviews)
+      if max_reviews
+        @ristoratori = @ristoratori.having('COUNT(recensiones.id) BETWEEN ? AND ?', min_reviews, max_reviews)
+      else
+        @ristoratori = @ristoratori.having('COUNT(recensiones.id) >= ?', min_reviews)
+      end    
     end
 
     if params[:asporto].present? && params[:asporto] == "1"
