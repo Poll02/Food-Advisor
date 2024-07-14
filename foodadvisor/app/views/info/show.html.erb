@@ -282,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
             impegniGiornalieri.appendChild(eventiSection);
           }
         } else {
-          impegniGiornalieri.innerHTML = '<p>Nessun impegno per questo giorno.</p>';
+          impegniGiornalieri.innerHTML = '<p style="color: gray; ">Nessun impegno per questo giorno.</p>';
         }
       })
       .catch(error => console.error('Errore nel caricamento dei dati giornalieri:', error));

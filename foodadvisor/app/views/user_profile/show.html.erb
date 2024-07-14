@@ -32,7 +32,7 @@
         <%end%>
     </div>
     <hr id="divider" class="solid">
-    <h3>I tuoi premi</h3>
+    <h1>I tuoi premi</h1>
     <div class="premicompetizioni">
       <% if @premi.any? %>
         <% @premi.each do |premio| %>
@@ -48,7 +48,7 @@
       <% end %>
     </div> 
     <hr id="divider" class="solid">
-    <h3>I tuoi impegni</h3>
+    <h1>I tuoi impegni</h1>
     <div class="impegniPersonali">
         <div class="impegniSinistra">
             <div id="calendario">
@@ -60,7 +60,7 @@
         </div>
     </div>
     <hr id="divider" class="solid">
-    <h3>Ultime recensioni</h3>
+    <h1>Ultime recensioni</h1>
     <div class="priv-recents-reviews">
         <% if @recensioni.any? %>
             <% @recensioni.each do |recensione| %>
@@ -87,7 +87,7 @@
           <% end %>
     </div>
     <hr id="divider" class="solid">
-    <h3>Competizioni a cui sei iscritto</h3>
+    <h1>Competizioni a cui sei iscritto</h1>
     <div class="p-user-fav-events">
       <% if @iscrizioni.any? %>
         <% @iscrizioni.each do |iscrizione| %>
@@ -111,7 +111,7 @@
       <% end %>
     </div>
     <hr id="divider" class="solid">
-    <h3>Le tue Prenotazioni</h3>
+    <h1>Le tue Prenotazioni</h1>
     <div class="p-user-reservs">
         <% if @prenotazioni.any? %>
             <% @prenotazioni.each do |prenotazione| %>
@@ -224,7 +224,7 @@
           });
           impegniGiornalieri.appendChild(prenotazioniSection);
         } else {
-          impegniGiornalieri.innerHTML = '<p>Nessun impegno per questo giorno.</p>';
+          impegniGiornalieri.innerHTML = '<p style="color: gray; ">Nessun impegno per questo giorno.</p>';
         }
       })
       .catch(error => console.error('Errore nel caricamento dei dati giornalieri:', error));
