@@ -244,6 +244,9 @@
               <% end %>
               <div class="public-review-text">
                 <p style="font-weight: bold";><%= review.cliente.user.username %></p>
+                <% if review.cliente.user.critico %>
+                <p style = "color: red;"> CRITICO </p>
+                <%end%>
                 <p>
                   <% review.stelle.times do %>
                     <ion-icon name="star" style="font-size: 15px;"></ion-icon>
@@ -259,7 +262,8 @@
               <%= hidden_field_tag :cliente_id, @current_user.cliente.id %>
               <%= hidden_field_tag :review_id, review.id %>
               <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
-              <%= submit_tag "👍", class: "thumb-button" %>
+              <button type="submit" class = "thumb-button"><ion-icon name = 'thumbs-up'></ion-icon> </button> 
+
             <% end %>
 
             <div id="like-notice"></div>
