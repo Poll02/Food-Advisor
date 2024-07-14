@@ -182,7 +182,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
           const mapIframe = document.getElementById('rest-map');
           const placeName = encodeURIComponent(data.name); // Assicurati che il nome sia URL-encoded
-          const apiKey = 'YOUR_GOOGLE_MAPS_API_KEY'; 
+          const apiKey = 'AIzaSyC9a9KDxjv1HNDVAeLEVYJDdjX2eYKPRzM'; 
 
           mapIframe.src = `https://www.google.com/maps/embed/v1/place?q=${placeName}&key=${apiKey}`;
         })
