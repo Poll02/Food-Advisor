@@ -109,29 +109,28 @@
         <p class="info">Motivo:  </p> <%= segnalazione.motivo %>
       </div>
       <div class="public-r-reviews">
+        <!-- link al profilo dello user del segnalato come bottone -->
+          <div class="public-foto-details">
             <% if segnalazione.recensione.cliente.foto.present? %>
               <%= image_tag segnalazione.recensione.cliente.foto, class: 'recensione-foto' %>
             <% else %>
               <%= image_tag 'background.jpg', class: 'recensione-foto' %>
             <% end %>
-          <div class="public-review-details">
-            <p style="font-weight: bold";><%= segnalazione.recensione.cliente.user.username %></p>
+            <div class="public-review-details">
             <p>
+              <%= segnalazione.recensione.cliente.user.username %><br>
               <% segnalazione.recensione.stelle.times do %>
                 <ion-icon name="star" style="font-size: 15px;"></ion-icon>
-              <% end %>
-            </p>            <p><%= segnalazione.recensione.commento %></p>
-            <p style="font-style: italic; font-size: 13px;">in data <%= segnalazione.recensione.created_at.strftime('%d/%m/%Y') %></p>
-          </div>
-          <div class="public-review-icon">
-            <i class="fa-regular fa-thumbs-up"></i>
-            <i class="fa-solid fa-share-nodes"></i>
-            
+              <% end %> <br>
+              <%= segnalazione.recensione.commento %> <br>
+              <span style="font-style: italic; font-size: 13px;">in data <%= segnalazione.recensione.created_at.strftime('%d/%m/%Y') %></span>
+            </p>
+            </div>
           </div>
         </div>
       <div class="segnalazioneAction">
         <%= form_with model: segnalazione.recensione ,url: review_path(segnalazione.recensione), method: :delete, local: true do %>
-          <button type="submit">Rimuovi recensione</button>
+          <button type="submit" style="width: 260px; ">Rimuovi recensione</button>
         <% end %>
         <button>Blocca profilo segnalato</button>
       </div>

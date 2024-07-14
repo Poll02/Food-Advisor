@@ -499,9 +499,14 @@ tr.flavor .piatto {
   background-color: #ddd7d7;
 }
 
-.public-review-details{
+.public-foto-details {
   display: flex;
   flex-direction: row;
+}
+
+.public-review-details{
+  display: flex;
+  flex-direction: column;
 }
 
 .public-review-text {
