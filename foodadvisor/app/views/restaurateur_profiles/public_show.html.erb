@@ -36,35 +36,25 @@
             <% else %>
               <p>Nessun tag associato</p>
             <% end %>
-          </div>
-          <% if @restaurant_owner.cliente.foto.present? %>
-            <%= image_tag @restaurant_owner.cliente.foto %>
+        </div>
+        <% if @restaurant_owner.cliente.foto.present? %>
+          <%= image_tag @restaurant_owner.cliente.foto %>
         <% else %>
-            <%= image_tag "user.jpg" %>
+          <%= image_tag "user.jpg" %>
         <% end %>
-  <div class="rest-info-public-right">
-    <h3>Informazioni</h3>
-    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.email %></span></p>
-    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.telefono %></span></p>
-    <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"> <%= @restaurant_owner.indirizzo %></span></p>
-    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> 
-      <% if @restaurant_owner.asporto %>
-      Si
-      <% else %>
-      No
-      <% end %>
-
-
-
-
-
-    
-    </span></p>
-    
-  </div>
-  
-  
-
+        <div class="rest-info-public-right">
+          <h3>Informazioni</h3>
+          <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.email %></span></p>
+          <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.telefono %></span></p>
+          <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"> <%= @restaurant_owner.indirizzo %></span></p>
+          <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> 
+            <% if @restaurant_owner.asporto %>
+              Si
+            <% else %>
+              No
+            <% end %>
+          </span></p>
+        </div>
     </div>
     <div class="review-reserve-buttons">
         <button type="button" class="review">Lascia una Recensione</button>
@@ -72,8 +62,6 @@
         <%= link_to public_show_menus_path(@restaurant_owner.id), class: 'user-link' do %><button type="button" style="background-color: rgb(234, 123, 121);" >Menù</button><% end %>
         <button type="button" id="add-rest-to-fav" data-ristoratore-id="<%= @restaurant_owner.id %>" style="background-color: rgb(71, 200, 82);">Aggiungi ai Preferiti</button>
         <button type="button" id="report-rest" style="background-color: rgb(221, 60, 60);">Segnala</button>
-
-
 
         <div id="reservModal" class="reserv-modal">
           <div class="reserv-modal-content">
@@ -253,27 +241,29 @@
                 <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
               </div>
             </div>
-            <div class="public-review-icon">     
+            <div class="public-review-icon"> 
 
-            <%= form_with url: add_like_review_path(review), method: :post, remote: true do %>
-              <%= hidden_field_tag :cliente_id, @current_user.cliente.id %>
-              <%= hidden_field_tag :review_id, review.id %>
-              <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
-              <%= submit_tag "👍", class: "thumb-button" %>
-            <% end %>
+              <% if session[:user_id] %>    
 
-            <div id="like-notice"></div>
+                <% if session[:role] != 'Admin' %>
+                  <%= form_with url: add_like_review_path(review), method: :post, remote: true do %>
+                    <%= hidden_field_tag :cliente_id, @current_user.cliente.id %>
+                    <%= hidden_field_tag :review_id, review.id %>
+                    <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
+                    <%= submit_tag "👍", class: "thumb-button" %>
+                  <% end %>
+                  <div id="like-notice"></div>
 
-              <i class="fa-solid fa-share-nodes"></i>
-              <% if session[:role] == 'Admin' %>
-                <i class="fa-solid fa-trash"></i>
-              <% else %>
-                <% if @current_user.cliente.id != review.cliente_id%>
-                  <i class="fa fa-exclamation-circle report-icon" data-review="<%= review.id %>"></i>
-                <% elsif @current_user.cliente.id == review.cliente_id %>
-                  <i class="fa-solid fa-pen-to-square change-icon" data-review="<%= review.id %>" data-review-star="<%= review.stelle %>" data-review-commento="<%= review.commento %>"></i>
+                  <i class="fa-solid fa-share-nodes"></i>
+                  <% if @current_user.cliente.id != review.cliente_id%>
+                      <i class="fa fa-exclamation-circle report-icon" data-review="<%= review.id %>"></i>
+                  <% elsif @current_user.cliente.id == review.cliente_id %>
+                    <i class="fa-solid fa-pen-to-square change-icon" data-review="<%= review.id %>" data-review-star="<%= review.stelle %>" data-review-commento="<%= review.commento %>"></i>
+                  <% end %>
+                <% else %>
+                  <i class="fa-solid fa-trash"></i>
                 <% end %>
-              <% end %> 
+              <% end %>
             </div>
           </div>
         <% end %>
