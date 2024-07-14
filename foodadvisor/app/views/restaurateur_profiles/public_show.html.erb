@@ -31,7 +31,8 @@
             <% if @tags.present? %>
               <h2 style="margin-top: 20px;">TAGS: </h2>
               <% @tags.each do |tag| %>
-                <span class="r-tag"><%= tag.nome %></span>
+                <% category_class = tag.categoria.downcase.gsub(' ', '-') %>
+                <span class="piatto category-<%= category_class %>"><%= tag.nome %></span>
               <% end %>
             <% else %>
               <p>Nessun tag associato</p>

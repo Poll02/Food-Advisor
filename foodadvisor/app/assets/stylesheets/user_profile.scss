@@ -48,8 +48,6 @@
 .public-u-recents-reviews{
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 .public-u-competitions{
@@ -60,10 +58,7 @@
     max-height: 600px;
     overflow-y: scroll;
     margin-bottom: 30px;
-    border: 1px solid #b8adad;
-    border-radius: 10px;
     padding: 1%;
-    
 }
 
 .public-u-competition-box{

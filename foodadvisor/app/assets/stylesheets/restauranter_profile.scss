@@ -70,13 +70,6 @@
   margin-top: 10px;
 }
 
-.r-tag {
-  padding: 5px 10px;
-  border-radius: 3px;
-  color: #28a745;
-  font-size: 14px;
-}
-
 .r-tag.pub {
   background-color: #ffc107; 
 }
@@ -91,6 +84,13 @@
   border-radius: 10px;
   display: flex;
   flex-direction: column;
+  width: 1200px;
+}
+
+.r-pub-recensioni {
+  display: flex;
+  flex-direction: column;
+  width: 1200px;
 }
 
 .night-mode .r-recensioni {
@@ -483,13 +483,20 @@ tr.flavor .piatto {
   display: flex;
   margin-bottom: 10px;
   justify-content: space-between;
-  width: 1200px;
+  width: 100%;
   border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 15px;
+  padding: 1%;
+  border-radius: 10px;
   transition: 0.3s;
 }
 
+.public-r-rev-icon {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2rem;
+  margin-top: 10px;
+  gap: 10px;
+}
 .public-r-reviews-grid{
   display: flex;
   flex-direction: column;
@@ -507,6 +514,7 @@ tr.flavor .piatto {
 .public-review-details{
   display: flex;
   flex-direction: column;
+  margin-left: 10px;
 }
 
 .public-review-text {
