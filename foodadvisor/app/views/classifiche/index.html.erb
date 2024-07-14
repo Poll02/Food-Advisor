@@ -1,12 +1,12 @@
 <div class="classifiche-page">
-    <h1 style="font-size: 50px;">Ristoranti e utenti migliori</h1>
+    <h1>Ristoranti e utenti migliori</h1>
     <div class="most-rewarded">
 
         <div class="most-rewarded-restaurants">
             <h2>Ristoranti</h2>
             <% if @top_restaurants.any? %>
                 <% @top_restaurants.each_with_index do |restaurant, index| %>
-                    <%= link_to public_restaurant_profile_path(restaurant.id), class: 'restaurant-link' do %>
+                    <%= link_to public_restaurant_profile_path(restaurant.id), style: "color: black; " do %>
                         <div class="most-rewarded-rest-box">
                             <p style="font-weight: bolder; color: #00b072;"><%= index + 1 %></p>
                             <%= image_tag restaurant.cliente.foto || 'background.jpg' %>  
@@ -30,7 +30,7 @@
             <% if @top_users.any? %>
                 <% @top_users.each_with_index do |user, index| %>
                     <% if user.critico %>
-                        <%= link_to public_critic_profile_path(user.id) do %>
+                        <%= link_to public_critic_profile_path(user.id), style: "color: black; " do %>
                         <div class="most-rewarded-user-box">
                         <p style="font-weight: bolder; color: #00b072;"><%= index + 1 %></p>
                         <%= image_tag user.cliente.foto || 'user.jpg' %>   
@@ -44,7 +44,7 @@
                         <hr class="solid" id="divider">
                         <% end %>
                     <% else %>
-                        <%= link_to public_user_profile_path(user.id) do %>
+                        <%= link_to public_user_profile_path(user.id), style: "color: black; " do %>
                         <div class="most-rewarded-user-box">
                         <p style="font-weight: bolder; color: #00b072;"><%= index + 1 %></p>
                         <%= image_tag user.cliente.foto || 'user.jpg' %>   
@@ -64,11 +64,12 @@
             <% end %>
         </div>
     </div>
-    <h3 style="font-size: 40px;">Classifiche di competizioni a cui partecipi</h3>
     
+    
+    <h1>Classifiche di competizioni a cui partecipi</h1>
+    <div class="user-competition-ranking">
     <% if @competitions.any? %>
         <% @competitions.each do |competition| %>
-        <div class="user-competition-ranking">
             <div class="user-competition-ranking-box">
                 <% if competition.locandina.present? %>
                     <%= image_tag competition.locandina %>
@@ -117,12 +118,12 @@
                     </span></p>
                 </div>
             </div>
-        </div>
+        
         <% end %>
         <% else %>
             <p>Non partecipi a nessuna competizione<p>
         <% end %>
-
+    </div>
 
 </div>
 

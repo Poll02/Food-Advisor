@@ -24,7 +24,7 @@
     <div class="r-pub-recensioni" style="max-height: 600px; overflow-y: scroll;">
         <% if @reviews.any? %>
             <% @reviews.each do |review| %>
-                <div class="public-r-reviews" style="margin-bottom: 20px; display: flex; flex-direction: row; ">
+                <div class="public-r-reviews" style="margin-bottom: 20px; display: flex; flex-direction: row; justify-content: space-between; ">
                     <div class="public-foto-details">
                         <% if review.ristoratore.cliente.foto.present? %>
                             <%= image_tag review.ristoratore.cliente.foto %> <!-- Supponendo che il ristorante abbia un'immagine associata -->

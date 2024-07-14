@@ -1,4 +1,5 @@
-<%= link_to 'Modifica', edit_restaurateur_profiles_path %>
+<%= link_to 'Modifica', edit_restaurateur_profiles_path, style: 'color: black; text-decoration: underline;' %>
+
 <% if flash[:notice] %>
     <div class="alert alert-success" role="alert">
       <%= flash[:notice] %>
@@ -23,7 +24,7 @@
     <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.indirizzo %></span></p>
     <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%= @restaurant_owner.email %></span></p>
     <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%= @restaurant_owner.telefono %></span></p>
-    <p style="font-weight: bold;">Data di registrazione: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.created_at %></span></p>
+    <p style="font-weight: bold;">Data di registrazione: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.created_at.strftime('%d/%m/%Y') %></span></p>
     <p style="font-weight: bold;">Asporto: <span style="font-weight: normal;">
     <% if @restaurant_owner.cliente.ristoratore.asporto %>
     Si
@@ -68,7 +69,7 @@
 </div>
 
 <h3>Recensioni</h3>
-<div class="r-recensioni">
+<div class="r-recensioni" style="width: 100%; ">
   <% if @reviews.any? %>
     <% @reviews.each do |review| %>
       <div class="r-recensione">

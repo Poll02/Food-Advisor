@@ -1,7 +1,7 @@
 <!-- show.html.erb -->
 <div class="ricerca-menu-container" style="text-align: center;"> 
   <h1 style="font-size: 50px;"><%= @menu.ristoratore.nomeristorante %>'s Menu</h1>
-  <%= link_to "Modifica menu", edit_menus_path(@menu), class: "edit-link" %>
+  <%= link_to "Modifica menu", edit_menus_path(@menu), style: 'color: black; text-decoration: underline;' %>
   <div class="search-container">
     <form id="find-form" action="<%= menus_path(@menu) %>" method="get">
       <div class="find-input" style="display: flex; align-items: center;">

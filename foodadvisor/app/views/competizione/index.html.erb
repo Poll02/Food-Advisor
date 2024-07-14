@@ -20,9 +20,11 @@
             <% else %>
               <%= image_tag "background.jpg" %>
             <% end %>
-            <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
+            <div class="text-overlay-competizioni" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
               <p><%= competizione.nome %></p>
               <p style="font-size: 13px; font-weight: normal;"><%= competizione.descrizione %></p>
+              <p style="font-size: 13px; font-weight: normal;">Data Inizio: <span id="right-side-start-data" style="font-weight: normal;"><%= competizione.data_inizio.strftime('%d/%m/%Y') %></span></p>
+              <p style="font-size: 13px; font-weight: normal;">Data Fine: <span id="right-side-end-date" style="font-weight: normal;"><%= competizione.data_fine.strftime('%d/%m/%Y') %></span></p>
               <p style="font-size: 13px; font-weight: normal;">Requisiti: <%= competizione.requisiti %> <span>Premi: <%= competizione.premio %></span></p>
               <div class="bottoni-comp" style="display: flex; flex-directions: row; " >
                 <button type="button" data-competizione-id="<%= competizione.id %>" class="iscriviti-button">Iscriviti</button>
@@ -88,9 +90,11 @@
             <% else %>
               <%= image_tag "background.jpg" %>
             <% end %>
-            <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
+            <div class="text-overlay-competizioni" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
               <p><%= competizione.nome %></p>
               <p style="font-size: 13px; font-weight: normal;"><%= competizione.descrizione %></p>
+              <p style="font-size: 13px; font-weight: normal;">Data Inizio: <span id="right-side-start-data" style="font-weight: normal;"><%= competizione.data_inizio.strftime('%d/%m/%Y') %></span></p>
+              <p style="font-size: 13px; font-weight: normal;">Data Fine: <span id="right-side-end-date" style="font-weight: normal;"><%= competizione.data_fine.strftime('%d/%m/%Y') %></span></p>
               <p style="font-size: 13px; font-weight: normal;">Requisiti: <%= competizione.requisiti %> <span>Premi: <%= competizione.premio %></span></p>
               <div class="bottoni-comp" style="display: flex; flex-directions: row; ">
                 <% if competizione.user_competitions.any? %>
@@ -119,7 +123,7 @@
       <div class="left-side">
         <h1>Risultati</h1>
         <% @competizioni.each do |competizione| %>
-          <div class="left-side-comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>"  data-date="<%= competizione.data_inizio %>" data-endate="<%= competizione.data_fine %>" data-id="<% competizione.id %>">
+          <div class="left-side-comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>"  data-date="<%= competizione.data_inizio.strftime('%d/%m/%Y') %>" data-endate="<%= competizione.data_fine.strftime('%d/%m/%Y') %>" data-id="<% competizione.id %>">
             <% if competizione.locandina.present? %>
               <%= image_tag competizione.locandina %>
             <% else %>
@@ -147,8 +151,8 @@
           <p style="font-weight: bold;">Descrizione: <span id="right-side-descrizione" style="font-weight: normal;"><%= @competizioni.first.descrizione %></span></p>
           <p style="font-weight: bold;">Requisiti: <span id="right-side-requisiti" style="font-weight: normal;"><%= @competizioni.first.requisiti %></span></p>
           <p style="font-weight: bold;">Premi: <span id="right-side-premio" style="font-weight: normal;"><%= @competizioni.first.premio %></span></p>
-          <p style="font-weight: bold;">Data Inizio: <span id="right-side-start-data" style="font-weight: normal;"><%= @competizioni.first.data_inizio %></span></p>
-          <p style="font-weight: bold;">Data Fine: <span id="right-side-end-date" style="font-weight: normal;"><%= @competizioni.first.data_fine %></span></p>
+          <p style="font-weight: bold;">Data Inizio: <span id="right-side-start-data" style="font-weight: normal;"><%= @competizioni.first.data_inizio.strftime('%d/%m/%Y') %></span></p>
+          <p style="font-weight: bold;">Data Fine: <span id="right-side-end-date" style="font-weight: normal;"><%= @competizioni.first.data_fine.strftime('%d/%m/%Y') %></span></p>
 
 
           <button type="button" class="iscriviti-button" id="right-side-button" data-competizione-id="<%= @competizioni.first.id %>">Iscriviti</button>

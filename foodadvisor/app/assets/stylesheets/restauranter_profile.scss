@@ -449,6 +449,14 @@ td {
   background-color: #FFF3CD;
 }
 
+.category-meal-type {
+  background-color: #b66767;
+}
+
+.category-feature {
+  background-color: #E0E0E0;
+}
+
 /* Specifica gli stili per ogni categoria */
 tr.cuisine .piatto {
   background-color: #FFDDC1;
@@ -460,6 +468,14 @@ tr.diet .piatto {
 
 tr.flavor .piatto {
   background-color: #FFF3CD;
+}
+
+tr.meal-type .piatto {
+  background-color: #b66767;
+}
+
+tr.feature .piatto {
+  background-color: #E0E0E0;
 }
 
 .inline-form {
@@ -481,9 +497,8 @@ tr.flavor .piatto {
 
 .public-r-reviews{
   display: flex;
+  flex-direction: row;
   margin-bottom: 10px;
-  justify-content: space-between;
-  width: 100%;
   border: 1px solid #ccc;
   padding: 1%;
   border-radius: 10px;
@@ -497,9 +512,11 @@ tr.flavor .piatto {
   margin-top: 10px;
   gap: 10px;
 }
+
 .public-r-reviews-grid{
   display: flex;
   flex-direction: column;
+  width: 1200px;
 }
 
 .public-r-reviews:hover{
@@ -513,7 +530,7 @@ tr.flavor .piatto {
 
 .public-review-details{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   margin-left: 10px;
 }
 

@@ -61,7 +61,7 @@
     </div>
     <hr id="divider" class="solid">
     <h1>Ultime recensioni</h1>
-    <div class="priv-recents-reviews">
+    <div class="priv-recents-reviews" style="width: 100%; ">
         <% if @recensioni.any? %>
             <% @recensioni.each do |recensione| %>
                 <% ristorante = Ristoratore.find(recensione.ristoratore_id) %>

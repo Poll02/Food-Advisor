@@ -35,7 +35,7 @@
     <% end %>
   </div>
 
-  <p>Gestisci le tue credenziali</p>
+  <p>Gestisci le tue informazioni</p>
   <div class="s-section">
     <%= form_for(@current_user, url: update_credentials_path, method: :put, html: { onsubmit: "return confirmPassword()" }) do |f| %>
       <!-- Cliente fields -->
