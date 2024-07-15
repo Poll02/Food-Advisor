@@ -11,7 +11,7 @@
         <div class="public-u-info">
             <p style="font-weight: bold;">Nome: <span style="font-weight: normal;"><%= @user.nome %></span></p>
             <p style="font-weight: bold;">Cognome: <span style="font-weight: normal;"><%= @user.cognome %></span></p>
-            <p style="font-weight: bold;">Iscrizione: <span style="font-weight: normal;"><%= @user.created_at %></span></p>
+            <p style="font-weight: bold;">Iscrizione: <span style="font-weight: normal;"><%= @user.created_at.strftime('%d/%m/%Y') %></span></p>
         </div>
     </div>
     <div class="public-u-follow-btn">
@@ -49,7 +49,7 @@
                 </div>
             <% end %>
         <% else %>
-            <p>L'utente non ha lasciato alcuna recensione.</p>
+            <p Style="color: gray; ">L'utente non ha lasciato alcuna recensione.</p>
         <% end %>
     </div>
 
@@ -76,7 +76,7 @@
         </div>
         <% end %>
           <% else %>
-            <p>Nessuna competizione trovata</p>
+            <p Style="color: gray; ">Nessuna competizione trovata</p>
           <% end %>
     </div>
 
