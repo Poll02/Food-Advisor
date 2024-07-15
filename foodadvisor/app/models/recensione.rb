@@ -15,6 +15,6 @@ class Recensione < ApplicationRecord
 
   delegate :user, to: :cliente, prefix: true
 
-  scope :top_rated, -> { order(like: :desc).limit(4) }
+  scope :top_rated, -> { order(like: :desc).limit(5) }
 end
   

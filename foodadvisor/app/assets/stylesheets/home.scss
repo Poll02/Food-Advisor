@@ -46,7 +46,6 @@ to{transform: translate()}
     display: inline-block;
     cursor: pointer;
     transition: 0.2s;
-    height: 250px;
 }  
 
 .restaurant-box:hover{
@@ -62,17 +61,15 @@ to{transform: translate()}
 }
 
 .text-overlay{
-    position: absolute;
-    bottom: 20px;
-    left: 20px;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    font-size: 18px;
-    font-weight: bold;
-    text-shadow: black 1px 0 5px;
-    height: 120px;
-    overflow-y: scroll;
+position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  text-shadow: black 1px 0 5px;
 }
 
 .earn-points-container{

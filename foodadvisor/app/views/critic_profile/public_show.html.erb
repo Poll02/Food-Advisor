@@ -11,77 +11,27 @@
         <div class="public-u-info">
             <p style="font-weight: bold;">Nome: <span style="font-weight: normal;"><%= @critico.user.nome %></span></p>
             <p style="font-weight: bold;">Cognome: <span style="font-weight: normal;"><%= @critico.user.cognome %></span></p>
-            <p style="font-weight: bold;">Iscrizione: <span style="font-weight: normal;"><%= @critico.created_at.strftime('%d/%m/%Y') %></span></p>
+            <p style="font-weight: bold;">Iscrizione: <span style="font-weight: normal;"><%= @critico.created_at %></span></p>
         </div>
     </div>
     <div class="public-u-follow-btn">
+        <button type="button">Inizia a Seguire</button>
         <button type="button" style="background-color: red;">Segnala</button>
+
     </div>
     <hr class="solid" id="divider" style="width: 80%;">
-    <h1>Attestati</h1>
-    <div class="public-u-attestati">
-    </div>
-    <hr class="solid" id="divider" style="width: 80%;">
-    <h1>Ultime Recensioni</h1>
     <div class="public-u-recents-reviews" style="max-height: 600px; overflow-y: scroll;">
-        <div class="r-pub-recensioni" style="max-height: 600px; overflow-y: scroll;">
-        <% if @reviews.any? %>
-            <% @reviews.each do |review| %>
-                <div class="public-r-reviews" style="margin-bottom: 20px; display: flex; flex-direction: row; ">
-                    <div class="public-foto-details">
-                        <% if review.ristoratore.cliente.foto.present? %>
-                            <%= image_tag review.ristoratore.cliente.foto %> <!-- Supponendo che il ristorante abbia un'immagine associata -->
-                        <% else %>
-                            <%= image_tag 'background.jpg' %>
-                        <% end %>
-                        <div class="public-review-details">
-                            <p>
-                                <%= review.ristoratore.nomeristorante %><br>
-                                <% review.stelle.times do %>
-                                    <ion-icon name="star" style="font-size: 15px;"></ion-icon>
-                                <% end %> <br>
-                                <%= truncate(review.commento, length: 200) %><br> <!-- Tronca il testo della recensione a 200 caratteri -->
-                                <span style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></span>
-                            </p>
-                        </div>
-                    </div>
-                    <div class="public-r-rev-icon">
-                        <i class="fa-regular fa-thumbs-up"></i>
-                        <i class="fa fa-exclamation-circle"></i>
-                    </div>
-                </div>
-            <% end %>
-        <% else %>
-            <p style="color: gray; ">L'utente non ha lasciato alcuna recensione.</p>
-        <% end %>
-        </div>
-    </div>
-
-
-    <hr class="solid" id="divider" style="width: 80%;">
-    <h1>Competizioni a cui l'utente partecipa</h1>
-
-    <div class="public-u-competitions">
-        <% if @iscrizioni.any? %>
-            <% @iscrizioni.each do |iscrizione| %>
-            <% competizione = Competizione.find(iscrizione.competizione_id) %>
-        <div class="public-u-competition-box">
-        <% if competizione.locandina.present? %>
-            <%= image_tag competizione.locandina %>
-            <% else  %>
-            <%= image_tag "background.jpg"  %>
-            <% end  %>
-            <div class="public-u-competition-box-info">
-                <p style="font-weight: bold;">Nome Competizione: <span style="font-weight: normal;"> <%= competizione.nome %></span></p>
-                <p style="font-weight: bold;">Punti: <span style="font-weight: normal;"><%= iscrizione.punti_competizione %></span></p>
-                <p style="font-weight: bold;">Posizione in Classifica: <span style="font-weight: normal;"><%= @posizioni[competizione.id] %></span></p>
+        <h1>Ultime Recensioni</h1>
+        <div class="r-recensioni">
+            <div class="public-r-reviews" style="margin-bottom: 20px;">
+              <%= image_tag 'background.jpg'%>
+              <div class="public-review-details">
+                <h3>Nome Ristorante</h3>
+                <p>n. stelle</p>
+                <p>Testo della recensione. Il testo dovrebbe rispettare dei caratteri minimi e massimi e dobbiamo decidere come gestirne la visualizzazione</p>
+                <p style="font-style: italic; font-size: 13px;">in data DATA</p>
+              </div>
             </div>
-
-        </div>
-        <% end %>
-          <% else %>
-            <p style="color: gray; ">Nessuna competizione trovata</p>
-          <% end %>
+          </div>
     </div>
-
 </div>

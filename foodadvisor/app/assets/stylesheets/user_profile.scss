@@ -48,6 +48,8 @@
 .public-u-recents-reviews{
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .public-u-competitions{
@@ -58,7 +60,10 @@
     max-height: 600px;
     overflow-y: scroll;
     margin-bottom: 30px;
+    border: 1px solid #b8adad;
+    border-radius: 10px;
     padding: 1%;
+    
 }
 
 .public-u-competition-box{
@@ -66,7 +71,6 @@
     width: 1200px;
 
     padding: 10px;
-    margin-bottom: 10px;
     gap: 20px;
     border: 1px solid #b8adad;
     border-radius: 10px;
@@ -101,9 +105,6 @@
     display: flex;
     align-items: center;
     gap: 30px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-    border-radius: 10px;
-    padding: 1%;
 }
 
 .p-user-photo-details img{
@@ -128,39 +129,26 @@
     gap: 20px;
     max-height: 400px;
     padding: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-    border-radius: 10px;
 }
 
 .p-user-fav-events{
     display: flex;
-    flex-direction: row;
     gap: 20px;
+    width: 1000px;
     max-height: 400px;
     overflow-x: scroll;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-    border-radius: 10px;
-    padding: 1%;
+
 }
 
 .p-user-reservs{
     display: flex;
-    flex-direction: row;
     gap: 20px;
+    width: 1000px;
     max-height: 400px;
     overflow-x: scroll;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-    border-radius: 10px;
-    padding: 1%;
 }
 
 .p-user-reserv-box{
     display: flex;
     flex-direction: column;
-}
-
-.premicompetizioni {
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
-    border-radius: 10px;
-    padding: 1%;
 }

@@ -8,7 +8,17 @@ class SegnalazionesController < ApplicationController
     @segnalazione.recensione = @recensione
     @segnalazione.cliente = @current_user.cliente
     
-    if @segnalazione.save  
+    if @segnalazione.save
+      # Aggiunta di due punti a punti_competizione di UserCompetition associata per competizioni attive
+      recensione_cliente = @recensione.cliente
+      recensione_cliente.user.user_competitions.each do |uc|
+        if uc.competizione.data_fine >= Date.today
+          uc.punti_competizione -= 2
+          uc.save!
+          Rails.logger.info("Aggiunti 2 punti alla competizione #{uc.competizione.nome} per l'utente #{uc.user.nome}")
+        end
+      end
+  
       flash[:notice] = 'Segnalazione salvata con successo! La segnalazione verrà verificata da un admin!'
       redirect_to public_restaurant_profile_path(@recensione.ristoratore_id)
     else

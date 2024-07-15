@@ -107,10 +107,10 @@
     <div class="popular-reviews-and-reserv-container" style="display: flex; margin-top: 30px; justify-content: space-evenly; margin-bottom: 30px;">
         <div class="reviews-container" style="padding: 10px; border-radius: 10px;">
             <h3 style="margin-bottom: 20px;">Recensioni Popolari</h3>
-            <div class="popular-reviews-container" style="display: flex; flex-direction: column; height: 300px; overflow-y: scroll; ">
+            <div class="popular-reviews-container" style="display: flex; flex-direction: column;">
                 <% if @reviews.any? %>
                     <% @reviews.each do |review| %>
-                        <%= link_to public_user_profile_path(review.cliente.user.id), class: 'user-link', style: "color: black; " do %>
+                        <%= link_to public_user_profile_path(review.cliente.user.id), class: 'user-link' do %>
                         <div class="popular-reviews-box" style="display: flex; width: 600px; ">
                             <%= image_tag 'background.jpg' %>
                             <div class="popular-reviews-box-text">

@@ -9,10 +9,6 @@
     align-items: center;
 }
 
-.classifiche-page > h1 {
-    margin: 10px 0 10px 0;
-}
-
 .most-rewarded{
     display: flex;
     gap: 100px;
@@ -23,7 +19,6 @@
     flex-direction: column;
     max-height: 400px;
     overflow-y: scroll;
-    width: 300px;
 }
 
 .most-rewarded-rest-box{
@@ -60,16 +55,12 @@
     flex-direction: column;
     max-height: 400px;
     overflow-y: scroll;
-    width: 300px;
 }
 
 .user-competition-ranking{
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    height: 400px;
-    overflow-y: scroll;
-    margin-bottom: 10px;
+    gap: 30px;
 }
 
 .user-competition-ranking-box{
@@ -79,7 +70,8 @@
     border-radius: 15px;
     padding: 10px;
     align-items: center;
-    width: 1000px;
+    margin: 1%;
+    width: 700px;
 }
 
 .night-mode .user-competition-ranking-box {

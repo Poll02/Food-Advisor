@@ -14,7 +14,6 @@ class Utente < ApplicationRecord
   has_one :ristoratore, through: :cliente
 
   has_one :setting, dependent: :destroy
-  
   after_create :create_default_settings
   
   accepts_nested_attributes_for :cliente

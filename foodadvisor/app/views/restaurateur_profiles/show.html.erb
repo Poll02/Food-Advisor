@@ -1,5 +1,4 @@
-<%= link_to 'Modifica', edit_restaurateur_profiles_path, style: 'color: black; text-decoration: underline;' %>
-
+<%= link_to 'Modifica', edit_restaurateur_profiles_path %>
 <% if flash[:notice] %>
     <div class="alert alert-success" role="alert">
       <%= flash[:notice] %>
@@ -24,7 +23,7 @@
     <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.indirizzo %></span></p>
     <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%= @restaurant_owner.email %></span></p>
     <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%= @restaurant_owner.telefono %></span></p>
-    <p style="font-weight: bold;">Data di registrazione: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.created_at.strftime('%d/%m/%Y') %></span></p>
+    <p style="font-weight: bold;">Data di registrazione: <span style="font-weight: normal;"><%= @restaurant_owner.cliente.ristoratore.created_at %></span></p>
     <p style="font-weight: bold;">Asporto: <span style="font-weight: normal;">
     <% if @restaurant_owner.cliente.ristoratore.asporto %>
     Si
@@ -40,11 +39,10 @@
     <div class="r-tags">
       <% if @tags.present? %>
         <% @tags.each do |tag| %>
-          <% category_class = tag.categoria.downcase.gsub(' ', '-') %>
-          <span class="piatto category-<%= category_class %>"><%= tag.nome %></span>
+          <span class="piatto"><%= tag.nome %></span>
         <% end %>
       <% else %>
-        <p style="color: gray; ">Non hai nessun tag associato</p>
+        <p>Nessun tag associato</p>
       <% end %>
     </div>
   </div>
@@ -63,13 +61,13 @@
         <div class="vertical-divider" style="height: 100px;"></div>
       <% end %>
     <% else %>
-      <p style="color: gray; ">Non hai nessuna promozione attiva</p>
+      <p>Nessuna promozione attiva</p>
     <% end %>
   </div>
 </div>
 
 <h3>Recensioni</h3>
-<div class="r-recensioni" style="width: 100%; ">
+<div class="r-recensioni">
   <% if @reviews.any? %>
     <% @reviews.each do |review| %>
       <div class="r-recensione">
@@ -97,7 +95,7 @@
     </div>
     <% end %>
   <%else%>
-    <p style="color: gray; ">Non hai ricevuto nessuna recensione</p>
+    <p>Non hai nessuna recensione</p>
   <% end %>
 </div>
 
@@ -120,7 +118,7 @@
       </div>
     <% end %>
   <% else %>
-    <p style="color: gray; ">Non hai condiviso alcuna ricetta.</p>
+    <p>Il ristoratore non ha condiviso alcuna ricetta.</p>
   <% end %>
 </div>
 <h3>Eventi</h3>
@@ -142,6 +140,6 @@
       </div>
     <% end %>
   <% else %>
-    <p style="color: gray; ">Non hai creato alcun evento.</p>
+    <p>Il ristoratore non ha creato alcun evento.</p>
   <% end %>
 </div>

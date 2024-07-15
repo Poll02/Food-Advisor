@@ -8,8 +8,6 @@ import Turbolinks from "turbolinks"
 import * as ActiveStorage from "@rails/activestorage"
 import "channels"
 
-// importa i tuoi file qui
-
 Rails.start()
 Turbolinks.start()
 ActiveStorage.start()

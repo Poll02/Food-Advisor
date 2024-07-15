@@ -41,7 +41,7 @@ class SettingsController < ApplicationController
         logger.info "Password digest era nil, impostato alla password corrente."
       end
       # se viene caricata la foto
-      if session[:role] != 'Admin' && params[:utente][:cliente_attributes][:foto]
+      if params[:utente][:cliente_attributes][:foto]
         uploaded_file = params[:utente][:cliente_attributes][:foto]
         file_path = Rails.root.join('app', 'assets', 'images', uploaded_file.original_filename)
         File.open(file_path, 'wb') do |file|
@@ -84,33 +84,8 @@ class SettingsController < ApplicationController
   private
 
   def user_params
-    params.require(:utente).permit(
-      :email,
-      :password,
-      :password_confirmation,
-      cliente_attributes: [
-        :id,
-        :foto,
-        ristoratore_attributes: [
-          :id,
-          :nomeristorante,
-          :piva,
-          :indirizzo
-        ],
-        user_attributes: [
-          :id,
-          :username,
-          :nome,
-          :cognome
-        ]
-      ],
-      admin_attributes: [
-        :id,
-        :nome,
-        :cognome
-      ]
-    )
-  end  
+    params.require(:utente).permit(:email, :password, :password_confirmation, cliente_attributes: [:id, :foto, ristoratore_attributes: [:id, :nomeristorante, :piva, :indirizzo], user_attributes: [:id, :username, :nome, :cognome]])
+  end
 
   def set_user
     @user = current_user
