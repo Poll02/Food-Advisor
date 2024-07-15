@@ -21,6 +21,7 @@
                 <th>ID</th>
                 <th>Nome</th>
                 <th>Cognome</th>
+                <th>Username</th>
                 <th>Nome Ristorante</th>
                 <th>Ruolo</th>
                 <th>Email</th>
@@ -52,6 +53,11 @@
                     <td>
                         <% if cliente.respond_to?(:user) && cliente.user.present? %>
                             <%= cliente.user.cognome %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.respond_to?(:user) && cliente.user.present? %>
+                            <%= cliente.user.username %>
                         <% end %>
                     </td>
                     <td>
@@ -105,12 +111,12 @@
 </div>
 
 
-<h1>Segnalazioni</h1>
+<h3>Segnalazioni</h3>
 <div class="gestioneSegnalazioni">
 <% if @segnalazioni.any? %>
   <% @segnalazioni.each do |segnalazione| %>
     <% if segnalazione.recensione_id.present? %>
-    <%= @recensione=Recensione.find(segnalazione.recensione_id) %>
+    <p style="display: none;"><%= @recensione=Recensione.find(segnalazione.recensione_id) %><p>
     <div class="segnalazione">
       <div class="segnalazioneInfo">
         <p class="info">Da: <%= segnalazione.cliente_id %>  A: <%= @recensione.cliente_id %>  <p>
@@ -160,7 +166,7 @@
     </div>
 <% end %>
 </div>
-<h1>Problemi</h1>
+<h3>Problemi</h3>
 <div class="gestioneProblemi">
   <table>
     <thead>
@@ -200,7 +206,7 @@
   </table>
 </div>
 
-<h1>Invia comunicazioni</h1>
+<h3>Invia comunicazioni</h3>
 <div class="inviaNotifiche">
   <%= form_with model: @notification, url: notifications_path, local: true do |form| %>
     <div class="form-group">

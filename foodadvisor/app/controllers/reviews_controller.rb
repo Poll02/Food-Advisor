@@ -55,7 +55,7 @@ class ReviewsController < ApplicationController
 
   def destroy
     @restauranteur=@review.ristoratore_id
-    if @review.segnalazione.destroy_all && (@review.answer.nil? || @review.answer.destroy) && @review.destroy 
+    if @review.segnalazione.destroy_all && (@review.answer.nil? || @review.answer.destroy) && (@review.assign_stars.nil? || @review.assign_stars.destroy_all) && @review.destroy 
       flash[:notice] = 'Recensione eliminata con successo!'
         @user_type=Admin.where(utente_id: @current_user.id)
         if @user_type.present?
@@ -64,6 +64,7 @@ class ReviewsController < ApplicationController
           redirect_to public_restaurant_profile_path(@restauranteur)
         end
     else
+      Rails.logger.info("PROBLEMA #{@review.errors.full_messages}")
       flash[:alert] = 'Errore durante la rimozione della recensione'
       redirect_back(fallback_location: root_path)
     end
