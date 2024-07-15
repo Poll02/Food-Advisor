@@ -11,7 +11,6 @@
         </div>
         <button type="submit" style="display: none;"></button>
         <ion-icon id="filter-icon" name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px; cursor: pointer;"></ion-icon>
-        <ion-icon name="pin-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon>
     </form>
 </div>
     <div class="results-and-details-container">
@@ -62,64 +61,114 @@
 
 <!-- Finestra di dialogo -->
 <div id="dialog" class="dialog">
-    <div class="dialog-content">
-        <span class="close-button">&times;</span>
-        <form id="filter-form">
-            <h4>Applica dei filtri alla tua ricerca</h4>
-            <p>Stelle:<p>
-            <div class="stars">
-                <span class="star" data-value="1">&#9733;</span>
-                <span class="star" data-value="2">&#9733;</span>
-                <span class="star" data-value="3">&#9733;</span>
-                <span class="star" data-value="4">&#9733;</span>
-                <span class="star" data-value="5">&#9733;</span>
-            </div>
-            <p>Tag:</p>
-            <P>Km distanza:</p>
-            <input type="hidden" id="star-rating" name="star_rating" value="0">
-            <button type="button" id="apply-filters">Applica filtri</button>
-        </form>
-    </div>
+  <div class="dialog-content">
+    <span class="close-button">&times;</span>
+    <form id="filter-form">
+      <h4>Applica dei filtri alla tua ricerca</h4>
+      
+      <p>Tag:</p>
+      <div id="tag-buttons">
+        <% @tags.each do |tag| %>
+          <button type="button" class="tag-button <%= 'selected' if params[:tags]&.include?(tag.id.to_s) %>" data-tag-id="<%= tag.id %>"><%= tag.nome %></button>
+        <% end %>
+      </div>
+
+      <p>Stelle:</p>
+      <div class="stars">
+        <% (1..5).each do |i| %>
+          <span class="star <%= 'selected' if params[:star_rating].to_i >= i %>" data-value="<%= i %>">&#9733;</span>
+        <% end %>
+      </div>
+      <p>Numero minimo di recensioni:</p>
+      <input type="number" id="min-reviews" name="min_reviews" min="0" value="<%= params[:min_reviews] %>">
+      <p>Numero massimo di recensioni:</p>
+      <input type="number" id="max-reviews" name="max_reviews" min="0" value="<%= params[:max_reviews] %>">
+      <p>Servizio di asporto:</p>
+      <input type="checkbox" id="asporto" name="asporto" <%= 'checked' if params[:asporto] == '1' %>>
+      <input type="hidden" id="star-rating" name="star_rating" value="<%= params[:star_rating] %>">
+      <input type="hidden" id="selected-tags" name="tags[]" value="<%= params[:tags]&.join(',') %>">
+      <button type="button" id="apply-filters">Applica filtri</button>
+      <button type="button" id="reset-filters">Azzera i filtri</button>
+    </form>
+  </div>
 </div>
+
 <script>
 document.addEventListener('DOMContentLoaded', (event) => {
-    const dialog = document.getElementById('dialog');
-    const filterIcon = document.getElementById('filter-icon');
-    const closeButton = document.querySelector('.close-button');
-    const stars = document.querySelectorAll('.star');
-    const starRatingInput = document.getElementById('star-rating');
-    const applyFiltersButton = document.getElementById('apply-filters');
+  const dialog = document.getElementById('dialog');
+  const filterIcon = document.getElementById('filter-icon');
+  const closeButton = document.querySelector('.close-button');
+  const stars = document.querySelectorAll('.star');
+  const starRatingInput = document.getElementById('star-rating');
+  const applyFiltersButton = document.getElementById('apply-filters');
+  const resetFiltersButton = document.getElementById('reset-filters');
+  const tagButtons = document.querySelectorAll('.tag-button');
+  const selectedTagsInput = document.getElementById('selected-tags');
 
-    filterIcon.addEventListener('click', () => {
-        dialog.style.display = 'block';
-    });
+  filterIcon.addEventListener('click', () => {
+    dialog.style.display = 'block';
+  });
 
-    closeButton.addEventListener('click', () => {
-        dialog.style.display = 'none';
-    });
+  closeButton.addEventListener('click', () => {
+    dialog.style.display = 'none';
+  });
 
-    window.addEventListener('click', (event) => {
-        if (event.target == dialog) {
-            dialog.style.display = 'none';
-        }
-    });
+  window.addEventListener('click', (event) => {
+    if (event.target == dialog) {
+      dialog.style.display = 'none';
+    }
+  });
 
-    stars.forEach(star => {
-        star.addEventListener('click', () => {
-            const value = star.getAttribute('data-value');
-            starRatingInput.value = value;
-            stars.forEach(s => s.classList.remove('selected'));
-            for (let i = 0; i < value; i++) {
-                stars[i].classList.add('selected');
-            }
-        });
+  stars.forEach(star => {
+    star.addEventListener('click', () => {
+      const value = star.getAttribute('data-value');
+      starRatingInput.value = value;
+      stars.forEach(s => s.classList.remove('selected'));
+      for (let i = 0; i < value; i++) {
+        stars[i].classList.add('selected');
+      }
     });
+  });
 
-    applyFiltersButton.addEventListener('click', () => {
-        const starRating = starRatingInput.value;
-        const query = document.getElementById('findbar').value;
-        window.location.href = `<%= ricerca_path %>?query=${query}&star_rating=${starRating}`;
+  let selectedTags = <%= params[:tags]&.map(&:to_i) || [] %>;
+
+  tagButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const tagId = parseInt(button.getAttribute('data-tag-id'));
+      if (selectedTags.includes(tagId)) {
+        selectedTags = selectedTags.filter(id => id !== tagId);
+        button.classList.remove('selected');
+      } else {
+        selectedTags.push(tagId);
+        button.classList.add('selected');
+      }
+      selectedTagsInput.value = selectedTags.join(',');
     });
+  });
+
+  applyFiltersButton.addEventListener('click', () => {
+    const starRating = starRatingInput.value;
+    const query = document.getElementById('findbar').value;
+    const minReviews = document.getElementById('min-reviews').value;
+    const maxReviews = document.getElementById('max-reviews').value;
+    const asporto = document.getElementById('asporto').checked ? 1 : 0;
+
+    const tagParams = selectedTags.map(tag => `tags[]=${tag}`).join('&');
+
+    window.location.href = `<%= ricerca_path %>?query=${query}&star_rating=${starRating}&min_reviews=${minReviews}&max_reviews=${maxReviews}&asporto=${asporto}&${tagParams}`;
+  });
+
+  resetFiltersButton.addEventListener('click', () => {
+    document.getElementById('findbar').value = '';
+    starRatingInput.value = '0';
+    stars.forEach(star => star.classList.remove('selected'));
+    document.getElementById('min-reviews').value = '';
+    document.getElementById('max-reviews').value = '';
+    document.getElementById('asporto').checked = false;
+    selectedTags = [];
+    tagButtons.forEach(button => button.classList.remove('selected'));
+    selectedTagsInput.value = '';
+  });
 });
 
 document.addEventListener('DOMContentLoaded', function() {

@@ -54,9 +54,21 @@ class CompetizioneController < ApplicationController
       return
     end
 
+    # Controlla se l'utente ha già due competizioni a cui partecipa
+    ncompetizioni = @current_user.cliente.user.competiziones.count
+    if ncompetizioni > 2
+      Rails.logger.debug "Partecipi già a due competizioni"
+      render json: { success: false, error: 'Partecipi già a due competizioni.' }
+      return
+    end 
+
     # Controllo sulla data di iscrizione
-    if competizione.data_inizio < Date.today
-      render json: { success: false, error: 'La competizione è già iniziata non puoi partecipare.' }
+    if competizione.data_inizio > Date.today
+      render json: { success: false, error: 'La competizione non è ancora iniziata non puoi partecipare.' }
+      return
+    end
+    if competizione.data_fine < Date.today
+      render json: { success: false, error: 'La competizione non è ancora iniziata non puoi partecipare.' }
       return
     end
   

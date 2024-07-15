@@ -103,7 +103,7 @@
 </div>
 
 
-<h3>Segnalazioni</h3>
+<h1>Segnalazioni</h1>
 <div class="gestioneSegnalazioni">
 <% if @segnalazioni.any? %>
   <% @segnalazioni.each do |segnalazione| %>
@@ -158,7 +158,7 @@
     </div>
 <% end %>
 </div>
-<h3>Problemi</h3>
+<h1>Problemi</h1>
 <div class="gestioneProblemi">
   <table>
     <thead>
@@ -198,7 +198,7 @@
   </table>
 </div>
 
-<h3>Invia comunicazioni</h3>
+<h1>Invia comunicazioni</h1>
 <div class="inviaNotifiche">
   <%= form_with model: @notification, url: notifications_path, local: true do |form| %>
     <div class="form-group">

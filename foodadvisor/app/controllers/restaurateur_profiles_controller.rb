@@ -4,7 +4,7 @@ class RestaurateurProfilesController < ApplicationController
   before_action :require_logged_in, except: [:public_show]
   before_action :require_restaurant_owner, except: [:public_show]
   before_action :set_restaurant_owner
-  before_action :set_evento, only: [:destroy_event]  
+  before_action :set_evento, only: [:destroy_event] 
 
   def show
     @eventi = Evento.where(ristoratore_id: @restaurant_owner.cliente.ristoratore.id).where("data >=?", Date.today)

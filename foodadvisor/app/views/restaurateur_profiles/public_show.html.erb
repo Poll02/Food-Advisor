@@ -31,40 +31,31 @@
             <% if @tags.present? %>
               <h2 style="margin-top: 20px;">TAGS: </h2>
               <% @tags.each do |tag| %>
-                <span class="r-tag"><%= tag.nome %></span>
+                <% category_class = tag.categoria.downcase.gsub(' ', '-') %>
+                <span class="piatto category-<%= category_class %>"><%= tag.nome %></span>
               <% end %>
             <% else %>
               <p>Nessun tag associato</p>
             <% end %>
-          </div>
-          <% if @restaurant_owner.cliente.foto.present? %>
-            <%= image_tag @restaurant_owner.cliente.foto %>
+        </div>
+        <% if @restaurant_owner.cliente.foto.present? %>
+          <%= image_tag @restaurant_owner.cliente.foto %>
         <% else %>
-            <%= image_tag "user.jpg" %>
+          <%= image_tag "user.jpg" %>
         <% end %>
-  <div class="rest-info-public-right">
-    <h3>Informazioni</h3>
-    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.email %></span></p>
-    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.telefono %></span></p>
-    <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"> <%= @restaurant_owner.indirizzo %></span></p>
-    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> 
-      <% if @restaurant_owner.asporto %>
-      Si
-      <% else %>
-      No
-      <% end %>
-
-
-
-
-
-    
-    </span></p>
-    
-  </div>
-  
-  
-
+        <div class="rest-info-public-right">
+          <h3>Informazioni</h3>
+          <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.email %></span></p>
+          <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.telefono %></span></p>
+          <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"> <%= @restaurant_owner.indirizzo %></span></p>
+          <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> 
+            <% if @restaurant_owner.asporto %>
+              Si
+            <% else %>
+              No
+            <% end %>
+          </span></p>
+        </div>
     </div>
     <div class="review-reserve-buttons">
         <button type="button" class="review">Lascia una Recensione</button>
@@ -192,7 +183,6 @@
             <p><%= recipe.name %></p>
             <p style="font-size: 13px; font-weight: normal;">Difficoltà: <span><%= recipe.difficulty %></span></p>
             <p style="font-size: 13px; font-weight: normal;">Ingredienti: <span><%= recipe.ingredients %></span></p>
-            <p style="font-size: 13px; font-weight: normal; font-style: italic;">Clicca per vedere il procedimento</p>
             <button type="submit" data-recipe-id="<%= recipe.id %>" id="add-recipe-fav">Preferiti +</button>
 
           </div>
@@ -253,26 +243,29 @@
                 <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
               </div>
             </div>
-            <div class="public-review-icon">
-              <%= form_with url: add_like_review_path(review), method: :post, remote: true, html: { class: 'like-form' } do %>
-          <%= hidden_field_tag :review_id, review.id %>
-          <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
-          <button type="submit" class="like-button" style="background: none; border: none;">
-            <i class="fa-regular fa-thumbs-up like-icon" style="font-size: 20px;"></i>
-          </button>
+            <div class="public-review-icon"> 
 
-        <% end %>
+              <% if session[:user_id] %>    
 
-              <i class="fa-solid fa-share-nodes"></i>
-              <% if session[:role] == 'Admin' %>
-                <i class="fa-solid fa-trash"></i>
-              <% else %>
-                <% if @current_user.cliente.id != review.cliente_id%>
-                  <i class="fa fa-exclamation-circle report-icon" data-report="<%= review.id %>" data-type="recensione"></i>
-                <% elsif @current_user.cliente.id == review.cliente_id %>
-                  <i class="fa-solid fa-pen-to-square change-icon" data-review="<%= review.id %>" data-review-star="<%= review.stelle %>" data-review-commento="<%= review.commento %>"></i>
+                <% if session[:role] != 'Admin' %>
+                  <%= form_with url: add_like_review_path(review), method: :post, remote: true do %>
+                    <%= hidden_field_tag :cliente_id, @current_user.cliente.id %>
+                    <%= hidden_field_tag :review_id, review.id %>
+                    <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
+                    <%= submit_tag "👍", class: "thumb-button" %>
+                  <% end %>
+                  <div id="like-notice"></div>
+
+                  <i class="fa-solid fa-share-nodes"></i>
+                  <% if @current_user.cliente.id != review.cliente_id%>
+                      <i class="fa fa-exclamation-circle report-icon" data-review="<%= review.id %>"></i>
+                  <% elsif @current_user.cliente.id == review.cliente_id %>
+                    <i class="fa-solid fa-pen-to-square change-icon" data-review="<%= review.id %>" data-review-star="<%= review.stelle %>" data-review-commento="<%= review.commento %>"></i>
+                  <% end %>
+                <% else %>
+                  <i class="fa-solid fa-trash"></i>
                 <% end %>
-              <% end %> 
+              <% end %>
             </div>
           </div>
 
@@ -306,6 +299,7 @@
             <%= form_with( url: segnalaziones_path, method: "post", local: true) do |form| %>
               <%= form.hidden_field :data_id%>
               <%= form.hidden_field :type%>
+              <%= form.hidden_field :recensione_id %>
               Motivo della segnalazione
               <br><br>
               <%= form.label :commento, "Commento:" %>
@@ -361,6 +355,25 @@
 </div>
 
 <script>
+  // per il like
+document.addEventListener("DOMContentLoaded", function() {
+  const form = document.querySelector(".thumb-button").closest("form");
+  
+  form.addEventListener("ajax:success", function(event) {
+    const [data, status, xhr] = event.detail;
+    const notice = document.getElementById("like-notice");
+    notice.innerText = data.message;
+  });
+
+  form.addEventListener("ajax:error", function(event) {
+    const [data, status, xhr] = event.detail;
+    const notice = document.getElementById("like-notice");
+    notice.innerText = "Si è verificato un errore. Per favore riprova.";
+  });
+});
+
+
+  //
 document.addEventListener("DOMContentLoaded", function() {
   document.querySelectorAll('.change-icon').forEach(icon => {
     icon.addEventListener('click', (event) => {
@@ -609,33 +622,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-document.getElementById('add-event-fav').addEventListener('click', function(event) {
-    event.preventDefault();
-    
-    const eventoId = this.getAttribute('data-evento-id');
-    
-    fetch('/add_event_to_favorites', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-      },
-      credentials: 'same-origin',
-      body: JSON.stringify({ evento_id: eventoId })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert('Evento aggiunto ai preferiti!');
-      } else {
-        alert('Errore: ' + data.error);
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('Si è verificato un errore durante l\'aggiunta dell\'evento ai preferiti.');
-    });
-  });
+
 
   document.getElementById('add-recipe-fav').addEventListener('click', function(event) {
     event.preventDefault();

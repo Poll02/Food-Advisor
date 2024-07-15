@@ -39,17 +39,7 @@ class SegnalazionesController < ApplicationController
       @segnalazione.cliente_segnalato = @user.cliente
     end
     if @segnalazione.save
-      if @recensione.present?
-        # Aggiunta di due punti a punti_competizione di UserCompetition associata per competizioni attive
-        recensione_cliente = @recensione.cliente
-        recensione_cliente.user.user_competitions.each do |uc|
-          if uc.competizione.data_fine >= Date.today
-            uc.punti_competizione -= 2
-            uc.save!
-            Rails.logger.info("Aggiunti 2 punti alla competizione #{uc.competizione.nome} per l'utente #{uc.user.nome}")
-          end
-        end
-      end
+      
   
       flash[:notice] = 'Segnalazione salvata con successo! La segnalazione verrà verificata da un admin!'
       if @recensione.present?

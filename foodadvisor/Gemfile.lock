@@ -87,6 +87,8 @@ GEM
       dotenv (= 2.8.1)
       railties (>= 3.2)
     erubi (1.13.0)
+    faker (3.4.1)
+      i18n (>= 1.8.11, < 2)
     faraday (2.8.1)
       base64
       faraday-net_http (>= 2.0, < 3.1)
@@ -288,6 +290,7 @@ DEPENDENCIES
   byebug
   capybara (>= 3.26)
   dotenv-rails
+  faker
   hirb
   jbuilder (~> 2.7)
   jquery-rails
