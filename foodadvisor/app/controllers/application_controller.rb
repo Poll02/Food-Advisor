@@ -9,11 +9,18 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    if session[:user_id].present?
-      @current_user = Utente.find_by(id: session[:user_id])
-    else
-      @current_user = nil
+    if (user_id = session[:user_id])
+      @current_user ||= Utente.find_by(id: user_id)
+    elsif (user_id = cookies.signed[:user_id])
+      user = Utente.find_by(id: user_id)
+      if user && user.authenticated?(cookies[:remember_token])
+        log_in(user, user_role(user))  # Login come utente normale
+        @current_user = user
+      end
     end
-  end  
+  end
   
+  def logged_in?
+    !current_user.nil?
+  end
 end

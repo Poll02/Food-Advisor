@@ -10,6 +10,8 @@ class UserProfileController < ApplicationController
     @iscrizioni = UserCompetition.where(user_id: current_user.cliente.user.id)
     @prenotazioni = Prenotazione.where(user_id: current_user.cliente.user.id).where('data >= ?', Date.today)
     @premi = Premi.where(id: current_user.cliente.user.id)
+
+  
   end
 
   def edit
@@ -20,6 +22,12 @@ class UserProfileController < ApplicationController
     @user = User.find(params[:id])
     @iscrizioni = UserCompetition.where(user_id: @user.id)
     @reviews = Recensione.where(cliente_id: @user.cliente.id).order(created_at: :desc).order(pinnata: :desc)
+
+    @posizioni = {}
+    @iscrizioni.each do |iscrizione|
+      competizione = Competizione.find(iscrizione.competizione_id)
+      @posizioni[competizione.id] = competizione.posizione_utente(@user.id)
+    end
   end
 
   def daily_bookings_user

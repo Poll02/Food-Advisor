@@ -1,3 +1,5 @@
+<%= javascript_include_tag 'competizione', 'data-turbolinks-track': 'reload' %>
+
 <div class="classifica-page">
   <% if flash[:notice] %>
     <div class="alert alert-success" role="alert">
@@ -20,9 +22,11 @@
             <% else %>
               <%= image_tag "background.jpg" %>
             <% end %>
-            <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
+            <div class="text-overlay-competizioni" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
               <p><%= competizione.nome %></p>
               <p style="font-size: 13px; font-weight: normal;"><%= competizione.descrizione %></p>
+              <p style="font-size: 13px; font-weight: normal;">Data Inizio: <span id="right-side-start-data" style="font-weight: normal;"><%= competizione.data_inizio.strftime('%d/%m/%Y') %></span></p>
+              <p style="font-size: 13px; font-weight: normal;">Data Fine: <span id="right-side-end-date" style="font-weight: normal;"><%= competizione.data_fine.strftime('%d/%m/%Y') %></span></p>
               <p style="font-size: 13px; font-weight: normal;">Requisiti: <%= competizione.requisiti %> <span>Premi: <%= competizione.premio %></span></p>
               <div class="bottoni-comp" style="display: flex; flex-directions: row; " >
                 <button type="button" data-competizione-id="<%= competizione.id %>" class="iscriviti-button">Iscriviti</button>
@@ -43,7 +47,7 @@
           </div>
           <div class="form-group">
             <%= cf.label :descrizione, 'Descrizione:' %>
-            <%= cf.text_area :descrizione, class: 'form-control', required: true, readonly: true, value: "2 punti: lasciare una recensione\n5 punti: effettuare una prenotazione\n3 punti: ricevi un like alla recensione\n-5 punti: il tuo profilo viene segnalato\n-2 punti: la tua recensione viene segnalata" %>
+            <%= cf.text_area :descrizione, class: 'form-control', required: true, readonly: true, value: "2 punti: lasciare una recensione\n5 punti: effettuare una prenotazione valida\n3 punti: ricevi un like alla recensione da un critico\n2 punti: ricevi un like alla recensione" %>
           </div>
           <div class="form-group">
             <%= cf.label :locandina, 'Locandina:' %>
@@ -88,9 +92,11 @@
             <% else %>
               <%= image_tag "background.jpg" %>
             <% end %>
-            <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
+            <div class="text-overlay-competizioni" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
               <p><%= competizione.nome %></p>
               <p style="font-size: 13px; font-weight: normal;"><%= competizione.descrizione %></p>
+              <p style="font-size: 13px; font-weight: normal;">Data Inizio: <span id="right-side-start-data" style="font-weight: normal;"><%= competizione.data_inizio.strftime('%d/%m/%Y') %></span></p>
+              <p style="font-size: 13px; font-weight: normal;">Data Fine: <span id="right-side-end-date" style="font-weight: normal;"><%= competizione.data_fine.strftime('%d/%m/%Y') %></span></p>
               <p style="font-size: 13px; font-weight: normal;">Requisiti: <%= competizione.requisiti %> <span>Premi: <%= competizione.premio %></span></p>
               <div class="bottoni-comp" style="display: flex; flex-directions: row; ">
                 <% if competizione.user_competitions.any? %>
@@ -119,7 +125,7 @@
       <div class="left-side">
         <h1>Risultati</h1>
         <% @competizioni.each do |competizione| %>
-          <div class="left-side-comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>"  data-date="<%= competizione.data_inizio %>" data-endate="<%= competizione.data_fine %>" data-id="<% competizione.id %>">
+          <div class="left-side-comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>"  data-date="<%= competizione.data_inizio.strftime('%d/%m/%Y') %>" data-endate="<%= competizione.data_fine.strftime('%d/%m/%Y') %>" data-id="<% competizione.id %>">
             <% if competizione.locandina.present? %>
               <%= image_tag competizione.locandina %>
             <% else %>
@@ -147,8 +153,8 @@
           <p style="font-weight: bold;">Descrizione: <span id="right-side-descrizione" style="font-weight: normal;"><%= @competizioni.first.descrizione %></span></p>
           <p style="font-weight: bold;">Requisiti: <span id="right-side-requisiti" style="font-weight: normal;"><%= @competizioni.first.requisiti %></span></p>
           <p style="font-weight: bold;">Premi: <span id="right-side-premio" style="font-weight: normal;"><%= @competizioni.first.premio %></span></p>
-          <p style="font-weight: bold;">Data Inizio: <span id="right-side-start-data" style="font-weight: normal;"><%= @competizioni.first.data_inizio %></span></p>
-          <p style="font-weight: bold;">Data Fine: <span id="right-side-end-date" style="font-weight: normal;"><%= @competizioni.first.data_fine %></span></p>
+          <p style="font-weight: bold;">Data Inizio: <span id="right-side-start-data" style="font-weight: normal;"><%= @competizioni.first.data_inizio.strftime('%d/%m/%Y') %></span></p>
+          <p style="font-weight: bold;">Data Fine: <span id="right-side-end-date" style="font-weight: normal;"><%= @competizioni.first.data_fine.strftime('%d/%m/%Y') %></span></p>
 
 
           <button type="button" class="iscriviti-button" id="right-side-button" data-competizione-id="<%= @competizioni.first.id %>">Iscriviti</button>
@@ -156,79 +162,3 @@
       </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Trova tutti gli elementi left-side-comp-box
-      var compBoxes = document.querySelectorAll('.left-side-comp-box');
-
-      // Aggiungi un event listener per il clic a ciascun box
-      compBoxes.forEach(function(box) {
-        box.addEventListener('click', function() {
-          // Recupera i dati dal box cliccato
-          var id = box.getAttribute('data-id');
-          var nome = box.getAttribute('data-nome');
-          var descrizione = box.getAttribute('data-descrizione');
-          var requisiti = box.getAttribute('data-requisiti');
-          var premio = box.getAttribute('data-premio');
-          var locandina = box.getAttribute('data-locandina');
-          var dataI = box.getAttribute('data-date')
-          var dataF = box.getAttribute('data-endate')
-
-          // Aggiorna i contenuti del riquadro destro
-          var rightSide = document.getElementById('right-side');
-          rightSide.style.display = 'flex';
-          document.getElementById('right-side-id').innerText = id;
-          document.getElementById('right-side-button').setAttribute('data-competizione-id', id);
-          document.getElementById('right-side-nome').innerText = nome;
-          document.getElementById('right-side-descrizione').innerText = descrizione;
-          document.getElementById('right-side-requisiti').innerText = requisiti;
-          document.getElementById('right-side-premio').innerText = premio;
-          document.getElementById('right-side-image').src = '/assets/' + locandina; // Assumendo che le immagini siano nella cartella assets
-          document.getElementById('right-side-start-data').innerText = dataI;
-          document.getElementById('right-side-end-date').innerText = dataF;
-        });
-      });
-
-      // Funzione per la ricerca delle competizioni
-      var findbar = document.getElementById('findbar');
-      findbar.addEventListener('input', function() {
-        var searchText = findbar.value.toLowerCase();
-        compBoxes.forEach(function(box) {
-          var nome = box.getAttribute('data-nome').toLowerCase();
-          if (nome.includes(searchText)) {
-            box.style.display = 'flex';
-          } else {
-            box.style.display = 'none';
-          }
-        });
-      });
-    });
-
-    // JS per le competizioni
-    document.addEventListener("DOMContentLoaded", function() {
-      document.querySelectorAll('.iscriviti-button').forEach(function(button) {
-        button.addEventListener('click', function() {
-          var competitionId = this.getAttribute('data-competizione-id');
-
-          console.log("id competizione", competitionId)
-          fetch(`/competizione/${competitionId}/join`, {
-            method: 'POST',
-            headers: {
-              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-              'Content-Type': 'application/json'
-            },
-            credentials: 'same-origin'
-          })
-          .then(response => response.json())
-          .then(data => {
-            if (data.success) {
-              alert('Partecipazione avvenuta con successo!');
-            } else {
-              alert('Errore nella partecipazione: ' + data.error);
-            }
-          });
-        });
-      });
-    });
-</script>

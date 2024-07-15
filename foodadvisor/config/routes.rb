@@ -23,6 +23,18 @@ Rails.application.routes.draw do
   
     # Defines the root path route ("/")
     # root "posts#index"
+
+    # config/routes.rb
+  resources :favorites, only: [] do
+    delete :remove_rest_from_favorites, on: :collection
+  end
+
+  # config/routes.rb
+  resources :favorites, only: [] do
+    delete :remove_recipe_from_favorites, on: :collection
+  end
+
+
   
     get 'classifiche', to: 'classifiche#index'
     get 'supporto', to: 'supporto#index'
@@ -191,7 +203,7 @@ Rails.application.routes.draw do
     resource :segnalaziones, only: [:create]
     
     # Rotte aggiunte per creare e distruggere un dipendente
-    post 'info/create_dipendente', to: 'info#create_dipendente', as: 'create_dipendente_info'
+    post 'info/create_dipendente', to: 'info#create_dipendente', as: 'create_dipendente'
     delete 'info/destroy_dipendente/:id', to: 'info#destroy_dipendente', as: 'destroy_dipendente'
   
     post 'update_review', to: 'reviews#update'

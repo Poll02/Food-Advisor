@@ -11,6 +11,14 @@ class Competizione < ApplicationRecord
   has_many :user_competitions
   has_many :users, through: :user_competitions
 
+  def posizione_utente(user_id)
+    # Ordina le user_competitions per punti in ordine decrescente e crea un array di user_ids
+    posizioni = user_competitions.order(punti_competizione: :desc).pluck(:user_id)
+
+    # Trova la posizione dell'utente nell'array (0-based, quindi aggiungi 1)
+    posizioni.index(user_id) + 1
+  end
+
   private
 
   def date_range

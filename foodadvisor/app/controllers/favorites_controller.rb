@@ -47,6 +47,42 @@ class FavoritesController < ApplicationController
         end
       end
     end
+
+    def remove_rest_from_favorites
+      ristoratore_id = params[:ristoratore_id]
+      if session[:role] == 'User'
+        user_id = current_user.cliente.user.id
+      else
+        render json: { success: false, error: 'Devi essere loggato come utente per rimuovere dai preferiti.' }, status: :unauthorized
+        return
+      end
+  
+      favorite = FavRistoranti.find_by(user_id: user_id, ristoratore_id: ristoratore_id)
+      if favorite
+        favorite.destroy
+        render json: { success: true }
+      else
+        render json: { success: false, error: 'Ristorante non trovato nei preferiti' }, status: :unprocessable_entity
+      end
+    end
+
+    def remove_recipe_from_favorites
+      recipe_id = params[:recipe_id]
+      if session[:role] == 'User'
+        user_id = current_user.cliente.user.id
+      else
+        render json: { success: false, error: 'Devi essere loggato come utente per rimuovere dai preferiti.' }, status: :unauthorized
+        return
+      end
+  
+      favorite = FavRecipe.find_by(user_id: user_id, recipe_id: recipe_id)
+      if favorite
+        favorite.destroy
+        render json: { success: true }
+      else
+        render json: { success: false, error: 'Ricetta non trovata nei preferiti' }, status: :unprocessable_entity
+      end
+    end
   
     private
   

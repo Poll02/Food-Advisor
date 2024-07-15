@@ -1,3 +1,21 @@
+.tag-button {
+    margin: 5px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .tag-button.selected {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .tag-button:hover {
+    background-color: #e0e0e0;
+  }
+  
 .ricerca-container{
     margin-top: 130px;
     display: flex;

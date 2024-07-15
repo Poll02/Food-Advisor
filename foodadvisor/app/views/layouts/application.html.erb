@@ -14,6 +14,9 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+New&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap">
   <%= stylesheet_link_tag "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" %>
+
+  <!-- js -->
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   
   <style>
     body {
@@ -25,65 +28,7 @@
 </head>
 <body>
   <div id="fb-root"></div>
-    <script async defer crossorigin="anonymous" src="https://connect.facebook.net/it_IT/sdk.js#xfbml=1&version=v20.0&appId=1343655893221774" nonce="XJcBlu3y"></script>
-    <script>
-      window.fbAsyncInit = function() {
-        FB.init({
-          appId      : '1343655893221774', // Sostituisci con l'ID della tua app
-          cookie     : true,
-          xfbml      : true,
-          version    : 'v20.0'
-        });
-
-        FB.AppEvents.logPageView();   
-
-      };
-
-      (function(d, s, id){
-         var js, fjs = d.getElementsByTagName(s)[0];
-         if (d.getElementById(id)) {return;}
-         js = d.createElement(s); js.id = id;
-         js.src = "https://connect.facebook.net/en_US/sdk.js";
-         fjs.parentNode.insertBefore(js, fjs);
-       }(document, 'script', 'facebook-jssdk'));
-
-       function checkLoginState() {
-    FB.getLoginStatus(function(response) {
-      statusChangeCallback(response);
-    });
-  }
-
-  function statusChangeCallback(response) {
-  if (response.status === 'connected') {
-    var accessToken = response.authResponse.accessToken;
-    
-    // Effettua la richiesta POST al backend Rails
-    fetch('/auth/facebook/callback', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-      },
-      body: JSON.stringify({ access_token: accessToken })
-    })
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Errore nella risposta del server');
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log('Successo:', data);
-      // Effettua il reindirizzamento dopo il successo della richiesta
-      window.location.href = '/user_profile/show';
-    })
-    .catch(error => {
-      console.error('Errore:', error);
-    });
-  }
-}
-
-    </script>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/it_IT/sdk.js#xfbml=1&version=v20.0&appId=2290231564653667" nonce="XJcBlu3y"></script>
   
   <%= render 'layouts/navbar' %> <!-- Barra di navigazione -->
 

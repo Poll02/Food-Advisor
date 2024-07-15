@@ -11,9 +11,7 @@
         <div class="public-u-info">
             <p style="font-weight: bold;">Nome: <span style="font-weight: normal;"><%= @user.nome %></span></p>
             <p style="font-weight: bold;">Cognome: <span style="font-weight: normal;"><%= @user.cognome %></span></p>
-            <p style="font-weight: bold;">Iscrizione: <span style="font-weight: normal;"><%= @user.created_at %></span></p>
-            <p style="font-weight: bold;">Follower: <span style="font-weight: normal;">Follower</span></p>
-            <p style="font-weight: bold;">Seguiti: <span style="font-weight: normal;">Seguiti</span></p>
+            <p style="font-weight: bold;">Iscrizione: <span style="font-weight: normal;"><%= @user.created_at.strftime('%d/%m/%Y') %></span></p>
         </div>
     </div>
     <div class="public-u-follow-btn">
@@ -23,30 +21,35 @@
     <hr class="solid" id="divider" style="width: 80%;">
     <h1>Ultime Recensioni</h1>
 
-    <div class="public-u-recents-reviews" style="max-height: 600px; overflow-y: scroll;">
+    <div class="r-pub-recensioni" style="max-height: 600px; overflow-y: scroll;">
         <% if @reviews.any? %>
             <% @reviews.each do |review| %>
-            <div class="r-recensioni" style="display:flex; justify-content: space-between; ">
-                <div class="public-r-reviews" style="margin-bottom: 20px; display: flex; flex-direction: row; ">
-                    <% if review.ristoratore.cliente.foto.present? %>
-                        <%= image_tag review.ristoratore.cliente.foto %> <!-- Supponendo che il ristorante abbia un'immagine associata -->
-                    <% else %>
-                        <%= image_tag 'background.jpg' %>
-                    <% end %>
-                    <div class="public-review-details">
-                        <h3><%= review.ristoratore.nomeristorante %></h3>
-                        <p><%= pluralize(review.stelle, 'stella') %></p>
-                        <p><%= truncate(review.commento, length: 200) %></p> <!-- Tronca il testo della recensione a 200 caratteri -->
-                        <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
+                <div class="public-r-reviews" style="margin-bottom: 20px; display: flex; flex-direction: row; justify-content: space-between; ">
+                    <div class="public-foto-details">
+                        <% if review.ristoratore.cliente.foto.present? %>
+                            <%= image_tag review.ristoratore.cliente.foto %> <!-- Supponendo che il ristorante abbia un'immagine associata -->
+                        <% else %>
+                            <%= image_tag 'background.jpg' %>
+                        <% end %>
+                        <div class="public-review-details">
+                            <p>
+                                <%= review.ristoratore.nomeristorante %><br>
+                                <% review.stelle.times do %>
+                                    <ion-icon name="star" style="font-size: 15px;"></ion-icon>
+                                <% end %> <br>
+                                <%= truncate(review.commento, length: 200) %><br> <!-- Tronca il testo della recensione a 200 caratteri -->
+                                <span style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="public-r-rev-icon">
+                        <i class="fa-regular fa-thumbs-up"></i>
+                        <i class="fa fa-exclamation-circle"></i>
                     </div>
                 </div>
-                <div class="public-r-rev-icon">
-                    <p>icone</p>
-                </div>
-            </div>
             <% end %>
         <% else %>
-            <p>L'utente non ha lasciato alcuna recensione.</p>
+            <p Style="color: gray; ">L'utente non ha lasciato alcuna recensione.</p>
         <% end %>
     </div>
 
@@ -59,17 +62,21 @@
             <% @iscrizioni.each do |iscrizione| %>
             <% competizione = Competizione.find(iscrizione.competizione_id) %>
         <div class="public-u-competition-box">
+        <% if competizione.locandina.present? %>
             <%= image_tag competizione.locandina %>
+            <% else  %>
+            <%= image_tag "background.jpg"  %>
+            <% end  %>
             <div class="public-u-competition-box-info">
                 <p style="font-weight: bold;">Nome Competizione: <span style="font-weight: normal;"> <%= competizione.nome %></span></p>
-                <p style="font-weight: bold;">Punti: <span style="font-weight: normal;"><%= iscrizione.punti %></span></p>
-                <p style="font-weight: bold;">Posizione in Classifica: <span style="font-weight: normal;">Posizione</span></p>
+                <p style="font-weight: bold;">Punti: <span style="font-weight: normal;"><%= iscrizione.punti_competizione %></span></p>
+                <p style="font-weight: bold;">Posizione in Classifica: <span style="font-weight: normal;"><%= @posizioni[competizione.id] %></span></p>
             </div>
 
         </div>
         <% end %>
           <% else %>
-            <p>Nessuna competizione trovata</p>
+            <p Style="color: gray; ">Nessuna competizione trovata</p>
           <% end %>
     </div>
 

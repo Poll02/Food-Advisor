@@ -4,6 +4,9 @@ class Recensione < ApplicationRecord
   belongs_to :ristoratore
 
   has_many :segnalazione, dependent: :destroy
+  has_many :assign_stars
+  has_many :clienti, through: :assign_stars
+  
   # Altre associazioni e validazioni
   validates :cliente_id, presence: true
   validates :ristoratore_id, presence: true
@@ -12,6 +15,6 @@ class Recensione < ApplicationRecord
 
   delegate :user, to: :cliente, prefix: true
 
-  scope :top_rated, -> { order(like: :desc).limit(5) }
+  scope :top_rated, -> { order(like: :desc).limit(4) }
 end
   
