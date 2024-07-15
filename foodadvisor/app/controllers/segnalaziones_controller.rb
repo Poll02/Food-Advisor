@@ -1,5 +1,24 @@
 class SegnalazionesController < ApplicationController
   before_action :set_recensione
+
+  def index
+    @segnalazioni = Segnalazione.where(cliente_segnalato_id: params[:cliente_id])
+    render json: @segnalazioni
+  end
+
+  def destroy
+    segnalazioni_da_elim =Segnalazione.where(cliente_segnalato_id:  params[:data_id])
+
+    # Verifica se ci sono segnalazioni da eliminare
+    if segnalazioni_da_elim.present?
+      # Elimina le segnalazioni
+      segnalazioni_da_elim.destroy_all
+      flash[:notice] = "Segnalazioni eliminate con successo!"
+    else
+      flash[:alert] = "Nessuna segnalazione selezionata per l'eliminazione."
+    end
+    redirect_to admin_profile_path(@current_user)
+  end
     
   def create
     @segnalazione = Segnalazione.new(

@@ -90,6 +90,7 @@ Rails.application.routes.draw do
     get 'critic_profile', to: 'critic_profile#show'
     get 'rest_profile', to: 'restaurateur_profiles#show'
     get 'admin_profile', to: 'admin_profile#show'
+    delete 'admin_profile_user_delete', to: 'admin_profile#destroy'
     get 'user_profile', to: 'user_profile#show'
   
     #rotta per il menu
@@ -189,6 +190,9 @@ Rails.application.routes.draw do
     resources :info, only: [:show] 
   
     resource :segnalaziones, only: [:create]
+    get 'segnalazione_index', to: 'segnalaziones#index'
+    delete 'segnalzaione_delete', to: 'segnalaziones#destroy'
+
     
     # Rotte aggiunte per creare e distruggere un dipendente
     post 'info/create_dipendente', to: 'info#create_dipendente', as: 'create_dipendente_info'
