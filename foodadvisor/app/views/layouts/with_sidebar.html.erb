@@ -14,7 +14,9 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Courier+New&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap"> 
 
-
+  <!-- js -->
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  
   <style>
     body {
       font-family: <%= @user_settings[:font] %>;
@@ -69,7 +71,6 @@
       document.body.classList.remove('night-mode');
     }
   });
-  
   </script>
 </body>
 </html>

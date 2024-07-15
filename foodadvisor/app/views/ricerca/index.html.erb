@@ -1,4 +1,3 @@
-<%= stylesheet_link_tag 'ricerca', media: 'all' %>
 <div class="ricerca-container">
     <h1 style="font-size: 50px;">Cerca ristoranti</h1>
     <div class="search-container">
@@ -67,7 +66,7 @@
       <h4>Applica dei filtri alla tua ricerca</h4>
       
       <p>Tag:</p>
-      <div id="tag-buttons">
+      <div id="tag-buttons" style="max-height: 200px; overflow-y: scroll; ">
         <% @tags.each do |tag| %>
           <button type="button" class="tag-button <%= 'selected' if params[:tags]&.include?(tag.id.to_s) %>" data-tag-id="<%= tag.id %>"><%= tag.nome %></button>
         <% end %>

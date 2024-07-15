@@ -1,3 +1,5 @@
+<%= javascript_include_tag 'admin_profile', 'data-turbolinks-track': 'reload' %>
+
 <!-- Mostra il messaggio di successo o errore -->
 <% if flash[:notice] %>
   <div class="alert alert-success" role="alert">
@@ -108,7 +110,7 @@
         <p class="info">Da: <%= segnalazione.cliente_id %>  A: <%= segnalazione.recensione.cliente_id %>  <p>
         <p class="info">Motivo:  </p> <%= segnalazione.motivo %>
       </div>
-      <div class="public-r-reviews">
+      <div class="public-r-reviews" style="margin-right: 50px; width: 250%;">
         <!-- link al profilo dello user del segnalato come bottone -->
           <div class="public-foto-details">
             <% if segnalazione.recensione.cliente.foto.present? %>
@@ -207,26 +209,4 @@
   <% end %>
 </div>
 
-</div> <!-- cosa chiude ? -->
-
-<style>
-.public-r-reviews {
-  margin-right: 50px;
-  width: 250%;
-}
-
-</style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const updateForms = document.querySelectorAll('.update-status-form');
-    updateForms.forEach(form => {
-      form.addEventListener('submit', function(event) {
-        const confirmMessage = this.getAttribute('data-confirm');
-        if (!confirm(confirmMessage)) {
-          event.preventDefault();
-        }
-      });
-    });
-  });
-</script>
+</div> 
