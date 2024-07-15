@@ -1,6 +1,8 @@
 class Ristoratore < ApplicationRecord
   belongs_to :cliente
 
+  attr_accessor :remember_token
+
   validates :piva, presence: true, uniqueness: true
   validates :asporto, inclusion: { in: [true, false] }
   validates :nomeristorante, presence: true
@@ -41,6 +43,20 @@ class Ristoratore < ApplicationRecord
     
   after_create :create_associated_menu
 
+  def remember
+    self.remember_token = SecureRandom.urlsafe_base64
+    update_attribute(:remember_digest, BCrypt::Password.create(remember_token))
+  end
+
+  def authenticated?(remember_token)
+    return false if remember_digest.nil?
+    BCrypt::Password.new(remember_digest).is_password?(remember_token)
+  end
+
+  def forget
+    update_attribute(:remember_digest, nil)
+  end
+  
   private
 
   def create_associated_menu

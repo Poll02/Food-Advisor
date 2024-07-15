@@ -11,7 +11,12 @@
         <div class="public-u-info">
             <p style="font-weight: bold;">Nome: <span style="font-weight: normal;"><%= @critico.user.nome %></span></p>
             <p style="font-weight: bold;">Cognome: <span style="font-weight: normal;"><%= @critico.user.cognome %></span></p>
-            <p style="font-weight: bold;">Iscrizione: <span style="font-weight: normal;"><%= @critico.created_at %></span></p>
+            <p style="font-weight: bold;">Iscrizione: <span style="font-weight: normal;"><%= @critico.created_at.strftime('%d/%m/%Y') %></span></p>
+            <% if @critico.certificato? %>
+                <%= link_to image_path(@critico.certificato), target: '_blank' do %>
+                    'Certificato'
+                <% end %>
+            <% end %>
         </div>
     </div>
     <div class="public-u-follow-btn">
@@ -52,7 +57,7 @@
                 </div>
             <% end %>
         <% else %>
-            <p>L'utente non ha lasciato alcuna recensione.</p>
+            <p style="color: gray; ">L'utente non ha lasciato alcuna recensione.</p>
         <% end %>
         </div>
     </div>
@@ -80,7 +85,7 @@
         </div>
         <% end %>
           <% else %>
-            <p>Nessuna competizione trovata</p>
+            <p style="color: gray; ">Nessuna competizione trovata</p>
           <% end %>
     </div>
 

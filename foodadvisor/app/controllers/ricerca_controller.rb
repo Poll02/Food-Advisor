@@ -14,7 +14,7 @@ class RicercaController < ApplicationController
                       .joins(:recensiones)
                       .group('ristoratores.id')
       if max_reviews
-        @ristoratori = @ristoratori.having('COUNT(recensiones.id) BETWEEN ? AND ?', min_reviews, max_reviews)
+        @ristoratori = @ristoratori.having('COUNT(recensiones.id) >= ? AND COUNT(recensiones.id) <= ?', min_reviews, max_reviews)
       else
         @ristoratori = @ristoratori.having('COUNT(recensiones.id) >= ?', min_reviews)
       end    
@@ -34,7 +34,15 @@ class RicercaController < ApplicationController
                       .distinct
     end
 
-    @ristoratori = @ristoratori.limit(10) unless params[:query].present? || params[:min_reviews].present? || params[:max_reviews].present?
+    # Applicare il filtro delle stelle come ultimo passo, dopo aver applicato i filtri SQL
+    if params[:star_rating].present?
+      @ristoratori = @ristoratori.select { |r| r.media_stelle >= params[:star_rating].to_f }
+    end
+
+    @ristoratori = @ristoratori.first(10) unless params[:query].present? || params[:min_reviews].present? || params[:max_reviews].present?
+
+    Rails.logger.info("filtro stelle applicato #{@ristoratori}")
+
   end
 
   def map_info

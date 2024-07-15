@@ -87,7 +87,17 @@
   width: 1200px;
 }
 
-.r-pub-recensioni {
+.thumb-button{
+  border: none;
+  background: none;
+  size: 15px;
+  cursor: pointer;
+}
+
+.r-recensioni {
+  padding: 1%;
+  border: 1px solid #b8adad;
+  border-radius: 10px;
   display: flex;
   flex-direction: column;
   width: 1200px;

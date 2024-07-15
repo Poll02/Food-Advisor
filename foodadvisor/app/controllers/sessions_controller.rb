@@ -12,6 +12,9 @@ class SessionsController < ApplicationController
       utente = Utente.find_by(email: params[:session][:email].downcase)
 
       if utente && utente.authenticate(params[:session][:password]) 
+        if params[:session][:remember_me] == '1'
+          remember(utente)
+        end
         if utente.admin
           log_in(utente, 'Admin')  # Login come utente normale
           redirect_to root_path
@@ -31,10 +34,13 @@ class SessionsController < ApplicationController
   end
 
   def create_restaurateur
-    restauratore = Ristoratore.find_by(piva: params[:restaurateur][:piva])
-
-    if restauratore && restauratore.cliente && restauratore.cliente.utente.authenticate(params[:restaurateur][:password])
-      log_in(restauratore.cliente.utente, 'Ristoratore')  # Effettua il login con l'utente associato al ristoratore
+    ristoratore = Ristoratore.find_by(piva: params[:restaurateur][:piva])
+  
+    if ristoratore && ristoratore.cliente && ristoratore.cliente.utente.authenticate(params[:restaurateur][:password])
+      if params[:restaurateur][:remember_me] == '1'
+        remember(ristoratore.cliente.utente)
+      end
+      log_in(ristoratore.cliente.utente, 'Ristoratore')  # Effettua il login con l'utente associato al ristoratore
       redirect_to root_path
     else
       flash.now[:alert] = 'Combinazione P.IVA/password non valida per il ristoratore.'
@@ -116,9 +122,8 @@ class SessionsController < ApplicationController
   end
   
   
-  
   def destroy
-    log_out
+    log_out if logged_in?
     redirect_to root_url
   end
 
@@ -140,5 +145,22 @@ class SessionsController < ApplicationController
     password
   end
 
+  def remember(utente)
+    utente.remember
+    cookies.permanent.signed[:user_id] = utente.id
+    cookies.permanent[:remember_token] = utente.remember_token
+  end
+
+  def log_out
+    forget(current_user)
+    session.delete(:user_id)
+    @current_user = nil
+  end
+
+  def forget(utente)
+    utente.forget
+    cookies.delete(:user_id)
+    cookies.delete(:remember_token)
+  end
 
 end
