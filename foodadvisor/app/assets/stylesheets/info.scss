@@ -12,7 +12,7 @@
 /* Stile delle sezioni */
 .i-section {
     margin-bottom: 20px;
-    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
     border-radius: 10px;
     padding: 10px;
     display: flex;
@@ -60,6 +60,8 @@
     padding: 10px;
     display: flex;
     flex-direction: row;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    border-radius: 10px;
 }
 .dipendente {
     margin: 1%;
@@ -79,7 +81,7 @@
 /* per le statistiche */
 .statistiche {
     padding: 20px;
-    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
     margin-bottom: 20px;
     background-color: #f9f9f9;
     text-align: center;

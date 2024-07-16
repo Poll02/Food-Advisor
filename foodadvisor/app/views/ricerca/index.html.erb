@@ -1,17 +1,15 @@
-<%= stylesheet_link_tag 'ricerca', media: 'all' %>
 <div class="ricerca-container">
     <h1 style="font-size: 50px;">Cerca ristoranti</h1>
     <div class="search-container">
     <form id="find-form" action="<%= ricerca_path %>" method="get">
         <div class="find-input" style="display: flex; align-items: center;">
         <button type="submit" style="background: none; border: none; margin-bottom: 80px; cursor: pointer; padding: 0;">
-            <ion-icon name="search-outline" style="color: black;"></ion-icon>
+            <ion-icon id="cerca" name="search-outline" style="color: black;"></ion-icon>
         </button>
         <input type="text" id="findbar" name="query" placeholder="Inserisci qui il nome del ristorante" value="<%= params[:query] %>">
         </div>
         <button type="submit" style="display: none;"></button>
         <ion-icon id="filter-icon" name="filter-circle-outline" style="margin-bottom: 30px; margin-left: 30px; cursor: pointer;"></ion-icon>
-        <ion-icon name="pin-outline" style="margin-bottom: 30px; margin-left: 30px;"></ion-icon>
     </form>
 </div>
     <div class="results-and-details-container">
@@ -68,14 +66,14 @@
       <h4>Applica dei filtri alla tua ricerca</h4>
       
       <p>Tag:</p>
-      <div id="tag-buttons">
+      <div id="tag-buttons" style="max-height: 150px; overflow-y: scroll; ">
         <% @tags.each do |tag| %>
           <button type="button" class="tag-button <%= 'selected' if params[:tags]&.include?(tag.id.to_s) %>" data-tag-id="<%= tag.id %>"><%= tag.nome %></button>
         <% end %>
       </div>
 
       <p>Stelle:</p>
-      <div class="stars">
+      <div class="stars" id="stars">
         <% (1..5).each do |i| %>
           <span class="star <%= 'selected' if params[:star_rating].to_i >= i %>" data-value="<%= i %>">&#9733;</span>
         <% end %>
@@ -86,8 +84,10 @@
       <input type="number" id="max-reviews" name="max_reviews" min="0" value="<%= params[:max_reviews] %>">
       <p>Servizio di asporto:</p>
       <input type="checkbox" id="asporto" name="asporto" <%= 'checked' if params[:asporto] == '1' %>>
+
       <input type="hidden" id="star-rating" name="star_rating" value="<%= params[:star_rating] %>">
       <input type="hidden" id="selected-tags" name="tags[]" value="<%= params[:tags]&.join(',') %>">
+
       <button type="button" id="apply-filters">Applica filtri</button>
       <button type="button" id="reset-filters">Azzera i filtri</button>
     </form>

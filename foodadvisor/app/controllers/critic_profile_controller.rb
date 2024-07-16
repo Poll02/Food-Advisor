@@ -7,6 +7,14 @@ class CriticProfileController < ApplicationController
 
   def public_show
     @critico = Critico.find(params[:id])
+    @iscrizioni = UserCompetition.where(user_id: @critico.user.id)
+    @reviews = Recensione.where(cliente_id: @critico.user.cliente.id).order(created_at: :desc).order(pinnata: :desc)
+
+    @posizioni = {}
+    @iscrizioni.each do |iscrizione|
+      competizione = Competizione.find(iscrizione.competizione_id)
+      @posizioni[competizione.id] = competizione.posizione_utente(@critico.user.id)
+    end
   end
 
   def show

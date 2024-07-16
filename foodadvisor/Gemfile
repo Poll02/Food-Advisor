@@ -6,7 +6,7 @@ ruby '2.7.2'
 #Gemma API facebook
 gem 'omniauth'
 gem 'omniauth-facebook'
-gem 'dotenv-rails'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.7', '>= 6.1.7.8'
 # Use sqlite3 as the database for Active Record
@@ -26,8 +26,12 @@ gem 'jquery-rails'
 # Use Active Model has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+
 # fb
 gem 'koala'
+
+# per generare casualmente il seed
+gem 'faker'
 
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
@@ -49,15 +53,24 @@ group :development do
   gem 'listen', '~> 3.3'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  # per la console
   gem 'hirb'
+  # guard per i test
+  gem 'guard'
+  gem 'guard-rspec', require: false
 end
 
 group :test do
+  gem 'rspec-rails', '~> 5.0.0'
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 3.26'
   gem 'selenium-webdriver', '>= 4.0.0.rc1'
   # Easy installation and use of web drivers to run system tests with browsers
   gem 'webdrivers'
+  #
+  gem 'rails-controller-testing'
+  # screen
+  gem 'launchy' 
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

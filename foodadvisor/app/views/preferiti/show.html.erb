@@ -23,7 +23,7 @@
 
         <% end %>
         <% else %>
-        <p>Nessuna ricetta tra i preferiti<p>
+        <p style="color: gray; ">Non hai nessuna ricetta tra i preferiti<p>
         <% end %>
 
 
@@ -33,7 +33,7 @@
     </div>
     <hr id="divider" class="solid">
     <h1>Ristoranti Preferiti</h1>
-    <div class="restaurants-grid">
+    <div class="restaurants-grid" style="box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 10px; padding: 1%; ">
             <% if @ristoranti_preferiti.any? %>
             <% @ristoranti_preferiti.each do |ristoratore| %>
             <% @media = ristoratore.media_stelle%>
@@ -59,7 +59,7 @@
                 <% end %>
 
                 <% else %>
-                <p>Nessun ristorante tra i preferiti</p>
+                <p style="color: gray; ">Non hai nessun ristorante tra i preferiti</p>
             <% end %>          
         </div>
 

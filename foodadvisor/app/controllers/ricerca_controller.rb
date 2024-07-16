@@ -41,7 +41,8 @@ class RicercaController < ApplicationController
 
     @ristoratori = @ristoratori.first(10) unless params[:query].present? || params[:min_reviews].present? || params[:max_reviews].present?
 
-    Rails.logger.info("filtro stelle applicato #{@ristoratori}")
+    Rails.logger.info "Parametri di filtro: #{params.inspect}"
+    Rails.logger.info "Ristoratori trovati: #{@ristoratori.map(&:nomeristorante)}"
 
   end
 

@@ -1,188 +1,309 @@
-# Creazione degli Utenti con validazioni aggiornate
-utente1 = Utente.create(
-  email: 'utente1@example.com', 
-  password: 'Password1', 
-  password_confirmation: 'Password1',
-  telefono: '1234567890'
-)
+require 'faker'
 
-utente2 = Utente.create(
-  email: 'utente2@example.com', 
-  password: 'Password2', 
-  password_confirmation: 'Password2',
-  telefono: '0987654321'
-)
+Faker::Config.locale = 'it'
 
-utente3 = Utente.create(
-  email: 'utente3@example.com', 
-  password: 'Password3', 
-  password_confirmation: 'Password3',
-  telefono: '1112223333'
-)
+# Genera una password cifrata
+password_digest = 'Password123'
 
-utente4 = Utente.create(
-  email: 'utente4@example.com', 
-  password: 'Password4', 
-  password_confirmation: 'Password4',
-  telefono: '1112244444'
-)
+# Funzione per copiare le immagini di esempio nella cartella assets/images
+def copy_image_to_assets(source, destination)
+  source_path = File.join(Rails.root, 'app', 'assets', 'images', source)
+  destination_path = File.join(Rails.root, 'app', 'assets', 'images', destination)
+  FileUtils.cp(source_path, destination_path)
+end
 
-utente5 = Utente.create(
-  email: 'utente5@example.com', 
-  password: 'Password5', 
-  password_confirmation: 'Password5',
-  telefono: '1112245555'
-)
+def generate_random_piva
+  rand(0..987654321).to_s.rjust(11, '0')
+end
 
-# Creazione di Clienti
-cliente1 = Cliente.create(utente: utente1, foto: 'ristoratore.jpg')
-cliente2 = Cliente.create(utente: utente2, foto: 'ristoratore.jpg')
-cliente3 = Cliente.create(utente: utente4, foto: 'user.jpg')
-cliente4 = Cliente.create(utente: utente5, foto: 'user.jpg')
+# CREAZIONE DATI
+# Creiamo 20 utenti, dei quali 18 saranno clienti e 2 admin
+20.times do |i|
+  if i == 19
+    email = 'utente3@example.com'
+    password = 'Password3'
+  else
+    email = Faker::Internet.email
+    password = password_digest
+  end
 
-# Creazione di Admin
-admin1 = Admin.create(utente: utente3, nome: 'Admin', cognome: 'One')
+  telefono = Faker::PhoneNumber.cell_phone
+  facebook_id = Faker::Internet.uuid
+  name = Faker::Name.name
 
-# Creazione di Ristoratori
-ristoratore1 = Ristoratore.create(
-  cliente: cliente1, 
-  piva: '12345678901', 
-  asporto: true, 
-  nomeristorante: 'Ristorante Uno', 
-  indirizzo: 'Via Uno, 1'
-)
+  utente = Utente.create!(
+    email: email,
+    password: password,
+    password_confirmation: password,
+    telefono: telefono,
+    facebook_id: facebook_id,
+    name: name
+  )
 
-ristoratore2 = Ristoratore.create(
-  cliente: cliente2, 
-  piva: '09876543210', 
-  asporto: false, 
-  nomeristorante: 'Ristorante Due', 
-  indirizzo: 'Via Due, 2'
-)
+  if i < 19 # primi 19 sono clienti
+    Cliente.create!(
+      utente_id: utente.id,
+      foto: 'default-propic.jpg'
+    )
+  else # ultimo admin
+    Admin.create!(
+      utente_id: utente.id,
+      nome: Faker::Name.first_name,
+      cognome: Faker::Name.last_name
+    )
+  end
+end
 
-# Creazione di Users con validazione per username
-user1 = User.create(
-  cliente: cliente3, 
-  username: 'user1', # Assicurarsi che non superi la lunghezza massima
-  nome: 'Nome3', 
-  cognome: 'Cognome3', 
-  datanascita: '1990-01-01'
-)
+# Creiamo 8 ristoratori collegati ai primi 8 clienti
+ristoratori = Cliente.limit(8).map do |cliente|
+  ristoratore = Ristoratore.create!(
+    cliente_id: cliente.id,
+    piva: generate_random_piva,
+    asporto: [true, false].sample,
+    nomeristorante: Faker::Restaurant.name,
+    indirizzo: Faker::Address.full_address
+  )
 
-user2 = User.create(
-  cliente: cliente4, 
-  username: 'user2', # Assicurarsi che non superi la lunghezza massima
-  nome: 'Nome4', 
-  cognome: 'Cognome4', 
-  datanascita: '1990-04-01'
-)
+  # Creiamo un menu per ogni ristoratore
+  menu = Menu.create!(
+    ristoratore_id: ristoratore.id
+  )
 
-# Creazione di Critici
-critico1 = Critico.create(user: user1, certificato: 'Certificato1')
+  # Creiamo dipendenti per ogni ristoratore
+  5.times do
+    Dipendente.create!(
+      nome: Faker::Name.first_name,
+      cognome: Faker::Name.last_name,
+      foto: 'user.jpg',
+      ruolo: %w[fattorino cameriere cassiere sommelier cuoco lavapiatti direttore\ di\ sala aiuto-chef].sample,
+      assunzione: Faker::Date.between(from: '2015-01-01', to: Date.today),
+      ristoratore_id: ristoratore.id
+    )
+  end
 
+  # Creiamo eventi per ogni ristoratore
+  3.times do
+    Evento.create!(
+      nome: Faker::Lorem.word,
+      data: Faker::Date.between(from: Date.today, to: '2025-12-31'),
+      luogo: Faker::Address.full_address,
+      descrizione: Faker::Lorem.sentence,
+      locandina: 'evento.jpg',
+      ristoratore_id: ristoratore.id
+    )
+  end
 
-#creazione di tag
+  # Creiamo piatti per il menu del ristoratore
+  categories = ["Antipasto", "Primo", "Secondo", "Dolce", "Bevanda"]
+  categories.each do |category|
+    5.times do
+      Piatto.create!(
+        menu_id: menu.id,
+        nome: Faker::Food.dish,
+        prezzo: Faker::Commerce.price(range: 5.0..50.0),
+        foto: 'piatto.jpg',
+        ingredienti: Faker::Food.ingredient,
+        categoria: category
+      )
+    end
+  end
+
+  # Creiamo almeno 2 ricette per ristoratore
+  2.times do
+    Recipe.create!(
+      name: Faker::Food.dish,
+      difficulty: ["Facile", "Medio", "Difficile"].sample,
+      ingredients: Faker::Food.ingredient,
+      procedure: Faker::Food.description,
+      photo: 'piatto.jpg',
+      ristoratore_id: ristoratore.id
+    )
+  end
+
+  # Creiamo 3 competizioni per ogni ristoratore
+  3.times do
+    Competizione.create!(
+      nome: Faker::Lorem.word,
+      descrizione: Faker::Lorem.sentence,
+      locandina: 'evento.jpg',
+      requisiti: Faker::Lorem.sentence,
+      premio: Faker::Commerce.product_name,
+      quantitareq: Faker::Number.between(from: 1, to: 10),
+      data_inizio: Faker::Date.between(from: '2022-01-01', to: Date.today),
+      data_fine: Faker::Date.between(from: Date.today, to: '2025-12-31'),
+      ristoratore_id: ristoratore.id
+    )
+  end
+
+  ristoratore
+end
+
+# Creiamo 10 user collegati ai restanti 10 clienti
+Cliente.offset(8).limit(11).each do |cliente|
+  user = User.create!(
+    cliente_id: cliente.id,
+    username: Faker::Internet.username,
+    nome: Faker::Name.first_name,
+    cognome: Faker::Name.last_name,
+    datanascita: Faker::Date.birthday(min_age: 18, max_age: 65),
+    punti: Faker::Number.between(from: 0, to: 1000)
+  )
+
+  # Tra questi 10 user, 3 saranno critici
+  if Cliente.offset(8).limit(3).include?(cliente)
+    Critico.create!(
+      user_id: user.id,
+      certificato: Faker::Lorem.sentence
+    )
+  end
+end
+
+# Creazione dei tag
 Tag.create(nome: 'Italian', categoria: 'Cuisine')
 Tag.create(nome: 'Fast Food', categoria: 'Cuisine')
 Tag.create(nome: 'Vegetarian', categoria: 'Diet')
 Tag.create(nome: 'Gluten-Free', categoria: 'Diet')
 Tag.create(nome: 'Spicy', categoria: 'Flavor')
 Tag.create(nome: 'Sweet', categoria: 'Flavor')
+Tag.create(nome: 'Chinese', categoria: 'Cuisine')
+Tag.create(nome: 'Mexican', categoria: 'Cuisine')
+Tag.create(nome: 'Indian', categoria: 'Cuisine')
+Tag.create(nome: 'French', categoria: 'Cuisine')
+Tag.create(nome: 'Japanese', categoria: 'Cuisine')
+Tag.create(nome: 'Keto', categoria: 'Diet')
+Tag.create(nome: 'Low Carb', categoria: 'Diet')
+Tag.create(nome: 'High Protein', categoria: 'Diet')
+Tag.create(nome: 'Vegan', categoria: 'Diet')
+Tag.create(nome: 'Dairy-Free', categoria: 'Diet')
+Tag.create(nome: 'Savory', categoria: 'Flavor')
+Tag.create(nome: 'Sour', categoria: 'Flavor')
+Tag.create(nome: 'Bitter', categoria: 'Flavor')
+Tag.create(nome: 'Umami', categoria: 'Flavor')
+Tag.create(nome: 'Breakfast', categoria: 'Meal Type')
+Tag.create(nome: 'Lunch', categoria: 'Meal Type')
+Tag.create(nome: 'Dinner', categoria: 'Meal Type')
+Tag.create(nome: 'Snack', categoria: 'Meal Type')
+Tag.create(nome: 'Dessert', categoria: 'Meal Type')
+Tag.create(nome: 'Appetizer', categoria: 'Meal Type')
+Tag.create(nome: 'Healthy', categoria: 'Feature')
+Tag.create(nome: 'Quick & Easy', categoria: 'Feature')
+Tag.create(nome: 'Comfort Food', categoria: 'Feature')
+Tag.create(nome: 'Gourmet', categoria: 'Feature')
+Tag.create(nome: 'Kids', categoria: 'Feature')
 
-# creazione ricette
-# Ricetta 1
-Recipe.create!(
-  name: "Pasta al pomodoro",
-  difficulty: "Facile",
-  ingredients: "Pasta, pomodoro, olio d'oliva, aglio",
-  procedure: "Cuocere la pasta. In una padella, far rosolare l'aglio nell'olio, aggiungere il pomodoro e condire la pasta.",
-  photo: "pasta_pomodoro.jpg",
-  ristoratore_id: 1  # Sostituisci con l'ID reale del ristoratore
-)
-# Ricetta 2
-Recipe.create!(
-  name: "Tiramisù",
-  difficulty: "Media",
-  ingredients: "Savoiardi, mascarpone, uova, zucchero, caffè",
-  procedure: "Preparare il caffè e ammorbidire i savoiardi. Montare il mascarpone con le uova e lo zucchero, alternare gli strati di savoiardi inzuppati nel caffè e crema di mascarpone.",
-  photo: "tiramisu.jpg",
-  ristoratore_id: 2  # Sostituisci con l'ID reale del ristoratore
-)
-# Ricetta 3
-Recipe.create!(
-  name: "Pizza Margherita",
-  difficulty: "Media",
-  ingredients: "Farina, lievito, acqua, pomodoro, mozzarella, basilico",
-  procedure: "Preparare l'impasto e lasciar lievitare. Stendere l'impasto e condire con pomodoro, mozzarella e basilico. Cuocere in forno.",
-  photo: "pizza_margherita.jpg",
-  ristoratore_id: 1  # Sostituisci con l'ID reale del ristoratore
-)
 
-#creazione competizioni
-# Competizione 1
-Competizione.create!(
-  nome: "Concorso di cucina 2024",
-  descrizione: "Partecipa al nostro concorso di cucina e mostra le tue abilità culinarie!",
-  locandina: "competizione_cucina.jpg",
-  premio: "Buoni pasto e visibilità sul nostro sito web",
-  data_inizio: DateTime.new(2024, 8, 1, 12, 0, 0),
-  data_fine: DateTime.new(2024, 8, 15, 12, 0, 0),
-  ristoratore_id: 1  # Sostituisci con l'ID reale del ristoratore
-)
+# Associa i tag ai ristoratori tramite Choose
+Tag.all.each do |tag|
+  # Ogni tag sarà associato a 3 ristoratori casuali
+  ristoratori.sample(3).each do |ristoratore|
+    Choose.create!(
+      ristoratore_id: ristoratore.id,
+      tag_id: tag.id
+    )
+  end
+end
 
-# Competizione 2
-Competizione.create!(
-  nome: "Festival di cocktail estivi",
-  descrizione: "Un festival estivo dedicato ai cocktail più innovativi!",
-  locandina: "competizione_cocktails.jpg",
-  premio: "Voucher per barman professionisti",
-  data_inizio: DateTime.new(2024, 7, 20, 18, 0, 0),
-  data_fine: DateTime.new(2024, 7, 25, 22, 0, 0),
-  ristoratore_id: 2  # Sostituisci con l'ID reale del ristoratore
-)
+# Gli utenti salvano ristoratori e ricette preferiti
+users = User.all
+recipes = Recipe.all
 
-# Competizione 3
-Competizione.create!(
-  nome: "Challenge di pasticceria 2024",
-  descrizione: "Metti alla prova le tue abilità in pasticceria!",
-  locandina: "competizione_pasticceria.jpeg",
-  premio: "Corso di pasticceria avanzato",
-  data_inizio: DateTime.new(2024, 9, 1, 10, 0, 0),
-  data_fine: DateTime.new(2024, 9, 15, 10, 0, 0),
-  ristoratore_id: 2  # Sostituisci con l'ID reale del ristoratore
-)
-# Competizione 4
-competizione = Competizione.create!(
-  nome: "Competizione Estiva",
-  descrizione: "Una competizione culinaria estiva",
-  premio: "Cena gratuita per due",
-  data_inizio: DateTime.new(2024, 6, 10),
-  data_fine: DateTime.new(2024, 7, 9),
-  ristoratore_id: 2 # Assicurati di usare un ID di ristoratore valido
-)
+users.each do |user|
+  # Ogni user salva da 1 a 3 ristoratori preferiti
+  ristoratori.sample(rand(1..3)).each do |ristoratore|
+    FavRistoranti.create!(
+      user_id: user.id,
+      ristoratore_id: ristoratore.id
+    )
+  end
 
-# Creazione di una user_competition per l'utente con ID 5 e la competizione appena creata
-UserCompetition.create!(
-  user_id: 1,
-  competizione_id: 4,
-  punti_competizione: 10
-)
+  # Ogni user salva da 1 a 3 ricette preferite
+  recipes.sample(rand(1..3)).each do |recipe|
+    FavRecipe.create!(
+      user_id: user.id,
+      recipe_id: recipe.id
+    )
+  end
+end
 
-# evento
-Evento.create(nome:"cena",luogo:"casa di nora",data:DateTime.new(2024, 7, 20, 18, 0, 0),descrizione:"g",ristoratore_id:2)
+# Creiamo le istanze di UserCompetition
+users.each do |user|
+  # Gli user partecipano attualmente a massimo 2 competizioni
+  Competizione.where("data_fine > ?", Date.today).sample(2).each do |competizione|
+    UserCompetition.create!(
+      user_id: user.id,
+      competizione_id: competizione.id,
+      punti_competizione: Faker::Number.between(from: 0, to: 100)
+    )
+  end
 
-# Creazione di prenotazioni
-Prenotazione.create!(
-  user_id: 1,
-  ristoratore_id: 1,
-  numero_persone: 4,
-  data: Date.new(2024, 7, 5),
-  orario: Time.new(2024, 7, 5, 20, 0, 0)
-)
-Prenotazione.create!(
-  user_id: 1,
-  ristoratore_id: 2,
-  numero_persone: 2,  
-  data: Date.new(2024, 7, 3),  
-  orario: Time.new(2024, 7, 10, 19, 30)
-)
+  # Gli user hanno partecipato a competizioni passate
+  Competizione.where("data_fine <= ?", Date.today).sample(rand(1..3)).each do |competizione|
+    UserCompetition.create!(
+      user_id: user.id,
+      competizione_id: competizione.id,
+      punti_competizione: Faker::Number.between(from: 0, to: 100)
+    )
+  end
+end
+
+# Creiamo problemi segnalati dai clienti all'admin
+Cliente.all.each do |cliente|
+  rand(1..3).times do
+    Problem.create!(
+      cliente_id: cliente.id,
+      text: Faker::Lorem.sentence
+    )
+  end
+end
+
+Admin.all.each do |admin|
+  Cliente.all.each do |cliente|
+    cliente_random = Cliente.all.sample  # Selezione casuale di un cliente
+
+    Notification.create!(
+      cliente_id: cliente_random.id,
+      email: cliente_random.utente.email,
+      message: Faker::Lorem.sentence
+    )
+  end
+end
+
+# Creiamo prenotazioni
+User.all.each do |user|
+  ristoratori.sample(rand(1..3)).each do |ristoratore|
+    Prenotazione.create!(
+      user_id: user.id,
+      ristoratore_id: ristoratore.id,
+      data: Faker::Date.between(from: 5.days.ago, to: 5.days.from_now),
+      orario: Faker::Time.between(from: 5.days.ago, to: 5.days.from_now, format: :short),
+      numero_persone: Faker::Number.between(from: 1, to: 10)
+    )
+  end
+end
+
+# creazione recensioni
+User.all.each do |user|
+  cliente = user.cliente # Assume che ci sia un'associazione tra User e Cliente
+
+  next if cliente.nil? # Salta se l'user non è associato a un cliente
+
+  ristoratori.sample(rand(1..3)).each do |ristoratore|
+    Recensione.create!(
+      cliente_id: cliente.id,
+      ristoratore_id: ristoratore.id,
+      commento: Faker::Lorem.paragraph(sentence_count: 2, supplemental: false, random_sentences_to_add: 4),
+      stelle: Faker::Number.between(from: 1, to: 5),
+      created_at: Faker::Date.between(from: 5.days.ago, to: 5.days.from_now)
+    )
+  end
+end
+
+# Creiamo assign_stars per le recensioni
+Recensione.all.each do |recensione|
+  cliente_random = Cliente.all.sample  # Estrae un cliente casuale
+
+  AssignStar.create!(
+    recensione_id: recensione.id,
+    cliente_id: cliente_random.id  # Usa l'ID del cliente casuale estratto
+  )
+end

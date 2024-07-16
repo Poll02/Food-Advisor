@@ -1,3 +1,5 @@
+<%= javascript_include_tag 'admin_profile', 'data-turbolinks-track': 'reload' %>
+
 <!-- Mostra il messaggio di successo o errore -->
 <% if flash[:notice] %>
   <div class="alert alert-success" role="alert">
@@ -11,7 +13,7 @@
   </div>
 <% end %>
 
-<h3>Nuove registrazioni</h3>
+<h1>Nuove registrazioni</h1>
 <div class="nuoviUtenti">
     <table>
         <thead>
@@ -99,7 +101,7 @@
 </div>
 
 
-<h3>Segnalazioni</h3>
+<h1>Segnalazioni</h1>
 <div class="gestioneSegnalazioni">
 <% if @segnalazioni.any? %>
   <% @segnalazioni.each do |segnalazione| %>
@@ -108,30 +110,29 @@
         <p class="info">Da: <%= segnalazione.cliente_id %>  A: <%= segnalazione.recensione.cliente_id %>  <p>
         <p class="info">Motivo:  </p> <%= segnalazione.motivo %>
       </div>
-      <div class="public-r-reviews">
+      <div class="public-r-reviews" style="margin-right: 50px; width: 250%;">
+        <!-- link al profilo dello user del segnalato come bottone -->
+          <div class="public-foto-details">
             <% if segnalazione.recensione.cliente.foto.present? %>
               <%= image_tag segnalazione.recensione.cliente.foto, class: 'recensione-foto' %>
             <% else %>
               <%= image_tag 'background.jpg', class: 'recensione-foto' %>
             <% end %>
-          <div class="public-review-details">
-            <p style="font-weight: bold";><%= segnalazione.recensione.cliente.user.username %></p>
+            <div class="public-review-details">
             <p>
+              <%= segnalazione.recensione.cliente.user.username %><br>
               <% segnalazione.recensione.stelle.times do %>
                 <ion-icon name="star" style="font-size: 15px;"></ion-icon>
-              <% end %>
-            </p>            <p><%= segnalazione.recensione.commento %></p>
-            <p style="font-style: italic; font-size: 13px;">in data <%= segnalazione.recensione.created_at.strftime('%d/%m/%Y') %></p>
-          </div>
-          <div class="public-review-icon">
-            <i class="fa-regular fa-thumbs-up"></i>
-            <i class="fa-solid fa-share-nodes"></i>
-            
+              <% end %> <br>
+              <%= segnalazione.recensione.commento %> <br>
+              <span style="font-style: italic; font-size: 13px;">in data <%= segnalazione.recensione.created_at.strftime('%d/%m/%Y') %></span>
+            </p>
+            </div>
           </div>
         </div>
       <div class="segnalazioneAction">
         <%= form_with model: segnalazione.recensione ,url: review_path(segnalazione.recensione), method: :delete, local: true do %>
-          <button type="submit">Rimuovi recensione</button>
+          <button type="submit" style="width: 260px; ">Rimuovi recensione</button>
         <% end %>
         <button>Blocca profilo segnalato</button>
       </div>
@@ -151,7 +152,7 @@
     </div>
 <% end %>
 </div>
-<h3>Problemi</h3>
+<h1>Problemi</h1>
 <div class="gestioneProblemi">
   <table>
     <thead>
@@ -191,7 +192,7 @@
   </table>
 </div>
 
-<h3>Invia comunicazioni</h3>
+<h1>Invia comunicazioni</h1>
 <div class="inviaNotifiche">
   <%= form_with model: @notification, url: notifications_path, local: true do |form| %>
     <div class="form-group">
@@ -208,26 +209,4 @@
   <% end %>
 </div>
 
-</div> <!-- cosa chiude ? -->
-
-<style>
-.public-r-reviews {
-  margin-right: 50px;
-  width: 250%;
-}
-
-</style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const updateForms = document.querySelectorAll('.update-status-form');
-    updateForms.forEach(form => {
-      form.addEventListener('submit', function(event) {
-        const confirmMessage = this.getAttribute('data-confirm');
-        if (!confirm(confirmMessage)) {
-          event.preventDefault();
-        }
-      });
-    });
-  });
-</script>
+</div> 

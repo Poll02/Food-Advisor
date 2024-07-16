@@ -4,7 +4,7 @@
 }
 
 .ristorante {
-  border: 1px solid #b8adad;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   border-radius: 10px;
   padding: 1%;
   display: flex;
@@ -26,14 +26,13 @@
 
 .r-statistiche {
   padding: 1%;
-  border: 1px solid #b8adad;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   border-radius: 10px;
 }
 
 .r-promozioni {
-  max-width: 900px;
   padding: 1%;
-  border: 1px solid #b8adad;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   border-radius: 10px;
 }
 
@@ -71,13 +70,6 @@
   margin-top: 10px;
 }
 
-.r-tag {
-  padding: 5px 10px;
-  border-radius: 3px;
-  color: #28a745;
-  font-size: 14px;
-}
-
 .r-tag.pub {
   background-color: #ffc107; 
 }
@@ -86,14 +78,13 @@
   background-color: #28a745; 
 }
 
-.r-stories {
+.r-recensioni {
   padding: 1%;
-  border: 1px solid #b8adad;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   border-radius: 10px;
-}
-
-.night-mode .r-stories {
-  border-color: #555;
+  display: flex;
+  flex-direction: column;
+  width: 1200px;
 }
 
 .thumb-button{
@@ -109,6 +100,7 @@
   border-radius: 10px;
   display: flex;
   flex-direction: column;
+  width: 1200px;
 }
 
 .night-mode .r-recensioni {
@@ -147,7 +139,7 @@
 
 .r-ricette {
   padding: 1%;
-  border: 1px solid #b8adad;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   border-radius: 10px;
   display: flex;
   flex-direction: row;
@@ -186,7 +178,7 @@
 
 .r-eventi {
   padding: 1%;
-  border: 1px solid #b8adad;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
   border-radius: 10px;
   display: flex;
   flex-direction: row; /* Modifica per gestire l'allineamento verticale */
@@ -288,11 +280,28 @@
 
 }
 
+#add-event-btn{
+  font-size: 15px;
+  color: white;
+  background-color: #28a745;
+  border: none;
+  padding: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+
+}
+
 #add-promo-btn:hover{
   filter: brightness(120%);
 }
 
 #add-recipe-btn:hover{
+  filter: brightness(120%);
+}
+
+#add-event-btn:hover{
   filter: brightness(120%);
 }
 
@@ -450,6 +459,14 @@ td {
   background-color: #FFF3CD;
 }
 
+.category-meal-type {
+  background-color: #b66767;
+}
+
+.category-feature {
+  background-color: #E0E0E0;
+}
+
 /* Specifica gli stili per ogni categoria */
 tr.cuisine .piatto {
   background-color: #FFDDC1;
@@ -461,6 +478,14 @@ tr.diet .piatto {
 
 tr.flavor .piatto {
   background-color: #FFF3CD;
+}
+
+tr.meal-type .piatto {
+  background-color: #b66767;
+}
+
+tr.feature .piatto {
+  background-color: #E0E0E0;
 }
 
 .inline-form {
@@ -482,27 +507,41 @@ tr.flavor .piatto {
 
 .public-r-reviews{
   display: flex;
+  flex-direction: row;
   margin-bottom: 10px;
-  justify-content: space-between;
-  width: 1200px;
   border: 1px solid #ccc;
-  padding: 10px;
-  border-radius: 15px;
+  padding: 1%;
+  border-radius: 10px;
   transition: 0.3s;
+}
+
+.public-r-rev-icon {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2rem;
+  margin-top: 10px;
+  gap: 10px;
 }
 
 .public-r-reviews-grid{
   display: flex;
   flex-direction: column;
+  width: 1200px;
 }
 
 .public-r-reviews:hover{
   background-color: #ddd7d7;
 }
 
+.public-foto-details {
+  display: flex;
+  flex-direction: row;
+}
+
 .public-review-details{
   display: flex;
   flex-direction: row;
+  margin-left: 10px;
 }
 
 .public-review-text {
