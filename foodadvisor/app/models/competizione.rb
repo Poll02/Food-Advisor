@@ -8,7 +8,7 @@ class Competizione < ApplicationRecord
   validates :data_fine, presence: true
   #validate :date_range
 
-  has_many :user_competitions
+  has_many :user_competitions,  dependent: :destroy
   has_many :users, through: :user_competitions
 
   def posizione_utente(user_id)

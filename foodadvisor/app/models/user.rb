@@ -6,17 +6,17 @@ class User < ApplicationRecord
     validates :cognome, presence: true, length: { maximum: 20 }
     validate :datanascita_must_be_in_the_past
     
-    has_one :critico
-    has_many :user_competitions
+    has_one :critico, dependent: :destroy
+    has_many :user_competitions,  dependent: :destroy
     has_many :competiziones, through: :user_competitions
     has_many :prenotaziones, dependent: :destroy
-    has_many :premis
+    has_many :premis,  dependent: :destroy
 
     has_many :fav_ristoranti, dependent: :destroy
-    has_many :favorite_ristoranti, through: :fav_ristoranti, source: :ristoratore
+    has_many :favorite_ristoranti, through: :fav_ristoranti, source: :ristoratore,  dependent: :destroy
 
     has_many :fav_recipe, dependent: :destroy
-    has_many :favorite_recipes, through: :fav_recipe, source: :recipe
+    has_many :favorite_recipes, through: :fav_recipe, source: :recipe,  dependent: :destroy
 
     accepts_nested_attributes_for :critico
 

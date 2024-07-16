@@ -40,9 +40,10 @@
                             public_restaurant_profile_path(cliente.ristoratore)
                         elsif cliente.user.respond_to?(:critico) && cliente.user.critico.present?
                             public_critic_profile_path(cliente.user.critico)
-                        else
+                        elsif cliente.respond_to?(:user) && cliente.user.present?
                             public_user_profile_path(cliente.user)
                         end
+
                 %>
                 <tr data-url="<%= url %>" style="cursor: pointer;">
                     <td><%= cliente.id %></td>
@@ -96,7 +97,7 @@
                         <% end %>
                     </td>
                     <td><%= cliente.created_at.strftime('%d/%m/%Y') %></td>
-                    <td class="icon-cell"><i class="fa-solid fa-clipboard" data-cliente="<%= cliente.id %>"></i>  <i class="fa-solid fa-person-circle-check" data-cliente="<%= cliente.id %>"></i>  <i class="fa-solid fa-ban" data-cliente="<%= cliente.id %>"></i></td>
+                    <td class="icon-cell"><i class="fa-solid fa-clipboard" data-cliente="<%= cliente.id %>"></i>  <i class="fa-solid fa-person-circle-check" data-cliente="<%= cliente.id %>"></i>  <i class="fa-solid fa-ban" data-cliente="<%= cliente.utente_id %>"></i></td>
                 </tr>
             <% end %>
 
