@@ -64,8 +64,9 @@
   </div>
   
   
-
+    
     </div>
+    <% if @current_user.present? && @current_user.cliente.id != @restaurant_owner.cliente.id%>
     <div class="review-reserve-buttons">
         <button type="button" class="review">Lascia una Recensione</button>
         <button type="button" style="background-color: rgb(234, 183, 121);" class="open-reserv-modal">Prenota un Tavolo</button>
@@ -93,7 +94,7 @@
         </div>
 
     </div>
-
+    <% end %>
     <% if session[:role] == 'User' || session[:role] == 'Critico' %>
     <div id="reviewModal" class="modal">
       <div class="modal-content">
@@ -242,12 +243,17 @@
                 <%= image_tag 'background.jpg', class: 'recensione-foto' %>
               <% end %>
               <div class="public-review-text">
-                <p style="font-weight: bold";><%= review.cliente.user.username %></p>
                 <% if review.cliente.user.critico %>
-                <%= link_to public_critic_profile_path(review.cliente.user.critico.id), style: "color: black; " do %>
-                <p style = "color: red;"> CRITICO </p>
-                <%end%>
-                <%end%>
+                  <%= link_to public_critic_profile_path(review.cliente.user.critico.id), style: "color: black; " do %>
+                    <p style="font-weight: bold";><%= review.cliente.user.username %></p>
+                    <p style = "color: red;"> CRITICO </p>
+                  <% end %>
+                <% else %>
+                  <%= link_to public_user_profile_path(review.cliente.user.id), style: "color: black; " do %>
+                    <p style="font-weight: bold";><%= review.cliente.user.username %></p>
+                  <% end %>
+                <% end %>
+                
                 <p>
                   <% review.stelle.times do %>
                     <ion-icon name="star" style="font-size: 15px;"></ion-icon>
@@ -270,7 +276,7 @@
               <i class="fa-solid fa-share-nodes"></i>
               <% if session[:role] == 'Admin' %>
                 <i class="fa-solid fa-trash"></i>
-              <% else %>
+              <% elsif @current_user.present? %>
                 <% if @current_user.cliente.id != review.cliente_id%>
                   <i class="fa fa-exclamation-circle report-icon" data-report="<%= review.id %>" data-type="recensione"></i>
                 <% elsif @current_user.cliente.id == review.cliente_id %>

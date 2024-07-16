@@ -4,9 +4,10 @@ class CompetizioneController < ApplicationController
 
   def index
     @competizioni = Competizione.where('data_fine >= ?', Date.today)
-    if session[:role] == 'Ristoratore'
-      @competizioni_ristoratore = Competizione.where(ristoratore_id: @current_user.cliente.ristoratore.id)
-    end
+      if session[:role] == 'Ristoratore'
+        @competizioni_ristoratore = Competizione.where(ristoratore_id: @current_user.cliente.ristoratore.id)
+      end
+  
   end
 
   def create

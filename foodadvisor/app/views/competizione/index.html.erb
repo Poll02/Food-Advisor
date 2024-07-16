@@ -78,6 +78,7 @@
             <%= cf.label :data_fine, 'Data fine:' %>
             <%= cf.date_field :data_fine, class: 'form-control', required: true %>
           </div>
+          
           <%= cf.hidden_field :ristoratore_id, value: current_user.cliente.ristoratore.id %>
         <% end %>
         <%= form.submit 'Crea Competizione', class: 'btn btn-primary' %>

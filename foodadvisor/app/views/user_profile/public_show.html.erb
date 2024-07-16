@@ -25,9 +25,11 @@
             <p style="font-weight: bold;">Iscrizione: <span style="font-weight: normal;"><%= @user.created_at.strftime('%d/%m/%Y') %></span></p>
         </div>
     </div>
+    <% if @current_user.present? && @current_user.cliente.id != @user.cliente.id%> 
     <div class="public-u-follow-btn">
     <button type="button" class="report-icon" id="report-rest" style="background-color: rgb(221, 60, 60);" data-report="<%= @user.id %>" data-type="user">Segnala</button>
     </div>
+    <% end %>
 
     <hr class="solid" id="divider" style="width: 80%;">
     <h1>Ultime Recensioni</h1>
@@ -44,7 +46,10 @@
                         <% end %>
                         <div class="public-review-details">
                             <p>
-                                <%= review.ristoratore.nomeristorante %><br>
+                                <%= link_to public_restaurant_profile_path(review.ristoratore.id), style: "color: black; " do %>
+                                  <%= review.ristoratore.nomeristorante %><br>
+                                <% end %>
+                                
                                 <% review.stelle.times do %>
                                     <ion-icon name="star" style="font-size: 15px;"></ion-icon>
                                 <% end %> <br>
@@ -54,8 +59,14 @@
                         </div>
                     </div>
                     <div class="public-r-rev-icon">
+                    <% if session[:role] == 'Admin' %>
+                    <i class="fa-solid fa-trash"></i>
+                    <% elsif @current_user.present? %>
                         <i class="fa-regular fa-thumbs-up"></i>
-                        <i class="fa fa-exclamation-circle"></i>
+                        <% if @current_user.cliente.id != review.cliente_id%>
+                        <i class="fa fa-exclamation-circle report-icon" data-report="<%= review.id %>" data-type="recensione"></i>
+                        <% end %>
+                  <% end %> 
                     </div>
                 </div>
             <% end %>
