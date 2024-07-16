@@ -13,7 +13,7 @@ class Competizione < ApplicationRecord
   validates :requisiti, inclusion: { in: VALID_REQUISITI, message: 'deve essere uno tra: nessuno, prenotazioni, recensioni, punti' }
   validate :quantitareq_validity
 
-  has_many :user_competitions
+  has_many :user_competitions,  dependent: :destroy
   has_many :users, through: :user_competitions
 
   def posizione_utente(user_id)

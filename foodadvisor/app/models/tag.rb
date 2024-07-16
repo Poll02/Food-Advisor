@@ -1,5 +1,5 @@
 class Tag < ApplicationRecord
-    has_many :chooses
+    has_many :chooses, dependent: :destroy
 
   end
   
