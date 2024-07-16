@@ -4,6 +4,8 @@ class CompetizioneController < ApplicationController
 
   def index
     @competizioni = Competizione.where('data_fine >= ?', Date.today)
+    @competizioni_limited = Competizione.where('data_fine >= ?', Date.today).limit(10) # limita a 10 le competizioni
+
       if session[:role] == 'Ristoratore'
         @competizioni_ristoratore = Competizione.where(ristoratore_id: @current_user.cliente.ristoratore.id)
       end

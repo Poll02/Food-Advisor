@@ -15,7 +15,7 @@
     <h1>Consigliate</h1>
     <div class="recommended">
       <div class="comp-grid">
-        <% @competizioni.each do |competizione| %>
+        <% @competizioni_limited.each do |competizione| %>
           <div class="comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>">
             <% if competizione.locandina.present? %>
               <%= image_tag competizione.locandina %>

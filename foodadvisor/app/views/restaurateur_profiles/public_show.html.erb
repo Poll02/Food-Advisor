@@ -1,3 +1,5 @@
+
+
 <div class="pagina-vetrina">
     <% if flash[:notice] %>
       <div class="alert alert-success" role="alert">
@@ -31,7 +33,9 @@
             <% if @tags.present? %>
               <h2 style="margin-top: 20px;">TAGS: </h2>
               <% @tags.each do |tag| %>
-                <span class="r-tag"><%= tag.nome %></span>
+                <% category_class = tag.categoria.downcase.gsub(' ', '-') %>
+
+          <span class="piatto category-<%= category_class %>"><%= tag.nome %></span>
               <% end %>
             <% else %>
               <p>Nessun tag associato</p>
@@ -66,13 +70,13 @@
   
     
     </div>
-    <% if @current_user.present? && @current_user.cliente.id != @restaurant_owner.cliente.id%>
+    <% if session[:role]!='Admin' && @current_user.present? && @current_user.cliente.id != @restaurant_owner.cliente.id%>
     <div class="review-reserve-buttons">
         <button type="button" class="review">Lascia una Recensione</button>
         <button type="button" style="background-color: rgb(234, 183, 121);" class="open-reserv-modal">Prenota un Tavolo</button>
         <%= link_to public_show_menus_path(@restaurant_owner.id), class: 'user-link' do %><button type="button" style="background-color: rgb(234, 123, 121);" >Menù</button><% end %>
         <button type="button" id="add-rest-to-fav" data-ristoratore-id="<%= @restaurant_owner.id %>" style="background-color: rgb(71, 200, 82);">Aggiungi ai Preferiti</button>
-        <button type="button" class="report-icon" id="report-rest" style="background-color: rgb(221, 60, 60);" data-report="<%= @restaurant_owner.cliente.id %>" data-type="ristorante">Segnala</button>
+        <button type="button" class="report-icon" id="report-rest" style="background-color: rgb(221, 60, 60);" data-report="<%= @restaurant_owner.cliente.utente.id %>" data-type="ristorante">Segnala</button>
         
 
 
@@ -192,8 +196,8 @@
             <p><%= recipe.name %></p>
             <p style="font-size: 13px; font-weight: normal;">Difficoltà: <span><%= recipe.difficulty %></span></p>
             <p style="font-size: 13px; font-weight: normal;">Ingredienti: <span><%= recipe.ingredients %></span></p>
-            <p style="font-size: 13px; font-weight: normal; font-style: italic;">Clicca per vedere il procedimento</p>
-            <button type="submit" data-recipe-id="<%= recipe.id %>" id="add-recipe-fav">Preferiti +</button>
+            <p style="font-size: 13px; font-weight: normal; font-style: italic;"><%= recipe.procedure %></p>
+            <button type="submit" data-recipe-id="<%= recipe.id %>" id="add-recipe-fav" class="add-recipe-fav">Preferiti +</button>
 
           </div>
         </div>
@@ -273,7 +277,6 @@
 
         <% end %>
 
-              <i class="fa-solid fa-share-nodes"></i>
               <% if session[:role] == 'Admin' %>
                 <i class="fa-solid fa-trash"></i>
               <% elsif @current_user.present? %>
@@ -619,35 +622,10 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-document.getElementById('add-event-fav').addEventListener('click', function(event) {
-    event.preventDefault();
-    
-    const eventoId = this.getAttribute('data-evento-id');
-    
-    fetch('/add_event_to_favorites', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-      },
-      credentials: 'same-origin',
-      body: JSON.stringify({ evento_id: eventoId })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert('Evento aggiunto ai preferiti!');
-      } else {
-        alert('Errore: ' + data.error);
-      }
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('Si è verificato un errore durante l\'aggiunta dell\'evento ai preferiti.');
-    });
-  });
 
-  document.getElementById('add-recipe-fav').addEventListener('click', function(event) {
+  document.querySelectorAll('.add-recipe-fav').forEach(addRecipe => {
+
+  addRecipe.addEventListener('click', function(event) {
     event.preventDefault();
     
     const recipeId = this.getAttribute('data-recipe-id');
@@ -673,6 +651,7 @@ document.getElementById('add-event-fav').addEventListener('click', function(even
       console.error('Error:', error);
       alert('Si è verificato un errore durante l\'aggiunta della ricetta ai preferiti.');
     });
+  });
   });
 
 </script>

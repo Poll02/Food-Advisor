@@ -26,7 +26,7 @@ class InfoController < ApplicationController
                            .group("DATE(data)")
                            .count
   
-    reviews = Recensione.where(created_at: start_date.beginning_of_day..end_date.end_of_day)
+    reviews = Recensione.where(ristoratore_id: rist, created_at: start_date.beginning_of_day..end_date.end_of_day)
                         .group("DATE(created_at)")
                         .count
   

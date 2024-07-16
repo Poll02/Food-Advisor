@@ -1,4 +1,5 @@
 <%= javascript_include_tag 'admin_profile', 'data-turbolinks-track': 'reload' %>
+<div class="admine-profile container">
 
 <!-- Mostra il messaggio di successo o errore -->
 <% if flash[:notice] %>
@@ -138,8 +139,7 @@
             <p style="font-style: italic; font-size: 13px;">in data <%= @recensione.created_at.strftime('%d/%m/%Y') %></p>
           </div>
           <div class="public-review-icon">
-            <i class="fa-regular fa-thumbs-up"></i>
-            <i class="fa-solid fa-share-nodes"></i>
+            
             
           </div>
         </div>
@@ -258,6 +258,8 @@
   
 </div>
 </div>
+</div>
+
 
 <style>
 .public-r-reviews {
