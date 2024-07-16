@@ -65,9 +65,11 @@ ristoratori = Cliente.limit(8).map do |cliente|
   )
 
   # Creiamo un menu per ogni ristoratore
-  menu = Menu.create!(
-    ristoratore_id: ristoratore.id
-  )
+  if ristoratore.menu.nil?
+    menu = Menu.create!(
+      ristoratore_id: ristoratore.id
+    )
+  end
 
   # Creiamo dipendenti per ogni ristoratore
   5.times do
@@ -92,6 +94,8 @@ ristoratori = Cliente.limit(8).map do |cliente|
       ristoratore_id: ristoratore.id
     )
   end
+
+  menu = Menu.find_by(ristoratore_id: ristoratore.id)
 
   # Creiamo piatti per il menu del ristoratore
   categories = ["Antipasto", "Primo", "Secondo", "Dolce", "Bevanda"]
