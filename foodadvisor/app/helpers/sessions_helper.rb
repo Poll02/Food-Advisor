@@ -35,6 +35,7 @@ module SessionsHelper
     forget(current_user)
     session.delete(:user_id)
     session.delete(:role)
+    session.delete(:tmp_password)
     @current_user = nil
   end
 

@@ -125,6 +125,34 @@
     margin: 5px 0;
 }
 
+.icon-cell {
+  width: 10%;
+}
+
+.icon-cell i{
+  padding: 0% 10% 0% 10%;
+}
+
+.fa-ban {
+  transition: color 0.3s ease;
+}
+
+.fa-ban:hover {
+  color: red;
+}
+
+.fa-person-circle-check fa-clipboard{
+  transition: color 0.3s ease;
+}
+
+.fa-person-circle-check:hover {
+  color: green;
+}
+
+.fa-clipboard:hover {
+  color: green;
+}
+
 // PROBLEMI
 .gestioneProblemi {
     display: flex;

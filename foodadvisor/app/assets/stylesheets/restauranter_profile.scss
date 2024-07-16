@@ -206,7 +206,8 @@
   margin-top: 10px;
   width: 260px;  
   height: 100px;
-  border-radius: 10px
+  border-radius: 10px;
+  object-fit: cover;
 }
 
 .evento-info {
@@ -513,6 +514,7 @@ tr.feature .piatto {
   padding: 1%;
   border-radius: 10px;
   transition: 0.3s;
+  justify-content: space-between;
 }
 
 .public-r-rev-icon {
@@ -620,6 +622,14 @@ tr.feature .piatto {
 }
 
 .fa-pen-to-square:hover {
+  color: green;
+}
+
+.fa-comments {
+  transition: color 0.3s ease;
+}
+
+.fa-comments:hover {
   color: green;
 }
 // prova like

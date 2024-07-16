@@ -4,6 +4,7 @@ class Recensione < ApplicationRecord
   belongs_to :ristoratore
 
   has_many :segnalazione, dependent: :destroy
+  has_one :answer, dependent: :destroy
   has_many :assign_stars
   has_many :clienti, through: :assign_stars
   

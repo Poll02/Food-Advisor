@@ -19,9 +19,12 @@
             <% end %>
         </div>
     </div>
+    <% if @current_user.present? && @current_user.cliente.id != @critico.user.cliente.id %>
     <div class="public-u-follow-btn">
-        <button type="button" style="background-color: red;">Segnala</button>
+    <button type="button" class="report-icon" id="report-rest" style="background-color: rgb(221, 60, 60);" data-report="<%= @critico.user_id %>" data-type="user">Segnala</button>
     </div>
+    <% end %>
+
     <hr class="solid" id="divider" style="width: 80%;">
     <h1>Attestati</h1>
     <div class="public-u-attestati">
@@ -41,7 +44,9 @@
                         <% end %>
                         <div class="public-review-details">
                             <p>
+                            <%= link_to public_restaurant_profile_path(review.ristoratore.id), style: "color: black; " do %>
                                 <%= review.ristoratore.nomeristorante %><br>
+                            <% end %>
                                 <% review.stelle.times do %>
                                     <ion-icon name="star" style="font-size: 15px;"></ion-icon>
                                 <% end %> <br>
@@ -51,8 +56,14 @@
                         </div>
                     </div>
                     <div class="public-r-rev-icon">
-                        <i class="fa-regular fa-thumbs-up"></i>
-                        <i class="fa fa-exclamation-circle"></i>
+                    <% if session[:role] == 'Admin' %>
+                    <i class="fa-solid fa-trash"></i>
+                    <% elsif @current_user.present? %>
+                        <% if @current_user.cliente.id != review.cliente_id%>
+                        <i class="fa fa-exclamation-circle report-icon" data-report="<%= review.id %>" data-type="recensione"></i>
+                        <% end %>
+                  <% end %> 
+                        
                     </div>
                 </div>
             <% end %>
@@ -90,3 +101,118 @@
     </div>
 
 </div>
+
+<div id="reportModal" class="modal">
+<div class="modal-content">
+  <span id="closeReport" class="close">&times;</span>
+  <h2>Fai la tua segnalazione</h2>
+  <% if current_user.present? %>
+    <%= form_with( url: segnalaziones_path, method: "post", local: true) do |form| %>
+      <%= form.hidden_field :data_id%>
+      <%= form.hidden_field :type%>
+      Motivo della segnalazione
+      <br><br>
+      <%= form.label :commento, "Commento:" %>
+      <%= form.text_area :commento, id: "commento", rows: 4, cols: 50 %>
+      <br><br>
+      <%= form.submit "Invia" %>
+    <% end %>
+  <% end %>
+</div>
+</div>
+
+<div id="reportModal" class="modal">
+        <div class="modal-content">
+          <span id="closeReport" class="close">&times;</span>
+          <h2>Fai la tua segnalazione</h2>
+          <% if current_user.present? %>
+            <%= form_with( url: segnalaziones_path, method: "post", local: true) do |form| %>
+              <%= form.hidden_field :data_id%>
+              <%= form.hidden_field :type%>
+              Motivo della segnalazione
+              <br><br>
+              <%= form.label :commento, "Commento:" %>
+              <%= form.text_area :commento, id: "commento", rows: 4, cols: 50 %>
+              <br><br>
+              <%= form.submit "Invia" %>
+            <% end %>
+          <% end %>
+        </div>
+    </div>
+
+    <div id="changeReviewModal" class="modal">
+  <div class="modal-content">
+    <span id="closeChangeModal" class="close">&times;</span>
+    <h2>Modifica la tua Recensione</h2>
+    <%= form_with( url: update_review_path, method: "post") do |form| %>
+      <%= form.hidden_field :reviewId%>
+      <div>
+        <label>Stelle:</label>
+        <div class="star-rating" id="reviewStars">
+          <svg class="star" viewBox="0 0 576 512" onclick="selectNewStar(1)">
+            <use xlink:href="#empty-star"></use>
+          </svg>
+          <svg class="star" viewBox="0 0 576 512" onclick="selectNewStar(2)">
+            <use xlink:href="#empty-star"></use>
+          </svg>
+          <svg class="star" viewBox="0 0 576 512" onclick="selectNewStar(3)">
+            <use xlink:href="#empty-star"></use>
+          </svg>
+          <svg class="star" viewBox="0 0 576 512" onclick="selectNewStar(4)">
+            <use xlink:href="#empty-star"></use>
+          </svg>
+          <svg class="star" viewBox="0 0 576 512" onclick="selectNewStar(5)">
+            <use xlink:href="#empty-star"></use>
+          </svg>
+        </div>
+        <%= form.hidden_field :stelle, id: "new_stars" %>
+      </div>
+      <br><br>
+          <%= form.label :new_comment, "Commento:" %>
+          <%= form.text_area :new_comment, id: "new_comment", rows: 4, cols: 50 %>
+      <br><br>
+      <%= form.submit "Invia" %>
+    <% end %>
+    <%= form_with(url: review_path, method: "delete") do %>
+      <%= hidden_field_tag :Rid %>
+      <button type="submit">Elimina</button>
+    <% end %>
+  </div>
+</div>
+
+<script>
+//JS modale segnalazione
+document.addEventListener("DOMContentLoaded", function() {
+  
+  document.querySelectorAll('.report-icon').forEach(icon => {
+    icon.addEventListener('click', (event) => {
+      const review = event.target.getAttribute('data-report');
+      const type = event.target.getAttribute('data-type');
+
+      document.getElementById('data_id').value = review;
+      document.getElementById('type').value = type;
+
+
+      openReportModal();
+    });
+  });
+
+  function openReportModal() {
+    document.getElementById('reportModal').style.display = 'block';
+  }
+
+  function closeReportModal() {
+    document.getElementById('reportModal').style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    var modal = document.getElementById('reportModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+  document.querySelector('#closeReport').onclick = closeReportModal;
+
+  
+});
+</script>

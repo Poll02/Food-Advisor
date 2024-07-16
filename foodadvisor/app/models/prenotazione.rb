@@ -2,10 +2,10 @@ class Prenotazione < ApplicationRecord
   belongs_to :user
   belongs_to :ristoratore
 
-  validates :numero_persone, presence: true, numericality: { only_integer: true }
+  validates :numero_persone, presence: { message: "non può essere vuoto" }, numericality: { only_integer: true }
   validate :numero_persone_tra_1_e_20
-  validates :data, presence: true
-  validates :orario, presence: true
+  validates :data, presence: { message: "non può essere vuoto" }
+  validates :orario, presence: { message: "non può essere vuoto" }
   validate :data_must_be_today_or_later
   validate :orario_must_be_later_if_today
 

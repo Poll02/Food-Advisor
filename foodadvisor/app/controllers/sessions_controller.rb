@@ -94,6 +94,7 @@ class SessionsController < ApplicationController
         @user.password = generate_password
         Rails.logger.info("password: #{@user.password}")
         @user.password_confirmation = @user.password
+        @user.tmp_password = @user.password
 
         @user.telefono = nil
         @user.name = profile['name']

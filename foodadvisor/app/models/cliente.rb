@@ -5,9 +5,10 @@ class Cliente < ApplicationRecord
     has_one :user, dependent: :destroy
     has_many :problems, dependent: :destroy
     has_many :assign_stars
-    has_many :recensione
+    has_many :recensione, dependent: :destroy
     has_many :notifications, dependent: :destroy
     has_many :segnalazione, dependent: :destroy
+    has_many :segnalazioni_ricevute, class_name: 'Segnalazione', dependent: :destroy
 
     accepts_nested_attributes_for :user, :ristoratore
   end

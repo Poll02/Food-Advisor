@@ -54,7 +54,6 @@ end
   end
 end
 
-# Creiamo 8 ristoratori collegati ai primi 8 clienti
 ristoratori = Cliente.limit(8).map do |cliente|
   ristoratore = Ristoratore.create!(
     cliente_id: cliente.id,
@@ -64,12 +63,14 @@ ristoratori = Cliente.limit(8).map do |cliente|
     indirizzo: Faker::Address.full_address
   )
 
-  # Creiamo un menu per ogni ristoratore
-  menu = Menu.create!(
-    ristoratore_id: ristoratore.id
-  )
+  # Verifica se il menu è già stato creato (dovrebbe essere evitato)
+  if ristoratore.menu.nil?
+    menu = Menu.create!(
+      ristoratore_id: ristoratore.id
+    )
+  end
 
-  # Creiamo dipendenti per ogni ristoratore
+  # Creiamo dipendenti per questo ristoratore
   5.times do
     Dipendente.create!(
       nome: Faker::Name.first_name,
@@ -81,7 +82,7 @@ ristoratori = Cliente.limit(8).map do |cliente|
     )
   end
 
-  # Creiamo eventi per ogni ristoratore
+  # Creiamo eventi per questo ristoratore
   3.times do
     Evento.create!(
       nome: Faker::Lorem.word,
@@ -93,12 +94,15 @@ ristoratori = Cliente.limit(8).map do |cliente|
     )
   end
 
-  # Creiamo piatti per il menu del ristoratore
+  # Trova il menu associato al ristoratore
+  menu = Menu.find_by(ristoratore_id: ristoratore.id)
+  
+  # Creiamo piatti per il menu di questo ristoratore
   categories = ["Antipasto", "Primo", "Secondo", "Dolce", "Bevanda"]
   categories.each do |category|
     5.times do
       Piatto.create!(
-        menu_id: menu.id,
+        menu_id: menu.id,  # Utilizziamo il menu appena creato per questo ristoratore
         nome: Faker::Food.dish,
         prezzo: Faker::Commerce.price(range: 5.0..50.0),
         foto: 'piatto.jpg',
@@ -108,7 +112,7 @@ ristoratori = Cliente.limit(8).map do |cliente|
     end
   end
 
-  # Creiamo almeno 2 ricette per ristoratore
+  # Creiamo almeno 2 ricette per questo ristoratore
   2.times do
     Recipe.create!(
       name: Faker::Food.dish,
@@ -120,7 +124,7 @@ ristoratori = Cliente.limit(8).map do |cliente|
     )
   end
 
-  # Creiamo 3 competizioni per ogni ristoratore
+  # Creiamo 3 competizioni per questo ristoratore
   3.times do
     requisiti = ['nessuno', 'prenotazioni', 'recensioni', 'punti'].sample
     quantitareq = requisiti == 'nessuno' ? 0 : Faker::Number.between(from: 1, to: 10)
@@ -140,6 +144,7 @@ ristoratori = Cliente.limit(8).map do |cliente|
 
   ristoratore
 end
+
 
 # Creiamo 10 user collegati ai restanti 10 clienti
 Cliente.offset(8).limit(11).each do |cliente|
