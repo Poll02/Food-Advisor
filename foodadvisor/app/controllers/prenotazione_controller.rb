@@ -10,7 +10,8 @@ class PrenotazioneController < ApplicationController
     Rails.logger.info("Inizio creazione prenotazione")
     
     @prenotazione = Prenotazione.new(prenotazione_params)
-    @prenotazione.user_id = @current_user.cliente.user.id
+    Rails.logger.info("vediamo il current user: #{@current_user}")
+    #@prenotazione.user_id = @current_user.cliente.user.id
     Rails.logger.info("User ID assegnato alla prenotazione: #{@prenotazione.user_id}")
     
     @prenotazione.valida = false  # Impostare valida a false
@@ -63,7 +64,7 @@ class PrenotazioneController < ApplicationController
   end
 
   def prenotazione_params
-    params.require(:prenotazione).permit(:numero_persone, :data, :orario, :ristoratore_id)
+    params.require(:prenotazione).permit(:numero_persone, :data, :orario, :ristoratore_id, :user_id)
   end
 
   def require_login

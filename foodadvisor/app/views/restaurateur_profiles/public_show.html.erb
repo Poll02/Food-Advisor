@@ -77,6 +77,7 @@
               <input type="date" id="data" name="data" required>
               <label for="orario">Orario:</label>
               <input type="hidden" id="ristoratore_id" name="ristoratore_id" value="<%= @restaurant_owner.id %>">
+              <input type="hidden" id="user_id" name="user_id" value="<%= @current_user.cliente.user.id %>">
               <input type="time" id="orario" name="orario" required>
               <button type="submit">Prenota</button>
             </form>

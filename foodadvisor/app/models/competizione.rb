@@ -1,4 +1,7 @@
 class Competizione < ApplicationRecord
+
+  VALID_REQUISITI = ['nessuno', 'prenotazioni', 'recensioni', 'punti']
+
   belongs_to :ristoratore
 
   validates :nome, presence: true
@@ -6,7 +9,9 @@ class Competizione < ApplicationRecord
   validates :premio, presence: true
   validates :data_inizio, presence: true
   validates :data_fine, presence: true
-  #validate :date_range
+  #validate :date_range: per quando li creiamo noi 
+  validates :requisiti, inclusion: { in: VALID_REQUISITI, message: 'deve essere uno tra: nessuno, prenotazioni, recensioni, punti' }
+  validate :quantitareq_validity
 
   has_many :user_competitions
   has_many :users, through: :user_competitions
@@ -30,6 +35,14 @@ class Competizione < ApplicationRecord
       if data_fine <= data_inizio
         errors.add(:data_fine, "deve essere maggiore della data di inizio")
       end
+    end
+  end
+
+  def quantitareq_validity
+    if requisiti == 'nessuno'
+      errors.add(:quantitareq, 'deve essere 0 se i requisiti sono nessuno') unless quantitareq == 0
+    else
+      errors.add(:quantitareq, 'deve essere maggiore di 0 se i requisiti non sono nessuno') unless quantitareq > 0
     end
   end
 end

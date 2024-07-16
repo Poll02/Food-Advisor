@@ -22,7 +22,7 @@
             <% else %>
               <%= image_tag "background.jpg" %>
             <% end %>
-            <div class="text-overlay-competizioni" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
+            <div class="text-overlay-competizioni" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9; height: 150px; overflow-y: scroll; ">
               <p><%= competizione.nome %></p>
               <p style="font-size: 13px; font-weight: normal;"><%= competizione.descrizione %></p>
               <p style="font-size: 13px; font-weight: normal;">Data Inizio: <span id="right-side-start-data" style="font-weight: normal;"><%= competizione.data_inizio.strftime('%d/%m/%Y') %></span></p>

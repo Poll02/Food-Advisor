@@ -20,6 +20,12 @@ class User < ApplicationRecord
 
     accepts_nested_attributes_for :critico
 
+    delegate :utente, to: :cliente
+
+    def setting
+      utente.setting
+    end
+
     private
 
     def datanascita_must_be_in_the_past
