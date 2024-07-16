@@ -37,7 +37,7 @@ class AdminProfileController < ApplicationController
   def set_cliente
     @cliente = Cliente.find(params[:delete_id])
     @user = User.find_by(cliente_id: params[:delete_id])
-    @cirtico = Critico.find_by(user_id: @user.id)
+    @critico = Critico.find_by(user_id: @user.id)
     @ristoratore = Ristoratore.find_by(cliente_id: params[:delete_id])
   end
 end

@@ -59,7 +59,6 @@
                     <% if session[:role] == 'Admin' %>
                     <i class="fa-solid fa-trash"></i>
                     <% elsif @current_user.present? %>
-                        <i class="fa-regular fa-thumbs-up"></i>
                         <% if @current_user.cliente.id != review.cliente_id%>
                         <i class="fa fa-exclamation-circle report-icon" data-report="<%= review.id %>" data-type="recensione"></i>
                         <% end %>
