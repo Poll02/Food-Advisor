@@ -5,30 +5,10 @@ RSpec.describe RicercaController, type: :controller do
   describe "GET #index" do
     before do
       # Creazione dei due utenti utilizzando Faker
-      @utente1 = Utente.create!(
-        email: Faker::Internet.email,
-        telefono: Faker::PhoneNumber.phone_number,
-        password: "Password1",
-        password_confirmation: "Password1"
-      )
-      @utente2 = Utente.create!(
-        email: Faker::Internet.email,
-        telefono: Faker::PhoneNumber.phone_number,
-        password: "Password2",
-        password_confirmation: "Password2"
-      )
-      @utente3 = Utente.create!(
-        email: Faker::Internet.email,
-        telefono: Faker::PhoneNumber.phone_number,
-        password: "Password3",
-        password_confirmation: "Password3"
-      )
-      @utente4 = Utente.create!(
-        email: Faker::Internet.email,
-        telefono: Faker::PhoneNumber.phone_number,
-        password: "Password4",
-        password_confirmation: "Password4"
-      )
+      @utente1 = Utente.create!(email: Faker::Internet.email, telefono: Faker::PhoneNumber.phone_number, password: "Password1", password_confirmation: "Password1")
+      @utente2 = Utente.create!(email: Faker::Internet.email, telefono: Faker::PhoneNumber.phone_number, password: "Password2", password_confirmation: "Password2")
+      @utente3 = Utente.create!(email: Faker::Internet.email, telefono: Faker::PhoneNumber.phone_number, password: "Password3", password_confirmation: "Password3")
+      @utente4 = Utente.create!(email: Faker::Internet.email, telefono: Faker::PhoneNumber.phone_number, password: "Password4", password_confirmation: "Password4")
 
       # Creazione dei due clienti associati ai due utenti
       @cliente1 = Cliente.create!(utente: @utente1)
@@ -37,39 +17,12 @@ RSpec.describe RicercaController, type: :controller do
       @cliente4 = Cliente.create!(utente: @utente4)
 
       # Creazione dei due ristoratori associati ai due clienti
-      @ristoratore1 = Ristoratore.create!(
-        nomeristorante: Faker::Restaurant.name,
-        asporto: true,
-        cliente: @cliente1,
-        piva: Faker::Company.ein,
-        indirizzo: Faker::Address.full_address
-      )
-      @ristoratore2 = Ristoratore.create!(
-        nomeristorante: Faker::Restaurant.name,
-        asporto: false,
-        cliente: @cliente2,
-        piva: Faker::Company.ein,
-        indirizzo: Faker::Address.full_address
-      )
+      @ristoratore1 = Ristoratore.create!(nomeristorante: Faker::Restaurant.name, asporto: true, cliente: @cliente1, piva: Faker::Company.ein, indirizzo: Faker::Address.full_address)
+      @ristoratore2 = Ristoratore.create!(nomeristorante: Faker::Restaurant.name, asporto: false, cliente: @cliente2, piva: Faker::Company.ein, indirizzo: Faker::Address.full_address)
 
-      @recensione1 = Recensione.create!(
-        ristoratore: @ristoratore1,
-        cliente: @cliente3,
-        stelle: 4,
-        commento: Faker::Restaurant.review.truncate(400)
-      )
-      @recensione2 = Recensione.create!(
-        ristoratore: @ristoratore1,
-        cliente: @cliente3,
-        stelle: 5,
-        commento: Faker::Restaurant.review.truncate(400)
-      )
-      @recensione3 = Recensione.create!(
-        ristoratore: @ristoratore2,
-        cliente: @cliente4,
-        stelle: 3,
-        commento: Faker::Restaurant.review.truncate(400)
-      )
+      @recensione1 = Recensione.create!(ristoratore: @ristoratore1, cliente: @cliente3, stelle: 4, commento: Faker::Restaurant.review.truncate(400))
+      @recensione2 = Recensione.create!(ristoratore: @ristoratore1, cliente: @cliente3, stelle: 5, commento: Faker::Restaurant.review.truncate(400))
+      @recensione3 = Recensione.create!(ristoratore: @ristoratore2, cliente: @cliente4, stelle: 3, commento: Faker::Restaurant.review.truncate(400))
 
       @tag1 = Tag.create!(nome: Faker::Restaurant.type, categoria: Faker::Commerce.department)
       @tag2 = Tag.create!(nome: Faker::Restaurant.type, categoria: Faker::Commerce.department)
