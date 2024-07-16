@@ -1,6 +1,7 @@
-<%= stylesheet_link_tag 'rest_edit', media: 'all' %>
+<%= javascript_include_tag 'rest_edit', 'data-turbolinks-track': 'reload' %>
 
 <%= link_to 'Salva', rest_profile_path, style: 'color: black; text-decoration: underline;' %>
+
 <% if flash[:notice] %>
     <div class="alert alert-success" role="alert">
       <%= flash[:notice] %>
