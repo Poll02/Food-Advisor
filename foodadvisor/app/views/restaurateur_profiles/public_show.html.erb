@@ -70,14 +70,16 @@
   
     
     </div>
-    <% if session[:role]!='Admin' && @current_user.present? && @current_user.cliente.id != @restaurant_owner.cliente.id%>
+   
     <div class="review-reserve-buttons">
+ 
         <button type="button" class="review">Lascia una Recensione</button>
         <button type="button" style="background-color: rgb(234, 183, 121);" class="open-reserv-modal">Prenota un Tavolo</button>
         <%= link_to public_show_menus_path(@restaurant_owner.id), class: 'user-link' do %><button type="button" style="background-color: rgb(234, 123, 121);" >Menù</button><% end %>
         <button type="button" id="add-rest-to-fav" data-ristoratore-id="<%= @restaurant_owner.id %>" style="background-color: rgb(71, 200, 82);">Aggiungi ai Preferiti</button>
+        <% if session[:role]!='Admin' || @current_user.present?%>
         <button type="button" class="report-icon" id="report-rest" style="background-color: rgb(221, 60, 60);" data-report="<%= @restaurant_owner.id %>" data-type="ristorante">Segnala</button>
-        
+        <% end%>
 
 
         <div id="reservModal" class="reserv-modal">
@@ -98,7 +100,7 @@
         </div>
 
     </div>
-    <% end %>
+    
     <% if session[:role] == 'User' || session[:role] == 'Critico' %>
     <div id="reviewModal" class="modal">
       <div class="modal-content">
@@ -273,19 +275,23 @@
           <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
           <button type="submit" class="like-button" style="background: none; border: none;">
             <i class="fa-regular fa-thumbs-up like-icon" style="font-size: 20px;"></i>
-          </button>
+          </button><br>
+          
 
         <% end %>
-
-              <% if session[:role] == 'Admin' %>
-                <i class="fa-solid fa-trash"></i>
-              <% elsif @current_user.present? %>
-                <% if @current_user.cliente.id != review.cliente_id%>
-                  <i class="fa fa-exclamation-circle report-icon" data-report="<%= review.id %>" data-type="recensione"></i>
-                <% elsif @current_user.cliente.id == review.cliente_id %>
-                  <i class="fa-solid fa-pen-to-square change-icon" data-review="<%= review.id %>" data-review-star="<%= review.stelle %>" data-review-commento="<%= review.commento %>"></i>
-                <% end %>
-              <% end %> 
+        <% if session[:role] == 'Admin' %>
+        <%= form_with model: review ,url: review_path(review.id), method: :delete, local: true do %>
+          <button type="submit"><i class="fa-solid fa-trash"></i></button>
+        <% end %>
+          
+        <% elsif @current_user.present? %>
+          <% if @current_user.cliente.id != review.cliente_id%>
+            <i class="fa fa-exclamation-circle report-icon" data-report="<%= review.id %>" data-type="recensione"></i>
+          <% elsif @current_user.cliente.id == review.cliente_id %>
+            <i class="fa-solid fa-pen-to-square change-icon" data-review="<%= review.id %>" data-review-star="<%= review.stelle %>" data-review-commento="<%= review.commento %>"></i>
+          <% end %>
+        <% end %> 
+              
             </div>
           </div>
 
@@ -680,5 +686,14 @@ document.addEventListener('DOMContentLoaded', () => {
 .star:not(.selected) {
   fill: none; /* Stelle vuote senza riempimento */
 }
+
+.fa-trash{
+  transition: color 0.3s ease;
+}
+
+.fa-trash:hover {
+  color: red;
+}
+
 
 </style>

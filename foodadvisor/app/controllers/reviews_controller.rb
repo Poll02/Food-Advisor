@@ -18,7 +18,7 @@ class ReviewsController < ApplicationController
         if uc.competizione.data_fine >= Date.today
           uc.punti_competizione += 2
           uc.save!
-          Rails.logger.info("Aggiunti 2 punti alla competizione #{uc.competizione.nome} per l'utente #{uc.user.nome}")
+          
         end
       end
   
@@ -31,7 +31,6 @@ class ReviewsController < ApplicationController
   end  
 
   def update
-    Rails.logger.info("parametri #{params[:stelle]} ---- #{params[:new_comment]}")
     @review=Recensione.find(params[:reviewId])
     if params[:stelle].present? && params[:new_comment].present?
       @review.update(stelle: params[:stelle], commento: params[:new_comment])
@@ -64,7 +63,7 @@ class ReviewsController < ApplicationController
           redirect_to public_restaurant_profile_path(@restauranteur)
         end
     else
-      Rails.logger.info("PROBLEMA #{@review.errors.full_messages}")
+      
       flash[:alert] = 'Errore durante la rimozione della recensione'
       redirect_back(fallback_location: root_path)
     end
@@ -83,7 +82,6 @@ class ReviewsController < ApplicationController
   private
 
   def find_review
-    Rails.logger.info("sto iniziando la ricerca della recensione")
     @review = Recensione.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     flash[:alert] = "Recensione non trovata."

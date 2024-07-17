@@ -30,9 +30,7 @@ class SegnalazionesController < ApplicationController
       @segnalazione.cliente_segnalato = @recensione.cliente
       @segnalazione.recensione_id = @recensione.id
     end
-    Rails.logger.info("pre")
     if @ristorante.present?
-      Rails.logger.info("mentre")
       @segnalazione.cliente_segnalato = @ristorante.cliente
     end
     if @user.present?
@@ -47,11 +45,9 @@ class SegnalazionesController < ApplicationController
       elsif @ristorante.present?
         redirect_to public_restaurant_profile_path(@ristorante)
       elsif @user.present?
-        Rails.logger.info("post")
         redirect_to public_user_profile_path(@user)
       end
     else
-      Rails.logger.info("Errori di validazione: #{@segnalazione.errors.full_messages}")
       flash[:alert] = 'Errore durante il salvataggio della segnalazione'
       redirect_back(fallback_location: root_path)
     end
@@ -65,7 +61,6 @@ class SegnalazionesController < ApplicationController
         @recensione = Recensione.find(params[:data_id])
       elsif params[:type]=='ristorante'
         @ristorante = Ristoratore.find(params[:data_id])
-        Rails.logger.info("Ristorante trovato")
       elsif params[:type]=='user'
         @user = User.find(params[:data_id])
       end

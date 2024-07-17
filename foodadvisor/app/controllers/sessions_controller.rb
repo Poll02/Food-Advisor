@@ -56,43 +56,31 @@ class SessionsController < ApplicationController
     fields = 'id,name,email,first_name,last_name,picture.type(large)'
     profile = @graph.get_object('me', fields: fields)
   
-    Rails.logger.info("Inizio ricerca utente nel database")
-    Rails.logger.info("dati profilo da facebook #{profile}")
-
     # Trova o crea l'utente nel database
     @user = Utente.find_by(email: profile['email']) 
-      Rails.logger.info("dati utente #{@user.inspect}")
       
 
       if @user.present?
-        Rails.logger.info("Utente trovato nel database")
         # Operazioni da eseguire se l'utente esiste già nel database
-        Rails.logger.info("dati utente user completi #{@user.cliente.user.inspect}")
         # Salva l'utente nel database
         if @user.update({facebook_id: profile['id'], name: profile['name']})
-            Rails.logger.info("Utente aggiornato con successo nel database")
             # Effettua il login dell'utente
     
             log_in(@user, 'User')  # Effettua il login con l'utente associato al ristoratore
             render json: { success: true, user: @user }
         else
-            Rails.logger.info("aggiornamento non effettuato")
-            Rails.logger.info("Errori di validazione: #{@user.errors.full_messages}")
             render json: { success: false, errors: @user.errors.full_messages }
         end
 
       else
-        Rails.logger.info("Utente non trovato nel database, quindi ne creo uno nuovo")
         # Operazioni da eseguire se l'utente non esiste e deve essere creato
         # Genera una password sicura per il nuovo utente
         @user = Utente.new
         @user.build_cliente
         @user.cliente.build_user
-        Rails.logger.info("utente buildato")
 
         @user.email = profile['email']
         @user.password = generate_password
-        Rails.logger.info("password: #{@user.password}")
         @user.password_confirmation = @user.password
         @user.tmp_password = @user.password
 
@@ -107,17 +95,11 @@ class SessionsController < ApplicationController
         @user.cliente.foto = profile.dig('picture', 'data', 'url') if profile.dig('picture', 'data', 'url').present?
         if @user.save
             log_in(@user, 'User')  # Effettua il login con l'utente associato al ristoratore
-            session[:tmp_password] = @user.password
-            Rails.logger.info("Login effettuato con successo")
-            render json: { success: true, user: @user, temporary_password: @user.password}
+            render json: { success: true, user: @user}
         else
-            Rails.logger.info("errore nella registrazione utente")
-            Rails.logger.info("Errori di validazione: #{@user.errors.full_messages}")
             render json: { success: false, errors: @user.errors.full_messages }
         end
       end
-      #Rails.logger.info("campo nome da aggiungere #{profile['id']}")
-      #Rails.logger.info("campo nome da agg #{profile['name']}")
 
   end
   

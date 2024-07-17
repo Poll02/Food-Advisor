@@ -103,8 +103,6 @@ class UserProfileController < ApplicationController
       file.write(image.read)
     end
     
-    Rails.logger.debug "Immagine salvata correttamente in: #{path}" # Utilizzo del logger di Rails
-    Rails.logger.debug "Immagine salvata come: #{filename}" # Utilizzo del logger di Rails
     filename
   end
 
