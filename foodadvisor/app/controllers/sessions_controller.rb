@@ -94,7 +94,7 @@ class SessionsController < ApplicationController
         @user.cliente.user.cognome = profile['last_name']
         @user.cliente.foto = profile.dig('picture', 'data', 'url') if profile.dig('picture', 'data', 'url').present?
         if @user.save
-            log_in(@user, 'User')  # Effettua il login con l'utente associato al ristoratore
+            log_in(@user, 'User') 
             render json: { success: true, user: @user}
         else
             render json: { success: false, errors: @user.errors.full_messages }
@@ -103,18 +103,71 @@ class SessionsController < ApplicationController
 
   end
   
-  
   def destroy
     log_out if logged_in?
     redirect_to root_url
   end
+  #login API google
+  def create
+    #campi ricevuti da google
+    auth_hash = request.env['omniauth.auth']
+
+    @user = Utente.find_by(email: auth_hash.dig('info', 'email')) 
+
+    if @user.present?
+      if @user.update({uid: auth_hash['uid'], name: auth_hash.dig('info', 'name')})
+            # Effettua il login dell'utente
+    
+            log_in(@user, 'User')  # Effettua il login con l'utente associato al ristoratore
+            flash[:notice] = "Utente registrato con successo"
+            redirect_to user_profile_path(@user)
+        else
+          flash[:alert] = "Errore nella registrazione utente"
+          redirect_to login_path
+        end
+    else
+        @user = Utente.new
+        @user.build_cliente
+        @user.cliente.build_user
+
+        @user.email = auth_hash.dig('info', 'email')
+        @user.password = generate_password
+        @user.password_confirmation = @user.password
+        @user.tmp_password = @user.password
+
+        @user.telefono = nil
+        @user.name = auth_hash.dig('info', 'name')
+        @user.facebook_id = nil
+
+        @user.uid = auth_hash['uid']
+        @user.provider = auth_hash['provider']
+
+        @user.cliente.foto = auth_hash.dig('info', 'image')
+
+        @user.cliente.user.username = auth_hash.dig('info', 'name')
+        @user.cliente.user.nome = auth_hash.dig('info', 'first_name')
+        @user.cliente.user.cognome = auth_hash.dig('info', 'last_name')
+        if @user.save
+          log_in(@user, 'User')
+          flash[:notice] = "Utente registrato con successo"
+          redirect_to user_profile_path(@user)
+      else
+          flash[:alert] = "Errore nella registrazione utente"
+          redirect_to login_path
+      end
+    end
+    
+  end
+  
+  def failure
+    Sentry.capture_message(params[:message])
+    redirect_to root_url, alert: 'Authentication failed.'
+  end
 
   private
 
-  def handle_google_login
-    utente = Utente.from_omniauth(request.env['omniauth.auth'])
-    log_in(utente, 'User') # Imposta il ruolo come 'User'
-    redirect_to root_path
+  def after_sign_in_path
+    request.env['omniauth.params']['after_sign_in_path'] || request.env['omniauth.origin'] || user_projects_path
   end
 
   # Genera una password casuale di lunghezza 10 con almeno una lettera maiuscola

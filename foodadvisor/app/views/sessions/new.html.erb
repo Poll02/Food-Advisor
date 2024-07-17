@@ -42,9 +42,11 @@
                     <%= submit_tag 'Accedi', id: "login-btn" %>
                 <% end %>
                     <hr class="solid" style="width: 200px;" id="divider">
-                    <a href="/auth/google_oauth2/callback"><button type="button" id="login-btn" style="background-color: rgb(6, 176, 176); margin-bottom: 10px;">
-                        <ion-icon name="logo-google"></ion-icon>Accedi con Google
-                    </button></a>
+                    <%= link_to sign_in_path, id: "login-btn", style: "background-color: rgb(6, 176, 176); margin-bottom: 10px;" do %>
+                        <ion-icon name="logo-google"></ion-icon> Accedi con Google
+                      <% end %>
+                      
+                      
                     
                     <fb:login-button scope="public_profile,email" onlogin="checkLoginState();">
                     </fb:login-button>
@@ -95,4 +97,3 @@
         </div>
     </div>
 </div>
-

@@ -151,10 +151,6 @@ Rails.application.routes.draw do
     # Rotta per il logout (DELETE)
     delete 'logout', to: 'sessions#destroy', as: :logout
     #get 'sessions/new'
-    #get 'login', to: 'sessions#new'
-    #post 'login', to: 'sessions#create'
-    get 'auth/google_oauth2/callback', to: 'sessions#create'
-    get 'auth/failure', to: redirect('/')
       
     get 'home/index'
     
@@ -222,6 +218,10 @@ Rails.application.routes.draw do
         post 'add_like'
       end
     end
-  
-  
+
+    # AUTHENTICATION ROUTES 
+    get 'auth/:provider/callback', to: 'sessions#create' 
+    get '/sign_out', to: 'sessions#destroy', as: :sign_out 
+    get '/auth/google_oauth2', as: :sign_in
+    get '/auth/failure' => 'sessions#failure'
   end
