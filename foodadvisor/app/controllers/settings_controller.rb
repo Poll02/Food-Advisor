@@ -19,26 +19,36 @@ class SettingsController < ApplicationController
     end
   end
 
-  def update_credentials  
-     # Log dei parametri ricevuti
+  def update_credentials
+    # Log dei parametri ricevuti
     logger.info "Params ricevuti: #{params.inspect}"
     logger.info "User params: #{user_params.inspect}"
-
+  
+    # Controlla la password se è presente
     if params[:utente][:password].present?
+      # Controllo della complessità della password
+      unless params[:utente][:password] =~ /^(?=.*[A-Z]).{4,}$/  # Almeno una lettera maiuscola e lunga almeno 4 caratteri
+        flash[:alert] = 'La nuova password deve contenere almeno una lettera maiuscola e essere lunga almeno 4 caratteri.'
+        render :edit
+        return
+      end
+  
+      # Se la password è stata inserita, annulla la temporanea e distruggi la sessione
       @current_user.update(tmp_password: nil)
     end
-
+  
     # Controllare la password corrente
     if params[:current_password].present? && @current_user.authenticate(params[:current_password])
       logger.info "Password corrente corretta."
-
+  
       # Se password_digest è nil, impostarlo alla password corrente
       if params[:utente][:password].blank?
         @current_user.password = params[:current_password]
         @current_user.password_confirmation = params[:current_password]
         logger.info "Password digest era nil, impostato alla password corrente."
       end
-      # se viene caricata la foto
+  
+      # Gestione del caricamento della foto per cliente
       if session[:role] != 'Admin' && params[:utente][:cliente_attributes][:foto]
         uploaded_file = params[:utente][:cliente_attributes][:foto]
         file_path = Rails.root.join('app', 'assets', 'images', uploaded_file.original_filename)
@@ -47,15 +57,16 @@ class SettingsController < ApplicationController
         end
         params[:utente][:cliente_attributes][:foto] = uploaded_file.original_filename
       end
-      # aggiornamento informazioni
+  
+      # Aggiornamento delle informazioni dell'utente
       if @current_user.update(user_params)
         # Reindirizza l'utente con un messaggio di successo
         logger.info "Aggiornamento credenziali riuscito."
         flash[:notice] = 'Credenziali aggiornate con successo.'
-        redirect_to settings_path 
+        redirect_to settings_path
       else
         # Rendi la vista del form con errori
-        logger.error "Errore aggiornamento credenziali: #{@current_user.errors.full_messages.join(", ")}"
+        logger.error "Errore aggiornamento credenziali: #{current_user.errors.full_messages.join(", ")}"
         flash[:alert] = 'Errore aggiornamento credenziali.'
         render :edit
       end
@@ -64,7 +75,7 @@ class SettingsController < ApplicationController
       flash[:alert] = 'Password corrente non corretta.'
       render :edit
     end
-  end
+  end 
   
 
   def destroy

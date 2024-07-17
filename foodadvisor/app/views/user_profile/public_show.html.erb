@@ -26,9 +26,9 @@
         </div>
     </div>
     <% if session[:role]!='Admin' && @current_user.present? && @current_user.cliente.id != @user.cliente.id%> 
-    <div class="public-u-follow-btn">
-    <button type="button" class="report-icon" id="report-rest" style="background-color: rgb(221, 60, 60);" data-report="<%= @user.id %>" data-type="user">Segnala</button>
-    </div>
+      <div class="public-u-follow-btn">
+        <button type="button" class="report-icon" id="report-rest" style="background-color: rgb(221, 60, 60);" data-report="<%= @user.id %>" data-type="user">Segnala</button>
+      </div>
     <% end %>
 
     <hr class="solid" id="divider" style="width: 80%;">
@@ -60,7 +60,7 @@
                     </div>
                     <div class="public-r-rev-icon">
                     <% if session[:role] == 'Admin' %>
-                    <i class="fa-solid fa-trash"></i>
+                      <i class="fa-solid fa-trash"></i>
                     <% elsif @current_user.present? %>
                         <% if @current_user.cliente.id != review.cliente_id%>
                         <i class="fa fa-exclamation-circle report-icon" data-report="<%= review.id %>" data-type="recensione"></i>

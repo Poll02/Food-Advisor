@@ -93,6 +93,7 @@
               <input type="date" id="data" name="data" required>
               <label for="orario">Orario:</label>
               <input type="hidden" id="ristoratore_id" name="ristoratore_id" value="<%= @restaurant_owner.id %>">
+              <input type="hidden" id="user_id" name="user_id" value="<%= @current_user.cliente.user.id %>">
               <input type="time" id="orario" name="orario" required>
               <button type="submit">Prenota</button>
             </form>
@@ -271,6 +272,7 @@
             </div>
             <div class="public-review-icon">
               <%= form_with url: add_like_review_path(review), method: :post, remote: true, html: { class: 'like-form' } do %>
+                <%= hidden_field_tag :cliente_id, @current_user.cliente.id %>
           <%= hidden_field_tag :review_id, review.id %>
           <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
           <button type="submit" class="like-button" style="background: none; border: none;">

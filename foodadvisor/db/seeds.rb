@@ -54,7 +54,6 @@ end
   end
 end
 
-# Creiamo 8 ristoratori collegati ai primi 8 clienti
 ristoratori = Cliente.limit(8).map do |cliente|
   ristoratore = Ristoratore.create!(
     cliente_id: cliente.id,
@@ -64,14 +63,14 @@ ristoratori = Cliente.limit(8).map do |cliente|
     indirizzo: Faker::Address.full_address
   )
 
-  # Creiamo un menu per ogni ristoratore
+  # Verifica se il menu è già stato creato (dovrebbe essere evitato)
   if ristoratore.menu.nil?
     menu = Menu.create!(
       ristoratore_id: ristoratore.id
     )
   end
 
-  # Creiamo dipendenti per ogni ristoratore
+  # Creiamo dipendenti per questo ristoratore
   5.times do
     Dipendente.create!(
       nome: Faker::Name.first_name,
@@ -83,7 +82,7 @@ ristoratori = Cliente.limit(8).map do |cliente|
     )
   end
 
-  # Creiamo eventi per ogni ristoratore
+  # Creiamo eventi per questo ristoratore
   3.times do
     Evento.create!(
       nome: Faker::Lorem.word,
@@ -95,14 +94,15 @@ ristoratori = Cliente.limit(8).map do |cliente|
     )
   end
 
+  # Trova il menu associato al ristoratore
   menu = Menu.find_by(ristoratore_id: ristoratore.id)
-
-  # Creiamo piatti per il menu del ristoratore
+  
+  # Creiamo piatti per il menu di questo ristoratore
   categories = ["Antipasto", "Primo", "Secondo", "Dolce", "Bevanda"]
   categories.each do |category|
     5.times do
       Piatto.create!(
-        menu_id: menu.id,
+        menu_id: menu.id,  # Utilizziamo il menu appena creato per questo ristoratore
         nome: Faker::Food.dish,
         prezzo: Faker::Commerce.price(range: 5.0..50.0),
         foto: 'piatto.jpg',
@@ -112,7 +112,7 @@ ristoratori = Cliente.limit(8).map do |cliente|
     end
   end
 
-  # Creiamo almeno 2 ricette per ristoratore
+  # Creiamo almeno 2 ricette per questo ristoratore
   2.times do
     Recipe.create!(
       name: Faker::Food.dish,
@@ -124,16 +124,19 @@ ristoratori = Cliente.limit(8).map do |cliente|
     )
   end
 
-  # Creiamo 3 competizioni per ogni ristoratore
+  # Creiamo 3 competizioni per questo ristoratore
   3.times do
+    requisiti = ['nessuno', 'prenotazioni', 'recensioni', 'punti'].sample
+    quantitareq = requisiti == 'nessuno' ? 0 : Faker::Number.between(from: 1, to: 10)
+
     Competizione.create!(
       nome: Faker::Lorem.word,
-      descrizione: Faker::Lorem.sentence,
       locandina: 'evento.jpg',
-      requisiti: Faker::Lorem.sentence,
+      descrizione: '2 punti: lasciare una recensione\n5 punti: effettuare una prenotazione valida\n3 punti: ricevi un like alla recensione da un critico\n2 punti: ricevi un like alla recensione',
+      requisiti: requisiti,
       premio: Faker::Commerce.product_name,
-      quantitareq: Faker::Number.between(from: 1, to: 10),
-      data_inizio: Faker::Date.between(from: '2022-01-01', to: Date.today),
+      quantitareq: quantitareq,
+      data_inizio: Faker::Date.between(from: '2024-01-01', to: Date.today),
       data_fine: Faker::Date.between(from: Date.today, to: '2025-12-31'),
       ristoratore_id: ristoratore.id
     )
@@ -141,6 +144,7 @@ ristoratori = Cliente.limit(8).map do |cliente|
 
   ristoratore
 end
+
 
 # Creiamo 10 user collegati ai restanti 10 clienti
 Cliente.offset(8).limit(11).each do |cliente|
@@ -157,7 +161,7 @@ Cliente.offset(8).limit(11).each do |cliente|
   if Cliente.offset(8).limit(3).include?(cliente)
     Critico.create!(
       user_id: user.id,
-      certificato: Faker::Lorem.sentence
+      certificato: 'certificato.jpg'
     )
   end
 end
@@ -275,12 +279,20 @@ end
 # Creiamo prenotazioni
 User.all.each do |user|
   ristoratori.sample(rand(1..3)).each do |ristoratore|
+    data = Faker::Date.between(from: Date.today, to: 5.days.from_now)
+
+    orario = if data == Date.today
+               Faker::Time.between(from: Time.now, to: Date.today.end_of_day, format: :short)
+             else
+               Faker::Time.between(from: data.beginning_of_day, to: data.end_of_day, format: :short)
+             end
+
     Prenotazione.create!(
       user_id: user.id,
       ristoratore_id: ristoratore.id,
-      data: Faker::Date.between(from: 5.days.ago, to: 5.days.from_now),
-      orario: Faker::Time.between(from: 5.days.ago, to: 5.days.from_now, format: :short),
-      numero_persone: Faker::Number.between(from: 1, to: 10)
+      data: data,
+      orario: orario,
+      numero_persone: Faker::Number.between(from: 1, to: 20)
     )
   end
 end

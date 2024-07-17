@@ -1,5 +1,16 @@
 <%= stylesheet_link_tag 'home', media: 'all' %>
 <div class="homepage-container">
+    <% if flash[:notice] %>
+        <div class="alert alert-success" role="alert">
+        <%= flash[:notice] %>
+        </div>
+    <% end %>
+
+    <% if flash[:alert] %>
+        <div class="alert alert-danger" role="alert">
+        <%= flash[:alert] %>
+        </div>
+    <% end %>
     <% if logged_in? %>
         <div class="alert" style="font-style: italic; color: #00b072;">
         <p>Benvenuto,
@@ -132,7 +143,19 @@
             </div>
         </div>
         <div class="reserv-container" style="margin-left: 30px; display: flex; justify-content: center; align-items: center; width: 20%;">
-            <h2>Accedi al <a href="<%=login_path %>"><span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span></a>  per effettuare e visualizzare le tue prenotazioni!</h3>
+            <% if session[:user_id].nil? %>
+                <h2>Accedi al <a href="<%= login_path %>"><span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span></a> per effettuare e visualizzare le tue prenotazioni!</h2>
+            <% elsif session[:role] == 'Admin' %>
+                <h2>Accedi al <a href="<%= admin_profile_path %>"><span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span></a> per effettuare e visualizzare le tue prenotazioni!</h2>
+            <% elsif session[:role] == 'Ristoratore' %>
+                <h2>Accedi al <a href="<%= restaurateur_profile_path %>"><span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span></a> per effettuare e visualizzare le tue prenotazioni!</h2>
+            <% elsif session[:role] == 'Critico' %>
+                <h2>Accedi al <a href="<%= critic_profile_path %>"><span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span></a> per effettuare e visualizzare le tue prenotazioni!</h2>
+            <% elsif session[:role] == 'User' %>
+                <h2>Accedi al <a href="<%= user_profile_path %>"><span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span></a> per effettuare e visualizzare le tue prenotazioni!</h2>
+            <% else %>
+                <h2>Accedi al <a href="<%= root_path %>"><span style="font-style: italic; cursor: pointer; color: #00b072;">tuo account</span></a> per effettuare e visualizzare le tue prenotazioni!</h2>
+            <% end %>
         </div>
     </div>
 </div>
