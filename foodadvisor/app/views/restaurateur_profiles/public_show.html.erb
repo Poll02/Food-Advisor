@@ -38,7 +38,7 @@
           <span class="piatto category-<%= category_class %>"><%= tag.nome %></span>
               <% end %>
             <% else %>
-              <p>Nessun tag associato</p>
+              <p style="color: gray;">Il ristorante non ha nessun tag associato</p>
             <% end %>
           </div>
           <% if @restaurant_owner.cliente.foto.present? %>
@@ -64,7 +64,6 @@
     </div>
    
     <div class="review-reserve-buttons">
- 
         <button type="button" class="review">Lascia una Recensione</button>
         <button type="button" style="background-color: rgb(234, 183, 121);" class="open-reserv-modal">Prenota un Tavolo</button>
         <%= link_to public_show_menus_path(@restaurant_owner.id), class: 'user-link' do %><button type="button" style="background-color: rgb(234, 123, 121);" >Menù</button><% end %>
@@ -85,7 +84,7 @@
               <input type="date" id="data" name="data" required>
               <label for="orario">Orario:</label>
               <input type="hidden" id="ristoratore_id" name="ristoratore_id" value="<%= @restaurant_owner.id %>">
-              <% if session[:user_id] && @current_user.present? && @current_user.cliente.present? %>
+              <% if @current_user && @current_user.cliente.present? && @current_user.cliente.user.present? %>
                 <input type="hidden" id="user_id" name="user_id" value="<%= @current_user.cliente.user.id %>">
               <% end %>
               <input type="time" id="orario" name="orario" required>
@@ -96,7 +95,6 @@
 
     </div>
     
-    <% if session[:role] == 'User' || session[:role] == 'Critico' %>
     <div id="reviewModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
@@ -130,7 +128,6 @@
         <% end %>
       </div>
     </div>
-    <% end %>
 
 
       <h1>Eventi</h1>
@@ -155,7 +152,7 @@
               </div>
             <% end %>
             <% else %>
-      <p>Nessun evento trovato</p>
+      <p style="color: gray; ">Nessun evento trovato</p>
     <% end %>
           </div>
       </div>
@@ -173,7 +170,7 @@
         </div>
         <% end %>
     <% else %>
-      <p>Nessuna promozione attiva</p>
+      <p style="color: gray; ">Nessuna promozione attiva</p>
     <% end %>
         
     </div>
@@ -204,32 +201,31 @@
     
     <h1 style="margin-bottom: 20px;">Recensioni</h1>
     <div class="reviews-filters">
-    <form action="<%= public_restaurant_profile_path %>" method="GET" id="filterForm">
-    <label for="date">Data:</label>
-    <input type="date" id="date" name="date" value="<%= params[:date] %>">
+      <form action="<%= public_restaurant_profile_path %>" method="GET" id="filterForm">
+        <label for="date">Data:</label>
+        <input type="date" id="date" name="date" value="<%= params[:date] %>">
 
-    <label for="stars_from">Numero di stelle da:</label>
-    <input type="number" id="stars_from" name="stars_from" min="1" max="5" value="<%= params[:stars_from] %>">
+        <label for="stars_from">Numero di stelle da:</label>
+        <input type="number" id="stars_from" name="stars_from" min="1" max="5" value="<%= params[:stars_from] %>">
 
-    <label for="stars_to">Numero di stelle a:</label>
-    <input type="number" id="stars_to" name="stars_to" min="1" max="5" value="<%= params[:stars_to] %>">
+        <label for="stars_to">Numero di stelle a:</label>
+        <input type="number" id="stars_to" name="stars_to" min="1" max="5" value="<%= params[:stars_to] %>">
 
-    <label for="order">Ordine:</label>
-    <select id="order" name="order">
-        <option value="asc" <%= 'selected' if params[:order] == 'asc' %>>Ascendente</option>
-        <option value="desc" <%= 'selected' if params[:order] == 'desc' %>>Discendente</option>
-    </select>
+        <label for="order">Ordine:</label>
+        <select id="order" name="order">
+            <option value="asc" <%= 'selected' if params[:order] == 'asc' %>>Ascendente</option>
+            <option value="desc" <%= 'selected' if params[:order] == 'desc' %>>Discendente</option>
+        </select>
 
-    <!-- Campo nascosto per ID del ristoratore -->
-    <input type="hidden" id="id" name="id" value="<%= @restaurant_owner.id %>">
+        <!-- Campo nascosto per ID del ristoratore -->
+        <input type="hidden" id="id" name="id" value="<%= @restaurant_owner.id %>">
 
-    <button type="submit">Cerca</button>
-    <button type="button" onclick="resetForm()">Azzera</button>
-</form>
+        <button type="submit">Cerca</button>
+        <button type="button" onclick="resetForm()">Azzera</button>
+      </form>
+    </div>
 
-</div>
-
-    <div class="public-r-reviews-grid"> 
+    <div class="public-r-reviews-grid" style="margin-top: 10px; height: 400px; overflow-y: scroll; "> 
       <% if @reviews.any? %>
         <% @reviews.each do |review| %>
           <div class="public-r-reviews">
@@ -240,12 +236,12 @@
                 <%= image_tag 'background.jpg', class: 'recensione-foto' %>
               <% end %>
               <div class="public-review-text">
-                <% if review.cliente.user.critico %>
+                <% if review.cliente.user && review.cliente.user.critico %>
                   <%= link_to public_critic_profile_path(review.cliente.user.critico.id), style: "color: black; " do %>
                     <p style="font-weight: bold";><%= review.cliente.user.username %></p>
                     <p style = "color: red;"> CRITICO </p>
                   <% end %>
-                <% else %>
+                <% elsif review.cliente.user %>
                   <%= link_to public_user_profile_path(review.cliente.user.id), style: "color: black; " do %>
                     <p style="font-weight: bold";><%= review.cliente.user.username %></p>
                   <% end %>
@@ -303,7 +299,7 @@
         
         <% end %>
       <% else %>
-        <p>Nessuna recensione trovata</p>
+        <p style="color: gray;">Nessuna recensione trovata</p>
       <% end %>
     </div>
     

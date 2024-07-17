@@ -5,21 +5,23 @@ class ReviewsController < ApplicationController
   before_action :find_review, only: [:add_like]
 
   def create
+    unless ['User', 'Critico'].include?(session[:role])
+      flash[:alert] = 'Non puoi lasciare una recensione'
+      return redirect_back(fallback_location: root_path)
+    end
+  
     @review = Recensione.new(
       stelle: params[:stelle],
-      commento: params[:commento]
+      commento: params[:commento],
+      cliente: @current_user.cliente,
+      ristoratore: @restaurant_owner.ristoratore
     )
-    @review.cliente = @current_user.cliente
-    @review.ristoratore = @restaurant_owner.ristoratore
-    
+  
     if @review.save
       # Aggiunta di due punti a punti_competizione di UserCompetition associata per competizioni attive
-      @current_user.cliente.user.user_competitions.each do |uc|
-        if uc.competizione.data_fine >= Date.today
-          uc.punti_competizione += 2
-          uc.save!
-          
-        end
+      @current_user.cliente.user.user_competitions.where('competizione.data_fine >= ?', Date.today).each do |uc|
+        uc.punti_competizione += 2
+        uc.save!
       end
   
       flash[:notice] = 'Recensione salvata con successo!'
@@ -28,7 +30,8 @@ class ReviewsController < ApplicationController
       flash[:alert] = 'Errore durante il salvataggio della recensione'
       redirect_back(fallback_location: root_path)
     end
-  end  
+  end
+  
 
   def update
     @review=Recensione.find(params[:reviewId])
