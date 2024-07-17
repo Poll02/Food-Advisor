@@ -4,21 +4,22 @@ class PrenotazioneController < ApplicationController
 
   def create
     ristoratore = Ristoratore.find_by(id: params[:prenotazione][:ristoratore_id])
+    
     if session[:role] != 'User' && session[:role] != 'Critico'
-      flash[:alert] = "non puoi prenotare"
-      redirect_to public_restaurant_profile_path(ristoratore)
+      flash[:alert] = "Non puoi effettuare la prenotazione"
+      redirect_to public_restaurant_profile_path(ristoratore) and return
     end
+  
     Rails.logger.info("Inizio creazione prenotazione")
     Rails.logger.info("parametri passati : #{prenotazione_params.inspect}")
-
-    
+  
     @prenotazione = Prenotazione.new(prenotazione_params)
     Rails.logger.info("vediamo il current user: #{@current_user}")
     #@prenotazione.user_id = @current_user.cliente.user.id
     Rails.logger.info("parametri prenotazione: #{@prenotazione.inspect}")
-
+  
     Rails.logger.info("User ID assegnato alla prenotazione: #{@prenotazione.user_id}")
-    
+  
     @prenotazione.valida = false  # Impostare valida a false
     Rails.logger.info("Prenotazione impostata come non valida")
   

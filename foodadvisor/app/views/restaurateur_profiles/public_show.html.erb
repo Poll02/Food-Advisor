@@ -79,31 +79,29 @@
             <span class="close-reserv-modal">&times;</span>
             <h2>Effettua una Prenotazione</h2>
             <%= form_with(model: @prenotazione, url: '/prenotazione', method: :post, id: "reservForm", local: true) do |form| %>
-  <%= form.fields_for :prenotazione do |pf| %>
-    <div class="form-group">
-      <%= pf.label :numero_persone, 'Numero di Persone:' %>
-      <%= pf.number_field :numero_persone, class: 'form-control', required: true , id: 'numero-persone'%>
-    </div>
-    <div class="form-group">
-  <%= pf.label :data, 'Data prenotazione:' %>
-  <%= pf.date_field :data, class: 'form-control', required: true, id: 'prenotazione_data' , id: 'data-prenotazione'%>
-</div>
+              <%= form.fields_for :prenotazione do |pf| %>
+                <div class="form-group">
+                  <%= pf.label :numero_persone, 'Numero di Persone:' %>
+                  <%= pf.number_field :numero_persone, class: 'form-control', required: true , id: 'numero-persone'%>
+                </div>
+                <div class="form-group">
+              <%= pf.label :data, 'Data prenotazione:' %>
+              <%= pf.date_field :data, class: 'form-control', required: true, id: 'data-prenotazione' %>
+            </div>
 
-    <div class="form-group">
-      <%= pf.label :orario, 'Orario:' %>
-      <%= pf.time_field :orario, class: 'form-control', required: true , id: 'orario-prenotazione'%>
-    </div>
-    <%= pf.hidden_field :ristoratore_id, value: @restaurant_owner.id %>
- 
-    <% if @current_user && @current_user.cliente.present? && @current_user.cliente.user.present? %>
-      <%= pf.hidden_field :user_id, value: @current_user.cliente.user.id %>
-    <% end %>
-  <% end %>
-  <%= form.submit 'Prenota', class: 'btn btn-primary' %>
-  <%= form.button 'Annulla', type: 'reset', class: 'btn btn-secondary' %>
-<% end %>
-
-
+                <div class="form-group">
+                  <%= pf.label :orario, 'Orario:' %>
+                  <%= pf.time_field :orario, class: 'form-control', required: true , id: 'orario-prenotazione'%>
+                </div>
+                <%= pf.hidden_field :ristoratore_id, value: @restaurant_owner.id %>
+            
+                <% if @current_user && @current_user.cliente.present? && @current_user.cliente.user.present? %>
+                  <%= pf.hidden_field :user_id, value: @current_user.cliente.user.id %>
+                <% end %>
+              <% end %>
+              <%= form.submit 'Prenota', class: 'btn btn-primary' %>
+              <%= form.button 'Annulla', type: 'reset', class: 'btn btn-secondary' %>
+            <% end %>
 
           </div>
         </div>

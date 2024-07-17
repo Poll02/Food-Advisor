@@ -26,11 +26,7 @@ RSpec.feature "Booking", type: :feature, js: true do
     
     # Imposta i valori dei campi utilizzando execute_script
     execute_script("document.getElementById('numero-persone').value = '4';")
-    save_and_open_screenshot
-
     execute_script("document.getElementById('data-prenotazione').value = '2024-07-23';")
-    save_and_open_screenshot
-
     execute_script("document.getElementById('orario-prenotazione').value = '20:00';")
 
     # Esegui uno script JavaScript per impostare l'orario con AM/PM
@@ -48,6 +44,14 @@ RSpec.feature "Booking", type: :feature, js: true do
     expect(page).to have_content('Prenotazione creata con successo')
     save_and_open_screenshot
 
+    visit user_profile_path
+    save_and_open_screenshot
+
+    # Verifica che la prenotazione appena fatta sia presente tra le prenotazioni dell'utente
+    expect(page).to have_content('2024-07-23')
+    expect(page).to have_content('20:00')
+    expect(page).to have_content('4')
+    save_and_open_screenshot
   end
 
   scenario "Campi inseriti non validi" do
@@ -55,28 +59,27 @@ RSpec.feature "Booking", type: :feature, js: true do
     visit public_restaurant_profile_path(ristoratore1)    
     find('.open-reserv-modal').click
     
-    fill_in 'Numero di Persone', with: invalid_booking_details[:num_persone]
-    fill_in 'Data prenotazione', with: invalid_booking_details[:data]
-    fill_in 'Orario', with: invalid_booking_details[:orario]
+    execute_script("document.getElementById('numero-persone').value = '4';")
+    execute_script("document.getElementById('data-prenotazione').value = '2024-07-03';")
+    execute_script("document.getElementById('orario-prenotazione').value = '20:00';")
 
     click_button 'Prenota'
+    expect(page).to have_current_path(public_restaurant_profile_path(ristoratore1))
     
     expect(page).to have_content('Errore nella prenotazione')
   end
 
-  scenario "Prenotazione impossibile da effettuare" do
-    allow_any_instance_of(Prenotazione).to receive(:save).and_return(false)
+  scenario "Prenotazione impossibile da effettuare" do    
+    login_as_ristoratore(ristoratore1)
+    visit public_restaurant_profile_path(ristoratore1)
+    find('.open-reserv-modal').click
     
-    login_as(user3)
-    visit ristoratore_path(ristoratore1)
-    click_button 'Prenota un Tavolo'
-    
-    fill_in 'Numero di Persone', with: valid_booking_details[:num_persone]
-    fill_in 'Data', with: valid_booking_details[:data]
-    fill_in 'Orario', with: valid_booking_details[:orario]
-    click_button 'Prenota'
-    
-    expect(page).to have_content('Errore nella prenotazione')
+    execute_script("document.getElementById('numero-persone').value = '4';")
+    execute_script("document.getElementById('data-prenotazione').value = '2024-08-03';")
+    execute_script("document.getElementById('orario-prenotazione').value = '20:00';")
+
+    click_button 'Prenota'    
+    expect(page).to have_content('Non puoi effettuare la prenotazione')
   end
 
   scenario "Accettare una prenotazione" do
