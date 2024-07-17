@@ -11,16 +11,10 @@ class InfoController < ApplicationController
   end
 
   def bookings_per_week
-    Rails.logger.info("inizio grafico")
     
     start_date = Date.parse(params[:start_date])
     end_date = start_date.end_of_week(:sunday) + 1.day
     rist = @restaurant_owner.cliente.ristoratore.id
-    
-    Rails.logger.info("data inizio: #{start_date}")
-    Rails.logger.info("data fine: #{end_date}")
-
-    Rails.logger.info("id ristorante: #{rist}")
   
     bookings = Prenotazione.where(data: start_date..end_date, valida: true, ristoratore_id: rist)
                            .group("DATE(data)")

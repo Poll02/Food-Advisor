@@ -29,13 +29,10 @@ class CriticProfileController < ApplicationController
 
   def update
     if @critico.update(utente_params)
-      Rails.logger.debug "Impostazioni profilo aggiornate" # Utilizzo del logger di Rails
       # Se la foto è stata aggiornata, copiala in assets/images
       if params[:utente][:cliente_attributes][:foto].present?
-        Rails.logger.debug "presente immagine" # Utilizzo del logger di Rails
         photo_path = save_locandina(params[:utente][:cliente_attributes][:foto])
         @critico.cliente.foto = photo_path
-        Rails.logger.debug "in user ho: #{@critico.cliente.foto}" # Utilizzo del logger di Rails
       end
       redirect_to critic_profile_path, notice: 'I tuoi dettagli sono stati aggiornati con successo.'
     else
@@ -65,7 +62,6 @@ class CriticProfileController < ApplicationController
   end
 
   def monthly_bookings
-    Rails.logger.info("inizio ricerca prenotazioni mensili")
     year = params[:year].to_i
     month = params[:month].to_i
 
@@ -76,14 +72,8 @@ class CriticProfileController < ApplicationController
     start_date_str = start_date.strftime('%Y-%m-%d')
     end_date_str = end_date.strftime('%Y-%m-%d')
 
-    Rails.logger.info("data inizio ricerca #{start_date}")
-    Rails.logger.info("data fine ricerca #{end_date}")
-    Rails.logger.info("user id #{@critico.cliente.user.id}")
-
     # Query per le prenotazioni del mese
     prenotazioni = Prenotazione.where('data >= ? AND data <= ? AND valida = ? AND user_id = ?', start_date_str, end_date_str, true, @critico.cliente.user.id)
-
-    Rails.logger.info("prenotazioni #{prenotazioni.count}")
 
     render json: {
       bookings: prenotazioni
@@ -128,8 +118,6 @@ class CriticProfileController < ApplicationController
       file.write(image.read)
     end
     
-    Rails.logger.debug "Immagine salvata correttamente in: #{path}" # Utilizzo del logger di Rails
-    Rails.logger.debug "Immagine salvata come: #{filename}" # Utilizzo del logger di Rails
     filename
   end
 

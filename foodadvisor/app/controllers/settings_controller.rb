@@ -35,7 +35,6 @@ class SettingsController < ApplicationController
   
       # Se la password è stata inserita, annulla la temporanea e distruggi la sessione
       @current_user.update(tmp_password: nil)
-      Rails.logger.info("Variabile di sessione distrutta")
     end
   
     # Controllare la password corrente

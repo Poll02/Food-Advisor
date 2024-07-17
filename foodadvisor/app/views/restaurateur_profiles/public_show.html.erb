@@ -63,14 +63,16 @@
   
     
     </div>
-    <% if session[:role]!='Admin' && @current_user.present? && @current_user.cliente.id != @restaurant_owner.cliente.id%>
+   
     <div class="review-reserve-buttons">
+ 
         <button type="button" class="review">Lascia una Recensione</button>
         <button type="button" style="background-color: rgb(234, 183, 121);" class="open-reserv-modal">Prenota un Tavolo</button>
         <%= link_to public_show_menus_path(@restaurant_owner.id), class: 'user-link' do %><button type="button" style="background-color: rgb(234, 123, 121);" >Menù</button><% end %>
         <button type="button" id="add-rest-to-fav" data-ristoratore-id="<%= @restaurant_owner.id %>" style="background-color: rgb(71, 200, 82);">Aggiungi ai Preferiti</button>
+        <% if session[:role]!='Admin' || @current_user.present?%>
         <button type="button" class="report-icon" id="report-rest" style="background-color: rgb(221, 60, 60);" data-report="<%= @restaurant_owner.id %>" data-type="ristorante">Segnala</button>
-        
+        <% end%>
 
 
         <div id="reservModal" class="reserv-modal">
@@ -84,7 +86,7 @@
               <input type="date" id="data" name="data" required>
               <label for="orario">Orario:</label>
               <input type="hidden" id="ristoratore_id" name="ristoratore_id" value="<%= @restaurant_owner.id %>">
-              <% if @current_user.cliente.user %>
+              <% if session[:user_id] && @current_user.cliente.present? %>
                 <input type="hidden" id="user_id" name="user_id" value="<%= @current_user.cliente.user.id %>">
               <% end %>
               <input type="time" id="orario" name="orario" required>
@@ -94,7 +96,7 @@
         </div>
 
     </div>
-    <% end %>
+    
     <% if session[:role] == 'User' || session[:role] == 'Critico' %>
     <div id="reviewModal" class="modal">
       <div class="modal-content">
@@ -276,7 +278,9 @@
                     <i class="fa-solid fa-pen-to-square change-icon" data-review="<%= review.id %>" data-review-star="<%= review.stelle %>" data-review-commento="<%= review.commento %>"></i>
                   <% end %>
                 <% else %>
-                  <i class="fa-solid fa-trash"></i>                  
+                  <%= form_with model: review ,url: review_path(review.id), method: :delete, local: true do %>
+                    <button type="submit"><i class="fa-solid fa-trash"></i></button>
+                  <% end %>                 
                 <% end %> 
               <% end %>
             </div>
@@ -673,5 +677,14 @@ document.addEventListener('DOMContentLoaded', () => {
 .star:not(.selected) {
   fill: none; /* Stelle vuote senza riempimento */
 }
+
+.fa-trash{
+  transition: color 0.3s ease;
+}
+
+.fa-trash:hover {
+  color: red;
+}
+
 
 </style>

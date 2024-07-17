@@ -5,8 +5,6 @@ class NotificationsController < ApplicationController
       end
     
       def create
-        Rails.logger.info("inizio creazione notifica")
-        Rails.logger.info(params.inspect) # Aggiungi questo per vedere i parametri nei log
         user = Utente.find_by(email: params[:email])
         if user
           @notification = user.cliente.notifications.new(notification_params)
