@@ -60,7 +60,6 @@
     </span></p>
   </div>
   
-  
     
     </div>
    
@@ -69,7 +68,7 @@
         <button type="button" style="background-color: rgb(234, 183, 121);" class="open-reserv-modal">Prenota un Tavolo</button>
         <%= link_to public_show_menus_path(@restaurant_owner.id), class: 'user-link' do %><button type="button" style="background-color: rgb(234, 123, 121);" >Menù</button><% end %>
         <button type="button" id="add-rest-to-fav" data-ristoratore-id="<%= @restaurant_owner.id %>" style="background-color: rgb(71, 200, 82);">Aggiungi ai Preferiti</button>
-        <% if session[:role]!='Admin' || @current_user.present?%>
+        <% if session[:role]!='Admin' && @current_user.present?%>
         <button type="button" class="report-icon" id="report-rest" style="background-color: rgb(221, 60, 60);" data-report="<%= @restaurant_owner.id %>" data-type="ristorante">Segnala</button>
         <% end%>
 
