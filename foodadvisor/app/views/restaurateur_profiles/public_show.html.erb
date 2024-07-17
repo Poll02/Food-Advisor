@@ -51,20 +51,13 @@
     <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.email %></span></p>
     <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.telefono %></span></p>
     <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"> <%= @restaurant_owner.indirizzo %></span></p>
-    <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> 
+    <p style="font-weight: bold;">Asporto? <span style="font-weight: normal;"> 
       <% if @restaurant_owner.asporto %>
       Si
       <% else %>
       No
       <% end %>
-
-
-
-
-
-    
     </span></p>
-    
   </div>
   
   
@@ -91,7 +84,9 @@
               <input type="date" id="data" name="data" required>
               <label for="orario">Orario:</label>
               <input type="hidden" id="ristoratore_id" name="ristoratore_id" value="<%= @restaurant_owner.id %>">
-              <input type="hidden" id="user_id" name="user_id" value="<%= @current_user.cliente.user.id %>">
+              <% if @current_user.cliente.user %>
+                <input type="hidden" id="user_id" name="user_id" value="<%= @current_user.cliente.user.id %>">
+              <% end %>
               <input type="time" id="orario" name="orario" required>
               <button type="submit">Prenota</button>
             </form>
@@ -183,30 +178,26 @@
     </div>
     <hr class="solid" id="divider" style="width: 70%;">
     <h1 style="margin-bottom: 20px;">Ricette Condivise</h1>
-    <div class="r-public-recipes">
-      <div class="restaurants-grid" style="width: 1300px; justify-content: center;" id="recipes-grid">
-        <% if @recipes.any? %>
-      <% @recipes.each do |recipe| %>
-        <div class="restaurant-box" id="recipes-box">
-          <% if recipe.photo.present? %>
-            <%= image_tag recipe.photo %>
-          <% else %>
-            <%= image_tag 'background.jpg' %>
-          <% end %>
-          <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
-            <p><%= recipe.name %></p>
-            <p style="font-size: 13px; font-weight: normal;">Difficoltà: <span><%= recipe.difficulty %></span></p>
-            <p style="font-size: 13px; font-weight: normal;">Ingredienti: <span><%= recipe.ingredients %></span></p>
-            <p style="font-size: 13px; font-weight: normal; font-style: italic;"><%= recipe.procedure %></p>
-            <button type="submit" data-recipe-id="<%= recipe.id %>" id="add-recipe-fav" class="add-recipe-fav">Preferiti +</button>
-
+    <div class="r-ricette" style="border: none; box-shadow: 0 0 0;">
+      <% if @recipes.any? %>
+        <% @recipes.each do |recipe| %>
+          <div class="r-ricetta">
+            <% if recipe.photo.present? %>
+              <%= image_tag recipe.photo, class: 'ricetta-foto' %>
+            <% else %>
+              <%= image_tag 'background.jpg', class: 'ricetta-foto' %>
+            <% end %>
+            <div class="ricetta-info">
+              <p>Nome: <%= recipe.name %></p>
+              <p>Difficoltà: <%= recipe.difficulty %></p>
+              <p>Ingredienti: <%= recipe.ingredients %></p>
+              <p>Procedimento: <%= recipe.procedure %></p>
+            </div>
           </div>
-        </div>
+        <% end %>
+      <% else %>
+        <p style="color: gray; ">Non hai condiviso alcuna ricetta.</p>
       <% end %>
-    <% else %>
-      <p>Il ristorante non ha condiviso ricette</p>
-    <% end %>
-    </div>
     </div>
     <hr class="solid" id="divider" style="width: 70%;">
     
@@ -269,25 +260,25 @@
               </div>
             </div>
             <div class="public-review-icon">
-              <%= form_with url: add_like_review_path(review), method: :post, remote: true, html: { class: 'like-form' } do %>
-                <%= hidden_field_tag :cliente_id, @current_user.cliente.id %>
-                <%= hidden_field_tag :review_id, review.id %>
-                <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
-                <button type="submit" class="like-button" style="background: none; border: none;">
-                  <i class="fa-regular fa-thumbs-up like-icon" style="font-size: 20px; cursor: pointer; "></i>
-                </button>
-
+              <% if @current_user.present? %> 
+                <%if session[:role] != 'Admin' %>
+                  <%= form_with url: add_like_review_path(review), method: :post, remote: true, html: { class: 'like-form' } do %>
+                    <%= hidden_field_tag :cliente_id, @current_user.cliente.id %>
+                    <%= hidden_field_tag :review_id, review.id %>
+                    <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
+                    <button type="submit" class="like-button" style="background: none; border: none;">
+                      <i class="fa-regular fa-thumbs-up like-icon" style="font-size: 20px; cursor: pointer; "></i>
+                    </button>
+                  <% end %>
+                  <% if @current_user.cliente.id != review.cliente_id%>
+                    <i class="fa fa-exclamation-circle report-icon" data-report="<%= review.id %>" data-type="recensione"></i>
+                  <% elsif @current_user.cliente.id == review.cliente_id %>
+                    <i class="fa-solid fa-pen-to-square change-icon" data-review="<%= review.id %>" data-review-star="<%= review.stelle %>" data-review-commento="<%= review.commento %>"></i>
+                  <% end %>
+                <% else %>
+                  <i class="fa-solid fa-trash"></i>                  
+                <% end %> 
               <% end %>
-
-              <% if session[:role] == 'Admin' %>
-                <i class="fa-solid fa-trash"></i>
-              <% elsif @current_user.present? %>
-                <% if @current_user.cliente.id != review.cliente_id%>
-                  <i class="fa fa-exclamation-circle report-icon" data-report="<%= review.id %>" data-type="recensione"></i>
-                <% elsif @current_user.cliente.id == review.cliente_id %>
-                  <i class="fa-solid fa-pen-to-square change-icon" data-review="<%= review.id %>" data-review-star="<%= review.stelle %>" data-review-commento="<%= review.commento %>"></i>
-                <% end %>
-              <% end %> 
             </div>
           </div>
 

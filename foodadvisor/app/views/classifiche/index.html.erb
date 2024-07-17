@@ -6,7 +6,7 @@
             <h2>Ristoranti</h2>
             <% if @top_restaurants.any? %>
                 <% @top_restaurants.each_with_index do |restaurant, index| %>
-                    <%= link_to public_restaurant_profile_path(restaurant.id), style: "color: black; " do %>
+                    <%= link_to public_restaurant_profile_path(restaurant.id), class: 'linksito' do %>
                         <div class="most-rewarded-rest-box">
                             <p style="font-weight: bolder; color: #00b072;"><%= index + 1 %></p>
                             <%= image_tag restaurant.cliente.foto || 'background.jpg' %>  
@@ -30,7 +30,7 @@
             <% if @top_users.any? %>
                 <% @top_users.each_with_index do |user, index| %>
                     <% if user.critico %>
-                        <%= link_to public_critic_profile_path(user.id), style: "color: black; " do %>
+                        <%= link_to public_critic_profile_path(user.id), class: 'linksito' do %>
                         <div class="most-rewarded-user-box">
                         <p style="font-weight: bolder; color: #00b072;"><%= index + 1 %></p>
                         <%= image_tag user.cliente.foto || 'user.jpg' %>   
@@ -44,7 +44,7 @@
                         <hr class="solid" id="divider">
                         <% end %>
                     <% else %>
-                        <%= link_to public_user_profile_path(user.id), style: "color: black; " do %>
+                        <%= link_to public_user_profile_path(user.id), class: 'linksito' do %>
                         <div class="most-rewarded-user-box">
                         <p style="font-weight: bolder; color: #00b072;"><%= index + 1 %></p>
                         <%= image_tag user.cliente.foto || 'user.jpg' %>   

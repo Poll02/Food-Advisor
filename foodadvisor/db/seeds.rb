@@ -98,14 +98,24 @@ ristoratori = Cliente.limit(8).map do |cliente|
   menu = Menu.find_by(ristoratore_id: ristoratore.id)
   
   # Creiamo piatti per il menu di questo ristoratore
-  categories = ["Antipasto", "Primo", "Secondo", "Dolce", "Bevanda"]
+  categories = ["Antipasto", "Primo", "Secondo", "Dolce", "Bevanda", "Pizza"]
   categories.each do |category|
     5.times do
+      foto = case category
+            when "Antipasto" then 'antipasto.jpg'
+            when "Primo" then 'primo.jpg'
+            when "Secondo" then 'secondo.jpg'
+            when "Dolce" then 'dolce.jpg'
+            when "Bevanda" then 'bevanda.jpg'
+            when "Pizza" then 'pizza.jpg'
+            else 'piatto.jpg' # Fallback in caso di categoria non prevista
+            end
+
       Piatto.create!(
         menu_id: menu.id,  # Utilizziamo il menu appena creato per questo ristoratore
         nome: Faker::Food.dish,
         prezzo: Faker::Commerce.price(range: 5.0..50.0),
-        foto: 'piatto.jpg',
+        foto: foto,
         ingredienti: Faker::Food.ingredient,
         categoria: category
       )
@@ -119,7 +129,7 @@ ristoratori = Cliente.limit(8).map do |cliente|
       difficulty: ["Facile", "Medio", "Difficile"].sample,
       ingredients: Faker::Food.ingredient,
       procedure: Faker::Food.description,
-      photo: 'piatto.jpg',
+      photo: 'recipe.jpg',
       ristoratore_id: ristoratore.id
     )
   end
@@ -137,7 +147,7 @@ ristoratori = Cliente.limit(8).map do |cliente|
       premio: Faker::Commerce.product_name,
       quantitareq: quantitareq,
       data_inizio: Faker::Date.between(from: '2024-01-01', to: Date.today),
-      data_fine: Faker::Date.between(from: Date.today, to: '2025-12-31'),
+      data_fine: Faker::Date.between(from: Date.today, to: '2024-07-01'),
       ristoratore_id: ristoratore.id
     )
   end

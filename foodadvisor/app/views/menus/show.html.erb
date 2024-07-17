@@ -2,7 +2,7 @@
 
 <div class="ricerca-menu-container" style="text-align: center;"> 
   <h1 style="font-size: 50px;"><%= @menu.ristoratore.nomeristorante %>'s Menu</h1>
-  <%= link_to "Modifica menu", edit_menus_path(@menu), style: 'color: black; text-decoration: underline;' %>
+  <%= link_to "Modifica menu", edit_menus_path(@menu), class: 'linksito' %>
   <div class="search-container">
     <form id="find-form" action="<%= menus_path(@menu) %>" method="get">
       <div class="find-input" style="display: flex; align-items: center;">
@@ -46,7 +46,7 @@
 <div id="dialog" class="dialog-menu">
   <div class="dialog-content-menu">
     <span class="close-button">&times;</span>
-    <form id="filter-form">
+    <form id="filter-form" style="color: black; ">
       <h4>Applica dei filtri alla tua ricerca</h4>
       <label for="categoria">Categoria:</label>
       <select id="categoria">
