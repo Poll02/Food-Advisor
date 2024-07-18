@@ -31,37 +31,48 @@ RSpec.feature "RicercaRistoranti", type: :feature do
   end
 
   scenario "Ricerca di ristoranti per nome" do
+    page.driver.browser.manage.window.resize_to(1920, 1080)
+
     visit ricerca_path
+    save_and_open_screenshot
     fill_in "query", with: "Ristorante A"
-    find('#cerca').click  # 2) Simula il clic sull'icona dei filtri  
+    save_and_open_screenshot
+    find('#cerca').click   
+    save_and_open_screenshot
     expect(page).to have_content("Ristorante A")
     expect(page).not_to have_content("Ristorante B")
   end
 
   scenario "Ricerca di ristoranti per tag" do
-    visit ricerca_path  # 1) Visita la pagina di ricerca  
-    find('#filter-icon').click  # 2) Simula il clic sull'icona dei filtri  
-    expect(page).to have_css('#dialog', visible: :visible)  # 3) Verifica che si sia aperta la finestra di dialogo  
-    find('button[data-tag-id="1"]').click  # 4) Clicca sul tag italiano  
-    click_button "Applica filtri"  # 5) Clicca su Applica filtri  
-    expect(page).to have_content("Ristorante A")  # Verifica che il ristorante A sia presente
-    expect(page).not_to have_content("Ristorante B")  # Verifica che il ristorante B non sia presente
+    page.driver.browser.manage.window.resize_to(1920, 1080)
+
+    visit ricerca_path  
+    find('#filter-icon').click  
+    expect(page).to have_css('#dialog', visible: :visible)  
+    find('button[data-tag-id="1"]').click  
+    click_button "Applica filtri" 
+    expect(page).to have_content("Ristorante A") 
+    expect(page).not_to have_content("Ristorante B")  
   end
   
 
   scenario "Ricerca di ristoranti per media di stelle" do
+    page.driver.browser.manage.window.resize_to(1920, 1080)
+
     visit ricerca_path
-    find('#filter-icon').click  # Simula il clic sull'icona dei filtri
+    find('#filter-icon').click  
     expect(page).to have_css('#dialog', visible: true)
-    find('span.star[data-value="5"]').click  # Seleziona le 4 stelle
+    find('span.star[data-value="5"]').click  
     click_button "apply-filters"
     expect(page).to have_content("Ristorante B")
     expect(page).not_to have_content("Ristorante A")
   end
 
   scenario "Ricerca di ristoranti per numero di recensioni" do
+    page.driver.browser.manage.window.resize_to(1920, 1080)
+
     visit ricerca_path
-    find('#filter-icon').click  # Simula il clic sull'icona dei filtri
+    find('#filter-icon').click  
     fill_in "min-reviews", with: "2"
     fill_in "max-reviews", with: "2"
     click_button "Applica filtri"
@@ -70,8 +81,10 @@ RSpec.feature "RicercaRistoranti", type: :feature do
   end
 
   scenario "Ricerca di ristoranti per asporto" do
+    page.driver.browser.manage.window.resize_to(1920, 1080)
+
     visit ricerca_path
-    find('#filter-icon').click  # Simula il clic sull'icona dei filtri
+    find('#filter-icon').click 
     expect(page).to have_css('#dialog', visible: true)
     check "asporto"
     click_button "apply-filters"
@@ -80,18 +93,24 @@ RSpec.feature "RicercaRistoranti", type: :feature do
   end
 
   scenario "Ricerca di ristoranti per filtri multipli" do
+    page.driver.browser.manage.window.resize_to(1920, 1080)
+
     visit ricerca_path
-    find('#filter-icon').click  # Simula il clic sull'icona dei filtri
-    find('button[data-tag-id="1"]').click  # Seleziona il tag italiano
-    find('span.star[data-value="4"]').click  # Seleziona le 4 stelle
+    save_and_open_screenshot
+    find('#filter-icon').click  
+    find('button[data-tag-id="1"]').click  
+    find('span.star[data-value="4"]').click  
     check "asporto"
+    save_and_open_screenshot
     click_button "Applica filtri"
+    save_and_open_screenshot
     expect(page).to have_content("Ristorante A")
     expect(page).not_to have_content("Ristorante B")
   end
 
   scenario "Annullamento dei filtri" do
-    # Visita la pagina di ricerca
+    page.driver.browser.manage.window.resize_to(1920, 1080)
+
     visit ricerca_path
     find('#filter-icon').click
     find('button[data-tag-id="1"]').click

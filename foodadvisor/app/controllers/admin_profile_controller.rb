@@ -8,7 +8,8 @@ class AdminProfileController < ApplicationController
   end
 
   def destroy
-    if @utente.destroy
+    @segnalazione = Segnalazione.where(cliente_segnalato: @utente.cliente)
+    if @segnalazione.destroy_all && @utente.destroy
       flash[:notice] = "Utente eliminato con successo"
     else
       flash[:alert] = "Errore nell'eliminazione dell'utente"

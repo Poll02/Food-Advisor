@@ -19,7 +19,5 @@ class SupportoController < ApplicationController
       params.require(:problem).permit(:text)
     end
   
-    
-    
   end
   

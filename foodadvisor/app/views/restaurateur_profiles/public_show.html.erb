@@ -60,16 +60,18 @@
     </span></p>
   </div>
   
-  
     
     </div>
    
     <div class="review-reserve-buttons">
-        <button type="button" class="review">Lascia una Recensione</button>
         <button type="button" style="background-color: rgb(234, 183, 121);" class="open-reserv-modal">Prenota un Tavolo</button>
+
+        <% if @current_user.present? && @current_user.cliente != @restaurant_owner.cliente%> 
+        <button type="button" class="review">Lascia una Recensione</button>
+        <% end %>
         <%= link_to public_show_menus_path(@restaurant_owner.id), class: 'user-link' do %><button type="button" style="background-color: rgb(234, 123, 121);" >Menù</button><% end %>
         <button type="button" id="add-rest-to-fav" data-ristoratore-id="<%= @restaurant_owner.id %>" style="background-color: rgb(71, 200, 82);">Aggiungi ai Preferiti</button>
-        <% if session[:role]!='Admin' || @current_user.present?%>
+        <% if session[:role]!='Admin' && @current_user.present? && @current_user.cliente != @restaurant_owner.cliente%>
         <button type="button" class="report-icon" id="report-rest" style="background-color: rgb(221, 60, 60);" data-report="<%= @restaurant_owner.id %>" data-type="ristorante">Segnala</button>
         <% end%>
 
@@ -99,7 +101,7 @@
                   <%= pf.hidden_field :user_id, value: @current_user.cliente.user.id %>
                 <% end %>
               <% end %>
-              <%= form.submit 'Prenota', style: '', class: 'btn btn-primary' %>
+              <%= form.submit 'Prenota', class: 'btn btn-primary' %>
               <%= form.button 'Annulla', type: 'reset', class: 'btn btn-secondary' %>
             <% end %>
 
@@ -203,6 +205,8 @@
               <p>Difficoltà: <%= recipe.difficulty %></p>
               <p>Ingredienti: <%= recipe.ingredients %></p>
               <p>Procedimento: <%= recipe.procedure %></p>
+                <button type="submit" data-recipe-id="<%= recipe.id %>" id="add-recipe-fav" class="add-recipe-fav">Preferiti +</button>
+
             </div>
           </div>
         <% end %>

@@ -8,13 +8,12 @@ class UserProfileController < ApplicationController
   def show
     @recensioni = Recensione.where(cliente_id: current_user.cliente.id).order(created_at: :desc)
     @iscrizioni = UserCompetition.where(user_id: current_user.cliente.user.id)
-    @prenotazioni = Prenotazione.where(user_id: current_user.cliente.user.id).where('data >= ?', Date.today)
+    @prenotazioni = Prenotazione.where(user_id: current_user.cliente.user.id).where('data >= ?', Date.today).order(valide: :desc).order(data: :asc)
     @premi = Premi.where(id: current_user.cliente.user.id)
     @user = Utente.find(@current_user.id)
   end
 
   def edit
-    # @user viene impostato dal before_action :set_user
   end
 
   def public_show

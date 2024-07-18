@@ -19,11 +19,7 @@ class SettingsController < ApplicationController
     end
   end
 
-  def update_credentials
-    # Log dei parametri ricevuti
-    logger.info "Params ricevuti: #{params.inspect}"
-    logger.info "User params: #{user_params.inspect}"
-  
+  def update_credentials  
     # Controlla la password se è presente
     if params[:utente][:password].present?
       # Controllo della complessità della password

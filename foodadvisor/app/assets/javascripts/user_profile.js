@@ -62,19 +62,27 @@ document.addEventListener('DOMContentLoaded', function() {
           // Esempio di visualizzazione dei dati nell'interfaccia utente
           const impegniGiornalieri = document.getElementById('impegniGiornalieri');
           impegniGiornalieri.innerHTML = '';
-  
+
+          function formatTime(orario) {
+            const date = new Date(orario);
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${hours-1}:${minutes}`;
+          }
+
           if (data.prenotazioni.length > 0) {
             const prenotazioniSection = document.createElement('div');
             prenotazioniSection.classList.add('section');
             prenotazioniSection.innerHTML = '';
             data.prenotazioni.forEach(prenotazione => {
               const prenotazioneElement = document.createElement('div');
+              const formattedTime = formatTime(prenotazione.orario);
               prenotazioneElement.classList.add('prenotazionetavolo');
               prenotazioneElement.innerHTML = `
                 <div style="font-size: 13px; background-color: #ffd166; padding: 1%; border-radius: 10px; ">
                   <p> ID cliente: ${prenotazione.user_id}</p>
                   <p> N persone: ${prenotazione.numero_persone}</p>
-                  <p> Orario: ${prenotazione.orario}</p>
+                  <p> Orario: ${formattedTime}</p>
                 </div>
               `;
               prenotazioniSection.appendChild(prenotazioneElement);

@@ -10,18 +10,9 @@ class PrenotazioneController < ApplicationController
       redirect_to public_restaurant_profile_path(ristoratore) and return
     end
   
-    Rails.logger.info("Inizio creazione prenotazione")
-    Rails.logger.info("parametri passati : #{prenotazione_params.inspect}")
-  
     @prenotazione = Prenotazione.new(prenotazione_params)
-    Rails.logger.info("vediamo il current user: #{@current_user}")
-    #@prenotazione.user_id = @current_user.cliente.user.id
-    Rails.logger.info("parametri prenotazione: #{@prenotazione.inspect}")
-  
-    Rails.logger.info("User ID assegnato alla prenotazione: #{@prenotazione.user_id}")
   
     @prenotazione.valida = false  # Impostare valida a false
-    Rails.logger.info("Prenotazione impostata come non valida")
   
     if @prenotazione.save
       flash[:notice] = "Prenotazione creata con successo"
@@ -35,32 +26,31 @@ class PrenotazioneController < ApplicationController
   def set_valida
     @prenotazione = Prenotazione.find(params[:id])
   
-    if @prenotazione.update(valida: true)
-      Rails.logger.info("Prenotazione validata con successo")
-      
+    if @prenotazione.update(valida: true)      
       # Aggiunta dei punti alle competizioni dell'utente
       user = @prenotazione.user
       user.user_competitions.each do |uc|
         if uc.competizione.data_fine >= Date.today
           uc.punti_competizione += 5
           uc.save!
-          Rails.logger.info("Aggiunti 5 punti alla competizione #{uc.competizione.nome}")
         end
       end
-      
-      render json: { success: true }
+          flash[:notice] = 'Prenotazione aggiornata con successo.'
+          redirect_to info_path
     else
-      Rails.logger.error("Errore durante la validazione della prenotazione: #{@prenotazione.errors.full_messages}")
-      render json: { success: false, error: @prenotazione.errors.full_messages.join(", ") }
+      flash[:alert] = 'Errore durante la validazione della prenotazione'
+      redirect_to info_path
     end
   rescue StandardError => e
-    Rails.logger.error("Errore durante l'aggiunta dei punti alle competizioni dell'utente: #{e.message}")
-    render json: { success: false, error: "Errore durante l'aggiunta dei punti alle competizioni dell'utente" }, status: :internal_server_error
+    flash[:alert] = 'Errore durante l\'aggiunta dei punti alle competizioni dell\'utente'
+    redirect_to info_path
+
   end
 
   def destroy
     @prenotazione.destroy
-    render json: { success: true }
+    flash[:notice] = 'Prenotazione eliminata'
+    redirect_to info_path
   end
 
   private
@@ -74,8 +64,10 @@ class PrenotazioneController < ApplicationController
   end
 
   def require_login
+
     unless logged_in?
-      render json: { success: false, message: 'Devi essere loggato per effettuare una prenotazione' }
+      flash[:alert] = "Errore nella prenotazione; non sei loggato"
+      redirect_to root_path   
     end
   end
 end
