@@ -33,5 +33,3 @@
 /config/master.key
 
 .env
-
-echo '.env' >> .gitignore
