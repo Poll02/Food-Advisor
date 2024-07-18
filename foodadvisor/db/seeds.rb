@@ -141,13 +141,13 @@ ristoratori = Cliente.limit(8).map do |cliente|
 
     Competizione.create!(
       nome: Faker::Lorem.word,
-      locandina: 'evento.jpg',
+      locandina: 'background.jpg',
       descrizione: '2 punti: lasciare una recensione\n5 punti: effettuare una prenotazione valida\n3 punti: ricevi un like alla recensione da un critico\n2 punti: ricevi un like alla recensione',
       requisiti: requisiti,
       premio: Faker::Commerce.product_name,
       quantitareq: quantitareq,
       data_inizio: Faker::Date.between(from: '2024-01-01', to: Date.today),
-      data_fine: Faker::Date.between(from: Date.today, to: '2024-07-01'),
+      data_fine: Faker::Date.between(from: Date.today, to: '2025-07-01'),
       ristoratore_id: ristoratore.id
     )
   end
