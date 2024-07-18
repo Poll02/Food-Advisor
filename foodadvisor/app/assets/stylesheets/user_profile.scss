@@ -102,6 +102,7 @@
     align-items: center;
     gap: 30px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    width: 85vw;
     border-radius: 10px;
     padding: 1%;
 }
@@ -129,6 +130,7 @@
     max-height: 400px;
     padding: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    width: 85vw;
     border-radius: 10px;
 }
 
@@ -139,6 +141,7 @@
     max-height: 400px;
     overflow-x: scroll;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    width: 85vw;
     border-radius: 10px;
     padding: 1%;
 }
@@ -152,15 +155,21 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
     border-radius: 10px;
     padding: 1%;
+    width: 85vw;
 }
 
 .p-user-reserv-box{
     display: flex;
     flex-direction: column;
+    min-width: 220px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 1%;
 }
 
 .premicompetizioni {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    width: 85vw;
     border-radius: 10px;
     padding: 1%;
 }
