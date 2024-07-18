@@ -12,135 +12,142 @@
       <%= flash[:alert] %>
     </div>
   <% end %>
-    <div class="p-user-photo-details">
-        <% if @current_user.cliente.foto.present? %>
-            <%= image_tag @current_user.cliente.foto %>
-        <% else %>
-            <%= image_tag 'user.jpg' %> <!-- Immagine competizione -->
-        <% end %>
-        <div class="p-user-details">
-            <p style="font-weight: bold;">Username: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.username%></span></p>
-            <p style="font-weight: bold;">Nome: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.nome%></span></p>
-            <p style="font-weight: bold;">Cognome: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.cognome%></span></p>
 
-            <p style="font-weight: bold;">Data di Nascita: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.datanascita%></span></p>
-            <p style="font-weight: bold;">Data Iscrizione: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.created_at.strftime('%d/%m/%Y')%></span></p>
-            <p style="font-weight: bold;">Email: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.utente.email%></span></p>
-            <p style="font-weight: bold;">Telefono: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.utente.telefono%></span></p>
-
-        </div>
-        <%if @user.tmp_password.present?%>
-          <p class="tmp_password">La tua password temporanea è: <%= @user.tmp_password%> cambiala al più presto!</p>
-        <%end%>
+  <div class="p-user-photo-details">
+    <% if @current_user.cliente.foto.present? %>
+      <%= image_tag @current_user.cliente.foto %>
+    <% else %>
+      <%= image_tag 'user.jpg' %> <!-- Immagine competizione -->
+    <% end %>
+    <div class="p-user-details">
+      <p style="font-weight: bold;">Username: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.username %></span></p>
+      <p style="font-weight: bold;">Nome: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.nome %></span></p>
+      <p style="font-weight: bold;">Cognome: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.cognome %></span></p>
+      <p style="font-weight: bold;">Data di Nascita: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.datanascita %></span></p>
+      <p style="font-weight: bold;">Data Iscrizione: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.user.created_at.strftime('%d/%m/%Y') %></span></p>
+      <p style="font-weight: bold;">Email: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.utente.email %></span></p>
+      <p style="font-weight: bold;">Telefono: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.utente.telefono %></span></p>
     </div>
-    <hr id="divider" class="solid">
-    <h1>I tuoi premi</h1>
-    <div class="premicompetizioni">
-      <% if @premi.any? %>
-        <% @premi.each do |premio| %>
-          <div class="premio-box">
-            <h3>Competizione: <%= premio.nomecompetizione %></h3>
-            <p>Nome del Premio: <%= premio.nome %></p>
-            <p>Data di Inizio: <%= premio.data_inizio.strftime('%d/%m/%Y') %></p>
-            <p>Data di Fine: <%= premio.data_fine.strftime('%d/%m/%Y') %></p>
-          </div>
-        <% end %>
-      <% else %>
-        <p style="color:gray; ">Partecipa alle competizioni per ottenere dei premi.</p>
+    <% if @user.tmp_password.present? %>
+      <p class="tmp_password">La tua password temporanea è: <%= @user.tmp_password %> cambiala al più presto!</p>
+    <% end %>
+  </div>
+
+  <hr id="divider" class="solid">
+  <h1>I tuoi premi</h1>
+  <div class="premicompetizioni">
+    <% if @premi.any? %>
+      <% @premi.each do |premio| %>
+        <div class="premio-box">
+          <h3>Competizione: <%= premio.nomecompetizione %></h3>
+          <p>Nome del Premio: <%= premio.nome %></p>
+          <p>Data di Inizio: <%= premio.data_inizio.strftime('%d/%m/%Y') %></p>
+          <p>Data di Fine: <%= premio.data_fine.strftime('%d/%m/%Y') %></p>
+        </div>
       <% end %>
-    </div> 
-    <hr id="divider" class="solid">
-    <h1>I tuoi impegni</h1>
-    <div class="impegniPersonali">
-        <div class="impegniSinistra">
-            <div id="calendario">
-            </div>
-        </div>
-        <div class="impegniDestra">
-            <div id="impegniGiornalieri">
-            </div>
-        </div>
-    </div>
-    <hr id="divider" class="solid">
-    <h1>Ultime recensioni</h1>
-    <div class="priv-recents-reviews" style="width: 100%; ">
-        <% if @recensioni.any? %>
-            <% @recensioni.each do |recensione| %>
-                <% ristorante = Ristoratore.find(recensione.ristoratore_id) %>
-                <%= link_to public_restaurant_profile_path(ristorante.id), class: 'restaurant-link' do %>
+    <% else %>
+      <p style="color:gray;">Partecipa alle competizioni per ottenere dei premi.</p>
+    <% end %>
+  </div>
 
-                <div class="public-r-reviews">
-                    <% if ristorante.cliente.foto.present? %>
-                        <%= image_tag ristorante.cliente.foto %> <!-- Foto Ristorante-->
-                    <% else %>
-                        <%= image_tag 'background.jpg' %> <!-- Immagine competizione -->
-                    <% end %>
-                    <div class="public-review-details">
-                        <h3><%= ristorante.nomeristorante %></h3> <!-- Nome Ristorante -->
-                        <p><%= recensione.stelle %> stelle</p>
-                    <p><%= recensione.commento %></p>
-                    <p style="font-style: italic; font-size: 13px;">in data <%= recensione.created_at.strftime('%d/%m/%Y') %></p>
+  <hr id="divider" class="solid">
+  <h1>I tuoi impegni</h1>
+  <div class="impegniPersonali">
+    <div class="impegniSinistra">
+      <div id="calendario">
+      </div>
+    </div>
+    <div class="impegniDestra">
+      <div id="impegniGiornalieri">
+      </div>
+    </div>
+  </div>
+  <hr id="divider" class="solid">
+
+  <h1>Ultime recensioni</h1>
+  <div class="r-pub-recensioni" style="max-height: 400px; overflow-y: scroll;">
+        <% if @recensioni.any? %>
+            <% @recensioni.each do |review| %>
+                <div class="public-r-reviews" style="margin-bottom: 20px; display: flex; flex-direction: row; justify-content: space-between; ">
+                    <div class="public-foto-details">
+                        <% if review.ristoratore.cliente.foto.present? %>
+                            <%= image_tag review.ristoratore.cliente.foto %> <!-- Supponendo che il ristorante abbia un'immagine associata -->
+                        <% else %>
+                            <%= image_tag 'background.jpg' %>
+                        <% end %>
+                        <div class="public-review-details">
+                            <p>
+                                <%= link_to public_restaurant_profile_path(review.ristoratore.id), style: "color: black; " do %>
+                                  <%= review.ristoratore.nomeristorante %><br>
+                                <% end %>
+                                
+                                <% review.stelle.times do %>
+                                    <ion-icon name="star" style="font-size: 15px;"></ion-icon>
+                                <% end %> <br>
+                                <%= truncate(review.commento, length: 200) %><br> <!-- Tronca il testo della recensione a 200 caratteri -->
+                                <span style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></span>
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <% end %>
             <% end %>
-          <% else %>
-            <p style="color: gray; ">Nessuna recensione trovata</p>
-          <% end %>
-    </div>
-    <hr id="divider" class="solid">
-    <h1>Competizioni a cui sei iscritto</h1>
-    <div class="p-user-fav-events">
-      <% if @iscrizioni.any? %>
-        <% @iscrizioni.each do |iscrizione| %>
-            <% competizione = Competizione.find(iscrizione.competizione_id) %>
-            <div class="comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>">
-            <% if competizione.locandina.present? %>
-              <%= image_tag competizione.locandina %>
-            <% else %>
-              <%= image_tag 'background.jpg' %>
-            <% end %>
-            <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
-              <p><%= competizione.nome %></p>
-              <p style="font-size: 13px; font-weight: normal;"><%= competizione.descrizione %></p>
-              <p style="font-size: 13px; font-weight: normal;">Requisiti: <%= competizione.requisiti %> <span>Premi: <%= competizione.premio %></span></p>
-              <%= button_to 'Disiscriviti', elimina_partecipante_competizione_path(competizione), method: :delete, data: { confirm: 'Sei sicuro di voler eliminare questa competizione?' }, class: 'btn btn-danger' %>
-            </div>
-          </div>
+        <% else %>
+            <p Style="color: gray; ">L'utente non ha lasciato alcuna recensione.</p>
         <% end %>
-      <% else %>
-        <p style="color: gray; ">Non sei ancora iscritto ad una competizione</p>
-      <% end %>
     </div>
-    <hr id="divider" class="solid">
-    <h1>Le tue Prenotazioni</h1>
-    <div class="p-user-reservs">
-        <% if @prenotazioni.any? %>
-            <% @prenotazioni.each do |prenotazione| %>
-            <% ristorante_prenotazione = Ristoratore.find(prenotazione.ristoratore_id) %>
 
-            <div class="p-user-reserv-box">
-                <p style="font-weight: bold;">Ristorante: <span id="right-side-requisiti" style="font-weight: normal;"><%= ristorante_prenotazione.nomeristorante %></span></p>
-                <p style="font-weight: bold;">Numero Persone: <span id="right-side-requisiti" style="font-weight: normal;"><%= prenotazione.numero_persone %></span></p>
-                <p style="font-weight: bold;">Data: <span id="right-side-requisiti" style="font-weight: normal;"><%= prenotazione.data %></span></p>
-                <p style="font-weight: bold;">Orario: <span id="right-side-requisiti" style="font-weight: normal;"><%= prenotazione.orario.strftime('%H:%M') %></span></p>
-                <p style="font-weight: bold;">Effettuata: <span id="right-side-requisiti" style="font-weight: normal;"><%= prenotazione.created_at.strftime('%d/%m/%Y') %></span></p><br>
-                <p style="font-weight: bold; text-align: center; ">
-                    <% if prenotazione.valida? %>
-                        Accettata
-                    <% else %>
-                        In attesa
-                    <% end %>
-                </p>
-            </div>
-            <% end %>
-            
-            <% else %>
-            <p style="color: gray; ">Nessuna prenotazione trovata</p>
+
+  <hr id="divider" class="solid">
+  <h1>Competizioni a cui sei iscritto</h1>
+  <div class="p-user-fav-events">
+    <% if @iscrizioni.any? %>
+      <% @iscrizioni.each do |iscrizione| %>
+        <% competizione = Competizione.find(iscrizione.competizione_id) %>
+        <div class="comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>">
+          <% if competizione.locandina.present? %>
+            <%= image_tag competizione.locandina %>
+          <% else %>
+            <%= image_tag 'background.jpg' %>
           <% end %>
+          <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
+            <p><%= competizione.nome %></p>
+            <p style="font-size: 13px; font-weight: normal;"><%= competizione.descrizione %></p>
+            <p style="font-size: 13px; font-weight: normal;">Requisiti: <%= competizione.requisiti %> <span>Premi: <%= competizione.premio %></span></p>
+            <%= button_to 'Disiscriviti', elimina_partecipante_competizione_path(competizione), method: :delete, data: { confirm: 'Sei sicuro di voler eliminare questa competizione?' }, class: 'btn btn-danger' %>
+          </div>
+        </div>
+      <% end %>
+    <% else %>
+      <p style="color: gray;">Non sei ancora iscritto ad una competizione</p>
+    <% end %>
+  </div>
 
-        
-    </div>
+  <hr id="divider" class="solid">
+  <h1>Le tue Prenotazioni</h1>
+  <div class="p-user-reservs" style="max-height: 400px; overflow-y: scroll;">
+    <% if @prenotazioni.any? %>
+      <% @prenotazioni.each do |prenotazione| %>
+        <% ristorante_prenotazione = Ristoratore.find(prenotazione.ristoratore_id) %>
+        <div class="p-user-reserv-box">
+          <p style="font-weight: bold;">Ristorante: <span id="right-side-requisiti" style="font-weight: normal;"><%= ristorante_prenotazione.nomeristorante %></span></p>
+          <p style="font-weight: bold;">Numero Persone: <span id="right-side-requisiti" style="font-weight: normal;"><%= prenotazione.numero_persone %></span></p>
+          <p style="font-weight: bold;">Data: <span id="right-side-requisiti" style="font-weight: normal;"><%= prenotazione.data %></span></p>
+          <p style="font-weight: bold;">Orario: <span id="right-side-requisiti" style="font-weight: normal;"><%= prenotazione.orario.strftime('%H:%M') %></span></p>
+          <p style="font-weight: bold;">Effettuata: <span id="right-side-requisiti" style="font-weight: normal;"><%= prenotazione.created_at.strftime('%d/%m/%Y') %></span></p>
+          <br>
+          <p style="font-weight: bold; text-align: center;">
+            <% if prenotazione.valida? %>
+              Accettata
+            <% else %>
+              In attesa
+            <% end %>
+          </p>
+        </div>
+      <% end %>
+    <% else %>
+      <p style="color: gray;">Nessuna prenotazione trovata</p>
+    <% end %>
+  </div>
 </div>
 
 <style>
@@ -155,4 +162,5 @@
   .tmp_password strong {
     font-weight: bold;
   }
+
 </style>
