@@ -21,6 +21,16 @@ ActiveRecord::Schema.define(version: 2024_07_14_151043) do
     t.index ["utente_id"], name: "index_admins_on_utente_id"
   end
 
+  create_table "answers", force: :cascade do |t|
+    t.integer "recensione_id", null: false
+    t.integer "ristoratore_id", null: false
+    t.string "risposta"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["recensione_id"], name: "index_answers_on_recensione_id"
+    t.index ["ristoratore_id"], name: "index_answers_on_ristoratore_id"
+  end
+
   create_table "assign_stars", force: :cascade do |t|
     t.integer "cliente_id"
     t.integer "recensione_id"
@@ -223,12 +233,14 @@ ActiveRecord::Schema.define(version: 2024_07_14_151043) do
   end
 
   create_table "segnalaziones", force: :cascade do |t|
-    t.integer "recensione_id", null: false
+    t.integer "recensione_id"
     t.integer "cliente_id", null: false
+    t.integer "cliente_segnalato_id", null: false
     t.string "motivo"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["cliente_id"], name: "index_segnalaziones_on_cliente_id"
+    t.index ["cliente_segnalato_id"], name: "index_segnalaziones_on_cliente_segnalato_id"
     t.index ["recensione_id"], name: "index_segnalaziones_on_recensione_id"
   end
 
@@ -275,6 +287,7 @@ ActiveRecord::Schema.define(version: 2024_07_14_151043) do
     t.string "email"
     t.string "password_digest"
     t.string "telefono"
+    t.string "tmp_password"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "facebook_id"
@@ -283,6 +296,8 @@ ActiveRecord::Schema.define(version: 2024_07_14_151043) do
   end
 
   add_foreign_key "admins", "utentes"
+  add_foreign_key "answers", "recensiones"
+  add_foreign_key "answers", "ristoratores"
   add_foreign_key "assign_stars", "clientes"
   add_foreign_key "assign_stars", "recensiones"
   add_foreign_key "chooses", "ristoratores", on_delete: :cascade
@@ -309,6 +324,7 @@ ActiveRecord::Schema.define(version: 2024_07_14_151043) do
   add_foreign_key "recensiones", "ristoratores"
   add_foreign_key "ristoratores", "clientes"
   add_foreign_key "segnalaziones", "clientes"
+  add_foreign_key "segnalaziones", "clientes", column: "cliente_segnalato_id"
   add_foreign_key "segnalaziones", "recensiones"
   add_foreign_key "settings", "utentes"
   add_foreign_key "user_competitions", "competiziones", on_delete: :cascade

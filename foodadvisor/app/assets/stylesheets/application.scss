@@ -20,3 +20,19 @@
     padding: 0;
     box-sizing: border-box;
 } 
+
+a {
+    color: black;
+}
+
+.night-mode a {
+    color: whitesmoke;
+}
+
+.linksito {
+    color: black;
+}
+
+.night-mode .linksito {
+    color: whitesmoke;
+}

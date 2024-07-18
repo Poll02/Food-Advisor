@@ -43,6 +43,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }
       });
     });
+
+    // Conferma per il pulsante di eliminazione
+    document.querySelectorAll('.btn.btn-danger').forEach(function(button) {
+      button.addEventListener('click', function(event) {
+        var confirmation = confirm('Sei sicuro di voler eliminare questa competizione?');
+        if (!confirmation) {
+          event.preventDefault();
+        }
+      });
+    });
+
+    // Conferma per il pulsante di assegnazione punti
+    document.querySelectorAll('.btn.btn-success-punti').forEach(function(button) {
+      button.addEventListener('click', function(event) {
+        var confirmation = confirm('Sei sicuro di voler assegnare i punti per questa competizione?');
+        if (!confirmation) {
+          event.preventDefault();
+        }
+      });
+    });
   });
 
   // JS per le competizioni

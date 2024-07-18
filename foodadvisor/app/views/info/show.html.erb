@@ -23,27 +23,32 @@
       </div>
 
       <h3>Gestione Prenotazioni</h3>
-      <div class="i-section">
-        <% @prenotazioni.each do |prenotazione| %>
-          <div class="prenotazione">
-            <%= image_tag 'background.jpg' %>    
-            <div class="pren-info">
-              <p style="font-weight: bold;">Nome Cliente: <span style="font-weight: normal;"><%= prenotazione.user.nome %> <%= prenotazione.user.cognome %></span></p>
-              <p style="font-weight: bold;">N. Persone: <span style="font-weight: normal;"><%= prenotazione.numero_persone %></span></p>
-              <p style="font-weight: bold;">Data: <span style="font-weight: normal;"><%= prenotazione.data %></span></p>
-              <p style="font-weight: bold;">Orario: <span style="font-weight: normal;"><%= prenotazione.orario.strftime("%H:%M") %></span></p>
-            </div>
-            <div class="pren-icon">
-              <!-- Icona fa-check -->
-              <i class="fa-solid fa-check check-icon" data-prenotazione-id="<%= prenotazione.id %>"></i>
-        
-              <!-- Icona fa-ban -->
-              <i class="fa-solid fa-ban delete-icon" data-prenotazione-id="<%= prenotazione.id %>"></i>
-            </div>
-          </div>
+<div class="i-section">
+  <% @prenotazioni.each do |prenotazione| %>
+    <div class="prenotazione">
+      <%= image_tag 'background.jpg' %>    
+      <div class="pren-info">
+        <p style="font-weight: bold;">Nome Cliente: <span style="font-weight: normal;"><%= prenotazione.user.nome %> <%= prenotazione.user.cognome %></span></p>
+        <p style="font-weight: bold;">N. Persone: <span style="font-weight: normal;"><%= prenotazione.numero_persone %></span></p>
+        <p style="font-weight: bold;">Data: <span style="font-weight: normal;"><%= prenotazione.data %></span></p>
+        <p style="font-weight: bold;">Orario: <span style="font-weight: normal;"><%= prenotazione.orario.strftime("%H:%M") %></span></p>
+      </div>
+      <div class="pren-icon">
+        <!-- Form per accettare la prenotazione -->
+        <%= form_with url: set_valida_prenotazione_path(prenotazione), method: :patch, local: true do |form| %>
+          <%= form.hidden_field :valida, value: true %>
+          <%= form.submit "✔", class: "fa-solid fa-check check-icon" %>
         <% end %>
 
+        <!-- Form per rifiutare la prenotazione -->
+        <%= form_with url: prenotazione_path(prenotazione), method: :delete, local: true do |form| %>
+          <%= form.submit "✖", class: "fa-solid fa-ban delete-icon" %>
+        <% end %>
       </div>
+    </div>
+  <% end %>
+</div>
+
     </div>
 
     <div class="column">

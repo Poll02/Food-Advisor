@@ -1,4 +1,4 @@
-<%= link_to 'Modifica', edit_restaurateur_profiles_path, style: 'color: black; text-decoration: underline;' %>
+<%= link_to 'Modifica', edit_restaurateur_profiles_path, class: 'linksito' %>
 
 <% if flash[:notice] %>
     <div class="alert alert-success" role="alert">
@@ -78,8 +78,8 @@
         <% else %>
           <%= image_tag 'background.jpg', class: 'recensione-foto' %>
         <% end %>
-      <div class="recensione-info">
-  <p style="font-weight: bold";><%= review.cliente.user.username %></p>
+          <div class="recensione-info">
+        <p style="font-weight: bold";><%= review.cliente.user.username %></p>
             <p>
               <% review.stelle.times do %>
                 <ion-icon name="star" style="font-size: 15px;"></ion-icon>
@@ -88,13 +88,32 @@
         <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
       </div>
       <%= form_with url: update_pin_restaurateur_profile_path, method: :post, local: true do |form| %>
-  <%= form.hidden_field :review_id, value: review.id %>
-  <button type="submit" class="recensione-icon">
-    <i class="fa-solid fa-thumbtack"></i>
-  </button>
-<% end %>
+        <%= form.hidden_field :review_id, value: review.id %>
+          <button type="submit" class="recensione-icon">
+            <i class="fa-solid fa-thumbtack"></i>
+          </button><br><br>
+          <% if !review.answer.present?%>
+          <i class="fa-regular fa-comments answer-icon" style="font-size: 30px;" data-review="<%= review.id %>"></i>
+          <% end%>
+      <% end %>
 
-    </div>
+      </div>
+      <% if review.answer.present?%>
+      <div class="r-risposta" style="border: 1px solid #ccc; border-radius: 10px; display: flex; align-items: center; margin-left: 20%; padding: 10px;">
+  <% if review.answer.ristoratore.cliente.foto.present? %>
+    <%= image_tag review.answer.ristoratore.cliente.foto, class: 'recensione-foto' %>
+  <% else %>
+    <%= image_tag 'background.jpg', class: 'recensione-foto' %>
+  <% end %>
+  <div class="risposta-info" style="text-align: center; margin-left: 10px; flex: 1;">
+    <p style="font-weight: bold; margin: 0;"><%= review.answer.ristoratore.nomeristorante %></p>
+    <p style="margin: 0;"><%= review.answer.risposta %></p>
+    <p style="font-style: italic; font-size: 13px; margin: 0;">in data <%= review.answer.created_at.strftime('%d/%m/%Y') %></p>
+  </div>
+  <i class="fa-solid fa-pen-to-square change-icon" style="font-size: 30px;" data-answer="<%= review.answer.id %>" data-answer-risposta="<%= review.answer.risposta %>"></i>
+</div>
+
+  <%end%>
     <% end %>
   <%else%>
     <p style="color: gray; ">Non hai ricevuto nessuna recensione</p>
@@ -145,3 +164,98 @@
     <p style="color: gray; ">Non hai creato alcun evento.</p>
   <% end %>
 </div>
+
+<div id="answerModal" class="modal">
+<div class="modal-content">
+  <span id="closeAnswerModal" class="close">&times;</span>
+  <h2>Rispondi alla Recensione</h2>
+  <%= form_with( url: answer_create_path, method: "post") do |form| %>
+    <%= form.hidden_field :reviewId%>
+    <br><br>
+        <%= form.label :answer, "Rispondi:" %>
+        <%= form.text_area :answer, id: "answer", rows: 4, cols: 50 %>
+    <br><br>
+    <%= form.submit "Invia" %>
+  <% end %>
+</div>
+</div>
+
+<div id="changeAnswerModal" class="modal">
+<div class="modal-content">
+  <span id="closeChangeAnswerModal" class="close">&times;</span>
+  <h2>Modifica la risposta alla Recensione</h2>
+  <%= form_with( url: answer_update_path, method: "post") do |form| %>
+    <%= form.hidden_field :answerId%>
+    <br><br>
+        <%= form.label :answer_change, "Rispondi:" %>
+        <%= form.text_area :answer_change, id: "answer_change", rows: 4, cols: 50 %>
+    <br><br>
+    <%= form.submit "Invia" %>
+  <% end %>
+  <%= form_with(url: answer_delete_path, method: "delete") do %>
+    <%= hidden_field_tag :answerDeleteId %>
+    <button type="submit">Elimina</button>
+  <% end %>
+</div>
+</div>
+
+<script>
+//JS modale segnalazione
+document.addEventListener("DOMContentLoaded", function() {
+  
+  document.querySelectorAll('.answer-icon').forEach(icon => {
+    icon.addEventListener('click', (event) => {
+      const review = event.target.getAttribute('data-review');
+
+      document.getElementById('reviewId').value = review;
+      openModal('new');
+    });
+  });
+
+  document.querySelectorAll('.change-icon').forEach(icon => {
+    icon.addEventListener('click', (event) => {
+      const answerId = event.target.getAttribute('data-answer');
+      const answer = event.target.getAttribute('data-answer-risposta');
+
+      document.getElementById('answerId').value = answerId;
+      document.getElementById('answerDeleteId').value = answerId;
+      document.getElementById('answer_change').value = answer;
+
+      openModal('change');
+    });
+  });
+
+  function openModal(modal) {
+    if (modal == 'new'){
+      document.getElementById('answerModal').style.display = 'block';
+    } else {
+      document.getElementById('changeAnswerModal').style.display = 'block';
+    }
+    
+  }
+
+  function closeAnswerModal() {
+    document.getElementById('answerModal').style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    var modal = document.getElementById('answerModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+
+  function closeChangeAnswerModal() {
+    document.getElementById('changeAnswerModal').style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    var modal = document.getElementById('changeAnswerModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+  document.querySelector('#closeAnswerModal').onclick = closeAnswerModal;
+  document.querySelector('#closeChangeAnswerModal').onclick = closeChangeAnswerModal;
+});
+</script>

@@ -1,7 +1,7 @@
 <%= javascript_include_tag 'menu_public', 'data-turbolinks-track': 'reload' %>
 
 <div class="pagina-menu">
-    <%= link_to public_restaurant_profile_path(@restaurateur_profile.id), style: 'color: black; text-decoration: underline;' do %>Torna alla pagina vetrina del ristoratore<% end %>
+    <%= link_to public_restaurant_profile_path(@restaurateur_profile.id), class: 'linksito' do %>Torna alla pagina vetrina del ristoratore<% end %>
     <div class="ricerca-menu-container" style="text-align: center;">
     <h1 style="font-size: 50px;"><%= @menu.ristoratore.nomeristorante %>'s Menu</h1>
     <div class="search-container">

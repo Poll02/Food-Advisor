@@ -4,15 +4,16 @@ class CompetizioneController < ApplicationController
 
   def index
     @competizioni = Competizione.where('data_fine >= ?', Date.today)
-    if session[:role] == 'Ristoratore'
-      @competizioni_ristoratore = Competizione.where(ristoratore_id: @current_user.cliente.ristoratore.id)
-    end
+    @competizioni_limited = Competizione.where('data_fine >= ?', Date.today).order(created_at: :desc).limit(10)
+
+      if session[:role] == 'Ristoratore'
+        @competizioni_ristoratore = Competizione.where(ristoratore_id: @current_user.cliente.ristoratore.id)
+      end
+  
   end
 
   def create
-    Rails.logger.info("inizio creazione competizione") 
     @competizione = Competizione.new(competizione_params)
-    Rails.logger.info("parametri competizione #{competizione_params}")
 
     # se c'è la foto la salviamo in locale
     if params[:competizione][:locandina]
@@ -27,7 +28,6 @@ class CompetizioneController < ApplicationController
     if @competizione.save
       flash[:notice] = 'Competizione creata con successo!'
     else
-      Rails.logger.info("Errori di validazione: #{@competizione.errors.full_messages}")
       flash[:alert] = 'Errore durante la creazione della competizione'
     end
     redirect_to competizione_index_path
@@ -40,16 +40,12 @@ class CompetizioneController < ApplicationController
       return
     end
   
-    Rails.logger.debug "join_competition called with params: #{params.inspect}"
-  
     # Trova la competizione tramite l'id passato nei parametri
     competizione = Competizione.find(params[:id])
-    Rails.logger.debug "Found competizione: #{competizione.inspect}"
   
     # Controlla se l'utente è già iscritto a questa competizione
     existing_participation = UserCompetition.find_by(user: @current_user.cliente.user, competizione: competizione)
     if existing_participation
-      Rails.logger.debug "User already registered for this competition"
       render json: { success: false, error: 'Sei già iscritto a questa competizione.' }
       return
     end
@@ -57,7 +53,6 @@ class CompetizioneController < ApplicationController
     # Controlla se l'utente ha già due competizioni a cui partecipa
     ncompetizioni = @current_user.cliente.user.competiziones.count
     if ncompetizioni > 2
-      Rails.logger.debug "Partecipi già a due competizioni"
       render json: { success: false, error: 'Partecipi già a due competizioni.' }
       return
     end 
@@ -74,31 +69,23 @@ class CompetizioneController < ApplicationController
   
     # Controlla se l'utente soddisfa i requisiti della competizione
     if !satisfies_requirements?(competizione)
-      Rails.logger.debug "User does not satisfy requirements for this competition"
       render json: { success: false, error: 'Non soddisfi i requisiti per partecipare a questa competizione.' }
       return
     end
-  
-    Rails.logger.debug "Search user"
+
     persona = @current_user.cliente.user
-    Rails.logger.debug "Found persona: #{persona.inspect}"
   
     # Crea una nuova partecipazione dell'utente alla competizione
     participation = UserCompetition.new(user: persona, competizione: competizione)
-    Rails.logger.debug "Created participation: #{participation.inspect}"
   
     # Salva la partecipazione dell'utente
     if participation.save
-      Rails.logger.debug "Participation saved successfully"
       render json: { success: true }
     else
-      Rails.logger.debug "Error saving participation: #{participation.errors.full_messages.to_sentence}"
       render json: { success: false, error: participation.errors.full_messages.to_sentence }
     end
   
   rescue => e
-    Rails.logger.error "Exception: #{e.message}"
-    Rails.logger.error e.backtrace.join("\n")
     render json: { success: false, error: 'Internal Server Error' }, status: 500
   end  
 
@@ -221,7 +208,6 @@ class CompetizioneController < ApplicationController
 
   def require_login
     unless logged_in?
-      Rails.logger.debug "User not logged in"
       render json: { success: false, error: 'Devi essere loggato per partecipare.' }
     end
   end

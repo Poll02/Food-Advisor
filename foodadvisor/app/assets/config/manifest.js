@@ -11,4 +11,4 @@
 //= link menu_public.js
 //= link user_profile.js
 //= link rest_edit.js
-//= link rest_public.js
+

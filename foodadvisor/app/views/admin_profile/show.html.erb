@@ -1,4 +1,5 @@
 <%= javascript_include_tag 'admin_profile', 'data-turbolinks-track': 'reload' %>
+<div class="admine-profile container">
 
 <!-- Mostra il messaggio di successo o errore -->
 <% if flash[:notice] %>
@@ -13,13 +14,15 @@
   </div>
 <% end %>
 
-<h1>Nuove registrazioni</h1>
+<h3>Utenti registrati</h3>
 <div class="nuoviUtenti">
     <table>
         <thead>
             <tr>
+                <th>ID</th>
                 <th>Nome</th>
                 <th>Cognome</th>
+                <th>Username</th>
                 <th>Nome Ristorante</th>
                 <th>Ruolo</th>
                 <th>Email</th>
@@ -27,6 +30,7 @@
                 <th>Asporto</th>
                 <th>Certificato</th>
                 <th>Data Iscrizione</th>
+                <th>Segnalato</th>
             </tr>
         </thead>
         <tbody>
@@ -36,11 +40,13 @@
                             public_restaurant_profile_path(cliente.ristoratore)
                         elsif cliente.user.respond_to?(:critico) && cliente.user.critico.present?
                             public_critic_profile_path(cliente.user.critico)
-                        else
+                        elsif cliente.respond_to?(:user) && cliente.user.present?
                             public_user_profile_path(cliente.user)
                         end
+
                 %>
-                <tr onclick="window.location='<%= url %>'" style="cursor: pointer;">
+                <tr data-url="<%= url %>" style="cursor: pointer;">
+                    <td><%= cliente.id %></td>
                     <td>
                         <% if cliente.respond_to?(:user) && cliente.user.present? %>
                             <%= cliente.user.nome %>
@@ -49,6 +55,11 @@
                     <td>
                         <% if cliente.respond_to?(:user) && cliente.user.present? %>
                             <%= cliente.user.cognome %>
+                        <% end %>
+                    </td>
+                    <td>
+                        <% if cliente.respond_to?(:user) && cliente.user.present? %>
+                            <%= cliente.user.username %>
                         <% end %>
                     </td>
                     <td>
@@ -86,6 +97,7 @@
                         <% end %>
                     </td>
                     <td><%= cliente.created_at.strftime('%d/%m/%Y') %></td>
+                    <td class="icon-cell"><i class="fa-solid fa-clipboard" data-cliente="<%= cliente.id %>"></i>  <i class="fa-solid fa-person-circle-check" data-cliente="<%= cliente.id %>"></i>  <i class="fa-solid fa-ban" data-cliente="<%= cliente.utente_id %>"></i></td>
                 </tr>
             <% end %>
 
@@ -101,43 +113,45 @@
 </div>
 
 
-<h1>Segnalazioni</h1>
+<h3>Segnalazioni</h3>
 <div class="gestioneSegnalazioni">
 <% if @segnalazioni.any? %>
   <% @segnalazioni.each do |segnalazione| %>
+    <% if segnalazione.recensione_id.present? %>
+    <p style="display: none;"><%= @recensione=Recensione.find(segnalazione.recensione_id) %><p>
     <div class="segnalazione">
       <div class="segnalazioneInfo">
-        <p class="info">Da: <%= segnalazione.cliente_id %>  A: <%= segnalazione.recensione.cliente_id %>  <p>
-        <p class="info">Motivo:  </p> <%= segnalazione.motivo %>
+        <p class="info">Da: <%= segnalazione.cliente.user.username %> <br> A: <%= @recensione.cliente.user.username %>  <p>
+        <p class="info">Motivo:   <%= segnalazione.motivo %></p>
       </div>
-      <div class="public-r-reviews" style="margin-right: 50px; width: 250%;">
-        <!-- link al profilo dello user del segnalato come bottone -->
-          <div class="public-foto-details">
-            <% if segnalazione.recensione.cliente.foto.present? %>
-              <%= image_tag segnalazione.recensione.cliente.foto, class: 'recensione-foto' %>
+      <div class="public-r-reviews">
+            <% if @recensione.cliente.foto.present? %>
+              <%= image_tag @recensione.cliente.foto, class: 'recensione-foto' %>
             <% else %>
               <%= image_tag 'background.jpg', class: 'recensione-foto' %>
             <% end %>
-            <div class="public-review-details">
+          <div class="public-review-details">
+            <p style="font-weight: bold";><%= @recensione.cliente.user.username %></p>
             <p>
-              <%= segnalazione.recensione.cliente.user.username %><br>
-              <% segnalazione.recensione.stelle.times do %>
+              <% @recensione.stelle.times do %>
                 <ion-icon name="star" style="font-size: 15px;"></ion-icon>
-              <% end %> <br>
-              <%= segnalazione.recensione.commento %> <br>
-              <span style="font-style: italic; font-size: 13px;">in data <%= segnalazione.recensione.created_at.strftime('%d/%m/%Y') %></span>
-            </p>
-            </div>
+              <% end %>
+            </p>            <p><%= @recensione.commento %></p>
+            <p style="font-style: italic; font-size: 13px;">in data <%= @recensione.created_at.strftime('%d/%m/%Y') %></p>
+          </div>
+          <div class="public-review-icon">
+            
+            
           </div>
         </div>
       <div class="segnalazioneAction">
-        <%= form_with model: segnalazione.recensione ,url: review_path(segnalazione.recensione), method: :delete, local: true do %>
-          <button type="submit" style="width: 260px; ">Rimuovi recensione</button>
+        <%= form_with model: @recensione ,url: review_path(@recensione), method: :delete, local: true do %>
+          <button type="submit">Rimuovi recensione</button>
         <% end %>
-        <button>Blocca profilo segnalato</button>
       </div>
     </div>
     <br><br>
+    <%end%>
   <%end%>
 <% elsif %>
     <div class="segnalazione">
@@ -147,12 +161,11 @@
         </div>
         <div class="segnalazioneAction">
             <button>Rimuovi recensione</button>
-            <button>Blocca profilo segnalato</button>
         </div>
     </div>
 <% end %>
 </div>
-<h1>Problemi</h1>
+<h3>Problemi</h3>
 <div class="gestioneProblemi">
   <table>
     <thead>
@@ -192,7 +205,7 @@
   </table>
 </div>
 
-<h1>Invia comunicazioni</h1>
+<h3>Invia comunicazioni</h3>
 <div class="inviaNotifiche">
   <%= form_with model: @notification, url: notifications_path, local: true do |form| %>
     <div class="form-group">
@@ -209,4 +222,40 @@
   <% end %>
 </div>
 
-</div> 
+</div> <!-- cosa chiude ? -->
+
+<div id="clipboardModal" class="modal">
+<div class="modal-content">
+  <span id="closeClipboard" class="close">&times;</span>
+  <input type="hidden" id="cliente_id" name="cliente_id">
+    <div id="segnalazioni-container">
+      <!-- Segnalazioni verranno caricate qui -->
+    </div>
+  
+</div>
+</div>
+
+<div id="cleanReportModal" class="modal">
+<div class="modal-content">
+  <span id="closeCleanReport" class="close">&times;</span>
+  <%= form_with(url: segnalzaione_delete_path, method: "delete") do %>
+    <h2>Vuoi eliminare le segnalazioni di questo account?</h2>
+    <%= hidden_field_tag :data_id %>
+    <button type="submit">Elimina</button>
+  <% end %>
+  
+</div>
+</div>
+
+<div id="deleteUserModal" class="modal">
+<div class="modal-content">
+  <span id="closeDeleteUser" class="close">&times;</span>
+  <%= form_with(url: admin_profile_user_delete_path, method: "delete") do %>
+    <h2>Vuoi eliminare definitivamente questo account?</h2>
+    <%= hidden_field_tag :delete_id %>
+    <button type="submit">Elimina</button>
+  <% end %>
+  
+</div>
+</div>
+</div>

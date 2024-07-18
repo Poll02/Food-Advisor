@@ -1,4 +1,4 @@
-<%= javascript_include_tag 'rest_public', 'data-turbolinks-track': 'reload' %>
+
 
 <div class="pagina-vetrina">
     <% if flash[:notice] %>
@@ -34,64 +34,85 @@
               <h2 style="margin-top: 20px;">TAGS: </h2>
               <% @tags.each do |tag| %>
                 <% category_class = tag.categoria.downcase.gsub(' ', '-') %>
-                <span class="piatto category-<%= category_class %>"><%= tag.nome %></span>
+
+          <span class="piatto category-<%= category_class %>"><%= tag.nome %></span>
               <% end %>
             <% else %>
-              <p>Nessun tag associato</p>
+              <p style="color: gray;">Il ristorante non ha nessun tag associato</p>
             <% end %>
-        </div>
-        <% if @restaurant_owner.cliente.foto.present? %>
-          <%= image_tag @restaurant_owner.cliente.foto %>
+          </div>
+          <% if @restaurant_owner.cliente.foto.present? %>
+            <%= image_tag @restaurant_owner.cliente.foto %>
         <% else %>
-          <%= image_tag "user.jpg" %>
+            <%= image_tag "user.jpg" %>
         <% end %>
-        <div class="rest-info-public-right">
-          <h3>Informazioni</h3>
-          <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.email %></span></p>
-          <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.telefono %></span></p>
-          <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"> <%= @restaurant_owner.indirizzo %></span></p>
-          <p style="font-weight: bold;">Asporto?: <span style="font-weight: normal;"> 
-            <% if @restaurant_owner.asporto %>
-              Si
-            <% else %>
-              No
-            <% end %>
-          </span></p>
-        </div>
+  <div class="rest-info-public-right">
+    <h3>Informazioni</h3>
+    <p style="font-weight: bold;">Email: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.email %></span></p>
+    <p style="font-weight: bold;">Telefono: <span style="font-weight: normal;"><%=  @restaurant_owner.cliente.utente.telefono %></span></p>
+    <p style="font-weight: bold;">Indirizzo: <span style="font-weight: normal;"> <%= @restaurant_owner.indirizzo %></span></p>
+    <p style="font-weight: bold;">Asporto? <span style="font-weight: normal;"> 
+      <% if @restaurant_owner.asporto %>
+      Si
+      <% else %>
+      No
+      <% end %>
+    </span></p>
+  </div>
+  
+  
+    
     </div>
+   
     <div class="review-reserve-buttons">
         <button type="button" class="review">Lascia una Recensione</button>
         <button type="button" style="background-color: rgb(234, 183, 121);" class="open-reserv-modal">Prenota un Tavolo</button>
         <%= link_to public_show_menus_path(@restaurant_owner.id), class: 'user-link' do %><button type="button" style="background-color: rgb(234, 123, 121);" >Menù</button><% end %>
         <button type="button" id="add-rest-to-fav" data-ristoratore-id="<%= @restaurant_owner.id %>" style="background-color: rgb(71, 200, 82);">Aggiungi ai Preferiti</button>
-        <button type="button" id="report-rest" style="background-color: rgb(221, 60, 60);">Segnala</button>
+        <% if session[:role]!='Admin' || @current_user.present?%>
+        <button type="button" class="report-icon" id="report-rest" style="background-color: rgb(221, 60, 60);" data-report="<%= @restaurant_owner.id %>" data-type="ristorante">Segnala</button>
+        <% end%>
+
 
         <div id="reservModal" class="reserv-modal">
           <div class="reserv-modal-content">
             <span class="close-reserv-modal">&times;</span>
             <h2>Effettua una Prenotazione</h2>
-            <form id="reservForm">
-              <label for="num_persone">Numero di Persone:</label>
-              <input type="number" id="num_persone" name="num_persone" required>
-              <label for="data">Data:</label>
-              <input type="date" id="data" name="data" required>
-              <label for="orario">Orario:</label>
-              <input type="hidden" id="ristoratore_id" name="ristoratore_id" value="<%= @restaurant_owner.id %>">
-              <input type="time" id="orario" name="orario" required>
-              <button type="submit">Prenota</button>
-            </form>
+            <%= form_with(model: @prenotazione, url: '/prenotazione', method: :post, id: "reservForm", local: true) do |form| %>
+              <%= form.fields_for :prenotazione do |pf| %>
+                <div class="form-group">
+                  <%= pf.label :numero_persone, 'Numero di Persone:' %>
+                  <%= pf.number_field :numero_persone, class: 'form-control', required: true , id: 'numero-persone'%>
+                </div>
+                <div class="form-group">
+              <%= pf.label :data, 'Data prenotazione:' %>
+              <%= pf.date_field :data, class: 'form-control', required: true, id: 'data-prenotazione' %>
+            </div>
+
+                <div class="form-group">
+                  <%= pf.label :orario, 'Orario:' %>
+                  <%= pf.time_field :orario, class: 'form-control', required: true , id: 'orario-prenotazione'%>
+                </div>
+                <%= pf.hidden_field :ristoratore_id, value: @restaurant_owner.id %>
+            
+                <% if @current_user && @current_user.cliente.present? && @current_user.cliente.user.present? %>
+                  <%= pf.hidden_field :user_id, value: @current_user.cliente.user.id %>
+                <% end %>
+              <% end %>
+              <%= form.submit 'Prenota', class: 'btn btn-primary' %>
+              <%= form.button 'Annulla', type: 'reset', class: 'btn btn-secondary' %>
+            <% end %>
+
           </div>
         </div>
 
     </div>
-
-    <% if session[:role] == 'User' || session[:role] == 'Critico' %>
+    
     <div id="reviewModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Lascia una Recensione</h2>
         <%= form_with( url: reviews_path, method: "post", local: true) do |form| %>
-          <%= form.hidden_field :cliente_id, value: @current_user.cliente.id %>
           <%= form.hidden_field :ristoratore_id, value: @restaurant_owner.cliente.id %>
           <%= form.label :stelle, "Stelle:" %>
           <div class="star-rating">
@@ -120,7 +141,6 @@
         <% end %>
       </div>
     </div>
-    <% end %>
 
 
       <h1>Eventi</h1>
@@ -145,7 +165,7 @@
               </div>
             <% end %>
             <% else %>
-      <p>Nessun evento trovato</p>
+      <p style="color: gray; ">Nessun evento trovato</p>
     <% end %>
           </div>
       </div>
@@ -163,66 +183,62 @@
         </div>
         <% end %>
     <% else %>
-      <p>Nessuna promozione attiva</p>
+      <p style="color: gray; ">Nessuna promozione attiva</p>
     <% end %>
         
     </div>
     <hr class="solid" id="divider" style="width: 70%;">
     <h1 style="margin-bottom: 20px;">Ricette Condivise</h1>
-    <div class="r-public-recipes">
-      <div class="restaurants-grid" style="width: 1300px; justify-content: center;" id="recipes-grid">
-        <% if @recipes.any? %>
-      <% @recipes.each do |recipe| %>
-        <div class="restaurant-box" id="recipes-box">
-          <% if recipe.photo.present? %>
-            <%= image_tag recipe.photo %>
-          <% else %>
-            <%= image_tag 'background.jpg' %>
-          <% end %>
-          <div class="text-overlay" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
-            <p><%= recipe.name %></p>
-            <p style="font-size: 13px; font-weight: normal;">Difficoltà: <span><%= recipe.difficulty %></span></p>
-            <p style="font-size: 13px; font-weight: normal;">Ingredienti: <span><%= recipe.ingredients %></span></p>
-            <button type="submit" data-recipe-id="<%= recipe.id %>" id="add-recipe-fav">Preferiti +</button>
-
+    <div class="r-ricette" style="border: none; box-shadow: 0 0 0;">
+      <% if @recipes.any? %>
+        <% @recipes.each do |recipe| %>
+          <div class="r-ricetta">
+            <% if recipe.photo.present? %>
+              <%= image_tag recipe.photo, class: 'ricetta-foto' %>
+            <% else %>
+              <%= image_tag 'background.jpg', class: 'ricetta-foto' %>
+            <% end %>
+            <div class="ricetta-info">
+              <p>Nome: <%= recipe.name %></p>
+              <p>Difficoltà: <%= recipe.difficulty %></p>
+              <p>Ingredienti: <%= recipe.ingredients %></p>
+              <p>Procedimento: <%= recipe.procedure %></p>
+            </div>
           </div>
-        </div>
+        <% end %>
+      <% else %>
+        <p style="color: gray; ">Non hai condiviso alcuna ricetta.</p>
       <% end %>
-    <% else %>
-      <p>Il ristorante non ha condiviso ricette</p>
-    <% end %>
-    </div>
     </div>
     <hr class="solid" id="divider" style="width: 70%;">
     
     <h1 style="margin-bottom: 20px;">Recensioni</h1>
     <div class="reviews-filters">
-    <form action="<%= public_restaurant_profile_path %>" method="GET" id="filterForm">
-    <label for="date">Data:</label>
-    <input type="date" id="date" name="date" value="<%= params[:date] %>">
+      <form action="<%= public_restaurant_profile_path %>" method="GET" id="filterForm">
+        <label for="date">Data:</label>
+        <input type="date" id="date" name="date" value="<%= params[:date] %>">
 
-    <label for="stars_from">Numero di stelle da:</label>
-    <input type="number" id="stars_from" name="stars_from" min="1" max="5" value="<%= params[:stars_from] %>">
+        <label for="stars_from">Numero di stelle da:</label>
+        <input type="number" id="stars_from" name="stars_from" min="1" max="5" value="<%= params[:stars_from] %>">
 
-    <label for="stars_to">Numero di stelle a:</label>
-    <input type="number" id="stars_to" name="stars_to" min="1" max="5" value="<%= params[:stars_to] %>">
+        <label for="stars_to">Numero di stelle a:</label>
+        <input type="number" id="stars_to" name="stars_to" min="1" max="5" value="<%= params[:stars_to] %>">
 
-    <label for="order">Ordine:</label>
-    <select id="order" name="order">
-        <option value="asc" <%= 'selected' if params[:order] == 'asc' %>>Ascendente</option>
-        <option value="desc" <%= 'selected' if params[:order] == 'desc' %>>Discendente</option>
-    </select>
+        <label for="order">Ordine:</label>
+        <select id="order" name="order">
+            <option value="asc" <%= 'selected' if params[:order] == 'asc' %>>Ascendente</option>
+            <option value="desc" <%= 'selected' if params[:order] == 'desc' %>>Discendente</option>
+        </select>
 
-    <!-- Campo nascosto per ID del ristoratore -->
-    <input type="hidden" id="id" name="id" value="<%= @restaurant_owner.id %>">
+        <!-- Campo nascosto per ID del ristoratore -->
+        <input type="hidden" id="id" name="id" value="<%= @restaurant_owner.id %>">
 
-    <button type="submit">Cerca</button>
-    <button type="button" onclick="resetForm()">Azzera</button>
-</form>
+        <button type="submit">Cerca</button>
+        <button type="button" onclick="resetForm()">Azzera</button>
+      </form>
+    </div>
 
-</div>
-
-    <div class="public-r-reviews-grid"> 
+    <div class="public-r-reviews-grid" style="margin-top: 10px; height: 400px; overflow-y: scroll; "> 
       <% if @reviews.any? %>
         <% @reviews.each do |review| %>
           <div class="public-r-reviews">
@@ -233,10 +249,17 @@
                 <%= image_tag 'background.jpg', class: 'recensione-foto' %>
               <% end %>
               <div class="public-review-text">
-                <p style="font-weight: bold";><%= review.cliente.user.username %></p>
-                <% if review.cliente.user.critico %>
-                <p style = "color: red;"> CRITICO </p>
-                <%end%>
+                <% if review.cliente.user && review.cliente.user.critico %>
+                  <%= link_to public_critic_profile_path(review.cliente.user.critico.id), style: "color: black; " do %>
+                    <p style="font-weight: bold";><%= review.cliente.user.username %></p>
+                    <p style = "color: red;"> CRITICO </p>
+                  <% end %>
+                <% elsif review.cliente.user %>
+                  <%= link_to public_user_profile_path(review.cliente.user.id), style: "color: black; " do %>
+                    <p style="font-weight: bold";><%= review.cliente.user.username %></p>
+                  <% end %>
+                <% end %>
+                
                 <p>
                   <% review.stelle.times do %>
                     <ion-icon name="star" style="font-size: 15px;"></ion-icon>
@@ -246,43 +269,61 @@
                 <p style="font-style: italic; font-size: 13px;">in data <%= review.created_at.strftime('%d/%m/%Y') %></p>
               </div>
             </div>
-            <div class="public-review-icon"> 
-
-              <% if session[:user_id] %>    
-                <% if session[:role] != 'Admin' %>
-                  <%= form_with url: add_like_review_path(review), method: :post, remote: true do %>
+            <div class="public-review-icon">
+              <% if @current_user.present? %> 
+                <%if session[:role] != 'Admin' %>
+                  <%= form_with url: add_like_review_path(review), method: :post, remote: true, html: { class: 'like-form' } do %>
                     <%= hidden_field_tag :cliente_id, @current_user.cliente.id %>
                     <%= hidden_field_tag :review_id, review.id %>
                     <%= hidden_field_tag :restaurant_owner_id, @restaurant_owner.id %>
-                    <button type="submit" class = "thumb-button"><ion-icon name = 'thumbs-up'></ion-icon> </button>
+                    <button type="submit" class="like-button" style="background: none; border: none;">
+                      <i class="fa-regular fa-thumbs-up like-icon" style="font-size: 20px; cursor: pointer; "></i>
+                    </button>
                   <% end %>
-                  <div id="like-notice"></div>
-
-                  <i class="fa-solid fa-share-nodes"></i>
                   <% if @current_user.cliente.id != review.cliente_id%>
-                      <i class="fa fa-exclamation-circle report-icon" data-review="<%= review.id %>"></i>
+                    <i class="fa fa-exclamation-circle report-icon" data-report="<%= review.id %>" data-type="recensione"></i>
                   <% elsif @current_user.cliente.id == review.cliente_id %>
                     <i class="fa-solid fa-pen-to-square change-icon" data-review="<%= review.id %>" data-review-star="<%= review.stelle %>" data-review-commento="<%= review.commento %>"></i>
                   <% end %>
                 <% else %>
-                  <i class="fa-solid fa-trash"></i>
-                <% end %>
+                  <%= form_with model: review ,url: review_path(review.id), method: :delete, local: true do %>
+                    <button type="submit"><i class="fa-solid fa-trash"></i></button>
+                  <% end %>                 
+                <% end %> 
               <% end %>
             </div>
           </div>
+
+          <% if review.answer.present?%>
+          <div class="r-risposta" style="border: 1px solid #ccc; border-radius: 10px; display: flex; align-items: center; margin-left: 20%; padding: 10px;">
+          <% if review.answer.ristoratore.cliente.foto.present? %>
+            <%= image_tag review.answer.ristoratore.cliente.foto, class: 'recensione-foto' %>
+          <% else %>
+            <%= image_tag 'background.jpg', class: 'recensione-foto' %>
+          <% end %>
+          <div class="risposta-info" style="text-align: center; margin-left: 10px; flex: 1;">
+            <p style="font-weight: bold; margin: 0;"><%= review.answer.ristoratore.nomeristorante %></p>
+            <p style="margin: 0;"><%= review.answer.risposta %></p>
+            <p style="font-style: italic; font-size: 13px; margin: 0;">in data <%= review.answer.created_at.strftime('%d/%m/%Y') %></p>
+          </div>
+        </div>
+
+        <%end %>
+        
         <% end %>
       <% else %>
-        <p>Nessuna recensione trovata</p>
+        <p style="color: gray;">Nessuna recensione trovata</p>
       <% end %>
     </div>
     
     <div id="reportModal" class="modal">
         <div class="modal-content">
           <span id="closeReport" class="close">&times;</span>
-          <h2>Segnala la Recensione</h2>
+          <h2>Fai la tua segnalazione</h2>
           <% if current_user.present? %>
             <%= form_with( url: segnalaziones_path, method: "post", local: true) do |form| %>
-              <%= form.hidden_field :recensione_id %>
+              <%= form.hidden_field :data_id%>
+              <%= form.hidden_field :type%>
               Motivo della segnalazione
               <br><br>
               <%= form.label :commento, "Commento:" %>
@@ -337,6 +378,245 @@
     
 </div>
 
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll('.change-icon').forEach(icon => {
+    icon.addEventListener('click', (event) => {
+      const review = event.target.getAttribute('data-review');
+      const stars = event.target.getAttribute('data-review-star');
+      const comment = event.target.getAttribute('data-review-commento');
+
+      document.getElementById('reviewId').value = review;
+      
+      document.getElementById('Rid').value = review;
+      console.log(review)
+      document.getElementById('new_stars').value = stars;
+      document.getElementById('new_comment').value = comment; // Imposta il valore del commento qui
+
+      updateStars(stars);
+      openModal(); // Passa il commento alla funzione openModal
+    });
+  });
+
+  function openModal(comment) {
+    document.getElementById('changeReviewModal').style.display = 'block';
+  }
+
+  function closeReportModal() {
+    document.getElementById('changeReviewModal').style.display = 'none';
+  }
+
+  function updateStars(stars) {
+    const starElements = document.querySelectorAll('#reviewStars .star use');
+    starElements.forEach((star, index) => {
+      star.setAttribute('xlink:href', index < stars ? '#filled-star' : '#empty-star');
+    });
+  }
+
+  window.onclick = function(event) {
+    var modal = document.getElementById('changeReviewModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+  document.querySelector('#closeChangeModal').onclick = closeReportModal;
+});
+// Function to handle star rating selection
+function selectNewStar(value) {
+  document.querySelectorAll('#changeReviewModal .star use').forEach((use, index) => {
+    use.setAttribute('xlink:href', index < value ? '#filled-star' : '#empty-star');
+  });
+
+  document.getElementById('new_stars').value = value;
+
+}
+  // azzero i campi del form delle recensioni
+   window.onload = function() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var dateParam = urlParams.get('date');
+        var starsFromParam = urlParams.get('stars_from');
+        var starsToParam = urlParams.get('stars_to');
+        var orderParam = urlParams.get('order');
+
+        // Imposta i valori dei campi in base ai parametri della query string se presenti
+        document.getElementById("date").value = dateParam || ""; // Se dateParam è null, usa una stringa vuota
+        document.getElementById("stars_from").value = starsFromParam || "1";
+        document.getElementById("stars_to").value = starsToParam || "5";
+        document.getElementById("order").value = orderParam || "asc";
+    };
+
+    // Funzione per azzerare i campi del form
+    function resetForm() {
+        document.getElementById("filterForm").reset(); // Resetta il form
+
+        // Imposta la data corrente nel campo "Data"
+        document.getElementById("date").valueAsDate = new Date();
+
+        // Imposta "0" nei campi "Numero di stelle da" e "Numero di stelle a"
+        document.getElementById("stars_from").value = "1";
+        document.getElementById("stars_to").value = "5";
+
+        // Imposta il valore predefinito "Ascendente" nel campo "Ordine"
+        document.getElementById("order").value = "asc";
+    }
+//JS modale segnalazione
+document.addEventListener("DOMContentLoaded", function() {
+  
+  document.querySelectorAll('.report-icon').forEach(icon => {
+    icon.addEventListener('click', (event) => {
+      const review = event.target.getAttribute('data-report');
+      const type = event.target.getAttribute('data-type');
+
+      document.getElementById('data_id').value = review;
+      document.getElementById('type').value = type;
+
+
+      openModal();
+    });
+  });
+
+  function openModal() {
+    document.getElementById('reportModal').style.display = 'block';
+  }
+
+  function closeReportModal() {
+    document.getElementById('reportModal').style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    var modal = document.getElementById('reportModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+  document.querySelector('#closeReport').onclick = closeReportModal;
+});
+
+// JS creazione prenotazione
+document.addEventListener('DOMContentLoaded', function() {
+  var reservModal = document.getElementById('reservModal');
+  var btn = document.querySelector('.open-reserv-modal');
+  var span = document.getElementsByClassName('close-reserv-modal')[0];
+
+  btn.onclick = function() {
+    reservModal.style.display = 'block';
+  }
+
+  span.onclick = function() {
+    reservModal.style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    if (event.target == reservModal) {
+      reservModal.style.display = 'none';
+    }
+  }
+
+  
+});
+
+// JS recensioni
+function selectStar(value) {
+  // Resetta tutte le stelle
+  document.querySelectorAll('.star use').forEach(use => {
+    use.setAttribute('xlink:href', '#empty-star');
+  });
+
+  // Imposta le stelle fino al valore cliccato
+  for (let i = 1; i <= value; i++) {
+    document.querySelector(`.star:nth-child(${i}) use`).setAttribute('xlink:href', '#filled-star');
+  }
+
+  // Aggiorna il valore nascosto per inviarlo al server
+  document.getElementById('stars').value = value;
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  function openModal() {
+    document.getElementById('reviewModal').style.display = 'block';
+  }
+
+  function closeModal() {
+    document.getElementById('reviewModal').style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    var modal = document.getElementById('reviewModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+
+  document.querySelector('.review').onclick = openModal;
+  document.querySelector('.close').onclick = closeModal;
+});
+
+//Ristorante ai preferiti
+document.addEventListener('DOMContentLoaded', () => {
+  const addToFavButton = document.getElementById('add-rest-to-fav');
+
+  if (addToFavButton) {
+    addToFavButton.addEventListener('click', () => {
+      const ristoratoreId = addToFavButton.getAttribute('data-ristoratore-id');
+
+      fetch('/add_rest_to_favorites', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ ristoratore_id: ristoratoreId })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Ristorante aggiunto ai preferiti con successo!');
+        } else {
+          alert(`Errore: ${data.error}`);
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Si è verificato un errore. Riprova.');
+      });
+    });
+  }
+});
+
+
+  document.querySelectorAll('.add-recipe-fav').forEach(addRecipe => {
+
+  addRecipe.addEventListener('click', function(event) {
+    event.preventDefault();
+    
+    const recipeId = this.getAttribute('data-recipe-id');
+    
+    fetch('/add_recipe_to_favorites', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({ recipe_id: recipeId })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        alert('Ricetta aggiunta ai preferiti!');
+      } else {
+        alert('Errore: ' + data.error);
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert('Si è verificato un errore durante l\'aggiunta della ricetta ai preferiti.');
+    });
+  });
+  });
+
+</script>
+
 
 <style>
 .star-rating {
@@ -361,5 +641,14 @@
 .star:not(.selected) {
   fill: none; /* Stelle vuote senza riempimento */
 }
+
+.fa-trash{
+  transition: color 0.3s ease;
+}
+
+.fa-trash:hover {
+  color: red;
+}
+
 
 </style>

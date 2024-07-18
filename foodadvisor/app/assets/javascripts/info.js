@@ -130,7 +130,14 @@ document.addEventListener('DOMContentLoaded', function() {
           // Esempio di visualizzazione dei dati nell interfaccia utente
           const impegniGiornalieri = document.getElementById('impegniGiornalieri');
           impegniGiornalieri.innerHTML = '';
-  
+          
+          function formatTime(orario) {
+            const date = new Date(orario);
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            return `${hours-1}:${minutes}`;
+          }
+
           if (data.prenotazioni.length > 0 || data.eventi.length > 0) {
             if (data.prenotazioni.length > 0) {
               const prenotazioniSection = document.createElement('div');
@@ -139,11 +146,12 @@ document.addEventListener('DOMContentLoaded', function() {
               data.prenotazioni.forEach(prenotazione => {
                 const prenotazioneElement = document.createElement('div');
                 prenotazioneElement.classList.add('prenotazionetavolo');
+                const formattedTime = formatTime(prenotazione.orario);
                 prenotazioneElement.innerHTML = `
                   <div style="font-size: 13px; background-color: #ffd166; padding: 1%; border-radius: 10px; ">
                     <p> ID cliente: ${prenotazione.user_id}</p>
                     <p> N persone: ${prenotazione.numero_persone}</p>
-                    <p> Orario: ${prenotazione.orario}</p>
+                    <p> Orario: ${formattedTime}</p>
                   </div>
                 `;
                 prenotazioniSection.appendChild(prenotazioneElement);
@@ -184,87 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
   
     // JS per la validazione delle prenotazioni
-    document.addEventListener('DOMContentLoaded', function() {
-      const checkIcons = document.querySelectorAll('.check-icon');
-      const deleteIcons = document.querySelectorAll('.delete-icon');
-  
-      checkIcons.forEach(icon => {
-        icon.addEventListener('mouseenter', function() {
-          this.style.color = 'green';
-        });
-  
-        icon.addEventListener('mouseleave', function() {
-          this.style.color = '';
-        });
-  
-        icon.addEventListener('click', function() {
-          const prenotazioneId = this.getAttribute('data-prenotazione-id');
-          setPrenotazioneValida(prenotazioneId);
-        });
-      });
-  
-      deleteIcons.forEach(icon => {
-        icon.addEventListener('mouseenter', function() {
-          this.style.color = 'red';
-        });
-  
-        icon.addEventListener('mouseleave', function() {
-          this.style.color = '';
-        });
-  
-        icon.addEventListener('click', function() {
-          const prenotazioneId = this.getAttribute('data-prenotazione-id');
-          deletePrenotazione(prenotazioneId);
-        });
-      });
-  
-      function setPrenotazioneValida(prenotazioneId) {
-        const authenticityToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        // Esegui una richiesta Ajax per impostare la prenotazione come valida
-        fetch(`/prenotazione/${prenotazioneId}/set_valida`, {
-          method: 'PATCH',  // Puoi usare 'PUT' se preferisci
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-Token': authenticityToken
-          },
-          body: JSON.stringify({ valida: true })
-        })
-        .then(response => {
-          if (response.ok) {
-            // Aggiorna l'interfaccia o ricarica la pagina come necessario
-            location.reload();  // Esempio: Ricarica la pagina
-          } else {
-            console.error('Errore durante l\'impostazione della prenotazione come valida');
-          }
-        })
-        .catch(error => {
-          console.error('Errore durante la richiesta Ajax:', error);
-        });
-      }
-  
-      function deletePrenotazione(prenotazioneId) {
-        const authenticityToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        // Esegui una richiesta Ajax per eliminare la prenotazione
-        fetch(`/prenotazione/${prenotazioneId}`, {
-          method: 'DELETE',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRF-Token': authenticityToken
-          }
-        })
-        .then(response => {
-          if (response.ok) {
-            // Aggiorna l'interfaccia o ricarica la pagina come necessario
-            location.reload();  // Esempio: Ricarica la pagina
-          } else {
-            console.error('Errore durante l\'eliminazione della prenotazione');
-          }
-        })
-        .catch(error => {
-          console.error('Errore durante la richiesta Ajax:', error);
-        });
-      }
-    });
+    
   
     // per i dipendenti
     document.addEventListener('DOMContentLoaded', function() {

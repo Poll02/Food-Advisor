@@ -28,7 +28,11 @@
             <p style="font-weight: bold;">Email: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.utente.email%></span></p>
             <p style="font-weight: bold;">Telefono: <span id="right-side-requisiti" style="font-weight: normal;"><%= @current_user.cliente.utente.telefono%></span></p>
 
-          
+            <% if @current_user.cliente.user.critico.certificato? %>
+                <%= link_to image_path(@current_user.cliente.user.critico.certificato), target: '_blank' do %>
+                    'Certificato'
+                <% end %>
+            <% end %>
         </div>
     </div>
     <hr id="divider" class="solid">

@@ -1,4 +1,15 @@
 <div class="pagina-vetrina-utente">
+<% if flash[:notice] %>
+      <div class="alert alert-success" role="alert">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+
+    <% if flash[:alert] %>
+      <div class="alert alert-danger" role="alert">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
     <h1 style="font-size: 40px; margin-bottom: 20px;">Profilo di <span style="color: #28a745;"><%= @user.username %></span></h1>
     <div class="public-u-foto-info">
         <div class="public-u-foto">
@@ -14,14 +25,16 @@
             <p style="font-weight: bold;">Iscrizione: <span style="font-weight: normal;"><%= @user.created_at.strftime('%d/%m/%Y') %></span></p>
         </div>
     </div>
-    <div class="public-u-follow-btn">
-        <button type="button" style="background-color: red;">Segnala</button>
-    </div>
+    <% if session[:role]!='Admin' && @current_user.present? && @current_user.cliente.id != @user.cliente.id%> 
+      <div class="public-u-follow-btn">
+        <button type="button" class="report-icon" id="report-rest" style="background-color: rgb(221, 60, 60);" data-report="<%= @user.id %>" data-type="user">Segnala</button>
+      </div>
+    <% end %>
 
     <hr class="solid" id="divider" style="width: 80%;">
     <h1>Ultime Recensioni</h1>
 
-    <div class="r-pub-recensioni" style="max-height: 600px; overflow-y: scroll;">
+    <div class="r-pub-recensioni" style="max-height: 400px; overflow-y: scroll;">
         <% if @reviews.any? %>
             <% @reviews.each do |review| %>
                 <div class="public-r-reviews" style="margin-bottom: 20px; display: flex; flex-direction: row; justify-content: space-between; ">
@@ -33,7 +46,10 @@
                         <% end %>
                         <div class="public-review-details">
                             <p>
-                                <%= review.ristoratore.nomeristorante %><br>
+                                <%= link_to public_restaurant_profile_path(review.ristoratore.id), style: "color: black; " do %>
+                                  <%= review.ristoratore.nomeristorante %><br>
+                                <% end %>
+                                
                                 <% review.stelle.times do %>
                                     <ion-icon name="star" style="font-size: 15px;"></ion-icon>
                                 <% end %> <br>
@@ -43,8 +59,13 @@
                         </div>
                     </div>
                     <div class="public-r-rev-icon">
-                        <i class="fa-regular fa-thumbs-up"></i>
-                        <i class="fa fa-exclamation-circle"></i>
+                    <% if session[:role] == 'Admin' %>
+                      <i class="fa-solid fa-trash"></i>
+                    <% elsif @current_user.present? %>
+                        <% if @current_user.cliente.id != review.cliente_id%>
+                        <i class="fa fa-exclamation-circle report-icon" data-report="<%= review.id %>" data-type="recensione"></i>
+                        <% end %>
+                  <% end %> 
                     </div>
                 </div>
             <% end %>
@@ -81,3 +102,58 @@
     </div>
 
 </div>
+
+<div id="reportModal" class="modal">
+<div class="modal-content">
+  <span id="closeReport" class="close">&times;</span>
+  <h2>Fai la tua segnalazione</h2>
+  <% if current_user.present? %>
+    <%= form_with( url: segnalaziones_path, method: "post", local: true) do |form| %>
+      <%= form.hidden_field :data_id%>
+      <%= form.hidden_field :type%>
+      Motivo della segnalazione
+      <br><br>
+      <%= form.label :commento, "Commento:" %>
+      <%= form.text_area :commento, id: "commento", rows: 4, cols: 50 %>
+      <br><br>
+      <%= form.submit "Invia" %>
+    <% end %>
+  <% end %>
+</div>
+</div>
+
+
+<script>
+//JS modale segnalazione
+document.addEventListener("DOMContentLoaded", function() {
+  
+  document.querySelectorAll('.report-icon').forEach(icon => {
+    icon.addEventListener('click', (event) => {
+      const review = event.target.getAttribute('data-report');
+      const type = event.target.getAttribute('data-type');
+
+      document.getElementById('data_id').value = review;
+      document.getElementById('type').value = type;
+
+
+      openModal();
+    });
+  });
+
+  function openModal() {
+    document.getElementById('reportModal').style.display = 'block';
+  }
+
+  function closeReportModal() {
+    document.getElementById('reportModal').style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    var modal = document.getElementById('reportModal');
+    if (event.target == modal) {
+      modal.style.display = 'none';
+    }
+  }
+  document.querySelector('#closeReport').onclick = closeReportModal;
+});
+</script>

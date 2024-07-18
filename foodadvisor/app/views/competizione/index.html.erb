@@ -15,14 +15,14 @@
     <h1>Consigliate</h1>
     <div class="recommended">
       <div class="comp-grid">
-        <% @competizioni.each do |competizione| %>
+        <% @competizioni_limited.each do |competizione| %>
           <div class="comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>">
             <% if competizione.locandina.present? %>
               <%= image_tag competizione.locandina %>
             <% else %>
               <%= image_tag "background.jpg" %>
             <% end %>
-            <div class="text-overlay-competizioni" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
+            <div class="text-overlay-competizioni" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9; height: 150px; overflow-y: scroll; ">
               <p><%= competizione.nome %></p>
               <p style="font-size: 13px; font-weight: normal;"><%= competizione.descrizione %></p>
               <p style="font-size: 13px; font-weight: normal;">Data Inizio: <span id="right-side-start-data" style="font-weight: normal;"><%= competizione.data_inizio.strftime('%d/%m/%Y') %></span></p>
@@ -78,12 +78,14 @@
             <%= cf.label :data_fine, 'Data fine:' %>
             <%= cf.date_field :data_fine, class: 'form-control', required: true %>
           </div>
+          
           <%= cf.hidden_field :ristoratore_id, value: current_user.cliente.ristoratore.id %>
         <% end %>
         <%= form.submit 'Crea Competizione', class: 'btn btn-primary' %>
         <%= form.button 'Azzerare', type: 'reset', class: 'btn btn-secondary' %> 
       <% end %>
       <h1>Le tue competizioni</h1>
+      <p style="color: gray;">Tieni sempre aggiornate le tue competizioni: se una competizione non ha alcun iscritto può essere eliminata, altrimenti attendi la fine di essa e distribuisci i premi ottenuti </p>
       <div class="comp-grid">
         <% @competizioni_ristoratore.each do |competizione| %>
           <div class="comp-box" data-id="<%= competizione.id %>" data-nome="<%= competizione.nome %>" data-descrizione="<%= competizione.descrizione %>" data-requisiti="<%= competizione.requisiti %>" data-premio="<%= competizione.premio %>" data-locandina="<%= competizione.locandina %>">
@@ -92,7 +94,7 @@
             <% else %>
               <%= image_tag "background.jpg" %>
             <% end %>
-            <div class="text-overlay-competizioni" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9;">
+            <div class="text-overlay-competizioni" style="background-color: white; text-shadow: none; color: black; bottom: 0; left: 0; width: 100%; border-radius: 0; border: 1px solid #c9c9c9; height:150px; overflow-y: scroll; ">
               <p><%= competizione.nome %></p>
               <p style="font-size: 13px; font-weight: normal;"><%= competizione.descrizione %></p>
               <p style="font-size: 13px; font-weight: normal;">Data Inizio: <span id="right-side-start-data" style="font-weight: normal;"><%= competizione.data_inizio.strftime('%d/%m/%Y') %></span></p>

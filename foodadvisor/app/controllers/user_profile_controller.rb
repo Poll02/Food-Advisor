@@ -10,8 +10,7 @@ class UserProfileController < ApplicationController
     @iscrizioni = UserCompetition.where(user_id: current_user.cliente.user.id)
     @prenotazioni = Prenotazione.where(user_id: current_user.cliente.user.id).where('data >= ?', Date.today)
     @premi = Premi.where(id: current_user.cliente.user.id)
-
-  
+    @user = Utente.find(@current_user.id)
   end
 
   def edit
@@ -104,8 +103,6 @@ class UserProfileController < ApplicationController
       file.write(image.read)
     end
     
-    Rails.logger.debug "Immagine salvata correttamente in: #{path}" # Utilizzo del logger di Rails
-    Rails.logger.debug "Immagine salvata come: #{filename}" # Utilizzo del logger di Rails
     filename
   end
 

@@ -67,10 +67,25 @@
     </p>
   </div>
 
-  <%= link_to 'Modifica Impostazioni', edit_settings_path %>
+  <%= link_to 'Modifica Impostazioni', edit_settings_path, class: 'linksito' %>
   <br>
-  <%= form_with url: settings_path(current_user), method: :delete, data: { confirm: 'Sei sicuro di voler eliminare il tuo account?' } do |form| %>
-    <%= form.submit 'Elimina l\'account', id: 'del-acc-btn' %>
+  <%= form_with url: settings_path(current_user), method: :delete do |form| %>
+    <%= form.submit 'Elimina l\'account', id: 'del-acc-btn', style: 'cursor: pointer; ' %>
   <% end %>  
   
 </div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+  var deleteButton = document.getElementById('del-acc-btn');
+
+  if (deleteButton) {
+    deleteButton.addEventListener('click', function(event) {
+      var confirmation = confirm('Sei sicuro di voler eliminare il tuo account?');
+      if (!confirmation) {
+        event.preventDefault();
+      }
+    });
+  }
+});
+</script>
