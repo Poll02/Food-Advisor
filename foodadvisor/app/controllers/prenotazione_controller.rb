@@ -64,8 +64,11 @@ class PrenotazioneController < ApplicationController
   end
 
   def require_login
+    ristoratore = Ristoratore.find_by(id: params[:prenotazione][:ristoratore_id])
+
     unless logged_in?
-      render json: { success: false, message: 'Devi essere loggato per effettuare una prenotazione' }
+      flash[:alert] = "Errore nella prenotazione; non sei loggato"
+      redirect_to public_restaurant_profile_path(ristoratore)    
     end
   end
 end

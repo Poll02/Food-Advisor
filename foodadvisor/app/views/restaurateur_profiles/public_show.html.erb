@@ -64,9 +64,10 @@
     </div>
    
     <div class="review-reserve-buttons">
-        <% if @current_user.cliente != @restaurant_owner.cliente%> 
-        <button type="button" class="review">Lascia una Recensione</button>
         <button type="button" style="background-color: rgb(234, 183, 121);" class="open-reserv-modal">Prenota un Tavolo</button>
+
+        <% if @current_user.present? && @current_user.cliente != @restaurant_owner.cliente%> 
+        <button type="button" class="review">Lascia una Recensione</button>
         <% end %>
         <%= link_to public_show_menus_path(@restaurant_owner.id), class: 'user-link' do %><button type="button" style="background-color: rgb(234, 123, 121);" >Menù</button><% end %>
         <button type="button" id="add-rest-to-fav" data-ristoratore-id="<%= @restaurant_owner.id %>" style="background-color: rgb(71, 200, 82);">Aggiungi ai Preferiti</button>
@@ -204,6 +205,8 @@
               <p>Difficoltà: <%= recipe.difficulty %></p>
               <p>Ingredienti: <%= recipe.ingredients %></p>
               <p>Procedimento: <%= recipe.procedure %></p>
+                <button type="submit" data-recipe-id="<%= recipe.id %>" id="add-recipe-fav" class="add-recipe-fav">Preferiti +</button>
+
             </div>
           </div>
         <% end %>

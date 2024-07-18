@@ -6,7 +6,7 @@ class CompetizioneController < ApplicationController
     @competizioni = Competizione.where('data_fine >= ?', Date.today)
     @competizioni_limited = Competizione.where('data_fine >= ?', Date.today).order(created_at: :desc).limit(10)
 
-      if session[:role] == 'Ristoratore'
+      if session[:role] == 'Ristoratore' && @current_user.present?
         @competizioni_ristoratore = Competizione.where(ristoratore_id: @current_user.cliente.ristoratore.id)
       end
   

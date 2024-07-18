@@ -142,7 +142,7 @@ ristoratori = Cliente.limit(8).map do |cliente|
     Competizione.create!(
       nome: Faker::Lorem.word,
       locandina: 'background.jpg',
-      descrizione: '2 punti: lasciare una recensione\n5 punti: effettuare una prenotazione valida\n3 punti: ricevi un like alla recensione da un critico\n2 punti: ricevi un like alla recensione',
+      descrizione: '2 punti: lasciare una recensione; 5 punti: effettuare una prenotazione valida;3 punti: ricevi un like alla recensione da un critico;2 punti: ricevi un like alla recensione',
       requisiti: requisiti,
       premio: Faker::Commerce.product_name,
       quantitareq: quantitareq,

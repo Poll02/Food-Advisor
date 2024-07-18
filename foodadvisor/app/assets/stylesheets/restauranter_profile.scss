@@ -378,6 +378,22 @@ cursor: pointer;
   margin-bottom: 30px;
 }
 
+.btn-primary{
+  border: none;
+  font-size: 17px;
+  padding: 10px;
+  background-color: rgb(91, 206, 168);
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-primary:hover{
+  filter: brightness(120%);
+
+}
+
 .review-reserve-buttons button{
   border: none;
   font-size: 17px;
