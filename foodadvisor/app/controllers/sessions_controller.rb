@@ -119,7 +119,7 @@ class SessionsController < ApplicationController
             # Effettua il login dell'utente
     
             log_in(@user, 'User')  # Effettua il login con l'utente associato al ristoratore
-            flash[:notice] = "Utente registrato con successo"
+            flash[:notice] = "Login effettuato"
             redirect_to user_profile_path(@user)
         else
           flash[:alert] = "Errore nella registrazione utente"

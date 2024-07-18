@@ -30,7 +30,7 @@
 
         </div>
         <%if @user.tmp_password.present?%>
-          <p class="tmp_password">La tua password temporanea è: <%= @user.tmp_password%> cambiala al più presto!</p>
+          <p class="tmp_password">La tua password temporanea è: <strong><%= @user.tmp_password %></strong> cambiala al più presto!</p>
         <%end%>
     </div>
     <hr id="divider" class="solid">
