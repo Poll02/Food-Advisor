@@ -107,6 +107,7 @@ class SessionsController < ApplicationController
     log_out if logged_in?
     redirect_to root_url
   end
+
   #login API google
   def create
     #campi ricevuti da google
@@ -118,7 +119,7 @@ class SessionsController < ApplicationController
       if @user.update({uid: auth_hash['uid'], name: auth_hash.dig('info', 'name')})
             # Effettua il login dell'utente
     
-            log_in(@user, 'User')  # Effettua il login con l'utente associato al ristoratore
+            log_in(@user, 'User') 
             flash[:notice] = "Login effettuato"
             redirect_to user_profile_path(@user)
         else

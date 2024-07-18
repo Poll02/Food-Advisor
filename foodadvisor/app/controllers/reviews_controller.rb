@@ -18,10 +18,15 @@ class ReviewsController < ApplicationController
     )
   
     if @review.save
-      # Aggiunta di due punti a punti_competizione di UserCompetition associata per competizioni attive
-      @current_user.cliente.user.user_competitions.where('competizione.data_fine >= ?', Date.today).each do |uc|
-        uc.punti_competizione += 2
-        uc.save!
+      competizioni_associate = @current_user.cliente.user.competiziones
+      competizioni_associate.each do |competizione|
+        if competizione.data_fine >= Date.today
+          user_competition = UserCompetition.find_by(user_id: @current_user.cliente.user.id, competizione_id: competizione.id)
+          if user_competition
+            user_competition.punti_competizione += 2
+            user_competition.save!
+          end
+        end
       end
   
       flash[:notice] = 'Recensione salvata con successo!'

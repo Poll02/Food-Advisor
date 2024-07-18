@@ -77,19 +77,31 @@
           <div class="reserv-modal-content">
             <span class="close-reserv-modal">&times;</span>
             <h2>Effettua una Prenotazione</h2>
-            <form id="reservForm">
-              <label for="num_persone">Numero di Persone:</label>
-              <input type="number" id="num_persone" name="num_persone" required>
-              <label for="data">Data:</label>
-              <input type="date" id="data" name="data" required>
-              <label for="orario">Orario:</label>
-              <input type="hidden" id="ristoratore_id" name="ristoratore_id" value="<%= @restaurant_owner.id %>">
-              <% if @current_user && @current_user.cliente.present? && @current_user.cliente.user.present? %>
-                <input type="hidden" id="user_id" name="user_id" value="<%= @current_user.cliente.user.id %>">
+            <%= form_with(model: @prenotazione, url: '/prenotazione', method: :post, id: "reservForm", local: true) do |form| %>
+              <%= form.fields_for :prenotazione do |pf| %>
+                <div class="form-group">
+                  <%= pf.label :numero_persone, 'Numero di Persone:' %>
+                  <%= pf.number_field :numero_persone, class: 'form-control', required: true , id: 'numero-persone'%>
+                </div>
+                <div class="form-group">
+              <%= pf.label :data, 'Data prenotazione:' %>
+              <%= pf.date_field :data, class: 'form-control', required: true, id: 'data-prenotazione' %>
+            </div>
+
+                <div class="form-group">
+                  <%= pf.label :orario, 'Orario:' %>
+                  <%= pf.time_field :orario, class: 'form-control', required: true , id: 'orario-prenotazione'%>
+                </div>
+                <%= pf.hidden_field :ristoratore_id, value: @restaurant_owner.id %>
+            
+                <% if @current_user && @current_user.cliente.present? && @current_user.cliente.user.present? %>
+                  <%= pf.hidden_field :user_id, value: @current_user.cliente.user.id %>
+                <% end %>
               <% end %>
-              <input type="time" id="orario" name="orario" required>
-              <button type="submit">Prenota</button>
-            </form>
+              <%= form.submit 'Prenota', class: 'btn btn-primary' %>
+              <%= form.button 'Annulla', type: 'reset', class: 'btn btn-secondary' %>
+            <% end %>
+
           </div>
         </div>
 
@@ -499,51 +511,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   }
 
-  document.getElementById('reservForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-
-    var num_persone = document.getElementById('num_persone').value;
-    var data = document.getElementById('data').value;
-    var orario = document.getElementById('orario').value;
-    var ristoratore_id = document.getElementById('ristoratore_id').value;
-
-    console.log("persone", num_persone);
-    console.log("data", data);
-    console.log("orario", orario);
-    console.log("id rist", ristoratore_id);
-
-    fetch('/prenotazione', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content
-      },
-      body: JSON.stringify({
-        prenotazione: {
-          numero_persone: num_persone,
-          data: data,
-          orario: orario,
-          ristoratore_id: ristoratore_id
-
-        }
-      })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data.success) {
-        alert('Prenotazione effettuata con successo!');
-      } else {
-        alert('Errore durante la prenotazione. Riprova.');
-      }
-      reservModal.style.display = 'none';
-    })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('Errore durante la prenotazione. Riprova.');
-      reservModal.style.display = 'none';
-    });
-  });
+  
 });
 
 // JS recensioni
