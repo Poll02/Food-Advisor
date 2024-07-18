@@ -15,7 +15,8 @@ RSpec.feature "Booking", type: :feature, js: true do
   let(:ristoratore2) { Ristoratore.create!(nomeristorante: "Ristorante B", asporto: false, cliente: cliente2, piva: "09876543212", indirizzo: "via livorno 73") }
 
   scenario "Prenotazione effettuata con successo" do
-    #page.driver.browser.manage.window.resize_to(1920, 1080)
+    page.driver.browser.manage.window.resize_to(1920, 1080)
+
     login_as(user3)
     visit public_restaurant_profile_path(ristoratore1)
     # L'utente clicca su "Prenota un tavolo" per aprire il modal
@@ -26,15 +27,9 @@ RSpec.feature "Booking", type: :feature, js: true do
     execute_script("document.getElementById('data-prenotazione').value = '2024-07-23';")
     execute_script("document.getElementById('orario-prenotazione').value = '20:00';")
 
-    # Esegui uno script JavaScript per impostare l'orario con AM/PM
-    #execute_script("document.getElementById('orario').value = '07:00 PM';")
-
-
     click_button 'Prenota'
 
     expect(page).to have_current_path(public_restaurant_profile_path(ristoratore1))
-    
-    # Aspetta che la risposta AJAX venga gestita e verifica la presenza del messaggio di conferma
     expect(page).to have_content('Prenotazione creata con successo')
 
     visit user_profile_path
@@ -46,6 +41,8 @@ RSpec.feature "Booking", type: :feature, js: true do
   end
 
   scenario "Campi inseriti non validi" do
+    page.driver.browser.manage.window.resize_to(1920, 1080)
+
     login_as(user3)
     visit public_restaurant_profile_path(ristoratore1)    
     find('.open-reserv-modal').click
@@ -60,7 +57,9 @@ RSpec.feature "Booking", type: :feature, js: true do
     expect(page).to have_content('Errore nella prenotazione')
   end
 
-  scenario "Prenotazione impossibile da effettuare" do    
+  scenario "Prenotazione impossibile da effettuare" do  
+    page.driver.browser.manage.window.resize_to(1920, 1080)
+  
     login_as_ristoratore(ristoratore1)
     visit public_restaurant_profile_path(ristoratore1)
     find('.open-reserv-modal').click
@@ -75,6 +74,7 @@ RSpec.feature "Booking", type: :feature, js: true do
 
   scenario "Accettare una prenotazione" do
     page.driver.browser.manage.window.resize_to(1920, 1080)
+
     # per perima cosa creiamo una prenotazione valida
     login_as(user3)
     save_and_open_screenshot
@@ -142,9 +142,6 @@ RSpec.feature "Booking", type: :feature, js: true do
       end
     end
 
-    # dovrei riaggiornare la pagina
-    visit info_path
-
     # per la verifica simuliamo il clic sul calendario e vediamo che in quella giornata c'è la prenotazione
     page.execute_script("loadDailyData('2024-07-23'.split('-')[2]);")
     sleep(2) # Attendiamo un po' per assicurarci che i dati vengano caricati correttamente
@@ -185,49 +182,37 @@ RSpec.feature "Booking", type: :feature, js: true do
 
   scenario "Rifiutare una prenotazione" do
     page.driver.browser.manage.window.resize_to(1920, 1080)
+
     # per perima cosa creiamo una prenotazione valida
     login_as(user3)
-    save_and_open_screenshot
     visit public_restaurant_profile_path(ristoratore1)
-    save_and_open_screenshot
     # L'utente clicca su "Prenota un tavolo" per aprire il modal
     find('.open-reserv-modal').click
-    save_and_open_screenshot
     # Imposta i valori dei campi utilizzando execute_script
     execute_script("document.getElementById('numero-persone').value = '4';")
     execute_script("document.getElementById('data-prenotazione').value = '2024-07-23';")
     execute_script("document.getElementById('orario-prenotazione').value = '20:00';")
-    save_and_open_screenshot
     click_button 'Prenota'
-    save_and_open_screenshot
     expect(page).to have_current_path(public_restaurant_profile_path(ristoratore1))
-    save_and_open_screenshot
     # Aspetta che la risposta AJAX venga gestita e verifica la presenza del messaggio di conferma
     expect(page).to have_content('Prenotazione creata con successo')
-    save_and_open_screenshot
 
     # Clicca sull'icona dell'omino nella navbar per aprire il dropdown
     find('ion-icon[name="person-circle-outline"]').click
-    save_and_open_screenshot
 
     # Effettua il logout cliccando sul link 'Logout' nel dropdown
     within '#dropdown' do
       click_link 'Logout'
     end
-    save_and_open_screenshot
 
     # login come ristoratore per validare la prenotazione
     login_as_ristoratore(ristoratore1)
-    save_and_open_screenshot
     # Clicca sull'icona dell'omino nella navbar per aprire il dropdown
     find('ion-icon[name="person-circle-outline"]').click
-    save_and_open_screenshot
     within '#dropdown' do
       click_link 'Visualizza Profilo'
     end
-    save_and_open_screenshot
     visit info_path
-    save_and_open_screenshot
 
     # cerco la prenotazione
     all('.prenotazione').each do |prenotazione|
@@ -241,62 +226,46 @@ RSpec.feature "Booking", type: :feature, js: true do
       if nome_cliente == 'Nome Cognome' && data == '2024-07-23' && orario == '20:00' && numero_persone == 4
         # Esempio specifico: se l'ID della prenotazione è 1, sostituisci con:
         find(".delete-icon").click
-        save_and_open_screenshot
 
         # Attendi che la richiesta AJAX abbia completato il suo lavoro
         expect(page).to have_content('Prenotazione eliminata')
-        save_and_open_screenshot
 
         found_prenotazione = true
         break # Esci dal ciclo una volta trovata la prenotazione
       end
     end
 
-    # dovrei riaggiornare la pagina
-    visit info_path
-
     # per la verifica simuliamo il clic sul calendario e vediamo che in quella giornata c'è la prenotazione
     page.execute_script("loadDailyData('2024-07-23'.split('-')[2]);")
     sleep(2) # Attendiamo un po' per assicurarci che i dati vengano caricati correttamente
-    save_and_open_screenshot
 
     # Verifica che la prenotazione sia presente tra gli impegni giornalieri
     expect(page).not_to have_content('ID cliente: 1')
     expect(page).not_to have_content('N persone: 4')
     expect(page).not_to have_content('Orario: 20:00')
-    
-    save_and_open_screenshot
 
     #logout
     # Clicca sull'icona dell'omino nella navbar per aprire il dropdown
     find('ion-icon[name="person-circle-outline"]').click
-    save_and_open_screenshot
 
     # Effettua il logout cliccando sul link 'Logout' nel dropdown
     within '#dropdown' do
       click_link 'Logout'
     end
-    save_and_open_screenshot
 
     # login come user per vedere la validazione accettata
     login_as(user3)
-    save_and_open_screenshot
     # Clicca sull'icona dell'omino nella navbar per aprire il dropdown
     find('ion-icon[name="person-circle-outline"]').click
-    save_and_open_screenshot
     within '#dropdown' do
       click_link 'Visualizza Profilo'
     end
-    save_and_open_screenshot
 
     #mi aspetto di trovare la prenotazione accettata
     expect(page).not_to have_content('Ristorante: Ristorante A ')
     expect(page).not_to have_content('Numero Persone: 4')
     expect(page).not_to have_content('Data: 2024-07-23')
-    expect(page).not_to have_content('Orario: 20:00')
-
-    save_and_open_screenshot
-   
+    expect(page).not_to have_content('Orario: 20:00')   
   end
 end
 

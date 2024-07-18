@@ -82,29 +82,21 @@ class ReviewsController < ApplicationController
     cliente_id = params[:cliente_id].to_i
     cliente = Cliente.find(params[:cliente_id])
 
-    Rails.logger.info("cerco l'istanza di cliente associata alla recensione ")
     assign_star = recensione.assign_stars.find_by(cliente_id: cliente_id)
 
     if assign_star
-      Rails.logger.info("trovata l'istanza di cliente associata alla recensione: hai già messo like")
       message = "Hai già messo like a questa recensione"
     elsif recensione.cliente_id == params[:cliente_id]
-      Rails.logger.info("è la tua stessa recensione")
       message = "Non puoi mettere like a una tua recensione"
     else
-      Rails.logger.info("non ho trovato l'istanza di cliente associata alla recensione: puoi lasciare il like")
       assign_star = recensione.assign_stars.create(cliente_id: cliente_id)
 
-      Rails.logger.info("incremento il num di like")
       recensione.increment!(:like)
 
-      # punti
-      Rails.logger.info("se il clie nte partecipa a delle competizioni gli aggiungo dei punti")
       competizioni_attive = recensione.cliente.user.competiziones.where("data_fine >= ?", Date.today)
       if competizioni_attive.any?
 
         # Per ogni competizione attiva, aggiungi punti_competizione
-        Rails.logger.info("aggiungo i punti")
         competizioni_attive.each do |competizione|
           if session[:role] == 'Critico'
             UserCompetition.find_by(user_id: recensione.cliente.user.id).increment!(:punti_competizione, 3)

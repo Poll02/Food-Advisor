@@ -14,7 +14,6 @@ class UserProfileController < ApplicationController
   end
 
   def edit
-    # @user viene impostato dal before_action :set_user
   end
 
   def public_show
