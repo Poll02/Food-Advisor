@@ -121,7 +121,13 @@
     <p style="display: none;"><%= @recensione=Recensione.find(segnalazione.recensione_id) %><p>
     <div class="segnalazione">
       <div class="segnalazioneInfo">
-        <p class="info">Da: <%= segnalazione.cliente.user.username %> <br> A: <%= @recensione.cliente.user.username %>  <p>
+        <p class="info">Da:
+          <%if segnalazione.cliente.user.present? %>
+           <%= segnalazione.cliente.user.username %> 
+          <% elsif segnalazione.cliente.ristoratore.present?%>
+          <%= segnalazione.cliente.ristoratore.nomeristorante %>
+          <%end%>
+           <br> A: <%= @recensione.cliente.user.username %>  <p>
         <p class="info">Motivo:   <%= segnalazione.motivo %></p>
       </div>
       <div class="public-r-reviews">
